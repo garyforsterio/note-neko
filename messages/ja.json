@@ -1,0 +1,22 @@
+{
+  "calendar": {
+    "previousMonth": "前月",
+    "nextMonth": "次月"
+  },
+  "diary": {
+    "title": "日記",
+    "newEntry": "新規作成",
+    "noEntries": "日記がまだありません",
+    "writtenOn": "{date}に書きました",
+    "editEntry": "編集",
+    "mentions": "言及",
+    "locations": "場所",
+    "searchLocation": "場所を検索...",
+    "contentPlaceholder": "ここに日記を書いてください..."
+  },
+  "common": {
+    "cancel": "キャンセル",
+    "save": "保存",
+    "create": "作成"
+  }
+}

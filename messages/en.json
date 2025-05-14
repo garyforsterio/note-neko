@@ -1,0 +1,22 @@
+{
+  "calendar": {
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month"
+  },
+  "diary": {
+    "title": "Diary",
+    "newEntry": "New Entry",
+    "noEntries": "No diary entries yet",
+    "writtenOn": "Written on {date}",
+    "editEntry": "Edit Entry",
+    "mentions": "Mentions",
+    "locations": "Locations",
+    "searchLocation": "Search for a location...",
+    "contentPlaceholder": "Write your diary entry here..."
+  },
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "create": "Create"
+  }
+}

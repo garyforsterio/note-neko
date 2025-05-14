@@ -1,0 +1,26 @@
+import { getPerson } from '@/lib/db';
+import PersonForm from '../../components/PersonForm';
+import { getTranslations } from 'next-intl/server';
+import { notFound } from 'next/navigation';
+
+interface EditPersonPageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default async function EditPersonPage({ params }: EditPersonPageProps) {
+  const t = await getTranslations();
+  const person = await getPerson(params.id);
+
+  if (!person) {
+    notFound();
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold mb-6">{t('people.editProfile')}</h1>
+      <PersonForm person={person} />
+    </div>
+  );
+}
