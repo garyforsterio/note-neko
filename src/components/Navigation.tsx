@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { BookOpen, Users } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import Calendar from '@/app/[locale]/diary/components/Calendar';
+import { cn } from '#lib/utils';
+import Calendar from '#app/[locale]/diary/components/Calendar';
 
 interface NavigationProps {
   entries?: {

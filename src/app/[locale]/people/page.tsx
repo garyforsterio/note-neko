@@ -1,7 +1,6 @@
-import { getPeople } from '@/lib/db';
+import { getPeople } from '#lib/db';
 import Link from 'next/link';
 import { format } from 'date-fns';
-import { Pencil } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import DeleteButton from './components/DeleteButton';
 import EditButton from './components/EditButton';

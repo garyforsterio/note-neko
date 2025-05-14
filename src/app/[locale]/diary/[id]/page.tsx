@@ -1,4 +1,4 @@
-import { getDiaryEntry, getDiaryEntries } from '@/lib/db';
+import { getDiaryEntry, getDiaryEntries } from '#lib/db';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';

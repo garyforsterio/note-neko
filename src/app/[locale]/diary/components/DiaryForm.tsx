@@ -2,12 +2,12 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createDiaryEntryAction, updateDiaryEntryAction } from '@/app/actions';
+import { createDiaryEntryAction, updateDiaryEntryAction } from '#app/actions';
 import { useTranslations } from 'next-intl';
 import { MapPin } from 'lucide-react';
 import LocationMention from './LocationMention';
 import MentionDropdown from './MentionDropdown';
-import { renderMarkdown } from '@/lib/markdown';
+import { renderMarkdown } from '#lib/markdown';
 
 interface Person {
   id: string;

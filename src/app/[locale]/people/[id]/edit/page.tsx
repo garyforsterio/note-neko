@@ -1,4 +1,4 @@
-import { getPerson } from '@/lib/db';
+import { getPerson } from '#lib/db';
 import PersonForm from '../../components/PersonForm';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';

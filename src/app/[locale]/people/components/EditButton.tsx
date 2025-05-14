@@ -1,7 +1,7 @@
 'use client';
 import { Pencil } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { cn } from '@/lib/utils';
+import { cn } from '#lib/utils';
 import Link from 'next/link';
 
 interface EditButtonProps {

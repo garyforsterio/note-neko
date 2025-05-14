@@ -1,10 +1,10 @@
-import { getPerson } from '@/lib/db';
+import { getPerson } from '#lib/db';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import DeleteButton from '../components/DeleteButton';
-import { renderMarkdown } from '@/lib/markdown';
+import { renderMarkdown } from '#lib/markdown';
 import EditButton from '../components/EditButton';
 
 interface PersonPageProps {

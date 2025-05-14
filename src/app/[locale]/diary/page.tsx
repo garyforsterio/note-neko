@@ -1,9 +1,9 @@
-import { getDiaryEntries } from '@/lib/db';
+import { getDiaryEntries } from '#lib/db';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { Pencil, MapPin } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { renderMarkdown } from '@/lib/markdown';
+import { renderMarkdown } from '#lib/markdown';
 
 export default async function DiaryPage() {
   const t = await getTranslations();

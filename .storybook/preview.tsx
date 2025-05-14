@@ -2,6 +2,8 @@ import type { Preview } from '@storybook/react';
 import '../src/app/[locale]/globals.css';
 import { withThemeByClassName } from '@storybook/addon-themes';
 import nextIntl from './next-intl';
+import Layout from '../src/app/[locale]/layout';
+import React from 'react';
 
 export const decorators = [
   withThemeByClassName({
@@ -34,6 +36,13 @@ const preview: Preview = {
     },
   },
   tags: ['autodocs'],
+  decorators: [
+    (Story, { parameters }) => (
+      <Layout params={Promise.resolve({ locale: 'en' })}>
+        <Story />
+      </Layout>
+    ),
+  ],
 };
 
 export default preview;

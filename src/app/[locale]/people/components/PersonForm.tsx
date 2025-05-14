@@ -6,9 +6,9 @@ import {
   createPersonAction,
   updatePersonAction,
   type State,
-} from '@/app/actions';
+} from '#app/actions';
 import { useTranslations } from 'next-intl';
-import ErrorMessage from '@/app/components/ErrorMessage';
+import ErrorMessage from '#app/components/ErrorMessage';
 
 interface PersonFormProps {
   person?: {

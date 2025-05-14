@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { MapPin } from 'lucide-react';
-import { loadGoogleMapsScript } from '@/lib/googleMaps';
+import { loadGoogleMapsScript } from '#lib/googleMaps';
 
 interface LocationMentionProps {
   onLocationSelect: (location: {
