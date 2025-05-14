@@ -6,7 +6,7 @@ export default async function NewPersonPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">{t('people.newPerson')}</h1>
+      <h1 className="text-2xl font-bold mb-6">{t('people.addPerson')}</h1>
       <PersonForm />
     </div>
   );

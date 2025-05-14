@@ -18,5 +18,22 @@
     "cancel": "Cancel",
     "save": "Save",
     "create": "Create"
+  },
+  "people": {
+    "noPeople": "No people added yet",
+    "addPerson": "New Person",
+    "title": "People",
+    "addedOn": "Added on {date}",
+    "editProfile": "Edit profile",
+    "name": "Name",
+    "interests": "Interests",
+    "interestsPlaceholder": "What they like etc",
+    "howWeMet": "How we met",
+    "notes": "Notes",
+    "birthday": "Birthday",
+    "save": "Save",
+    "update": "Update",
+    "saving": "Saving",
+    "cancel": "Cancel"
   }
 }

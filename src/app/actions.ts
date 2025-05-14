@@ -9,19 +9,38 @@ import {
   updateDiaryEntry,
   deleteDiaryEntry,
 } from '@/lib/db';
-import type { CreatePersonData, UpdatePersonData } from '@/lib/db';
+import type { DiaryData, PersonData } from '@/lib/db';
+import { redirect } from 'next/navigation';
 
-export async function createPersonAction(data: {
-  name: string;
-  birthday: string | null;
-  howWeMet: string | null;
-  interests: string[];
-  notes: string | null;
-}) {
+function processFormData(formData: FormData): PersonData {
+  return {
+    id: formData.get('id') as string,
+    name: formData.get('name') as string,
+    birthday: (formData.get('birthday') as string) || null,
+    howWeMet: (formData.get('howWeMet') as string) || null,
+    interests: (formData.get('interests') as string)
+      .split(',')
+      .map((i) => i.trim())
+      .filter(Boolean),
+    notes: (formData.get('notes') as string) || null,
+  };
+}
+
+export type State = {
+  success?: boolean;
+  error?: string;
+};
+
+export async function createPersonAction(
+  state: State,
+  formData: FormData
+): Promise<State> {
   try {
+    const data = processFormData(formData);
+
     await createPerson(data);
+
     revalidatePath('/people');
-    return { success: true };
   } catch (error) {
     console.error('Error creating person:', error);
     return {
@@ -29,23 +48,22 @@ export async function createPersonAction(data: {
       error: error instanceof Error ? error.message : 'Failed to create person',
     };
   }
+  redirect('/people');
 }
 
 export async function updatePersonAction(
-  id: string,
-  data: {
-    name?: string;
-    birthday?: string | null;
-    howWeMet?: string | null;
-    interests?: string[];
-    notes?: string | null;
-  }
-) {
+  state: State,
+  formData: FormData
+): Promise<State> {
   try {
+    const id = formData.get('id') as string;
+    const data = processFormData(formData);
+    console.log(data);
+
     await updatePerson(id, data);
+
     revalidatePath('/people');
     revalidatePath(`/people/${id}`);
-    return { success: true };
   } catch (error) {
     console.error('Error updating person:', error);
     return {
@@ -53,6 +71,7 @@ export async function updatePersonAction(
       error: error instanceof Error ? error.message : 'Failed to update person',
     };
   }
+  redirect('/people');
 }
 
 export async function deletePersonAction(id: string) {
@@ -69,11 +88,7 @@ export async function deletePersonAction(id: string) {
   }
 }
 
-export async function createDiaryEntryAction(data: {
-  content: string;
-  date: string;
-  mentions?: string[];
-}) {
+export async function createDiaryEntryAction(data: DiaryData) {
   try {
     await createDiaryEntry(data);
     revalidatePath('/diary');
@@ -88,14 +103,7 @@ export async function createDiaryEntryAction(data: {
   }
 }
 
-export async function updateDiaryEntryAction(
-  id: string,
-  data: {
-    content?: string;
-    date?: string;
-    mentions?: string[];
-  }
-) {
+export async function updateDiaryEntryAction(id: string, data: DiaryData) {
   try {
     await updateDiaryEntry(id, data);
     revalidatePath('/diary');

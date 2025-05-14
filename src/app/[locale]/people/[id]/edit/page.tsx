@@ -4,14 +4,14 @@ import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 interface EditPersonPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function EditPersonPage({ params }: EditPersonPageProps) {
   const t = await getTranslations();
-  const person = await getPerson(params.id);
+  const person = await getPerson((await params).id);
 
   if (!person) {
     notFound();

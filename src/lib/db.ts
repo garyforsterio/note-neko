@@ -12,7 +12,8 @@ export const prisma =
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
-export interface CreatePersonData {
+export interface PersonData {
+  id: string;
   name: string;
   birthday?: string | null;
   howWeMet?: string | null;
@@ -20,12 +21,16 @@ export interface CreatePersonData {
   notes?: string | null;
 }
 
-export interface UpdatePersonData {
-  name?: string;
-  birthday?: string | null;
-  howWeMet?: string | null;
-  interests?: string[];
-  notes?: string | null;
+export interface DiaryData {
+  content: string;
+  date: string;
+  mentions?: string[];
+  locations?: Array<{
+    name: string;
+    placeId: string;
+    lat: number;
+    lng: number;
+  }>;
 }
 
 export async function getPeople() {
@@ -54,13 +59,7 @@ export async function getPerson(id: string) {
   });
 }
 
-export async function createPerson(data: {
-  name: string;
-  birthday: string | null;
-  howWeMet: string | null;
-  interests: string[];
-  notes: string | null;
-}) {
+export async function createPerson(data: PersonData) {
   return prisma.person.create({
     data: {
       name: data.name,
@@ -72,16 +71,7 @@ export async function createPerson(data: {
   });
 }
 
-export async function updatePerson(
-  id: string,
-  data: {
-    name?: string;
-    birthday?: string | null;
-    howWeMet?: string | null;
-    interests?: string[];
-    notes?: string | null;
-  }
-) {
+export async function updatePerson(id: string, data: PersonData) {
   return prisma.person.update({
     where: { id },
     data: {
@@ -133,17 +123,7 @@ export async function getDiaryEntry(id: string) {
   });
 }
 
-export async function createDiaryEntry(data: {
-  content: string;
-  date: string;
-  mentions?: string[];
-  locations?: Array<{
-    name: string;
-    placeId: string;
-    lat: number;
-    lng: number;
-  }>;
-}) {
+export async function createDiaryEntry(data: DiaryData) {
   return prisma.diaryEntry.create({
     data: {
       content: data.content,
@@ -175,20 +155,7 @@ export async function createDiaryEntry(data: {
   });
 }
 
-export async function updateDiaryEntry(
-  id: string,
-  data: {
-    content: string;
-    date: string;
-    mentions?: string[];
-    locations?: Array<{
-      name: string;
-      placeId: string;
-      lat: number;
-      lng: number;
-    }>;
-  }
-) {
+export async function updateDiaryEntry(id: string, data: DiaryData) {
   // First, delete all existing mentions and locations
   await prisma.diaryMention.deleteMany({
     where: { diaryEntryId: id },

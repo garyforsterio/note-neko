@@ -4,9 +4,9 @@ import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 interface EditDiaryEntryPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function EditDiaryEntryPage({
@@ -14,7 +14,7 @@ export default async function EditDiaryEntryPage({
 }: EditDiaryEntryPageProps) {
   const t = await getTranslations();
   const [entry, people] = await Promise.all([
-    getDiaryEntry(params.id),
+    getDiaryEntry((await params).id),
     getPeople(),
   ]);
 

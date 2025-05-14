@@ -1,8 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useActionState, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createPersonAction, updatePersonAction } from '@/app/actions';
+import {
+  createPersonAction,
+  updatePersonAction,
+  type State,
+} from '@/app/actions';
 import { useTranslations } from 'next-intl';
 
 interface PersonFormProps {
@@ -19,51 +23,20 @@ interface PersonFormProps {
 export default function PersonForm({ person }: PersonFormProps) {
   const router = useRouter();
   const t = useTranslations();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
-
-    const formData = new FormData(e.currentTarget);
-    const data = {
-      name: formData.get('name') as string,
-      birthday: (formData.get('birthday') as string) || null,
-      howWeMet: (formData.get('howWeMet') as string) || null,
-      interests: (formData.get('interests') as string)
-        .split(',')
-        .map((i) => i.trim())
-        .filter(Boolean),
-      notes: (formData.get('notes') as string) || null,
-    };
-
-    try {
-      if (person) {
-        const result = await updatePersonAction(person.id, data);
-        if (!result.success) {
-          throw new Error(result.error || t('errors.updateFailed'));
-        }
-      } else {
-        const result = await createPersonAction(data);
-        if (!result.success) {
-          throw new Error(result.error || t('errors.createFailed'));
-        }
-      }
-      router.push('/people');
-    } catch (error) {
-      console.error('Error saving person:', error);
-      setError(error instanceof Error ? error.message : t('errors.unexpected'));
-    } finally {
-      setIsSubmitting(false);
+  const [state, action, isLoading] = useActionState<State, FormData>(
+    person ? updatePersonAction : createPersonAction,
+    {
+      success: undefined,
+      error: undefined,
     }
-  };
+  );
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {error && (
-        <div className="p-4 bg-red-50 text-red-700 rounded-md">{error}</div>
+    <form className="space-y-6" action={action} method="POST">
+      {state.error && (
+        <div className="p-4 bg-red-50 text-red-700 rounded-md">
+          {state.error}
+        </div>
       )}
 
       <div>
@@ -71,8 +44,9 @@ export default function PersonForm({ person }: PersonFormProps) {
           htmlFor="name"
           className="block text-sm font-medium text-gray-700 mb-1"
         >
-          {t('form.name')} *
+          {t('people.name')} *
         </label>
+        <input hidden name="id" value={person?.id} readOnly />
         <input
           type="text"
           id="name"
@@ -88,7 +62,7 @@ export default function PersonForm({ person }: PersonFormProps) {
           htmlFor="birthday"
           className="block text-sm font-medium text-gray-700 mb-1"
         >
-          {t('form.birthday')}
+          {t('people.birthday')}
         </label>
         <input
           type="date"
@@ -108,7 +82,7 @@ export default function PersonForm({ person }: PersonFormProps) {
           htmlFor="howWeMet"
           className="block text-sm font-medium text-gray-700 mb-1"
         >
-          {t('form.howWeMet')}
+          {t('people.howWeMet')}
         </label>
         <textarea
           id="howWeMet"
@@ -124,14 +98,14 @@ export default function PersonForm({ person }: PersonFormProps) {
           htmlFor="interests"
           className="block text-sm font-medium text-gray-700 mb-1"
         >
-          {t('form.interests')}
+          {t('people.interests')}
         </label>
         <input
           type="text"
           id="interests"
           name="interests"
           defaultValue={person?.interests.join(', ')}
-          placeholder={t('form.interestsPlaceholder')}
+          placeholder={t('people.interestsPlaceholder')}
           className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
@@ -141,7 +115,7 @@ export default function PersonForm({ person }: PersonFormProps) {
           htmlFor="notes"
           className="block text-sm font-medium text-gray-700 mb-1"
         >
-          {t('form.notes')}
+          {t('people.notes')}
         </label>
         <textarea
           id="notes"
@@ -158,18 +132,18 @@ export default function PersonForm({ person }: PersonFormProps) {
           onClick={() => router.back()}
           className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
         >
-          {t('form.cancel')}
+          {t('people.cancel')}
         </button>
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isLoading}
           className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSubmitting
-            ? t('form.saving')
+          {isLoading
+            ? t('people.saving')
             : person
-            ? t('form.saveChanges')
-            : t('form.save')}
+            ? t('people.update')
+            : t('people.save')}
         </button>
       </div>
     </form>
