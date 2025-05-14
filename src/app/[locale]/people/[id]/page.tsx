@@ -3,9 +3,9 @@ import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { format } from 'date-fns';
-import { Pencil } from 'lucide-react';
 import DeleteButton from '../components/DeleteButton';
 import { renderMarkdown } from '@/lib/markdown';
+import EditButton from '../components/EditButton';
 
 interface PersonPageProps {
   params: {
@@ -34,13 +34,7 @@ export default async function PersonPage({ params }: PersonPageProps) {
         </div>
         <div className="flex">
           <DeleteButton personId={person.id} personName={person.name} />
-          <Link
-            href={`/people/${person.id}/edit`}
-            className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
-            title={t('people.editProfile')}
-          >
-            <Pencil className="h-6 w-6" />
-          </Link>
+          <EditButton personId={person.id} />
         </div>
       </div>
 
