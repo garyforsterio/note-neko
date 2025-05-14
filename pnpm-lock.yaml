@@ -32,6 +32,9 @@ dependencies:
   '@types/marked':
     specifier: ^6.0.0
     version: 6.0.0
+  bcryptjs:
+    specifier: ^3.0.2
+    version: 3.0.2
   class-variance-authority:
     specifier: ^0.7.0
     version: 0.7.1
@@ -41,6 +44,9 @@ dependencies:
   date-fns:
     specifier: ^4.1.0
     version: 4.1.0
+  jose:
+    specifier: ^6.0.11
+    version: 6.0.11
   lucide-react:
     specifier: ^0.510.0
     version: 0.510.0(react@19.1.0)
@@ -69,7 +75,7 @@ dependencies:
     specifier: ^3.3.0
     version: 3.3.0
   zod:
-    specifier: ^3.22.4
+    specifier: ^3.24.4
     version: 3.24.4
 
 devDependencies:
@@ -3119,6 +3125,11 @@ packages:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
     dev: true
 
+  /bcryptjs@3.0.2:
+    resolution: {integrity: sha512-k38b3XOZKv60C4E2hVsXTolJWfkGRMbILBIe2IBITXciy5bOsTKot5kDrf3ZfufQtQOUN5mXceUEpU1rTl9Uog==}
+    hasBin: true
+    dev: false
+
   /body-parser@2.2.0:
     resolution: {integrity: sha512-02qvAaxv8tp7fBa/mw1ga98OGm+eCbqzJOKoRt70sLmfEEi+jyBYVTDGfCL/k06/4EMk/z01gCe7HoCH/f2LTg==}
     engines: {node: '>=18'}
@@ -5609,6 +5620,10 @@ packages:
     resolution: {integrity: sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A==}
     hasBin: true
     dev: true
+
+  /jose@6.0.11:
+    resolution: {integrity: sha512-QxG7EaliDARm1O1S8BGakqncGT9s25bKL1WSf6/oa17Tkqwi8D2ZNglqCF+DsYF88/rV66Q/Q2mFAy697E1DUg==}
+    dev: false
 
   /js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}

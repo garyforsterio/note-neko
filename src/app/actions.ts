@@ -12,18 +12,40 @@ import {
 import type { DiaryData, PersonData } from '@/lib/db';
 import { redirect } from 'next/navigation';
 
-function processFormData(formData: FormData): PersonData {
+import { z } from 'zod';
+
+const personSchema = z.object({
+  id: z.string(),
+  name: z.string().min(1, 'Name is required'),
+  birthday: z.string().optional(),
+  howWeMet: z.string().optional(),
+  interests: z.array(z.string()),
+  notes: z.string().optional(),
+});
+
+const diaryLocationSchema = z.object({
+  name: z.string().min(1, 'Location name is required'),
+  placeId: z.string().min(1, 'Place ID is required'),
+  lat: z.number(),
+  lng: z.number(),
+});
+
+const diarySchema = z.object({
+  content: z.string().min(1, 'Content is required'),
+  date: z.string().min(1, 'Date is required'),
+  mentions: z.array(z.string()),
+  locations: z.array(diaryLocationSchema),
+});
+
+function getPersonFormFormData(formData: FormData): PersonData {
+  const data = Object.fromEntries(formData);
   return {
-    id: formData.get('id') as string,
-    name: formData.get('name') as string,
-    birthday: (formData.get('birthday') as string) || null,
-    howWeMet: (formData.get('howWeMet') as string) || null,
-    interests: (formData.get('interests') as string)
+    ...data,
+    interests: (data.interests as string)
       .split(',')
       .map((i) => i.trim())
       .filter(Boolean),
-    notes: (formData.get('notes') as string) || null,
-  };
+  } as PersonData;
 }
 
 export type State = {
@@ -36,10 +58,15 @@ export async function createPersonAction(
   formData: FormData
 ): Promise<State> {
   try {
-    const data = processFormData(formData);
-
-    await createPerson(data);
-
+    const data = getPersonFormFormData(formData);
+    const result = personSchema.safeParse(data);
+    if (!result.success) {
+      return {
+        success: false,
+        error: result.error.errors.map((e) => e.message).join(', '),
+      };
+    }
+    await createPerson(result.data);
     revalidatePath('/people');
   } catch (error) {
     console.error('Error creating person:', error);
@@ -56,14 +83,19 @@ export async function updatePersonAction(
   formData: FormData
 ): Promise<State> {
   try {
-    const id = formData.get('id') as string;
-    const data = processFormData(formData);
-    console.log(data);
+    const data = getPersonFormFormData(formData);
+    const result = personSchema.safeParse(data);
+    if (!result.success) {
+      return {
+        success: false,
+        error: result.error.errors.map((e) => e.message).join(', '),
+      };
+    }
 
-    await updatePerson(id, data);
+    await updatePerson(result.data.id, result.data);
 
     revalidatePath('/people');
-    revalidatePath(`/people/${id}`);
+    revalidatePath(`/people/${result.data.id}`);
   } catch (error) {
     console.error('Error updating person:', error);
     return {
@@ -94,7 +126,14 @@ export async function deletePersonAction(
 
 export async function createDiaryEntryAction(data: DiaryData) {
   try {
-    await createDiaryEntry(data);
+    const result = diarySchema.safeParse(data);
+    if (!result.success) {
+      return {
+        success: false,
+        error: result.error.errors.map((e) => e.message).join(', '),
+      };
+    }
+    await createDiaryEntry(result.data);
     revalidatePath('/diary');
     return { success: true };
   } catch (error) {
@@ -109,7 +148,14 @@ export async function createDiaryEntryAction(data: DiaryData) {
 
 export async function updateDiaryEntryAction(id: string, data: DiaryData) {
   try {
-    await updateDiaryEntry(id, data);
+    const result = diarySchema.safeParse(data);
+    if (!result.success) {
+      return {
+        success: false,
+        error: result.error.errors.map((e) => e.message).join(', '),
+      };
+    }
+    await updateDiaryEntry(id, result.data);
     revalidatePath('/diary');
     revalidatePath(`/diary/${id}`);
     return { success: true };
