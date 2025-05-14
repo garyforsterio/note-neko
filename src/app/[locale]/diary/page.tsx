@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { format } from 'date-fns';
 import { Pencil, MapPin } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import { renderMarkdown } from '@/lib/markdown';
 
 export default async function DiaryPage() {
   const t = await getTranslations();
@@ -52,7 +53,11 @@ export default async function DiaryPage() {
               </div>
 
               <div className="prose max-w-none">
-                <p className="whitespace-pre-wrap">{entry.content}</p>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: renderMarkdown(entry.content),
+                  }}
+                />
               </div>
 
               {entry.mentions.length > 0 && (

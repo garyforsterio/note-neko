@@ -18,5 +18,25 @@
     "cancel": "キャンセル",
     "save": "保存",
     "create": "作成"
+  },
+  "people": {
+    "addedOn": "{date}に追加",
+    "addPerson": "新しい人物",
+    "birthday": "誕生日",
+    "cancel": "キャンセル",
+    "confirmDelete": "{name}を本当に削除しますか？",
+    "deleteProfile": "プロフィールを削除",
+    "editProfile": "プロフィールを編集",
+    "howWeMet": "出会い",
+    "interests": "興味・関心",
+    "interestsPlaceholder": "好きなことなど",
+    "mentionedIn": "言及された場所",
+    "name": "名前",
+    "noPeople": "まだ人物が追加されていません",
+    "notes": "メモ",
+    "save": "保存",
+    "saving": "保存中",
+    "title": "人物",
+    "update": "更新"
   }
 }

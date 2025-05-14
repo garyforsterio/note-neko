@@ -8,6 +8,7 @@ import {
   type State,
 } from '@/app/actions';
 import { useTranslations } from 'next-intl';
+import ErrorMessage from '@/app/components/ErrorMessage';
 
 interface PersonFormProps {
   person?: {
@@ -25,20 +26,12 @@ export default function PersonForm({ person }: PersonFormProps) {
   const t = useTranslations();
   const [state, action, isLoading] = useActionState<State, FormData>(
     person ? updatePersonAction : createPersonAction,
-    {
-      success: undefined,
-      error: undefined,
-    }
+    {}
   );
 
   return (
     <form className="space-y-6" action={action} method="POST">
-      {state.error && (
-        <div className="p-4 bg-red-50 text-red-700 rounded-md">
-          {state.error}
-        </div>
-      )}
-
+      <ErrorMessage message={state.error} />
       <div>
         <label
           htmlFor="name"

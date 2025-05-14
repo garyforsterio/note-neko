@@ -74,11 +74,14 @@ export async function updatePersonAction(
   redirect('/people');
 }
 
-export async function deletePersonAction(id: string) {
+export async function deletePersonAction(
+  state: State,
+  formData: FormData
+): Promise<State> {
+  const id = formData.get('id') as string;
   try {
     await deletePerson(id);
     revalidatePath('/people');
-    return { success: true };
   } catch (error) {
     console.error('Error deleting person:', error);
     return {
@@ -86,6 +89,7 @@ export async function deletePersonAction(id: string) {
       error: error instanceof Error ? error.message : 'Failed to delete person',
     };
   }
+  redirect('/people');
 }
 
 export async function createDiaryEntryAction(data: DiaryData) {

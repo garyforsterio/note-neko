@@ -1,39 +1,42 @@
 {
   "calendar": {
-    "previousMonth": "Previous month",
-    "nextMonth": "Next month"
-  },
-  "diary": {
-    "title": "Diary",
-    "newEntry": "New Entry",
-    "noEntries": "No diary entries yet",
-    "writtenOn": "Written on {date}",
-    "editEntry": "Edit Entry",
-    "mentions": "Mentions",
-    "locations": "Locations",
-    "searchLocation": "Search for a location...",
-    "contentPlaceholder": "Write your diary entry here..."
+    "nextMonth": "Next month",
+    "previousMonth": "Previous month"
   },
   "common": {
     "cancel": "Cancel",
-    "save": "Save",
-    "create": "Create"
+    "create": "Create",
+    "save": "Save"
+  },
+  "diary": {
+    "contentPlaceholder": "Write your diary entry here...",
+    "editEntry": "Edit Entry",
+    "locations": "Locations",
+    "mentions": "Mentions",
+    "newEntry": "New Entry",
+    "noEntries": "No diary entries yet",
+    "searchLocation": "Search for a location...",
+    "title": "Diary",
+    "writtenOn": "Written on {date}"
   },
   "people": {
-    "noPeople": "No people added yet",
-    "addPerson": "New Person",
-    "title": "People",
     "addedOn": "Added on {date}",
+    "addPerson": "New Person",
+    "birthday": "Birthday",
+    "cancel": "Cancel",
+    "confirmDelete": "Really delete {name}?",
+    "deleteProfile": "Delete profile",
     "editProfile": "Edit profile",
-    "name": "Name",
+    "howWeMet": "How we met",
     "interests": "Interests",
     "interestsPlaceholder": "What they like etc",
-    "howWeMet": "How we met",
+    "mentionedIn": "Mentioned in",
+    "name": "Name",
+    "noPeople": "No people added yet",
     "notes": "Notes",
-    "birthday": "Birthday",
     "save": "Save",
-    "update": "Update",
     "saving": "Saving",
-    "cancel": "Cancel"
+    "title": "People",
+    "update": "Update"
   }
 }

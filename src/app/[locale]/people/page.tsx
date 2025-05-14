@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { format } from 'date-fns';
 import { Pencil } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import DeleteButton from './components/DeleteButton';
 
 interface DiaryMention {
   id: string;
@@ -55,13 +56,20 @@ export default async function PeoplePage() {
                 >
                   {person.name}
                 </Link>
-                <Link
-                  href={`/people/${person.id}/edit`}
-                  className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
-                  title={t('people.editProfile')}
-                >
-                  <Pencil className="h-4 w-4" />
-                </Link>
+                <div className="flex gap-2">
+                  <DeleteButton
+                    personId={person.id}
+                    personName={person.name}
+                    size="small"
+                  />
+                  <Link
+                    href={`/people/${person.id}/edit`}
+                    className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
+                    title={t('people.editProfile')}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Link>
+                </div>
               </div>
 
               {person.birthday && (

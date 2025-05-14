@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { Pencil } from 'lucide-react';
+import DeleteButton from '../components/DeleteButton';
+import { renderMarkdown } from '@/lib/markdown';
 
 interface PersonPageProps {
   params: {
@@ -30,13 +32,16 @@ export default async function PersonPage({ params }: PersonPageProps) {
             })}
           </div>
         </div>
-        <Link
-          href={`/people/${person.id}/edit`}
-          className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
-          title={t('people.editProfile')}
-        >
-          <Pencil className="h-6 w-6" />
-        </Link>
+        <div className="flex">
+          <DeleteButton personId={person.id} personName={person.name} />
+          <Link
+            href={`/people/${person.id}/edit`}
+            className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
+            title={t('people.editProfile')}
+          >
+            <Pencil className="h-6 w-6" />
+          </Link>
+        </div>
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
@@ -103,9 +108,14 @@ export default async function PersonPage({ params }: PersonPageProps) {
                     {format(mention.diaryEntry.date, 'MMMM d, yyyy')}
                   </Link>
                 </div>
-                <p className="text-gray-600 whitespace-pre-wrap">
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: renderMarkdown(mention.diaryEntry.content),
+                  }}
+                />
+                {/* <p className="text-gray-600 whitespace-pre-wrap">
                   {mention.diaryEntry.content}
-                </p>
+                </p> */}
               </div>
             ))}
           </div>
