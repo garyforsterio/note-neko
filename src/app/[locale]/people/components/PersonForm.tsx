@@ -30,7 +30,7 @@ export default function PersonForm({ person }: PersonFormProps) {
   );
 
   return (
-    <form className="space-y-6" action={action} method="POST">
+    <form className="space-y-6" action={action}>
       <ErrorMessage message={state.error} />
       <div>
         <label

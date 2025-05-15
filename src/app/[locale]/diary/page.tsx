@@ -1,4 +1,4 @@
-import { getDiaryEntries } from '#lib/db';
+import { getDiaryEntries } from '#lib/dal';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { Pencil, MapPin } from 'lucide-react';

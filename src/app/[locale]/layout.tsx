@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { routing } from '#i18n/routing';
 import Navigation from '#components/Navigation';
-import { getDiaryEntries } from '#lib/db';
+import { getDiaryEntries } from '#lib/dal';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });

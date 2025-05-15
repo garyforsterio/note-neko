@@ -8,8 +8,8 @@ import {
   createDiaryEntry,
   updateDiaryEntry,
   deleteDiaryEntry,
-} from '#lib/db';
-import type { DiaryData, PersonData } from '#lib/db';
+} from '#lib/dal';
+import type { DiaryData, PersonData } from '#lib/dal';
 import { redirect } from 'next/navigation';
 
 import { z } from 'zod';

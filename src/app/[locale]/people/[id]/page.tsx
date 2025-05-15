@@ -1,4 +1,4 @@
-import { getPerson } from '#lib/db';
+import { getPerson } from '#lib/dal';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';

@@ -26,6 +26,11 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    docs: {
+      story: {
+        autoplay: true,
+      },
+    },
     nextIntl,
   },
   initialGlobals: {
