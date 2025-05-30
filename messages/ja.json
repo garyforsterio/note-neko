@@ -12,31 +12,34 @@
     "mentions": "言及",
     "locations": "場所",
     "searchLocation": "場所を検索...",
-    "contentPlaceholder": "ここに日記を書いてください..."
+    "contentPlaceholder": "日記を書いてください...",
+    "date": "日付"
   },
   "common": {
     "cancel": "キャンセル",
+    "create": "作成",
     "save": "保存",
-    "create": "作成"
+    "saving": "保存中"
   },
   "people": {
     "addedOn": "{date}に追加",
-    "addPerson": "新しい人物",
+    "addPerson": "新しい人",
     "birthday": "誕生日",
     "cancel": "キャンセル",
     "confirmDelete": "{name}を本当に削除しますか？",
     "deleteProfile": "プロフィールを削除",
     "editProfile": "プロフィールを編集",
-    "howWeMet": "出会い",
-    "interests": "興味・関心",
-    "interestsPlaceholder": "好きなことなど",
+    "howWeMet": "出会いのきっかけ",
+    "interests": "興味・趣味",
+    "interestsPlaceholder": "趣味など",
     "mentionedIn": "言及された場所",
     "name": "名前",
-    "noPeople": "まだ人物が追加されていません",
+    "newPerson": "新しい人",
+    "noPeople": "まだ人が追加されていません",
     "notes": "メモ",
     "save": "保存",
     "saving": "保存中",
-    "title": "人物",
+    "title": "人々",
     "update": "更新"
   }
 }

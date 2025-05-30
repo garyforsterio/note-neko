@@ -1,12 +1,14 @@
+import { useState } from 'react';
 import { Link } from '#i18n/navigation';
+import { useTranslations } from 'next-intl';
+import CreatePersonModal from './CreatePersonModal';
 
 interface Person {
   id: string;
   name: string;
-  birthday?: string;
-  howWeMet?: string;
-  interests?: string[];
-  notes?: string;
+  birthday: Date | null;
+  howWeMet: string | null;
+  interests: string[];
 }
 
 interface MentionDropdownProps {
@@ -20,15 +22,33 @@ export default function MentionDropdown({
   onSelect,
   people,
 }: MentionDropdownProps) {
+  const t = useTranslations();
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const filteredPeople = people.filter((person) =>
     person.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (filteredPeople.length === 0) {
     return (
-      <div className="p-4 text-center text-gray-500">
-        No matching people found
-      </div>
+      <>
+        <div className="p-4 text-center text-gray-500">
+          {t('people.noPeople')}
+        </div>
+        <div className="p-4 border-t">
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="w-full px-4 py-2 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
+          >
+            {t('people.addPerson')}
+          </button>
+        </div>
+        {showCreateModal && (
+          <CreatePersonModal
+            onClose={() => setShowCreateModal(false)}
+            onPersonCreated={onSelect}
+          />
+        )}
+      </>
     );
   }
 
@@ -48,22 +68,23 @@ export default function MentionDropdown({
                 onClick={() => onSelect(person)}
                 className="px-3 py-1 text-sm text-white bg-blue-600 rounded hover:bg-blue-700"
               >
-                Mention
+                {t('diary.mentions')}
               </button>
             </div>
             {person.birthday && (
               <div className="text-sm text-gray-500">
-                Birthday: {new Date(person.birthday).toLocaleDateString()}
+                {t('people.birthday')}:{' '}
+                {new Date(person.birthday).toLocaleDateString()}
               </div>
             )}
             {person.howWeMet && (
               <div className="text-sm text-gray-500 mt-1">
-                Met: {person.howWeMet}
+                {t('people.howWeMet')}: {person.howWeMet}
               </div>
             )}
             {person.interests && person.interests.length > 0 && (
               <div className="text-sm text-gray-500 mt-1">
-                Interests: {person.interests.join(', ')}
+                {t('people.interests')}: {person.interests.join(', ')}
               </div>
             )}
           </div>

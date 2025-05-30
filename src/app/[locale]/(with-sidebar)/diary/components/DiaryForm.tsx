@@ -10,6 +10,9 @@ import { useTranslations } from 'next-intl';
 import LocationMention from './LocationMention';
 import MentionDropdown from './MentionDropdown';
 import { renderMarkdown } from '#lib/markdown';
+import { useActionState } from 'react';
+import { ActionState } from '#app/actions/types';
+import ErrorMessage from '#app/components/ErrorMessage';
 
 interface Person {
   id: string;
@@ -43,6 +46,9 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
   const t = useTranslations();
   const router = useRouter();
   const [content, setContent] = useState(entry?.content || '');
+  const [selectedDate, setSelectedDate] = useState<Date>(
+    entry?.date || new Date()
+  );
   const [selectedPeople, setSelectedPeople] = useState<string[]>(
     entry?.mentions.map((m) => m.person.id) || []
   );
@@ -61,6 +67,11 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
   const [isPreview, setIsPreview] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  const [state, action, isPending] = useActionState<ActionState, FormData>(
+    entry ? updateDiaryEntryAction : createDiaryEntryAction,
+    {}
+  );
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -72,23 +83,6 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
   }, []);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const data = {
-      content,
-      date: new Date().toISOString(),
-      mentions: selectedPeople,
-      locations,
-    };
-
-    if (entry) {
-      await updateDiaryEntryAction(entry.id, data);
-    } else {
-      await createDiaryEntryAction(data);
-    }
-    router.push('/diary');
-  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const textarea = e.currentTarget;
@@ -166,7 +160,33 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form action={action} className="space-y-6">
+      <ErrorMessage message={state.error} />
+      <input type="hidden" name="content" value={content} />
+      <div className="mb-4">
+        <label
+          htmlFor="date"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          {t('diary.date')}
+        </label>
+        <input
+          type="date"
+          id="date"
+          name="date"
+          value={selectedDate.toISOString().split('T')[0]}
+          onChange={(e) => setSelectedDate(new Date(e.target.value))}
+          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+      <input
+        type="hidden"
+        name="mentions"
+        value={JSON.stringify(selectedPeople)}
+      />
+      <input type="hidden" name="locations" value={JSON.stringify(locations)} />
+      {entry && <input type="hidden" name="id" value={entry.id} />}
+
       <div className="relative">
         <div className="flex space-x-4 mb-4">
           <button
@@ -256,9 +276,15 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
         </button>
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          disabled={isPending}
+          aria-disabled={isPending}
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
         >
-          {entry ? t('common.save') : t('common.create')}
+          {isPending
+            ? t('common.saving')
+            : entry
+            ? t('common.save')
+            : t('common.create')}
         </button>
       </div>
     </form>

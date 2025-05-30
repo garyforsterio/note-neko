@@ -10,6 +10,7 @@ alwaysApply: true
 - Only use Client Components when interactivity is required
 - Follow progressive enhancement patterns
 - Ensure proper localization
+- Must add translations to all locale JSON files inside messages folder when using new i18n keys
 
 ## Server Components
 - Must not include 'use client' directive
@@ -23,6 +24,7 @@ alwaysApply: true
 - Must handle loading states with isPending
 - Must handle updates using a form with server action
 - Must have proper ARIA attributes
+- Must NOT use fetch() - always use server actions instead
 
 ## Server Actions
 - Must be in src/app/actions/*.ts files

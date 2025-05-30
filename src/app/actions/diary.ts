@@ -4,6 +4,8 @@ import { revalidatePath } from 'next/cache';
 import { createDiaryEntry, updateDiaryEntry, deleteDiaryEntry } from '#lib/dal';
 import type { DiaryData } from '#lib/dal';
 import { requireAuth } from '#lib/auth';
+import { redirect } from 'next/navigation';
+import { ActionState } from './types';
 
 import { z } from 'zod';
 
@@ -21,8 +23,18 @@ const diarySchema = z.object({
   locations: z.array(diaryLocationSchema),
 });
 
-export async function createDiaryEntryAction(data: DiaryData) {
+export async function createDiaryEntryAction(
+  state: ActionState,
+  formData: FormData
+): Promise<ActionState> {
   try {
+    const data = {
+      content: formData.get('content') as string,
+      date: formData.get('date') as string,
+      mentions: JSON.parse((formData.get('mentions') as string) || '[]'),
+      locations: JSON.parse((formData.get('locations') as string) || '[]'),
+    };
+
     const result = diarySchema.safeParse(data);
     if (!result.success) {
       return {
@@ -32,7 +44,6 @@ export async function createDiaryEntryAction(data: DiaryData) {
     }
     await createDiaryEntry({ ...result.data });
     revalidatePath('/diary');
-    return { success: true };
   } catch (error) {
     console.error('Error creating diary entry:', error);
     return {
@@ -41,10 +52,22 @@ export async function createDiaryEntryAction(data: DiaryData) {
         error instanceof Error ? error.message : 'Failed to create diary entry',
     };
   }
+  redirect('/diary');
 }
 
-export async function updateDiaryEntryAction(id: string, data: DiaryData) {
+export async function updateDiaryEntryAction(
+  state: ActionState,
+  formData: FormData
+): Promise<ActionState> {
   try {
+    const id = formData.get('id') as string;
+    const data = {
+      content: formData.get('content') as string,
+      date: formData.get('date') as string,
+      mentions: JSON.parse((formData.get('mentions') as string) || '[]'),
+      locations: JSON.parse((formData.get('locations') as string) || '[]'),
+    };
+
     const result = diarySchema.safeParse(data);
     if (!result.success) {
       return {
@@ -55,7 +78,7 @@ export async function updateDiaryEntryAction(id: string, data: DiaryData) {
     await updateDiaryEntry(id, { ...result.data });
     revalidatePath('/diary');
     revalidatePath(`/diary/${id}`);
-    return { success: true };
+    redirect('/diary');
   } catch (error) {
     console.error('Error updating diary entry:', error);
     return {

@@ -8,7 +8,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 const personSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   name: z.string().min(1, 'Name is required'),
   birthday: z.string().optional(),
   howWeMet: z.string().optional(),
@@ -97,4 +97,35 @@ export async function deletePersonAction(
     };
   }
   redirect('/people');
+}
+
+export async function createPersonWithoutRedirectAction(
+  state: ActionState,
+  formData: FormData
+): Promise<ActionState & { data?: { id: string; name: string } }> {
+  try {
+    const data = getPersonFormFormData(formData);
+    const result = personSchema.safeParse(data);
+    if (!result.success) {
+      return {
+        success: false,
+        error: result.error.errors.map((e) => e.message).join(', '),
+      };
+    }
+    const person = await createPerson({ ...result.data });
+    revalidatePath('/people');
+    return {
+      success: true,
+      data: {
+        id: person.id,
+        name: person.name,
+      },
+    };
+  } catch (error) {
+    console.error('Error creating person:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to create person',
+    };
+  }
 }
