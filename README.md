@@ -1,6 +1,6 @@
 # Life Tracker
 
-A personal life tracking application built with Next.js 15, featuring a daily diary and people profile management system.
+A personal life tracking application built with Next.js 15, featuring a daily diary, people profile management system, and location tracking.
 
 ## Features
 
@@ -10,22 +10,32 @@ A personal life tracking application built with Next.js 15, featuring a daily di
   - Preview markdown content in real-time
   - Mention people in diary entries using @ symbol
   - Automatic linking between diary entries and people profiles
+  - Track locations for each diary entry
 
 - **People Profiles**
+
   - Create and manage profiles for people you know
   - Track birthdays, how you met, interests, and additional notes
   - View all diary entries where a person is mentioned
   - Easy navigation between related content
 
+- **Location Tracking**
+  - Record and store locations for diary entries
+  - View entries by location
+  - Integration with mapping services
+
 ## Tech Stack
 
 - Next.js 15 with App Router
+- React 19
 - TypeScript
 - Prisma (ORM)
 - PostgreSQL
-- Tailwind CSS
+- Tailwind CSS 4
 - MDX for markdown support
-- Jest + React Testing Library
+- Vitest + Playwright for testing
+- Storybook 8 for component development
+- Next-intl for internationalization
 
 ## Getting Started
 
@@ -43,7 +53,7 @@ A personal life tracking application built with Next.js 15, featuring a daily di
    docker-compose up -d
 
    # Run database migrations
-   npx prisma migrate dev
+   pnpm prisma:setup
    ```
 
 4. Create a `.env` file in the root directory with the following content:
@@ -68,18 +78,38 @@ A personal life tracking application built with Next.js 15, featuring a daily di
   pnpm test
   ```
 
+- Start Storybook:
+
+  ```bash
+  pnpm storybook
+  ```
+
+- Type checking:
+
+  ```bash
+  pnpm typecheck
+  ```
+
+- Linting:
+
+  ```bash
+  pnpm lint
+  ```
+
 - Generate Prisma client:
   ```bash
-  pnpm exec prisma generate
+  pnpm prisma:generate
   ```
 
 ## Database Schema
 
 The application uses PostgreSQL with the following main models:
 
+- **User**: Authentication and user management
 - **DiaryEntry**: Stores daily diary entries with markdown content
 - **Person**: Stores people profiles with various details
-- Many-to-many relationship between DiaryEntry and Person for mentions
+- **DiaryMention**: Many-to-many relationship between DiaryEntry and Person
+- **DiaryLocation**: Stores location information for diary entries
 
 ## Contributing
 
@@ -88,3 +118,9 @@ The application uses PostgreSQL with the following main models:
 3. Commit your changes
 4. Push to the branch
 5. Create a Pull Request
+
+## Requirements
+
+- Node.js >= 22
+- pnpm >= 8.15.2
+- Docker (for local PostgreSQL)
