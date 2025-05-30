@@ -1,0 +1,44 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Server Components and Progressive Enhancement
+
+## Core Principles
+- Default to Server Components for all components
+- Only use Client Components when interactivity is required
+- Follow progressive enhancement patterns
+- Ensure proper localization
+
+## Server Components
+- Must not include 'use client' directive
+- Should use getTranslations from next-intl/server
+- Can include Client Components for interactive parts
+- Should handle data fetching and initial rendering
+
+## Client Components
+- Must have 'use client' directive at the top
+- Should use useTranslations from next-intl
+- Must handle loading states with isPending
+- Must handle updates using a form with server action
+- Must have proper ARIA attributes
+
+## Server Actions
+- Must be in src/app/actions/*.ts files
+- Must have 'use server' directive
+- Must use ActionState type
+- Must use Zod for validation
+- Must revalidate affected paths
+- Must use requireAuth for protected actions
+
+## Form Handling
+- Must use useActionState hook 
+- Must use form action prop
+- Must handle loading states
+- Must display error messages
+- Must be accessible
+
+@templates/server-action.ts
+@templates/client-component.tsx
+@templates/server-component.tsx
