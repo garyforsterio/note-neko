@@ -6,7 +6,7 @@ import { getTranslations } from 'next-intl/server';
 import { getCurrentUser } from '#lib/auth';
 import { redirect } from 'next/navigation';
 import { notFound } from 'next/navigation';
-
+import { renderMarkdown } from '#lib/markdown';
 interface DiaryEntryPageProps {
   params: Promise<{
     id: string;
@@ -51,7 +51,11 @@ export default async function DiaryEntryPage({ params }: DiaryEntryPageProps) {
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
         <div className="prose max-w-none">
-          <p className="whitespace-pre-wrap">{entry.content}</p>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: await renderMarkdown(entry.content),
+            }}
+          />
         </div>
 
         {entry.mentions.length > 0 && (

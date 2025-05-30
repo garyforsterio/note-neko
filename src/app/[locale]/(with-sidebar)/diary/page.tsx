@@ -28,7 +28,7 @@ export default async function DiaryPage() {
             <p className="text-gray-500 text-sm">{t('diary.noEntries')}</p>
           </div>
         ) : (
-          entries.map((entry) => (
+          entries.map(async (entry) => (
             <div key={entry.id} className="bg-white p-6 rounded-lg shadow-md">
               <div className="flex justify-between items-start mb-4">
                 <div>
@@ -56,7 +56,7 @@ export default async function DiaryPage() {
               <div className="prose max-w-none">
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: renderMarkdown(entry.content),
+                    __html: await renderMarkdown(entry.content),
                   }}
                 />
               </div>

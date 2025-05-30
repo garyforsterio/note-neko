@@ -63,7 +63,9 @@
     "cancel": "Cancel",
     "create": "Create",
     "save": "Save",
-    "saving": "Saving"
+    "saving": "Saving",
+    "back": "Back",
+    "edit": "Edit"
   },
   "diary": {
     "contentPlaceholder": "Write your diary entry here...",

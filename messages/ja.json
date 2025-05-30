@@ -19,7 +19,9 @@
     "cancel": "キャンセル",
     "create": "作成",
     "save": "保存",
-    "saving": "保存中"
+    "saving": "保存中",
+    "back": "戻る",
+    "edit": "編集"
   },
   "people": {
     "addedOn": "{date}に追加",

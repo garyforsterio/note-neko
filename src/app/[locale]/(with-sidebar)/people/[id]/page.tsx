@@ -89,7 +89,7 @@ export default async function PersonPage({ params }: PersonPageProps) {
         <div>
           <h2 className="text-2xl font-bold mb-4">{t('people.mentionedIn')}</h2>
           <div className="space-y-4">
-            {person.mentions.map((mention) => (
+            {person.mentions.map(async (mention) => (
               <div
                 key={mention.diaryEntry.id}
                 className="bg-white rounded-lg shadow-md p-6"
@@ -104,7 +104,7 @@ export default async function PersonPage({ params }: PersonPageProps) {
                 </div>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: renderMarkdown(mention.diaryEntry.content),
+                    __html: await renderMarkdown(mention.diaryEntry.content),
                   }}
                 />
                 {/* <p className="text-gray-600 whitespace-pre-wrap">
