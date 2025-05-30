@@ -4,10 +4,8 @@ import { marked } from 'marked';
 marked.setOptions({
   gfm: true, // GitHub Flavored Markdown
   breaks: true, // Convert line breaks to <br>
-  headerIds: false, // Don't add IDs to headers
-  mangle: false, // Don't mangle email addresses
 });
 
-export const renderMarkdown = (content: string): string => {
+export const renderMarkdown = async (content: string): Promise<string> => {
   return marked(content);
 };

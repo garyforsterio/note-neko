@@ -28,16 +28,16 @@ export const Default: Story = {
     const canvas = within(canvasElement);
 
     // Test desktop navigation links
-    const diaryLink = canvas.getByRole('link', { name: /diary/i });
-    const peopleLink = canvas.getByRole('link', { name: /people/i });
+    const diaryLink = await canvas.findByRole('link', { name: /diary/i });
+    const peopleLink = await canvas.findByRole('link', { name: /people/i });
 
     // Verify links exist
-    expect(diaryLink).toBeInTheDocument();
-    expect(peopleLink).toBeInTheDocument();
+    await expect(diaryLink).toBeInTheDocument();
+    await expect(peopleLink).toBeInTheDocument();
 
     // Verify calendar is rendered when entries are provided
-    const calendar = canvas.getByRole('grid');
-    expect(calendar).toBeInTheDocument();
+    const calendar = await canvas.findByRole('grid');
+    await expect(calendar).toBeInTheDocument();
   },
 };
 
@@ -47,15 +47,15 @@ export const WithoutEntries: Story = {
     const canvas = within(canvasElement);
 
     // Verify navigation links still exist
-    const diaryLink = canvas.getByRole('link', { name: /diary/i });
-    const peopleLink = canvas.getByRole('link', { name: /people/i });
+    const diaryLink = await canvas.findByRole('link', { name: /diary/i });
+    const peopleLink = await canvas.findByRole('link', { name: /people/i });
 
-    expect(diaryLink).toBeInTheDocument();
-    expect(peopleLink).toBeInTheDocument();
+    await expect(diaryLink).toBeInTheDocument();
+    await expect(peopleLink).toBeInTheDocument();
 
     // Verify calendar is not rendered when no entries are provided
     const calendar = canvas.queryByRole('grid');
-    expect(calendar).not.toBeInTheDocument();
+    await expect(calendar).not.toBeInTheDocument();
   },
 };
 
@@ -73,15 +73,15 @@ export const MobileView: Story = {
     const canvas = within(canvasElement);
 
     // Test mobile navigation links
-    const diaryLink = canvas.getByRole('link', { name: /diary/i });
-    const peopleLink = canvas.getByRole('link', { name: /people/i });
+    const diaryLink = await canvas.findByRole('link', { name: /diary/i });
+    const peopleLink = await canvas.findByRole('link', { name: /people/i });
 
     // Verify mobile navigation links exist
-    expect(diaryLink).toBeInTheDocument();
-    expect(peopleLink).toBeInTheDocument();
+    await expect(diaryLink).toBeInTheDocument();
+    await expect(peopleLink).toBeInTheDocument();
 
     // Verify mobile navigation has correct styling
-    expect(diaryLink.closest('nav')).toHaveClass('md:hidden');
+    await expect(diaryLink.closest('nav')).toHaveClass('md:hidden');
   },
 };
 
@@ -101,11 +101,11 @@ export const ActiveState: Story = {
     const canvas = within(canvasElement);
 
     // Test active state of Diary link
-    const diaryLink = canvas.getByRole('link', { name: /diary/i });
-    expect(diaryLink).toHaveClass('bg-gray-100');
+    const diaryLink = await canvas.findByRole('link', { name: /diary/i });
+    await expect(diaryLink).toHaveClass('bg-gray-100');
 
     // Test inactive state of People link
-    const peopleLink = canvas.getByRole('link', { name: /people/i });
-    expect(peopleLink).not.toHaveClass('bg-gray-100');
+    const peopleLink = await canvas.findByRole('link', { name: /people/i });
+    await expect(peopleLink).not.toHaveClass('bg-gray-100');
   },
 };

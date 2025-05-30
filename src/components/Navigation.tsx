@@ -1,10 +1,10 @@
 'use client';
 
-import Link from 'next/link';
+import { Link } from '#i18n/navigation';
 import { usePathname } from 'next/navigation';
 import { BookOpen, Users } from 'lucide-react';
 import { cn } from '#lib/utils';
-import Calendar from '#app/[locale]/diary/components/Calendar';
+import Calendar from './Calendar';
 
 interface NavigationProps {
   entries?: {

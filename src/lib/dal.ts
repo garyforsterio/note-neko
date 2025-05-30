@@ -1,18 +1,20 @@
 import { db } from '#lib/db';
+import { Prisma } from '@prisma/client';
+import { requireAuth } from './auth';
 
 export interface PersonData {
-  id: string;
+  id?: string;
   name: string;
-  birthday?: string | null;
-  howWeMet?: string | null;
-  interests?: string[];
-  notes?: string | null;
+  birthday?: string;
+  howWeMet?: string;
+  interests: string[];
+  notes?: string;
 }
 
 export interface DiaryData {
   content: string;
   date: string;
-  mentions?: string[];
+  mentions: string[];
   locations?: Array<{
     name: string;
     placeId: string;
@@ -21,8 +23,31 @@ export interface DiaryData {
   }>;
 }
 
-export async function getPeople() {
+export type PersonWithMentions = Prisma.PersonGetPayload<{
+  include: {
+    mentions: {
+      include: {
+        diaryEntry: true;
+      };
+    };
+  };
+}>;
+
+export type DiaryEntryWithRelations = Prisma.DiaryEntryGetPayload<{
+  include: {
+    mentions: {
+      include: {
+        person: true;
+      };
+    };
+    locations: true;
+  };
+}>;
+
+export async function getPeople(): Promise<PersonWithMentions[]> {
+  const user = await requireAuth();
   return db.person.findMany({
+    where: { userId: user.id },
     orderBy: { name: 'asc' },
     include: {
       mentions: {
@@ -34,9 +59,12 @@ export async function getPeople() {
   });
 }
 
-export async function getPerson(id: string) {
-  return db.person.findUnique({
-    where: { id },
+export async function getPerson(
+  id: string
+): Promise<PersonWithMentions | null> {
+  const user = await requireAuth();
+  return db.person.findFirst({
+    where: { id, userId: user.id },
     include: {
       mentions: {
         include: {
@@ -48,6 +76,7 @@ export async function getPerson(id: string) {
 }
 
 export async function createPerson(data: PersonData) {
+  const user = await requireAuth();
   return db.person.create({
     data: {
       name: data.name,
@@ -55,31 +84,38 @@ export async function createPerson(data: PersonData) {
       howWeMet: data.howWeMet,
       interests: data.interests,
       notes: data.notes,
+      userId: user.id,
     },
   });
 }
 
 export async function updatePerson(id: string, data: PersonData) {
+  const user = await requireAuth();
   return db.person.update({
-    where: { id },
+    where: { id, userId: user.id },
     data: {
       name: data.name,
       birthday: data.birthday ? new Date(data.birthday) : null,
       howWeMet: data.howWeMet,
       interests: data.interests,
       notes: data.notes,
+      userId: user.id,
     },
   });
 }
 
 export async function deletePerson(id: string) {
+  const user = await requireAuth();
   return db.person.delete({
-    where: { id },
+    where: { id, userId: user.id },
   });
 }
 
-export async function getDiaryEntries() {
+export async function getDiaryEntries(): Promise<DiaryEntryWithRelations[]> {
+  const user = await requireAuth();
+
   return db.diaryEntry.findMany({
+    where: { userId: user.id },
     orderBy: { date: 'desc' },
     include: {
       mentions: {
@@ -97,9 +133,12 @@ export async function getDiaryEntries() {
   });
 }
 
-export async function getDiaryEntry(id: string) {
-  return db.diaryEntry.findUnique({
-    where: { id },
+export async function getDiaryEntry(
+  id: string
+): Promise<DiaryEntryWithRelations | null> {
+  const user = await requireAuth();
+  return db.diaryEntry.findFirst({
+    where: { id, userId: user.id },
     include: {
       mentions: {
         include: {
@@ -112,10 +151,12 @@ export async function getDiaryEntry(id: string) {
 }
 
 export async function createDiaryEntry(data: DiaryData) {
+  const user = await requireAuth();
   return db.diaryEntry.create({
     data: {
       content: data.content,
       date: new Date(data.date),
+      userId: user.id,
       mentions: {
         create: data.mentions?.map((personId) => ({
           person: {
@@ -144,6 +185,7 @@ export async function createDiaryEntry(data: DiaryData) {
 }
 
 export async function updateDiaryEntry(id: string, data: DiaryData) {
+  const user = await requireAuth();
   // First, delete all existing mentions and locations
   await db.diaryMention.deleteMany({
     where: { diaryEntryId: id },
@@ -158,6 +200,7 @@ export async function updateDiaryEntry(id: string, data: DiaryData) {
     data: {
       content: data.content,
       date: new Date(data.date),
+      userId: user.id,
       mentions: {
         create: data.mentions?.map((personId) => ({
           person: {
@@ -186,7 +229,8 @@ export async function updateDiaryEntry(id: string, data: DiaryData) {
 }
 
 export async function deleteDiaryEntry(id: string) {
+  const user = await requireAuth();
   return db.diaryEntry.delete({
-    where: { id },
+    where: { id, userId: user.id },
   });
 }

@@ -21,17 +21,10 @@ export default async function RootLayout({
     notFound();
   }
 
-  const entries = await getDiaryEntries();
-
   return (
     <html lang={locale}>
       <body className={inter.className}>
-        <NextIntlClientProvider>
-          <Navigation entries={entries} />
-          <main className="min-h-screen bg-gray-50 md:pl-72 pb-16 md:pb-0">
-            {children}
-          </main>
-        </NextIntlClientProvider>
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
   );

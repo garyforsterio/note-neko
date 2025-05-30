@@ -1,4 +1,60 @@
 {
+  "auth": {
+    "title": "Authentication",
+    "login": {
+      "title": "Sign in to your account",
+      "email": "Email address",
+      "password": "Password",
+      "submit": "Sign in",
+      "submitting": "Signing in...",
+      "forgotPassword": "Forgot your password?",
+      "noAccount": "Don't have an account?",
+      "registered": "Your account has been created. Please sign in.",
+      "reset": "Your password has been reset. Please sign in.",
+      "error": {
+        "required": "Please check your credentials and try again.",
+        "invalidCredentials": "Invalid email or password."
+      }
+    },
+    "signup": {
+      "title": "Create your account",
+      "email": "Email address",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "submit": "Sign up",
+      "submitting": "Creating account...",
+      "hasAccount": "Already have an account?",
+      "error": {
+        "required": "Please check your information and try again.",
+        "passwordMismatch": "Passwords do not match.",
+        "emailExists": "An account with this email already exists."
+      }
+    },
+    "forgotPassword": {
+      "title": "Reset your password",
+      "email": "Email address",
+      "submit": "Send reset link",
+      "submitting": "Sending reset link...",
+      "backToLogin": "Back to login",
+      "success": "If an account exists with that email, we've sent a password reset link. Please check your email.",
+      "error": {
+        "required": "Please check your email and try again."
+      }
+    },
+    "resetPassword": {
+      "title": "Set new password",
+      "password": "New password",
+      "confirmPassword": "Confirm new password",
+      "submit": "Reset password",
+      "submitting": "Resetting password...",
+      "backToLogin": "Back to login",
+      "error": {
+        "required": "Please check your information and try again.",
+        "passwordMismatch": "Passwords do not match.",
+        "invalidToken": "Invalid or expired reset token."
+      }
+    }
+  },
   "calendar": {
     "nextMonth": "Next month",
     "previousMonth": "Previous month"

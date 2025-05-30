@@ -13,6 +13,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id            String        @id @default(cuid())
+  email         String        @unique
+  passwordHash  String
+  resetToken    String?
+  resetTokenExpiry DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  people        Person[]
+  diaryEntries  DiaryEntry[]
+}
+
 model Person {
   id          String        @id @default(cuid())
   name        String
@@ -23,6 +35,10 @@ model Person {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   mentions    DiaryMention[]
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+
+  @@index([userId])
 }
 
 model DiaryEntry {
@@ -33,6 +49,10 @@ model DiaryEntry {
   updatedAt   DateTime  @updatedAt
   mentions    DiaryMention[]
   locations   DiaryLocation[]
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+
+  @@index([userId])
 }
 
 model DiaryMention {
