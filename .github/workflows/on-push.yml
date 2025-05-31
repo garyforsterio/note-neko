@@ -22,21 +22,13 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-
-      - name: Prepare environment
-        run: |
-          pnpm run prisma:setup
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
       - name: Install Playwright Dependencies
         run: pnpm exec playwright install chromium --with-deps
-
-      - name: Run vitest
-        run: pnpm test
-
       - name: Run lint
         run: pnpm lint
 
       - name: Run typecheck
         run: pnpm typecheck
+
+      - name: Run vitest
+        run: pnpm test
