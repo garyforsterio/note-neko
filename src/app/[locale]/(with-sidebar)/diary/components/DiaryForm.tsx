@@ -11,7 +11,7 @@ import LocationMention from './LocationMention';
 import MentionDropdown from './MentionDropdown';
 import { renderMarkdown } from '#lib/markdown';
 import { useActionState } from 'react';
-import { ActionState } from '#app/actions/types';
+import { type ActionState } from '#app/actions/types';
 import ErrorMessage from '#app/components/ErrorMessage';
 
 interface Person {
@@ -89,7 +89,7 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
     const cursorPosition = textarea.selectionStart;
     const textBeforeCursor = content.substring(0, cursorPosition);
     const lines = textBeforeCursor.split('\n');
-    const currentLine = lines[lines.length - 1];
+    const currentLine = lines[lines.length - 1] || '';
     const lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
     const rect = textarea.getBoundingClientRect();
     const top = rect.top + (lines.length - 1) * lineHeight;
@@ -115,7 +115,7 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
     const mentionMatch = textBeforeCursor.match(/@(\w*)$/);
 
     if (mentionMatch) {
-      const searchTerm = mentionMatch[1];
+      const searchTerm = mentionMatch[1] || '';
       setMentionSearchTerm(searchTerm);
       setShowPeopleMention(true);
     } else {

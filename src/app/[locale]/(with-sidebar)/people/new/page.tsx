@@ -1,15 +1,12 @@
 import PersonForm from '../components/PersonForm';
 import { getTranslations } from '#lib/i18n/server';
-import { getCurrentUser } from '#lib/auth';
+import { ensureLoggedIn } from '#lib/auth';
 import { redirect } from 'next/navigation';
 
 export default async function NewPersonPage() {
   const t = await getTranslations();
-  const user = await getCurrentUser();
 
-  if (!user) {
-    redirect('/auth/login');
-  }
+  await ensureLoggedIn();
 
   return (
     <div className="container mx-auto px-4 py-8">

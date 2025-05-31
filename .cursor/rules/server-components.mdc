@@ -41,6 +41,21 @@ alwaysApply: true
 - Must display error messages
 - Must be accessible
 
+## Storybook Stories
+- Must create a .stories.tsx file for each component
+- Must include at least two stories: Empty and WithData states
+- Must use async play functions for testing
+- Must mock authentication using requireAuth.mockResolvedValue
+- Must test both UI elements and interactions
+- Must verify accessibility attributes
+- Must test data loading states
+- Must use within() from @storybook/test for element queries
+- Must use expect() for assertions
+- Must clean up test data after stories
+
 @templates/server-action.ts
 @templates/client-component.tsx
 @templates/server-component.tsx
+@templates/component.stories.tsx
+@templates/layout.stories.tsx
+@templates/page.stories.tsx

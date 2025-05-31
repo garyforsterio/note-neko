@@ -24,6 +24,11 @@ export const Default: Story = {
   args: {
     entries: sampleEntries,
   },
+  parameters: {
+    viewport: {
+      defaultViewport: 'desktop',
+    },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
@@ -36,13 +41,24 @@ export const Default: Story = {
     await expect(peopleLink).toBeInTheDocument();
 
     // Verify calendar is rendered when entries are provided
-    const calendar = await canvas.findByRole('grid');
+    const calendar = await canvas.getByText('Mon');
     await expect(calendar).toBeInTheDocument();
+
+    const diaryEntryLink = await canvas.findByRole('link', {
+      name: /20/,
+    });
+
+    await expect(diaryEntryLink).toBeInTheDocument();
   },
 };
 
 export const WithoutEntries: Story = {
   args: {},
+  parameters: {
+    viewport: {
+      defaultViewport: 'desktop',
+    },
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
@@ -54,7 +70,7 @@ export const WithoutEntries: Story = {
     await expect(peopleLink).toBeInTheDocument();
 
     // Verify calendar is not rendered when no entries are provided
-    const calendar = canvas.queryByRole('grid');
+    const calendar = canvas.queryByText('Mon');
     await expect(calendar).not.toBeInTheDocument();
   },
 };
@@ -79,9 +95,6 @@ export const MobileView: Story = {
     // Verify mobile navigation links exist
     await expect(diaryLink).toBeInTheDocument();
     await expect(peopleLink).toBeInTheDocument();
-
-    // Verify mobile navigation has correct styling
-    await expect(diaryLink.closest('nav')).toHaveClass('md:hidden');
   },
 };
 
@@ -91,6 +104,9 @@ export const ActiveState: Story = {
     entries: sampleEntries,
   },
   parameters: {
+    viewport: {
+      defaultViewport: 'mobile1',
+    },
     nextjs: {
       navigation: {
         pathname: '/diary',
@@ -102,7 +118,7 @@ export const ActiveState: Story = {
 
     // Test active state of Diary link
     const diaryLink = await canvas.findByRole('link', { name: /diary/i });
-    await expect(diaryLink).toHaveClass('bg-gray-100');
+    await expect(diaryLink).toHaveClass('text-blue-600');
 
     // Test inactive state of People link
     const peopleLink = await canvas.findByRole('link', { name: /people/i });

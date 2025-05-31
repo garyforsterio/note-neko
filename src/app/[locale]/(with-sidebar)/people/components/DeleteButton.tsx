@@ -33,6 +33,7 @@ export default function DeleteButton({
         aria-disabled={isLoading}
         className="p-2 text-gray-500 hover:text-red-600 transition-colors cursor-pointer"
         title={t('people.deleteProfile')}
+        aria-label={t('people.deleteProfile')}
         onClick={(e) => {
           if (!confirm(t('people.confirmDelete', { name: personName }))) {
             e.preventDefault();
