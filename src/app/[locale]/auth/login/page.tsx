@@ -1,5 +1,5 @@
 import { LoginForm } from '#components/auth/LoginForm';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations } from '#lib/i18n/server';
 
 export default async function LoginPage() {
   const t = await getTranslations();

@@ -1,6 +1,6 @@
 import { getDiaryEntry, getPeople } from '#lib/dal';
 import DiaryForm from '../../components/DiaryForm';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations } from '#lib/i18n/server';
 import { notFound } from 'next/navigation';
 
 interface EditDiaryEntryPageProps {

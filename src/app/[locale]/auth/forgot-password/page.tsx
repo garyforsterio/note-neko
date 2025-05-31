@@ -1,5 +1,5 @@
 import { ForgotPasswordForm } from '#components/auth/ForgotPasswordForm';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations } from '#lib/i18n/server';
 
 export default async function ForgotPasswordPage() {
   const t = await getTranslations();

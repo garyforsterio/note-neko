@@ -1,5 +1,5 @@
 import PersonForm from '../components/PersonForm';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations } from '#lib/i18n/server';
 import { getCurrentUser } from '#lib/auth';
 import { redirect } from 'next/navigation';
 

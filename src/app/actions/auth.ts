@@ -7,7 +7,7 @@ import { db } from '#lib/db';
 import { redirect } from 'next/navigation';
 import { sendEmail } from '#lib/email';
 import { jwtVerify } from 'jose';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations } from '#lib/i18n/server';
 import { ActionState } from './types';
 import { z } from 'zod';
 

@@ -1,5 +1,5 @@
 import { getPerson } from '#lib/dal';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations } from '#lib/i18n/server';
 import { notFound } from 'next/navigation';
 import { Link } from '#i18n/navigation';
 import { format } from 'date-fns';

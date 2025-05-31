@@ -1,5 +1,5 @@
 import { ResetPasswordForm } from '#components/auth/ResetPasswordForm';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations } from '#lib/i18n/server';
 
 interface ResetPasswordPageProps {
   searchParams: { token?: string };

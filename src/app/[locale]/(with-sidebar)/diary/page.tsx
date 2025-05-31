@@ -2,7 +2,7 @@ import { getDiaryEntries, type DiaryEntryWithRelations } from '#lib/dal';
 import { Link } from '#i18n/navigation';
 import { format } from 'date-fns';
 import { Pencil, MapPin } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations } from '#lib/i18n/server';
 import { renderMarkdown } from '#lib/markdown';
 
 export default async function DiaryPage() {

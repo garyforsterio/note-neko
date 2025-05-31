@@ -1,7 +1,7 @@
 import { getPeople } from '#lib/dal';
 import { Link } from '#i18n/navigation';
 import { format } from 'date-fns';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations } from '#lib/i18n/server';
 import DeleteButton from './components/DeleteButton';
 import EditButton from './components/EditButton';
 

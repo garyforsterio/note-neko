@@ -1,5 +1,5 @@
 import React from 'react';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations } from '#lib/i18n/server';
 import { InteractiveComponent } from './InteractiveComponent';
 
 export default async function Page() {
