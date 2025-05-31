@@ -93,7 +93,6 @@
     "prisma": "^5.22.0",
     "prisma-mock": "^0.10.3",
     "storybook": "^8.6.12",
-    "storybook-next-intl": "^1.2.6",
     "tailwindcss": "^4.1.6",
     "tsx": "^4.19.4",
     "typescript": "^5",

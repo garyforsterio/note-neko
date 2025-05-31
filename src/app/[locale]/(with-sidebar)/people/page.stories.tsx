@@ -1,13 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import People from './page';
-import { initializeDB, db } from '#lib/db.mock';
+import { db } from '#lib/db.mock';
 import { expect, within } from '@storybook/test';
-import { PageDecorator } from '../../../../../.storybook/decorators';
 import { requireAuth } from '#lib/auth.mock.js';
 const meta = {
   title: 'app/[locale]/People/page',
   component: People,
-  decorators: [PageDecorator],
   parameters: { layout: 'fullscreen' },
   async beforeEach() {
     requireAuth.mockResolvedValue({

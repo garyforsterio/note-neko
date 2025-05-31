@@ -6,7 +6,6 @@ const config: StorybookConfig = {
     '@storybook/addon-essentials',
     '@chromatic-com/storybook',
     '@storybook/experimental-addon-test',
-    'storybook-next-intl',
   ],
   framework: {
     name: '@storybook/experimental-nextjs-vite',

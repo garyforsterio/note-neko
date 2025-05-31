@@ -1,12 +1,12 @@
 import type { Preview } from '@storybook/react';
 import '../src/app/[locale]/globals.css';
-import nextIntl from './next-intl';
 import * as MockDate from 'mockdate';
 import { userEvent } from '@storybook/test';
 import { initializeDB } from '#lib/db.mock';
 import { getTranslations } from '#lib/i18n/server.mock';
 import { useTranslations } from 'next-intl';
-
+import { rscDecorator } from './decorators/rsc';
+import { i18NDecorator } from './decorators/i18n';
 export const decorators = [];
 
 const preview: Preview = {
@@ -25,15 +25,23 @@ const preview: Preview = {
         autoplay: true,
       },
     },
-    nextIntl,
+  },
+  globalTypes: {
+    locale: {
+      description: 'Internationalization locale',
+      toolbar: {
+        icon: 'globe',
+        items: [
+          { value: 'en', right: '🇬🇧', title: 'English' },
+          { value: 'ja', right: '🇯🇵', title: '日本語' },
+        ],
+      },
+    },
   },
   initialGlobals: {
     locale: 'en',
-    locales: {
-      en: { icon: '🇬🇧', title: 'English', right: 'EN' },
-      ja: { icon: '🇯🇵', title: '日本語', right: 'JA' },
-    },
   },
+  decorators: [rscDecorator, i18NDecorator],
   tags: ['autodocs'],
   async beforeEach({ context, parameters, globals }) {
     // mock backend translations with useTranslations https://github.com/amannn/next-intl/discussions/771
