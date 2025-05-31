@@ -26,7 +26,7 @@ export const Empty: Story = {
     await expect(canvas.getByText('People')).toBeInTheDocument();
     const link = canvas.getByText('New Person');
     await expect(link).toBeInTheDocument();
-    await expect(link).toHaveAttribute('href', '/people/new');
+    await expect(link).toHaveAttribute('href', '/en/people/new');
     await expect(canvas.queryByText('No people added yet')).toBeInTheDocument();
   },
 };
