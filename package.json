@@ -28,6 +28,10 @@
       "storybook": "./src/lib/i18n/server.mock.ts",
       "default": "./src/lib/i18n/server.ts"
     },
+    "#lib/auth": {
+      "storybook": "./src/lib/auth.mock.ts",
+      "default": "./src/lib/auth.ts"
+    },
     "#*": [
       "./src/*",
       "./src/*.ts",

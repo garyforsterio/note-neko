@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { jwtVerify } from 'jose';
-import { db } from './db';
+import { db } from '#lib/db';
 import { redirect } from 'next/navigation';
 
 const JWT_SECRET = new TextEncoder().encode(

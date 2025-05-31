@@ -1,6 +1,6 @@
 import { db } from '#lib/db';
 import { Prisma } from '@prisma/client';
-import { requireAuth } from './auth';
+import { requireAuth } from '#lib/auth';
 
 export interface PersonData {
   id?: string;

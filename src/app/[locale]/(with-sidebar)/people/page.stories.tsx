@@ -1,21 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import People from './page';
 import { initializeDB, db } from '#lib/db.mock';
-
+import { expect, within } from '@storybook/test';
+import { PageDecorator } from '../../../../../.storybook/decorators';
+import { requireAuth } from '#lib/auth.mock.js';
 const meta = {
   title: 'app/[locale]/People/page',
   component: People,
+  decorators: [PageDecorator],
+  parameters: { layout: 'fullscreen' },
   async beforeEach() {
-    // await db.person.create({
-    //   data: {
-    //     title: 'Module mocking in Storybook?',
-    //     body: "Yup, that's a thing now! 🎉",
-    //     createdBy: 'storybookjs',
-    //   },
-    // });
-    // await db.note.create({
-    //   /* another */
-    // });
+    requireAuth.mockResolvedValue({
+      id: 'test-user-id',
+      email: 'test@test.com',
+    });
   },
 } satisfies Meta<typeof People>;
 export default meta;
@@ -23,25 +21,36 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Empty: Story = {
-  args: {},
-  async play({ mount }) {
-    initializeDB({});
-    await mount();
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByText('People')).toBeInTheDocument();
+    await expect(canvas.getByText('New Person')).toBeInTheDocument();
+    await expect(canvas.queryByText('No people added yet')).toBeInTheDocument();
   },
 };
 
 export const WithPeople: Story = {
-  args: {},
-  async play({ mount }) {
-    initializeDB({});
+  async play({ mount, canvasElement }) {
+    await db.user.create({
+      data: {
+        id: 'test-user-id',
+        email: 'test@test.com',
+        passwordHash: 'test',
+      },
+    });
+    await db.person.create({
+      data: {
+        name: 'John Doe',
+        interests: ['test'],
+        user: {
+          connect: {
+            id: 'test-user-id',
+          },
+        },
+      },
+    });
     await mount();
-  },
-};
-
-export const Paginated: Story = {
-  args: {},
-  async play({ mount }) {
-    initializeDB({});
-    await mount();
+    const canvas = within(canvasElement);
+    await expect(canvas.getByText('John Doe')).toBeInTheDocument();
   },
 };
