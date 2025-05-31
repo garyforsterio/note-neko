@@ -20,10 +20,7 @@ export default defineConfig({
     isolate: false,
     setupFiles: ['./.storybook/vitest.setup.ts'],
     coverage: {
-      all: true,
-      include: ['{app,lib,components}/**/*'],
-      exclude: [...coverageConfigDefaults.exclude, '**/*.{stories,mock}.*'],
-      provider: 'istanbul',
+      provider: 'v8',
     },
   },
 });
