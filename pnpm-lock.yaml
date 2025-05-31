@@ -88,9 +88,6 @@ devDependencies:
   '@storybook/addon-essentials':
     specifier: ^8.6.12
     version: 8.6.12(@types/react@19.1.4)(storybook@8.6.12)
-  '@storybook/addon-themes':
-    specifier: ^8.6.12
-    version: 8.6.12(storybook@8.6.12)
   '@storybook/blocks':
     specifier: ^8.6.12
     version: 8.6.12(react-dom@19.1.0)(react@19.1.0)(storybook@8.6.12)
@@ -112,6 +109,9 @@ devDependencies:
   '@tailwindcss/typography':
     specifier: ^0.5.10
     version: 0.5.16(tailwindcss@4.1.6)
+  '@total-typescript/tsconfig':
+    specifier: ^1.0.4
+    version: 1.0.4
   '@types/node':
     specifier: ^22.15.17
     version: 22.15.17
@@ -2666,15 +2666,6 @@ packages:
       ts-dedent: 2.2.0
     dev: true
 
-  /@storybook/addon-themes@8.6.12(storybook@8.6.12):
-    resolution: {integrity: sha512-eqE40MUKTz9lLEOusXjRuDC7DwCSIwlgEnlbvhhEEme8IeKf2di6yvlhenY4nn5QfkUwY1POnZxfJ2OpXj0gqQ==}
-    peerDependencies:
-      storybook: ^8.6.12
-    dependencies:
-      storybook: 8.6.12
-      ts-dedent: 2.2.0
-    dev: true
-
   /@storybook/addon-toolbars@8.6.12(storybook@8.6.12):
     resolution: {integrity: sha512-HEcSzo1DyFtIu5/ikVOmh5h85C1IvK9iFKSzBR6ice33zBOaehVJK+Z5f487MOXxPsZ63uvWUytwPyViGInj+g==}
     peerDependencies:
@@ -3197,6 +3188,10 @@ packages:
       '@testing-library/dom': '>=7.21.4'
     dependencies:
       '@testing-library/dom': 10.4.0
+    dev: true
+
+  /@total-typescript/tsconfig@1.0.4:
+    resolution: {integrity: sha512-fO4ctMPGz1kOFOQ4RCPBRBfMy3gDn+pegUfrGyUFRMv/Rd0ZM3/SHH3hFCYG4u6bPLG8OlmOGcBLDexvyr3A5w==}
     dev: true
 
   /@tybys/wasm-util@0.9.0:

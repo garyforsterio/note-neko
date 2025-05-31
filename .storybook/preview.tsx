@@ -1,6 +1,5 @@
 import type { Preview } from '@storybook/react';
 import '../src/app/[locale]/globals.css';
-import { withThemeByClassName } from '@storybook/addon-themes';
 import nextIntl from './next-intl';
 import * as MockDate from 'mockdate';
 import { userEvent } from '@storybook/test';
@@ -8,15 +7,7 @@ import { initializeDB } from '#lib/db.mock';
 import { getTranslations } from '#lib/i18n/server.mock';
 import { useTranslations } from 'next-intl';
 
-export const decorators = [
-  withThemeByClassName({
-    themes: {
-      light: '',
-      dark: 'dark',
-    },
-    defaultTheme: 'light',
-  }),
-];
+export const decorators = [];
 
 const preview: Preview = {
   parameters: {
