@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import ErrorMessage from '#app/components/ErrorMessage';
 import { useActionState } from 'react';
 import { createPersonWithoutRedirectAction } from '#app/actions/people';
-import { ActionState } from '#app/actions/types';
+import { type ActionState } from '#app/actions/types';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 

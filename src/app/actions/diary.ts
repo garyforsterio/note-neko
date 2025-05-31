@@ -5,7 +5,7 @@ import { createDiaryEntry, updateDiaryEntry, deleteDiaryEntry } from '#lib/dal';
 import type { DiaryData } from '#lib/dal';
 import { requireAuth } from '#lib/auth';
 import { redirect } from 'next/navigation';
-import { ActionState } from './types';
+import { type ActionState } from './types';
 
 import { z } from 'zod';
 

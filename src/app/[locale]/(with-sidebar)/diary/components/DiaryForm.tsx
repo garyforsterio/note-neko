@@ -17,6 +17,9 @@ import ErrorMessage from '#app/components/ErrorMessage';
 interface Person {
   id: string;
   name: string;
+  birthday: Date | null;
+  howWeMet: string | null;
+  interests: string[];
 }
 
 interface DiaryFormProps {

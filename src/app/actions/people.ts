@@ -1,9 +1,14 @@
 'use server';
 
-import { createPerson, deletePerson, PersonData, updatePerson } from '#lib/dal';
+import {
+  createPerson,
+  deletePerson,
+  type PersonData,
+  updatePerson,
+} from '#lib/dal';
 import { requireAuth } from '#lib/auth';
 import { z } from 'zod';
-import { ActionState } from './types';
+import { type ActionState } from './types';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -66,7 +71,7 @@ export async function updatePersonAction(
       };
     }
 
-    await updatePerson(result.data.id, { ...result.data });
+    await updatePerson(result.data.id as string, { ...result.data });
 
     revalidatePath('/people');
     revalidatePath(`/people/${result.data.id}`);

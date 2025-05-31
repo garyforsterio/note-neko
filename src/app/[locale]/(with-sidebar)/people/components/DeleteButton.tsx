@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useActionState } from 'react';
 import ErrorMessage from '#app/components/ErrorMessage';
 import { cn } from '#lib/utils';
-import { ActionState } from '#app/actions/types';
+import { type ActionState } from '#app/actions/types';
 
 interface DeleteButtonProps {
   personId: string;

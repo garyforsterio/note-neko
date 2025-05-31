@@ -3,7 +3,7 @@
 import { useActionState } from 'react';
 import { useTranslations } from 'next-intl';
 import { someAction } from '#app/actions/someAction';
-import { ActionState } from '#app/actions/types';
+import { type ActionState } from '#app/actions/types';
 import ErrorMessage from '#app/components/ErrorMessage';
 
 export function ComponentName() {

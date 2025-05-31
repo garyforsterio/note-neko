@@ -120,12 +120,7 @@ export async function getDiaryEntries(): Promise<DiaryEntryWithRelations[]> {
     include: {
       mentions: {
         include: {
-          person: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
+          person: true,
         },
       },
       locations: true,

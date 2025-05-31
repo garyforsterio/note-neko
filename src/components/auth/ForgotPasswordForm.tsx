@@ -4,7 +4,7 @@ import { useActionState, useState } from 'react';
 import { Link } from '#i18n/navigation';
 import { requestPasswordReset } from '#app/actions/auth';
 import { useTranslations } from 'next-intl';
-import { ActionState } from '#app/actions/types';
+import { type ActionState } from '#app/actions/types';
 import ErrorMessage from '#app/components/ErrorMessage';
 
 export function ForgotPasswordForm() {

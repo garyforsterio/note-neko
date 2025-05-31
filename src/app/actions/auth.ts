@@ -8,7 +8,7 @@ import { redirect } from 'next/navigation';
 import { sendEmail } from '#lib/email';
 import { jwtVerify } from 'jose';
 import { getTranslations } from '#lib/i18n/server';
-import { ActionState } from './types';
+import { type ActionState } from './types';
 import { z } from 'zod';
 
 const JWT_SECRET = new TextEncoder().encode(

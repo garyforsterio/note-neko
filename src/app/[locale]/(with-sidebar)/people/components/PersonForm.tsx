@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createPersonAction, updatePersonAction } from '#app/actions/people';
 import { useTranslations } from 'next-intl';
 import ErrorMessage from '#app/components/ErrorMessage';
-import { ActionState } from '#app/actions/types';
+import { type ActionState } from '#app/actions/types';
 
 interface PersonFormProps {
   person?: {
