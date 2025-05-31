@@ -1,4 +1,17 @@
 -- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "passwordHash" TEXT NOT NULL,
+    "resetToken" TEXT,
+    "resetTokenExpiry" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Person" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -8,6 +21,7 @@ CREATE TABLE "Person" (
     "notes" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "Person_pkey" PRIMARY KEY ("id")
 );
@@ -19,6 +33,7 @@ CREATE TABLE "DiaryEntry" (
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "DiaryEntry_pkey" PRIMARY KEY ("id")
 );
@@ -48,6 +63,15 @@ CREATE TABLE "DiaryLocation" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE INDEX "Person_userId_idx" ON "Person"("userId");
+
+-- CreateIndex
+CREATE INDEX "DiaryEntry_userId_idx" ON "DiaryEntry"("userId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "DiaryMention_personId_diaryEntryId_key" ON "DiaryMention"("personId", "diaryEntryId");
 
 -- CreateIndex
@@ -55,6 +79,12 @@ CREATE UNIQUE INDEX "DiaryLocation_placeId_key" ON "DiaryLocation"("placeId");
 
 -- CreateIndex
 CREATE INDEX "DiaryLocation_diaryEntryId_idx" ON "DiaryLocation"("diaryEntryId");
+
+-- AddForeignKey
+ALTER TABLE "Person" ADD CONSTRAINT "Person_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "DiaryEntry" ADD CONSTRAINT "DiaryEntry_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "DiaryMention" ADD CONSTRAINT "DiaryMention_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE CASCADE ON UPDATE CASCADE;

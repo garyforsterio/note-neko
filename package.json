@@ -16,8 +16,9 @@
     "coverage": "vitest run --coverage",
     "lint": "next lint",
     "typecheck": "tsc",
-    "prisma:generate": "prisma generate",
-    "prisma:setup": "dotenv -e .env.local prisma migrate dev",
+    "prisma:generate": "prisma generate --no-engine",
+    "prisma:setup": "dotenv -e .env.development.local prisma migrate dev && pnpm run prisma:generate-dmmf",
+    "prisma:seed": "dotenv -e .env.development.local prisma db seed",
     "prisma:generate-dmmf": "tsx prisma/generate-dmmf.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
@@ -99,6 +100,7 @@
     "tailwindcss": "^4.1.6",
     "tsx": "^4.19.4",
     "typescript": "^5",
+    "vercel": "^42.3.0",
     "vitest": "^3.1.3"
   }
 }
