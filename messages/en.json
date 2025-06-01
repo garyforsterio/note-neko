@@ -77,7 +77,9 @@
     "noEntries": "No diary entries yet",
     "searchLocation": "Search for a location...",
     "title": "Diary",
-    "writtenOn": "Written on {date}"
+    "writtenOn": "Written on {date}",
+    "noLocationsFound": "No locations found",
+    "addLocation": "Add location"
   },
   "people": {
     "addedOn": "Added on {date}",
@@ -98,6 +100,7 @@
     "save": "Save",
     "saving": "Saving",
     "title": "People",
-    "update": "Update"
+    "update": "Update",
+    "mention": "Mention someone"
   }
 }

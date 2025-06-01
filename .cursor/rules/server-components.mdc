@@ -10,7 +10,7 @@ alwaysApply: true
 - Only use Client Components when interactivity is required
 - Follow progressive enhancement patterns
 - Ensure proper localization
-- Must add translations to all locale JSON files inside messages folder when using new i18n keys
+- Must add translations to all locale JSON files inside repository root-level messages folder when using new i18n keys
 
 ## Server Components
 - Must not include 'use client' directive

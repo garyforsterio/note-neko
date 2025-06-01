@@ -1,18 +1,20 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '#i18n/navigation';
 import {
   createDiaryEntryAction,
   updateDiaryEntryAction,
 } from '#app/actions/diary';
 import { useTranslations } from 'next-intl';
-import LocationMention from './LocationMention';
-import MentionDropdown from './MentionDropdown';
+import { useGooglePlaces } from '#app/hooks/useGooglePlaces';
+
 import { renderMarkdown } from '#lib/markdown';
 import { useActionState } from 'react';
 import { type ActionState } from '#app/actions/types';
 import ErrorMessage from '#app/components/ErrorMessage';
+import PeopleMention from './PeopleMention';
+import LocationMentionSheet from './LocationMentionSheet';
 
 interface Person {
   id: string;
@@ -65,10 +67,14 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
   >(entry?.locations || []);
   const [showLocationMention, setShowLocationMention] = useState(false);
   const [showPeopleMention, setShowPeopleMention] = useState(false);
-  const [mentionPosition, setMentionPosition] = useState({ top: 0, left: 0 });
   const [mentionSearchTerm, setMentionSearchTerm] = useState('');
   const [isPreview, setIsPreview] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const locationPredictions = useGooglePlaces(
+    mentionSearchTerm,
+    showLocationMention
+  );
 
   const [state, action, isPending] = useActionState<ActionState, FormData>(
     entry ? updateDiaryEntryAction : createDiaryEntryAction,
@@ -88,23 +94,34 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
   }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    const textarea = e.currentTarget;
-    const cursorPosition = textarea.selectionStart;
-    const textBeforeCursor = content.substring(0, cursorPosition);
-    const lines = textBeforeCursor.split('\n');
-    const currentLine = lines[lines.length - 1] || '';
-    const lineHeight = parseInt(getComputedStyle(textarea).lineHeight);
-    const rect = textarea.getBoundingClientRect();
-    const top = rect.top + (lines.length - 1) * lineHeight;
-    const left = rect.left + currentLine.length * 8; // Approximate character width
+    if (e.key === 'Enter' && (showPeopleMention || showLocationMention)) {
+      e.preventDefault();
+      const filteredPeople = people.filter((person) =>
+        person.name.toLowerCase().includes(mentionSearchTerm.toLowerCase())
+      );
 
-    if (e.key === '@') {
-      setMentionPosition({ top, left });
-      setShowPeopleMention(true);
-      setMentionSearchTerm('');
-    } else if (e.key === '#') {
-      setMentionPosition({ top, left });
-      setShowLocationMention(true);
+      if (showPeopleMention) {
+        if (filteredPeople.length > 0 && filteredPeople[0]) {
+          handlePersonSelect(filteredPeople[0]);
+        } else if (mentionSearchTerm.trim()) {
+          // Create new person
+          const newPerson = {
+            id: 'new',
+            name: mentionSearchTerm.trim(),
+          };
+          handlePersonSelect(newPerson);
+        }
+      } else if (showLocationMention && locationPredictions.length > 0) {
+        const firstPrediction = locationPredictions[0];
+        if (firstPrediction) {
+          handleLocationSelect({
+            name: firstPrediction.name,
+            placeId: firstPrediction.placeId,
+            lat: firstPrediction.lat,
+            lng: firstPrediction.lng,
+          });
+        }
+      }
     }
   };
 
@@ -121,8 +138,20 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
       const searchTerm = mentionMatch[1] || '';
       setMentionSearchTerm(searchTerm);
       setShowPeopleMention(true);
+      setShowLocationMention(false);
     } else {
       setShowPeopleMention(false);
+    }
+
+    // Handle ^ location mentions
+    const locationMatch = textBeforeCursor.match(/\^(\w*)$/);
+    if (locationMatch) {
+      const searchTerm = locationMatch[1] || '';
+      setMentionSearchTerm(searchTerm);
+      setShowLocationMention(true);
+      setShowPeopleMention(false);
+    } else {
+      setShowLocationMention(false);
     }
   };
 
@@ -139,7 +168,7 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
       const mentionStart = cursorPosition - mentionMatch[0].length;
       const newValue =
         textBeforeCursor.slice(0, mentionStart) +
-        `@[${person.name}](/people/${person.id})` +
+        `@[${person.name}](/en/people/${person.id})` +
         textAfterCursor;
 
       setContent(newValue);
@@ -154,12 +183,26 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
     lat: number;
     lng: number;
   }) => {
-    setLocations([...locations, location]);
-    setContent(
-      content +
-        ` [${location.name}](https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng})`
-    );
-    setShowLocationMention(false);
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const cursorPosition = textarea.selectionStart;
+    const textBeforeCursor = content.slice(0, cursorPosition);
+    const textAfterCursor = content.slice(cursorPosition);
+    const locationMatch = textBeforeCursor.match(/\^(\w*)$/);
+
+    if (locationMatch) {
+      const mentionStart = cursorPosition - locationMatch[0].length;
+      const newValue =
+        textBeforeCursor.slice(0, mentionStart) +
+        `[${location.name}](https://www.google.com/maps/search/?api=1&query_place_id=${location.placeId}&query=${location.lat},${location.lng})` +
+        textAfterCursor;
+
+      setContent(newValue);
+      setLocations([...locations, location]);
+      setShowLocationMention(false);
+      setMentionSearchTerm('');
+    }
   };
 
   return (
@@ -229,44 +272,21 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
           />
         )}
 
-        {showLocationMention && (
-          <div
-            style={{
-              position: 'fixed',
-              top: mentionPosition.top,
-              left: mentionPosition.left,
-            }}
-          >
-            <LocationMention
-              onLocationSelect={handleLocationSelect}
-              onClose={() => setShowLocationMention(false)}
-            />
-          </div>
-        )}
+        <PeopleMention
+          isOpen={showPeopleMention}
+          onClose={() => setShowPeopleMention(false)}
+          onSelect={handlePersonSelect}
+          people={people}
+          searchTerm={mentionSearchTerm}
+        />
 
-        {showPeopleMention && (
-          <div
-            style={{
-              position: 'fixed',
-              top: mentionPosition.top,
-              left: mentionPosition.left,
-            }}
-          >
-            <div className="w-80 border rounded-md bg-white shadow-lg">
-              <div className="p-4 border-b">
-                <h3 className="font-medium text-gray-900">Mention People</h3>
-                <p className="text-sm text-gray-500">
-                  Type @ to mention someone
-                </p>
-              </div>
-              <MentionDropdown
-                searchTerm={mentionSearchTerm}
-                onSelect={handlePersonSelect}
-                people={people}
-              />
-            </div>
-          </div>
-        )}
+        <LocationMentionSheet
+          isOpen={showLocationMention}
+          onClose={() => setShowLocationMention(false)}
+          onLocationSelect={handleLocationSelect}
+          searchTerm={mentionSearchTerm}
+          predictions={locationPredictions}
+        />
       </div>
 
       <div className="flex justify-end space-x-4">

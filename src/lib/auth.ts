@@ -41,7 +41,7 @@ export async function requireAuth() {
 export async function ensureLoggedIn() {
   const user = await getCurrentUser();
   if (!user) {
-    return redirect({
+    redirect({
       href: '/auth/login',
       locale: 'en',
     });
