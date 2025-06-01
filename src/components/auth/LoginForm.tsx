@@ -1,8 +1,8 @@
 'use client';
 
-import { useActionState, useState } from 'react';
+import { useActionState } from 'react';
 import { Link } from '#i18n/navigation';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { login } from '#app/actions/auth';
 import { useTranslations } from 'next-intl';
 import { type ActionState } from '#app/actions/types';

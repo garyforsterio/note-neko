@@ -10,7 +10,7 @@ import { requireAuth } from '#lib/auth';
 import { z } from 'zod';
 import { type ActionState } from './types';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
+import { redirect } from '#i18n/navigation';
 
 const personSchema = z.object({
   id: z.string().optional(),
@@ -54,7 +54,10 @@ export async function createPersonAction(
       error: error instanceof Error ? error.message : 'Failed to create person',
     };
   }
-  redirect('/people');
+  return redirect({
+    href: '/people',
+    locale: 'en',
+  });
 }
 
 export async function updatePersonAction(
@@ -82,7 +85,10 @@ export async function updatePersonAction(
       error: error instanceof Error ? error.message : 'Failed to update person',
     };
   }
-  redirect('/people');
+  return redirect({
+    href: '/people',
+    locale: 'en',
+  });
 }
 
 export async function deletePersonAction(
@@ -101,7 +107,10 @@ export async function deletePersonAction(
       error: error instanceof Error ? error.message : 'Failed to delete person',
     };
   }
-  redirect('/people');
+  return redirect({
+    href: '/people',
+    locale: 'en',
+  });
 }
 
 export async function createPersonWithoutRedirectAction(

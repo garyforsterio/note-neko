@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { jwtVerify } from 'jose';
 import { db } from '#lib/db';
-import { redirect } from 'next/navigation';
+import { redirect } from '#i18n/navigation';
 
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || 'your-secret-key'
@@ -41,6 +41,9 @@ export async function requireAuth() {
 export async function ensureLoggedIn() {
   const user = await getCurrentUser();
   if (!user) {
-    redirect('/auth/login');
+    return redirect({
+      href: '/auth/login',
+      locale: 'en',
+    });
   }
 }

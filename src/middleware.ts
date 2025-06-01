@@ -25,11 +25,6 @@ export async function middleware(request: NextRequest) {
 
   // Allow public paths
   if (!PUBLIC_PATHS.includes(pathnameWithoutLocale)) {
-    console.log('here', {
-      pathname,
-      pathnameWithoutLocale,
-    });
-
     const token = request.cookies.get('token')?.value;
 
     if (!token) {

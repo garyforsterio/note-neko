@@ -4,7 +4,7 @@ import { hash, compare } from 'bcryptjs';
 import { cookies } from 'next/headers';
 import { SignJWT } from 'jose';
 import { db } from '#lib/db';
-import { redirect } from 'next/navigation';
+import { redirect } from '#i18n/navigation';
 import { sendEmail } from '#lib/email';
 import { jwtVerify } from 'jose';
 import { getTranslations } from '#lib/i18n/server';
@@ -76,7 +76,10 @@ export async function signUp(state: ActionState, formData: FormData) {
     },
   });
 
-  redirect('/auth/login?registered=true');
+  return redirect({
+    href: '/auth/login?registered=true',
+    locale: 'en',
+  });
 }
 
 export async function login(state: ActionState, formData: FormData) {
@@ -121,13 +124,19 @@ export async function login(state: ActionState, formData: FormData) {
     maxAge: 60 * 60 * 24, // 24 hours
   });
 
-  redirect('/');
+  return redirect({
+    href: '/',
+    locale: 'en',
+  });
 }
 
 export async function logout() {
   const cookieStore = await cookies();
   cookieStore.delete('token');
-  redirect('/auth/login');
+  return redirect({
+    href: '/auth/login',
+    locale: 'en',
+  });
 }
 
 export async function requestPasswordReset(
@@ -214,7 +223,10 @@ export async function resetPassword(state: ActionState, formData: FormData) {
     },
   });
 
-  redirect('/auth/login?reset=true');
+  return redirect({
+    href: '/auth/login?reset=true',
+    locale: 'en',
+  });
 }
 
 export async function getCurrentUser() {

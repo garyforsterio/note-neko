@@ -1,7 +1,6 @@
 import PersonForm from '../components/PersonForm';
 import { getTranslations } from '#lib/i18n/server';
 import { ensureLoggedIn } from '#lib/auth';
-import { redirect } from 'next/navigation';
 
 export default async function NewPersonPage() {
   const t = await getTranslations();

@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '#i18n/navigation';
 import { createPersonAction, updatePersonAction } from '#app/actions/people';
 import { useTranslations } from 'next-intl';
 import ErrorMessage from '#app/components/ErrorMessage';

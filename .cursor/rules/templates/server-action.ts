@@ -2,7 +2,7 @@
 
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
+import { redirect } from '#i18n/navigation';
 import { type ActionState } from '#app/actions/types';
 
 const schema = z.object({
@@ -23,7 +23,10 @@ export async function actionName(state: ActionState, formData: FormData) {
 
     // Process data
     revalidatePath('/path');
-    redirect('/success');
+    redirect({
+      href: '/success',
+      locale: 'en',
+    });
   } catch (error) {
     return {
       success: false,

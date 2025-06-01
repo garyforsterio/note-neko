@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { createDiaryEntry, updateDiaryEntry, deleteDiaryEntry } from '#lib/dal';
 import type { DiaryData } from '#lib/dal';
 import { requireAuth } from '#lib/auth';
-import { redirect } from 'next/navigation';
+import { redirect } from '#i18n/navigation';
 import { type ActionState } from './types';
 
 import { z } from 'zod';
@@ -52,7 +52,10 @@ export async function createDiaryEntryAction(
         error instanceof Error ? error.message : 'Failed to create diary entry',
     };
   }
-  redirect('/diary');
+  return redirect({
+    href: '/diary',
+    locale: 'en',
+  });
 }
 
 export async function updateDiaryEntryAction(
@@ -78,7 +81,6 @@ export async function updateDiaryEntryAction(
     await updateDiaryEntry(id, { ...result.data });
     revalidatePath('/diary');
     revalidatePath(`/diary/${id}`);
-    redirect('/diary');
   } catch (error) {
     console.error('Error updating diary entry:', error);
     return {
@@ -87,6 +89,10 @@ export async function updateDiaryEntryAction(
         error instanceof Error ? error.message : 'Failed to update diary entry',
     };
   }
+  return redirect({
+    href: '/diary',
+    locale: 'en',
+  });
 }
 
 export async function deleteDiaryEntryAction(id: string) {

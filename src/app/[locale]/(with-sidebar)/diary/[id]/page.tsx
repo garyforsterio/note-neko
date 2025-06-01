@@ -1,10 +1,9 @@
-import { getDiaryEntry, type DiaryEntryWithRelations } from '#lib/dal';
+import { getDiaryEntry } from '#lib/dal';
 import { Link } from '#i18n/navigation';
 import { format } from 'date-fns';
 import { MapPin } from 'lucide-react';
 import { getTranslations } from '#lib/i18n/server';
-import { getCurrentUser } from '#lib/auth';
-import { redirect } from 'next/navigation';
+import { ensureLoggedIn } from '#lib/auth';
 import { notFound } from 'next/navigation';
 import { renderMarkdown } from '#lib/markdown';
 interface DiaryEntryPageProps {
@@ -15,11 +14,7 @@ interface DiaryEntryPageProps {
 
 export default async function DiaryEntryPage({ params }: DiaryEntryPageProps) {
   const t = await getTranslations();
-  const user = await getCurrentUser();
-
-  if (!user) {
-    redirect('/auth/login');
-  }
+  await ensureLoggedIn();
 
   const entry = await getDiaryEntry((await params).id);
 
