@@ -79,7 +79,9 @@
     "title": "Diary",
     "writtenOn": "Written on {date}",
     "noLocationsFound": "No locations found",
-    "addLocation": "Add location"
+    "addLocation": "Add location",
+    "deleteEntry": "Delete entry",
+    "confirmDelete": "Are you sure you want to delete this diary entry? This action cannot be undone."
   },
   "people": {
     "addedOn": "Added on {date}",

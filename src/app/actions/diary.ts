@@ -95,7 +95,11 @@ export async function updateDiaryEntryAction(
   });
 }
 
-export async function deleteDiaryEntryAction(id: string) {
+export async function deleteDiaryEntryAction(
+  state: ActionState,
+  formData: FormData
+): Promise<ActionState> {
+  const id = formData.get('id') as string;
   try {
     await requireAuth();
     await deleteDiaryEntry(id);

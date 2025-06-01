@@ -6,6 +6,8 @@ import { getTranslations } from '#lib/i18n/server';
 import { ensureLoggedIn } from '#lib/auth';
 import { notFound } from 'next/navigation';
 import { renderMarkdown } from '#lib/markdown';
+import DeleteButton from '../components/DeleteButton';
+
 interface DiaryEntryPageProps {
   params: Promise<{
     id: string;
@@ -35,6 +37,7 @@ export default async function DiaryEntryPage({ params }: DiaryEntryPageProps) {
           >
             {t('common.edit')}
           </Link>
+          <DeleteButton id={entry.id} />
           <Link
             href="/diary"
             className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition-colors"

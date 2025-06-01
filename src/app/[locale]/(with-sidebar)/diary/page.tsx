@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { Pencil, MapPin } from 'lucide-react';
 import { getTranslations } from '#lib/i18n/server';
 import { renderMarkdown } from '#lib/markdown';
+import DeleteButton from './components/DeleteButton';
 
 export default async function DiaryPage() {
   const t = await getTranslations();
@@ -44,13 +45,16 @@ export default async function DiaryPage() {
                     })}
                   </p>
                 </div>
-                <Link
-                  href={`/diary/${entry.id}/edit`}
-                  className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
-                  title={t('diary.editEntry')}
-                >
-                  <Pencil className="h-4 w-4" />
-                </Link>
+                <div className="flex gap-2">
+                  <Link
+                    href={`/diary/${entry.id}/edit`}
+                    className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
+                    title={t('diary.editEntry')}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Link>
+                  <DeleteButton id={entry.id} />
+                </div>
               </div>
 
               <div className="prose max-w-none">
