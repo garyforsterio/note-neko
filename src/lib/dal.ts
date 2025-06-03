@@ -62,7 +62,16 @@ export async function getPeople(): Promise<PersonWithMentions[]> {
     include: {
       mentions: {
         include: {
-          diaryEntry: true,
+          diaryEntry: {
+            include: {
+              mentions: {
+                include: {
+                  person: true,
+                },
+              },
+              locations: true,
+            },
+          },
         },
       },
     },
@@ -78,7 +87,16 @@ export async function getPerson(
     include: {
       mentions: {
         include: {
-          diaryEntry: true,
+          diaryEntry: {
+            include: {
+              mentions: {
+                include: {
+                  person: true,
+                },
+              },
+              locations: true,
+            },
+          },
         },
       },
     },
