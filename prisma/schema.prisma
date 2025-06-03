@@ -70,7 +70,7 @@ model DiaryMention {
 model DiaryLocation {
   id           String      @id @default(cuid())
   name         String
-  placeId      String      @unique
+  placeId      String      
   lat          Float
   lng          Float
   diaryEntry   DiaryEntry  @relation(fields: [diaryEntryId], references: [id], onDelete: Cascade)
