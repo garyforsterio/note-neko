@@ -11,9 +11,11 @@ import { getTranslations } from '#lib/i18n/server';
 import { type ActionState } from './types';
 import { z } from 'zod';
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || 'your-secret-key'
-);
+if (!process.env.JWT_SECRET) {
+  throw new Error('JWT_SECRET is not set');
+}
+
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
 const signUpSchema = z
   .object({
@@ -123,6 +125,8 @@ export async function login(state: ActionState, formData: FormData) {
     sameSite: 'lax',
     maxAge: 60 * 60 * 24, // 24 hours
   });
+
+  console.log('token', token);
 
   return redirect({
     href: '/',
