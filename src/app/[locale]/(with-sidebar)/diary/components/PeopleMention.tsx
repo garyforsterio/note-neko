@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '#i18n/navigation';
-import ActionSheet from '#app/components/ActionSheet';
+import ActionSheet from '#components/ActionSheet';
 import CreatePersonModal from './CreatePersonModal';
 import { useState } from 'react';
 

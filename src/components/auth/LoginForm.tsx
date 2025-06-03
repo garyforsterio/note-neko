@@ -3,10 +3,10 @@
 import { useActionState } from 'react';
 import { Link } from '#i18n/navigation';
 import { useSearchParams } from 'next/navigation';
-import { login } from '#app/actions/auth';
+import { login } from '#actions/auth';
 import { useTranslations } from 'next-intl';
-import { type ActionState } from '#app/actions/types';
-import ErrorMessage from '#app/components/ErrorMessage';
+import { type ActionState } from '#actions/types';
+import ErrorMessage from '#components/ErrorMessage';
 
 export function LoginForm() {
   const t = useTranslations();

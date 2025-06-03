@@ -2,9 +2,9 @@
 
 import { useActionState } from 'react';
 import { useTranslations } from 'next-intl';
-import { someAction } from '#app/actions/someAction';
-import { type ActionState } from '#app/actions/types';
-import ErrorMessage from '#app/components/ErrorMessage';
+import { someAction } from '#actions/someAction';
+import { type ActionState } from '#actions/types';
+import ErrorMessage from '#components/ErrorMessage';
 
 export function ComponentName() {
   const t = useTranslations();

@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import ErrorMessage from '#app/components/ErrorMessage';
+import ErrorMessage from '#components/ErrorMessage';
 import { useActionState } from 'react';
-import { createPersonWithoutRedirectAction } from '#app/actions/people';
-import { type ActionState } from '#app/actions/types';
+import { createPersonWithoutRedirectAction } from '#actions/people';
+import { type ActionState } from '#actions/types';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 

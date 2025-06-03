@@ -2,10 +2,10 @@
 
 import { useActionState, useState } from 'react';
 import { useRouter } from '#i18n/navigation';
-import { createPersonAction, updatePersonAction } from '#app/actions/people';
+import { createPersonAction, updatePersonAction } from '#actions/people';
 import { useTranslations } from 'next-intl';
-import ErrorMessage from '#app/components/ErrorMessage';
-import { type ActionState } from '#app/actions/types';
+import ErrorMessage from '#components/ErrorMessage';
+import { type ActionState } from '#actions/types';
 
 interface PersonFormProps {
   person?: {

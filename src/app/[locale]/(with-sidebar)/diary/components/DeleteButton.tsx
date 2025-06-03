@@ -2,9 +2,9 @@
 
 import { Trash2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { deleteDiaryEntryAction } from '#app/actions/diary';
+import { deleteDiaryEntryAction } from '#actions/diary';
 import { useActionState } from 'react';
-import type { ActionState } from '#app/actions/types';
+import type { ActionState } from '#actions/types';
 
 interface DeleteButtonProps {
   id: string;

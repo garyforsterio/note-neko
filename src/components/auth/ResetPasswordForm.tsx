@@ -2,10 +2,10 @@
 
 import { useActionState } from 'react';
 import { Link } from '#i18n/navigation';
-import { resetPassword } from '#app/actions/auth';
+import { resetPassword } from '#actions/auth';
 import { useTranslations } from 'next-intl';
-import { type ActionState } from '#app/actions/types';
-import ErrorMessage from '#app/components/ErrorMessage';
+import { type ActionState } from '#actions/types';
+import ErrorMessage from '#components/ErrorMessage';
 interface ResetPasswordFormProps {
   token: string;
 }

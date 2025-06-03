@@ -2,17 +2,14 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from '#i18n/navigation';
-import {
-  createDiaryEntryAction,
-  updateDiaryEntryAction,
-} from '#app/actions/diary';
+import { createDiaryEntryAction, updateDiaryEntryAction } from '#actions/diary';
 import { useTranslations } from 'next-intl';
-import { useGooglePlaces } from '#app/hooks/useGooglePlaces';
+import { useGooglePlaces } from '#hooks/useGooglePlaces';
 
 import { renderMarkdown } from '#lib/markdown';
 import { useActionState } from 'react';
-import { type ActionState } from '#app/actions/types';
-import ErrorMessage from '#app/components/ErrorMessage';
+import { type ActionState } from '#actions/types';
+import ErrorMessage from '#components/ErrorMessage';
 import PeopleMention from './PeopleMention';
 import LocationMentionSheet from './LocationMentionSheet';
 

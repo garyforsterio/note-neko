@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { MapPin } from 'lucide-react';
-import ActionSheet from '#app/components/ActionSheet';
+import ActionSheet from '#components/ActionSheet';
 
 interface LocationMentionSheetProps {
   isOpen: boolean;
