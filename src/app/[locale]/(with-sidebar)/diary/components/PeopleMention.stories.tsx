@@ -16,6 +16,7 @@ const mockPeople = [
   {
     id: '1',
     name: 'John Doe',
+    nickname: 'Johnny',
     birthday: new Date('1990-01-01'),
     howWeMet: 'At a conference',
     interests: ['Programming', 'Reading'],
@@ -23,6 +24,7 @@ const mockPeople = [
   {
     id: '2',
     name: 'Jane Smith',
+    nickname: 'Janey',
     birthday: new Date('1992-05-15'),
     howWeMet: 'Through mutual friends',
     interests: ['Photography', 'Travel'],
@@ -30,6 +32,7 @@ const mockPeople = [
   {
     id: '3',
     name: 'Bob Johnson',
+    nickname: null,
     birthday: null,
     howWeMet: null,
     interests: [],

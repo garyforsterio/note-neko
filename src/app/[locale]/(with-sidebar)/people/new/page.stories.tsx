@@ -17,6 +17,7 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     await expect(canvas.getByText('New Person')).toBeInTheDocument();
     await expect(canvas.getByLabelText('Name *')).toBeInTheDocument();
+    await expect(canvas.getByLabelText('Nickname')).toBeInTheDocument();
     await expect(canvas.getByLabelText('Birthday')).toBeInTheDocument();
     await expect(canvas.getByLabelText('How we met')).toBeInTheDocument();
     await expect(canvas.getByLabelText('Interests')).toBeInTheDocument();

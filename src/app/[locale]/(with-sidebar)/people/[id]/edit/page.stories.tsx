@@ -38,6 +38,7 @@ export const WithExistingData: Story = {
       data: {
         id: '123',
         name: 'John Doe',
+        nickname: 'Johnny',
         birthday: new Date('1990-01-01'),
         howWeMet: 'Met at a conference',
         interests: ['Programming', 'Reading'],
@@ -59,6 +60,10 @@ export const WithExistingData: Story = {
     const nameInput = canvas.getByLabelText('Name *');
     await expect(nameInput).toBeInTheDocument();
     await expect(nameInput).toHaveValue('John Doe');
+
+    const nicknameInput = canvas.getByLabelText('Nickname');
+    await expect(nicknameInput).toBeInTheDocument();
+    await expect(nicknameInput).toHaveValue('Johnny');
 
     const birthdayInput = canvas.getByLabelText('Birthday');
     await expect(birthdayInput).toBeInTheDocument();

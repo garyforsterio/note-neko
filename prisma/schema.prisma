@@ -28,6 +28,7 @@ model User {
 model Person {
   id          String        @id @default(cuid())
   name        String
+  nickname    String?
   birthday    DateTime?
   howWeMet    String?
   interests   String[]

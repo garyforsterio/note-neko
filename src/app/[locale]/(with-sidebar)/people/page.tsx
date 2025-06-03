@@ -66,6 +66,12 @@ export default async function PeoplePage() {
                 </div>
               </div>
 
+              {person.nickname && (
+                <p className="text-gray-600 mb-2">
+                  {t('people.nickname')}: {person.nickname}
+                </p>
+              )}
+
               {person.birthday && (
                 <p className="text-gray-600 mb-2">
                   {t('people.birthday')}:{' '}

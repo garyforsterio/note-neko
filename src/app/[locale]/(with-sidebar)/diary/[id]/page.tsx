@@ -52,7 +52,11 @@ export default async function DiaryEntryPage({ params }: DiaryEntryPageProps) {
         <div className="prose max-w-none">
           <div
             dangerouslySetInnerHTML={{
-              __html: await renderMarkdown(entry.content),
+              __html: await renderMarkdown(
+                entry.content,
+                entry.mentions.map((m) => m.person),
+                entry.locations
+              ),
             }}
           />
         </div>

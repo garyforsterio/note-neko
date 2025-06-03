@@ -18,6 +18,7 @@ import { getGoogleMapsUrl } from '#lib/utils/maps';
 interface Person {
   id: string;
   name: string;
+  nickname?: string | null;
   birthday: Date | null;
   howWeMet: string | null;
   interests: string[];
@@ -189,7 +190,7 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 
         const newValue =
           textBeforeCursor.slice(0, mentionStart) +
-          `[${personName}](/en/people/${personId})` +
+          `[person:${personId}]` +
           textAfterCursor;
 
         setContent(newValue);
@@ -217,11 +218,7 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
       const mentionStart = cursorPosition - locationMatch[0].length;
       const newValue =
         textBeforeCursor.slice(0, mentionStart) +
-        `[${location.name}](${getGoogleMapsUrl(
-          location.placeId,
-          location.lat,
-          location.lng
-        )})` +
+        `[location:${location.placeId}]` +
         textAfterCursor;
 
       setContent(newValue);
@@ -284,7 +281,13 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
         {isPreview ? (
           <div className="prose max-w-none p-4 bg-white rounded-md border border-gray-300">
             <div
-              dangerouslySetInnerHTML={{ __html: renderMarkdown(content) }}
+              dangerouslySetInnerHTML={{
+                __html: renderMarkdown(
+                  content,
+                  entry?.mentions.map((m) => m.person),
+                  locations
+                ),
+              }}
             />
           </div>
         ) : (

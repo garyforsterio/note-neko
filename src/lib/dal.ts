@@ -5,6 +5,7 @@ import { requireAuth } from '#lib/auth';
 export interface PersonData {
   id?: string;
   name: string;
+  nickname?: string;
   birthday?: string;
   howWeMet?: string;
   interests: string[];
@@ -27,7 +28,16 @@ export type PersonWithMentions = Prisma.PersonGetPayload<{
   include: {
     mentions: {
       include: {
-        diaryEntry: true;
+        diaryEntry: {
+          include: {
+            mentions: {
+              include: {
+                person: true;
+              };
+            };
+            locations: true;
+          };
+        };
       };
     };
   };
@@ -80,6 +90,7 @@ export async function createPerson(data: PersonData) {
   return db.person.create({
     data: {
       name: data.name,
+      nickname: data.nickname,
       birthday: data.birthday ? new Date(data.birthday) : null,
       howWeMet: data.howWeMet,
       interests: data.interests,
@@ -95,6 +106,7 @@ export async function updatePerson(id: string, data: PersonData) {
     where: { id, userId: user.id },
     data: {
       name: data.name,
+      nickname: data.nickname,
       birthday: data.birthday ? new Date(data.birthday) : null,
       howWeMet: data.howWeMet,
       interests: data.interests,

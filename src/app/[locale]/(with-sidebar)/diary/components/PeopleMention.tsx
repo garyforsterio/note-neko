@@ -6,6 +6,7 @@ import { useState } from 'react';
 interface Person {
   id: string;
   name: string;
+  nickname?: string | null;
   birthday: Date | null;
   howWeMet: string | null;
   interests: string[];
@@ -72,6 +73,11 @@ export default function PeopleMention({
                     {t('diary.mentions')}
                   </button>
                 </div>
+                {person.nickname && (
+                  <div className="text-sm text-gray-500">
+                    {t('people.nickname')}: {person.nickname}
+                  </div>
+                )}
                 {person.birthday && (
                   <div className="text-sm text-gray-500">
                     {t('people.birthday')}:{' '}

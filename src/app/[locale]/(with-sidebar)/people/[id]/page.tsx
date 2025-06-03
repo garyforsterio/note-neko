@@ -104,7 +104,11 @@ export default async function PersonPage({ params }: PersonPageProps) {
                 </div>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: await renderMarkdown(mention.diaryEntry.content),
+                    __html: await renderMarkdown(
+                      mention.diaryEntry.content,
+                      mention.diaryEntry.mentions.map((m) => m.person),
+                      mention.diaryEntry.locations
+                    ),
                   }}
                 />
                 {/* <p className="text-gray-600 whitespace-pre-wrap">

@@ -16,6 +16,7 @@ interface DiaryMention {
 interface Person {
   id: string;
   name: string;
+  nickname?: string | null;
   birthday: Date | null;
   howWeMet: string | null;
   interests: string[];
@@ -56,6 +57,12 @@ export default function PeopleList({ people }: PeopleListProps) {
                 <Pencil className="h-4 w-4" />
               </Link>
             </div>
+
+            {person.nickname && (
+              <p className="text-gray-600 mb-2">
+                {t('people.nickname')}: {person.nickname}
+              </p>
+            )}
 
             {person.birthday && (
               <p className="text-gray-600 mb-2">

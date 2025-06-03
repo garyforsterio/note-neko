@@ -15,6 +15,7 @@ import { redirect } from '#i18n/navigation';
 const personSchema = z.object({
   id: z.string().optional(),
   name: z.string().min(1, 'Name is required'),
+  nickname: z.string().optional(),
   birthday: z.string().optional(),
   howWeMet: z.string().optional(),
   interests: z.array(z.string()),

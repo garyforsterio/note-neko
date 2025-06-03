@@ -11,6 +11,7 @@ interface PersonFormProps {
   person?: {
     id: string;
     name: string;
+    nickname?: string | null;
     birthday: Date | null;
     howWeMet: string | null;
     interests: string[];
@@ -43,6 +44,22 @@ export default function PersonForm({ person }: PersonFormProps) {
           name="name"
           required
           defaultValue={person?.name}
+          className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+
+      <div>
+        <label
+          htmlFor="nickname"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          {t('people.nickname')}
+        </label>
+        <input
+          type="text"
+          id="nickname"
+          name="nickname"
+          defaultValue={person?.nickname || ''}
           className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
