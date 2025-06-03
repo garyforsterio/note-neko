@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useTransition } from 'react';
 import { useRouter } from '#i18n/navigation';
 import { createDiaryEntryAction, updateDiaryEntryAction } from '#actions/diary';
+import { createPersonWithoutRedirectAction } from '#actions/people';
 import { useTranslations } from 'next-intl';
 import { useGooglePlaces } from '#hooks/useGooglePlaces';
 
@@ -12,6 +13,7 @@ import { type ActionState } from '#actions/types';
 import ErrorMessage from '#components/ErrorMessage';
 import PeopleMention from './PeopleMention';
 import LocationMentionSheet from './LocationMentionSheet';
+import { getGoogleMapsUrl } from '#lib/utils/maps';
 
 interface Person {
   id: string;
@@ -78,6 +80,8 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
     {}
   );
 
+  const [isAddingPerson, startTransition] = useTransition();
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -103,7 +107,6 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
         } else if (mentionSearchTerm.trim()) {
           // Create new person
           const newPerson = {
-            id: 'new',
             name: mentionSearchTerm.trim(),
           };
           handlePersonSelect(newPerson);
@@ -129,7 +132,7 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
     // Handle @ mentions
     const cursorPosition = e.target.selectionStart;
     const textBeforeCursor = newValue.slice(0, cursorPosition);
-    const mentionMatch = textBeforeCursor.match(/@(\w*)$/);
+    const mentionMatch = textBeforeCursor.match(/@([^@\n]*)$/);
 
     if (mentionMatch) {
       const searchTerm = mentionMatch[1] || '';
@@ -141,7 +144,8 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
     }
 
     // Handle ^ location mentions
-    const locationMatch = textBeforeCursor.match(/\^(\w*)$/);
+    const locationMatch = textBeforeCursor.match(/\^([^\^\n]*)$/);
+
     if (locationMatch) {
       const searchTerm = locationMatch[1] || '';
       setMentionSearchTerm(searchTerm);
@@ -152,26 +156,47 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
     }
   };
 
-  const handlePersonSelect = (person: { id: string; name: string }) => {
-    const textarea = textareaRef.current;
-    if (!textarea) return;
+  const handlePersonSelect = async (person: { id?: string; name: string }) => {
+    startTransition(async () => {
+      const textarea = textareaRef.current;
 
-    const cursorPosition = textarea.selectionStart;
-    const textBeforeCursor = content.slice(0, cursorPosition);
-    const textAfterCursor = content.slice(cursorPosition);
-    const mentionMatch = textBeforeCursor.match(/@(\w*)$/);
+      if (!textarea) return;
 
-    if (mentionMatch) {
-      const mentionStart = cursorPosition - mentionMatch[0].length;
-      const newValue =
-        textBeforeCursor.slice(0, mentionStart) +
-        `@[${person.name}](/en/people/${person.id})` +
-        textAfterCursor;
+      const cursorPosition = textarea.selectionStart;
+      const textBeforeCursor = content.slice(0, cursorPosition);
+      const textAfterCursor = content.slice(cursorPosition);
+      const mentionMatch = textBeforeCursor.match(/@([^@\n]*)$/);
 
-      setContent(newValue);
-      setSelectedPeople([...selectedPeople, person.id]);
-      setShowPeopleMention(false);
-    }
+      if (mentionMatch) {
+        const mentionStart = cursorPosition - mentionMatch[0].length;
+        let personId = person.id;
+        let personName = person.name;
+
+        // If this is a new person (id is undefined), create them first
+        if (!personId) {
+          console.log('Creating person', personName);
+
+          const result = await createPersonWithoutRedirectAction(personName);
+          if (result.success && result.data) {
+            personId = result.data.id;
+            personName = result.data.name;
+          } else {
+            // Handle error case
+            console.error('Failed to create person:', result.error);
+            return;
+          }
+        }
+
+        const newValue =
+          textBeforeCursor.slice(0, mentionStart) +
+          `[${personName}](/en/people/${personId})` +
+          textAfterCursor;
+
+        setContent(newValue);
+        setSelectedPeople([...selectedPeople, personId]);
+        setShowPeopleMention(false);
+      }
+    });
   };
 
   const handleLocationSelect = (location: {
@@ -186,13 +211,17 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
     const cursorPosition = textarea.selectionStart;
     const textBeforeCursor = content.slice(0, cursorPosition);
     const textAfterCursor = content.slice(cursorPosition);
-    const locationMatch = textBeforeCursor.match(/\^(\w*)$/);
+    const locationMatch = textBeforeCursor.match(/\^([^\^\n]*)$/);
 
     if (locationMatch) {
       const mentionStart = cursorPosition - locationMatch[0].length;
       const newValue =
         textBeforeCursor.slice(0, mentionStart) +
-        `[${location.name}](https://www.google.com/maps/search/?api=1&query_place_id=${location.placeId}&query=${location.lat},${location.lng})` +
+        `[${location.name}](${getGoogleMapsUrl(
+          location.placeId,
+          location.lat,
+          location.lng
+        )})` +
         textAfterCursor;
 
       setContent(newValue);
@@ -275,6 +304,7 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
           onSelect={handlePersonSelect}
           people={people}
           searchTerm={mentionSearchTerm}
+          addingPerson={isAddingPerson}
         />
 
         <LocationMentionSheet

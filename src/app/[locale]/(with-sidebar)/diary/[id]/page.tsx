@@ -7,6 +7,7 @@ import { ensureLoggedIn } from '#lib/auth';
 import { notFound } from 'next/navigation';
 import { renderMarkdown } from '#lib/markdown';
 import DeleteButton from '../components/DeleteButton';
+import { getGoogleMapsUrl } from '#lib/utils/maps';
 
 interface DiaryEntryPageProps {
   params: Promise<{
@@ -84,7 +85,11 @@ export default async function DiaryEntryPage({ params }: DiaryEntryPageProps) {
               {entry.locations.map((location) => (
                 <a
                   key={location.id}
-                  href={`https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}`}
+                  href={getGoogleMapsUrl(
+                    location.placeId,
+                    location.lat,
+                    location.lng
+                  )}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-green-100 text-green-800 px-3 py-1 rounded-full hover:bg-green-200 transition-colors flex items-center gap-1"

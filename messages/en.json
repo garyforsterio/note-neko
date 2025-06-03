@@ -103,6 +103,8 @@
     "saving": "Saving",
     "title": "People",
     "update": "Update",
-    "mention": "Mention someone"
+    "mention": "Mention someone",
+    "createNew": "Add {name}",
+    "creating": "Creating {name}..."
   }
 }

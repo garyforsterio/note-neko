@@ -114,12 +114,13 @@ export async function deletePersonAction(
 }
 
 export async function createPersonWithoutRedirectAction(
-  state: ActionState,
-  formData: FormData
+  name: string
 ): Promise<ActionState & { data?: { id: string; name: string } }> {
   try {
-    const data = getPersonFormFormData(formData);
-    const result = personSchema.safeParse(data);
+    const result = personSchema.safeParse({
+      name,
+      interests: [],
+    });
     if (!result.success) {
       return {
         success: false,

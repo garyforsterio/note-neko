@@ -5,6 +5,7 @@ import { Pencil, MapPin } from 'lucide-react';
 import { getTranslations } from '#lib/i18n/server';
 import { renderMarkdown } from '#lib/markdown';
 import DeleteButton from './components/DeleteButton';
+import { getGoogleMapsUrl } from '#lib/utils/maps';
 
 export default async function DiaryPage() {
   const t = await getTranslations();
@@ -93,7 +94,11 @@ export default async function DiaryPage() {
                     {entry.locations.map((location) => (
                       <a
                         key={location.id}
-                        href={`https://www.google.com/maps/search/?api=1&query=${location.lat},${location.lng}`}
+                        href={getGoogleMapsUrl(
+                          location.placeId,
+                          location.lat,
+                          location.lng
+                        )}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="bg-green-100 text-green-800 text-sm px-2 py-1 rounded hover:bg-green-200 transition-colors flex items-center gap-1"
