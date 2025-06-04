@@ -194,7 +194,9 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
           textAfterCursor;
 
         setContent(newValue);
-        setSelectedPeople([...selectedPeople, personId]);
+        // Ensure that the person is not already in the selectedPeople array
+        const newSelectedPeople = selectedPeople.filter((p) => p !== personId);
+        setSelectedPeople([...newSelectedPeople, personId]);
         setShowPeopleMention(false);
       }
     });
@@ -222,7 +224,11 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
         textAfterCursor;
 
       setContent(newValue);
-      setLocations([...locations, location]);
+      // Ensure that the location is not already in the locations array
+      const newLocations = locations.filter(
+        (l) => l.placeId !== location.placeId
+      );
+      setLocations([...newLocations, location]);
       setShowLocationMention(false);
       setMentionSearchTerm('');
     }
