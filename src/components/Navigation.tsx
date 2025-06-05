@@ -78,7 +78,7 @@ export default function Navigation({ entries }: NavigationProps) {
           <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
             <div className="flex flex-shrink-0 items-center px-4">
               <Link href="/" className="text-xl font-bold text-gray-900">
-                Neko Note
+                Note Neko
               </Link>
             </div>
             <nav className="mt-5 flex-1 space-y-1 bg-white px-2">

@@ -25,10 +25,10 @@
   },
   "home": {
     "hero": {
-      "title": "Neko Note",
+      "title": "Note Neko",
       "subtitle": "シンプルなメモアプリで、あなたの力を引き出します。",
       "cta": "メモを始める",
-      "heroImageAlt": "Neko Note ヒーロー画像"
+      "heroImageAlt": "Note Neko ヒーロー画像"
     },
     "features": {
       "dailyDiary": {

@@ -94,10 +94,10 @@
   },
   "home": {
     "hero": {
-      "title": "Neko Note",
+      "title": "Note Neko",
       "subtitle": "Simple note taking app to empower you.",
       "cta": "Start Taking Notes",
-      "heroImageAlt": "Neko Note Hero"
+      "heroImageAlt": "Note Neko Hero"
     },
     "features": {
       "dailyDiary": {
