@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   format,
   startOfMonth,
@@ -9,9 +9,14 @@ import {
   isSameMonth,
   isToday,
   isSameDay,
+  isWithinInterval,
+  startOfDay,
+  endOfDay,
+  parseISO,
 } from 'date-fns';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MousePointer } from 'lucide-react';
 import { Link } from '#i18n/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 interface CalendarProps {
@@ -19,11 +24,50 @@ interface CalendarProps {
     id: string;
     date: Date;
   }[];
+  onDateRangeChange?: (startDate: Date | null, endDate: Date | null) => void;
 }
 
-export default function Calendar({ entries }: CalendarProps) {
+export default function Calendar({
+  entries,
+  onDateRangeChange,
+}: CalendarProps) {
   const t = useTranslations();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [selectionStart, setSelectionStart] = useState<Date | null>(null);
+  const [selectionEnd, setSelectionEnd] = useState<Date | null>(null);
+  const [isSelecting, setIsSelecting] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(true);
+
+  // Initialize selection from URL params
+  useEffect(() => {
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
+    if (startDate) {
+      // Parse the date string and set to UTC midnight
+      const date = parseISO(startDate);
+      setSelectionStart(
+        new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
+      );
+    }
+    if (endDate) {
+      const date = parseISO(endDate);
+      setSelectionEnd(
+        new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
+      );
+    }
+  }, [searchParams]);
+
+  // Hide tooltip after 5 seconds
+  useEffect(() => {
+    if (showTooltip) {
+      const timer = setTimeout(() => {
+        setShowTooltip(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showTooltip]);
 
   const monthStart = startOfMonth(currentMonth);
   const monthEnd = endOfMonth(currentMonth);
@@ -45,8 +89,60 @@ export default function Calendar({ entries }: CalendarProps) {
     return entries.some((entry) => isSameDay(new Date(entry.date), date));
   };
 
+  const isInSelection = (date: Date) => {
+    if (!selectionStart || !selectionEnd) return false;
+    return isWithinInterval(date, {
+      start: startOfDay(selectionStart),
+      end: endOfDay(selectionEnd),
+    });
+  };
+
+  const handleMouseDown = (e: React.MouseEvent, date: Date) => {
+    e.preventDefault(); // Prevent text selection
+    if (!isSameMonth(date, currentMonth)) return;
+    // Create UTC date at midnight
+    const utcDate = new Date(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+    );
+    setIsSelecting(true);
+    setSelectionStart(utcDate);
+    setSelectionEnd(utcDate);
+    setShowTooltip(false);
+  };
+
+  const handleMouseEnter = (date: Date) => {
+    if (!isSelecting || !selectionStart || !isSameMonth(date, currentMonth))
+      return;
+    // Create UTC date at midnight
+    const utcDate = new Date(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+    );
+    setSelectionEnd(utcDate);
+  };
+
+  const handleMouseUp = () => {
+    setIsSelecting(false);
+    if (selectionStart && selectionEnd && onDateRangeChange) {
+      onDateRangeChange(selectionStart, selectionEnd);
+    }
+  };
+
+  useEffect(() => {
+    const handleGlobalMouseUp = () => {
+      if (isSelecting) {
+        setIsSelecting(false);
+        if (selectionStart && selectionEnd && onDateRangeChange) {
+          onDateRangeChange(selectionStart, selectionEnd);
+        }
+      }
+    };
+
+    window.addEventListener('mouseup', handleGlobalMouseUp);
+    return () => window.removeEventListener('mouseup', handleGlobalMouseUp);
+  }, [isSelecting, selectionStart, selectionEnd, onDateRangeChange]);
+
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+    <div className="bg-white rounded-lg shadow-md p-6 mb-8 select-none">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold">
           {format(currentMonth, 'MMMM yyyy')}
@@ -69,6 +165,13 @@ export default function Calendar({ entries }: CalendarProps) {
         </div>
       </div>
 
+      {showTooltip && !selectionStart && !selectionEnd && (
+        <div className="mb-4 p-2 bg-blue-50 text-blue-700 text-sm rounded-md flex items-center gap-2">
+          <MousePointer className="h-4 w-4" />
+          <span>{t('calendar.dragToSelect')}</span>
+        </div>
+      )}
+
       <div className="grid grid-cols-7 gap-2">
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
           <div
@@ -79,16 +182,22 @@ export default function Calendar({ entries }: CalendarProps) {
           </div>
         ))}
 
-        {days.map((day) => {
+        {days?.map((day) => {
           const entry = entries.find((e) => isSameDay(new Date(e.date), day));
+          const isSelected = isInSelection(day);
           return (
             <div
               key={day.toString()}
+              onMouseDown={(e) => handleMouseDown(e, day)}
+              onMouseEnter={() => handleMouseEnter(day)}
               className={`
                 relative aspect-square p-2 text-center rounded-lg min-w-0
                 ${!isSameMonth(day, currentMonth) ? 'text-gray-300' : ''}
                 ${isToday(day) ? 'bg-blue-50' : ''}
                 ${hasEntry(day) ? 'hover:bg-blue-100 cursor-pointer' : ''}
+                ${isSelected ? 'bg-blue-100' : ''}
+                ${isSameMonth(day, currentMonth) ? 'cursor-pointer' : ''}
+                ${isSelecting ? 'cursor-grab active:cursor-grabbing' : ''}
               `}
             >
               {entry ? (

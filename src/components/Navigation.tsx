@@ -1,10 +1,18 @@
 'use client';
 
 import { Link } from '#i18n/navigation';
-import { usePathname } from 'next/navigation';
-import { BookOpen, Users } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import {
+  BookOpen,
+  Users,
+  X,
+  Calendar as CalendarIcon,
+  Settings,
+} from 'lucide-react';
 import { cn } from '#lib/utils';
 import Calendar from './Calendar';
+import { useTranslations } from 'next-intl';
+import { useCallback, useState } from 'react';
 
 interface NavigationProps {
   entries?: {
@@ -27,7 +35,46 @@ const navigation = [
 ];
 
 export default function Navigation({ entries }: NavigationProps) {
+  const t = useTranslations();
   const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pageSize = searchParams.get('pageSize') || '10';
+  const startDate = searchParams.get('startDate');
+  const endDate = searchParams.get('endDate');
+  const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+
+  const updateFilters = useCallback(
+    (updates: Record<string, string | null>) => {
+      const params = new URLSearchParams(searchParams.toString());
+      Object.entries(updates).forEach(([key, value]) => {
+        if (value === null) {
+          params.delete(key);
+        } else {
+          params.set(key, value);
+        }
+      });
+      router.push(`${pathname}?${params.toString()}`);
+    },
+    [pathname, router, searchParams]
+  );
+
+  const handleDateRangeChange = useCallback(
+    (start: Date | null, end: Date | null) => {
+      updateFilters({
+        startDate: start?.toISOString().split('T')[0] || null,
+        endDate: end?.toISOString().split('T')[0] || null,
+      });
+    },
+    [updateFilters]
+  );
+
+  const clearDateRange = useCallback(() => {
+    updateFilters({
+      startDate: null,
+      endDate: null,
+    });
+  }, [updateFilters]);
 
   return (
     <>
@@ -68,9 +115,50 @@ export default function Navigation({ entries }: NavigationProps) {
                 );
               })}
             </nav>
-            {entries && (
-              <div className="px-4 pb-4">
-                <Calendar entries={entries} />
+
+            {pathname.startsWith('/en/diary') && (
+              <div className="px-4 pb-4 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-medium text-gray-700">
+                    {t('diary.itemsPerPage')}
+                  </h3>
+                  <select
+                    value={pageSize}
+                    onChange={(e) =>
+                      updateFilters({ pageSize: e.target.value })
+                    }
+                    className="block w-24 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+                  >
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                  </select>
+                </div>
+
+                {(startDate || endDate) && (
+                  <div className="flex items-center justify-between text-sm text-gray-600">
+                    <span>
+                      {startDate && endDate
+                        ? `${startDate} - ${endDate}`
+                        : startDate || endDate}
+                    </span>
+                    <button
+                      onClick={clearDateRange}
+                      className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                      title={t('diary.clearDateRange')}
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
+
+                {entries && (
+                  <Calendar
+                    entries={entries}
+                    onDateRangeChange={handleDateRangeChange}
+                  />
+                )}
               </div>
             )}
           </div>
@@ -79,6 +167,17 @@ export default function Navigation({ entries }: NavigationProps) {
 
       {/* Mobile Navigation */}
       <div className="md:hidden">
+        {/* Floating Action Button */}
+        {pathname.startsWith('/en/diary') && (
+          <button
+            onClick={() => setIsMobileFiltersOpen(true)}
+            className="fixed bottom-20 right-4 z-20 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors"
+            title={t('diary.filters')}
+          >
+            <Settings className="h-6 w-6" />
+          </button>
+        )}
+
         <div className="fixed inset-x-0 bottom-0 z-10 bg-white border-t border-gray-200">
           <nav className="flex justify-around">
             {navigation.map((item) => {
@@ -106,6 +205,93 @@ export default function Navigation({ entries }: NavigationProps) {
               );
             })}
           </nav>
+        </div>
+
+        {/* Bottom Sheet */}
+        <div
+          className={cn(
+            'fixed inset-0 bg-black transition-opacity duration-300',
+            isMobileFiltersOpen
+              ? 'bg-opacity-50 z-40'
+              : 'bg-opacity-0 pointer-events-none'
+          )}
+          onClick={() => setIsMobileFiltersOpen(false)}
+        />
+        <div
+          className={cn(
+            'fixed inset-x-0 bottom-0 z-50 bg-white rounded-t-2xl shadow-xl transition-transform duration-300 ease-in-out transform',
+            isMobileFiltersOpen ? 'translate-y-0' : 'translate-y-full'
+          )}
+        >
+          <div className="p-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                {t('diary.filters')}
+              </h3>
+              <button
+                onClick={() => setIsMobileFiltersOpen(false)}
+                className="p-2 text-gray-400 hover:text-gray-500"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h4 className="text-sm font-medium text-gray-700">
+                  {t('diary.itemsPerPage')}
+                </h4>
+                <select
+                  value={pageSize}
+                  onChange={(e) => {
+                    updateFilters({ pageSize: e.target.value });
+                    setIsMobileFiltersOpen(false);
+                  }}
+                  className="block w-24 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
+                >
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                </select>
+              </div>
+
+              {(startDate || endDate) && (
+                <div className="flex items-center justify-between text-sm text-gray-600">
+                  <span>
+                    {startDate && endDate
+                      ? `${startDate} - ${endDate}`
+                      : startDate || endDate}
+                  </span>
+                  <button
+                    onClick={() => {
+                      clearDateRange();
+                      setIsMobileFiltersOpen(false);
+                    }}
+                    className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                    title={t('diary.clearDateRange')}
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              )}
+
+              {entries && (
+                <div className="mt-4">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">
+                    {t('diary.selectDateRange')}
+                  </h4>
+                  <Calendar
+                    entries={entries}
+                    onDateRangeChange={(start, end) => {
+                      handleDateRangeChange(start, end);
+                      setIsMobileFiltersOpen(false);
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </>

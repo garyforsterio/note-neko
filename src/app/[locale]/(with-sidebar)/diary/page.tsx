@@ -1,27 +1,65 @@
 import { getDiaryEntries, type DiaryEntryWithRelations } from '#lib/dal';
 import { Link } from '#i18n/navigation';
 import { format } from 'date-fns';
-import { Pencil, MapPin } from 'lucide-react';
+import { Pencil, MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 import { getTranslations } from '#lib/i18n/server';
 import { renderMarkdown } from '#lib/markdown';
 import DeleteButton from './components/DeleteButton';
 import { getGoogleMapsUrl } from '#lib/utils/maps';
 
-export default async function DiaryPage() {
+interface PageProps {
+  searchParams: {
+    page?: string;
+    pageSize?: string;
+    startDate?: string;
+    endDate?: string;
+  };
+}
+
+export default async function DiaryPage({ searchParams }: PageProps) {
   const t = await getTranslations();
 
-  const entries = await getDiaryEntries();
+  const { page, pageSize, startDate, endDate } = await searchParams;
+
+  const parsedPage = page ? Number(page) : 1;
+  const parsedPageSize = pageSize ? Number(pageSize) : 10;
+  const parsedStartDate = startDate ? new Date(startDate) : undefined;
+  const parsedEndDate = endDate ? new Date(endDate) : undefined;
+
+  const { entries, total } = await getDiaryEntries({
+    page: parsedPage,
+    pageSize: parsedPageSize,
+    startDate: parsedStartDate,
+    endDate: parsedEndDate,
+  });
+
+  const totalPages = Math.ceil(total / parsedPageSize);
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold">{t('diary.title')}</h1>
-        <Link
-          href="/diary/new"
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-        >
-          {t('diary.newEntry')}
-        </Link>
+      <div className="flex flex-col gap-4 mb-8">
+        <div className="flex justify-between items-center">
+          <h1 className="text-4xl font-bold">{t('diary.title')}</h1>
+          <Link
+            href="/diary/new"
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+          >
+            {t('diary.newEntry')}
+          </Link>
+        </div>
+
+        {(parsedStartDate || parsedEndDate) && (
+          <div className="text-sm text-gray-600">
+            {parsedStartDate && parsedEndDate
+              ? `${format(parsedStartDate, 'MMM d')} - ${format(
+                  parsedEndDate,
+                  'MMM d, yyyy'
+                )}`
+              : parsedStartDate
+              ? format(parsedStartDate, 'MMM d, yyyy')
+              : format(parsedEndDate!, 'MMM d, yyyy')}
+          </div>
+        )}
       </div>
 
       <div className="space-y-6">
@@ -118,6 +156,54 @@ export default async function DiaryPage() {
           ))
         )}
       </div>
+
+      {totalPages > 1 && (
+        <div className="mt-8 flex justify-center items-center gap-2">
+          <Link
+            href={`/diary?page=${parsedPage - 1}&pageSize=${parsedPageSize}${
+              parsedStartDate
+                ? `&startDate=${parsedStartDate.toISOString().split('T')[0]}`
+                : ''
+            }${
+              parsedEndDate
+                ? `&endDate=${parsedEndDate.toISOString().split('T')[0]}`
+                : ''
+            }`}
+            className={`p-2 rounded-md ${
+              parsedPage > 1
+                ? 'text-gray-600 hover:bg-gray-100'
+                : 'text-gray-300 cursor-not-allowed'
+            }`}
+            aria-disabled={parsedPage <= 1}
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Link>
+
+          <span className="text-sm text-gray-600">
+            {t('diary.pageInfo', { page: parsedPage, totalPages })}
+          </span>
+
+          <Link
+            href={`/diary?page=${parsedPage + 1}&pageSize=${parsedPageSize}${
+              parsedStartDate
+                ? `&startDate=${parsedStartDate.toISOString().split('T')[0]}`
+                : ''
+            }${
+              parsedEndDate
+                ? `&endDate=${parsedEndDate.toISOString().split('T')[0]}`
+                : ''
+            }`}
+            className={`p-2 rounded-md ${
+              parsedPage < totalPages
+                ? 'text-gray-600 hover:bg-gray-100'
+                : 'text-gray-300 cursor-not-allowed'
+            }`}
+            aria-disabled={parsedPage >= totalPages}
+          >
+            <ChevronRight className="h-5 w-5" />
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

@@ -10,7 +10,7 @@ export default async function Layout({
 
   return (
     <>
-      <Navigation entries={entries} />
+      <Navigation entries={entries.entries} />
       <main className="min-h-screen bg-gray-50 md:pl-72 pb-16 md:pb-0">
         {children}
       </main>

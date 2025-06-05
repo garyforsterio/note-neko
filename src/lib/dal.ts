@@ -142,22 +142,54 @@ export async function deletePerson(id: string) {
   });
 }
 
-export const getDiaryEntries = cache(
-  async (): Promise<DiaryEntryWithRelations[]> => {
-    const user = await requireAuth();
+export interface DiaryEntriesOptions {
+  page?: number;
+  pageSize?: number;
+  startDate?: Date;
+  endDate?: Date;
+}
 
-    return db.diaryEntry.findMany({
-      where: { userId: user.id },
-      orderBy: { date: 'desc' },
-      include: {
-        mentions: {
-          include: {
-            person: true,
+export const getDiaryEntries = cache(
+  async (
+    options: DiaryEntriesOptions = {}
+  ): Promise<{
+    entries: DiaryEntryWithRelations[];
+    total: number;
+  }> => {
+    const user = await requireAuth();
+    const { page = 1, pageSize = 10, startDate, endDate } = options;
+
+    const where = {
+      userId: user.id,
+      ...(startDate && endDate
+        ? {
+            date: {
+              gte: startDate,
+              lte: endDate,
+            },
+          }
+        : {}),
+    };
+
+    const [entries, total] = await Promise.all([
+      db.diaryEntry.findMany({
+        where,
+        orderBy: { date: 'desc' },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        include: {
+          mentions: {
+            include: {
+              person: true,
+            },
           },
+          locations: true,
         },
-        locations: true,
-      },
-    });
+      }),
+      db.diaryEntry.count({ where }),
+    ]);
+
+    return { entries, total };
   }
 );
 
