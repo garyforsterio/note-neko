@@ -50,7 +50,6 @@ export function useGooglePlaces(searchTerm: string, isActive: boolean) {
           });
 
           const formattedPredictions = places.map((place: any) => {
-            console.log(place.id, place.displayName, place.formattedAddress);
             return {
               name: place.displayName,
               placeId: place.id,

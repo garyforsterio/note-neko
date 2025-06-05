@@ -175,8 +175,6 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 
         // If this is a new person (id is undefined), create them first
         if (!personId) {
-          console.log('Creating person', personName);
-
           const result = await createPersonWithoutRedirectAction(personName);
           if (result.success && result.data) {
             personId = result.data.id;
