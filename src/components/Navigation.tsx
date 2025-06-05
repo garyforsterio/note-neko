@@ -6,13 +6,16 @@ import { BookOpen, Users, X, Settings } from 'lucide-react';
 import { cn } from '#lib/utils';
 import Calendar from './Calendar';
 import { useTranslations } from 'next-intl';
-import { useCallback, useState } from 'react';
+import { use, useCallback, useState } from 'react';
 
 interface NavigationProps {
-  entries?: {
-    id: string;
-    date: Date;
-  }[];
+  entries: Promise<{
+    entries: {
+      id: string;
+      date: Date;
+    }[];
+    total: number;
+  }>;
 }
 
 const navigation = [
@@ -28,8 +31,11 @@ const navigation = [
   },
 ];
 
-export default function Navigation({ entries }: NavigationProps) {
+export default function Navigation({
+  entries: entriesPromise,
+}: NavigationProps) {
   const t = useTranslations();
+  const entries = use(entriesPromise);
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -149,7 +155,7 @@ export default function Navigation({ entries }: NavigationProps) {
 
                 {entries && (
                   <Calendar
-                    entries={entries}
+                    entries={entries.entries}
                     onDateRangeChange={handleDateRangeChange}
                   />
                 )}
@@ -276,7 +282,7 @@ export default function Navigation({ entries }: NavigationProps) {
                     {t('diary.selectDateRange')}
                   </h4>
                   <Calendar
-                    entries={entries}
+                    entries={entries.entries}
                     onDateRangeChange={(start, end) => {
                       handleDateRangeChange(start, end);
                       setIsMobileFiltersOpen(false);
