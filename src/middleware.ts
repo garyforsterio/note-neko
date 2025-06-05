@@ -25,7 +25,6 @@ export async function middleware(request: NextRequest) {
 
   const locale = pathname.split('/')[1] || 'en';
   const pathnameWithoutLocale = pathname.replace(`/${locale}`, '');
-  console.log('pathnameWithoutLocale', pathnameWithoutLocale);
 
   // Allow public paths
   if (!PUBLIC_PATHS.includes(pathnameWithoutLocale)) {
