@@ -1,22 +1,11 @@
 import { Skeleton } from '#components/ui/skeleton';
+import { DiaryHeader } from './components/DiaryHeader';
 
-export default function DiaryLoading() {
+export default async function DiaryLoading() {
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-4">
-          <Skeleton className="h-10 w-48" />
-          <div className="flex gap-4">
-            <Skeleton className="h-10 w-32" />
-            <Skeleton className="h-10 w-32" />
-          </div>
-        </div>
-        <div className="flex gap-4">
-          <Skeleton className="h-10 w-40" />
-          <Skeleton className="h-10 w-40" />
-        </div>
-      </div>
+      <DiaryHeader />
 
       {/* Entries */}
       <div className="space-y-6">
