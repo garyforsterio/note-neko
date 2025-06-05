@@ -5,18 +5,18 @@ import { DiaryEntry } from './components/DiaryEntry';
 import { DiaryPagination } from './components/DiaryPagination';
 
 interface PageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
     pageSize?: string;
     startDate?: string;
     endDate?: string;
-  };
+  }>;
 }
 
 export default async function DiaryPage({ searchParams }: PageProps) {
   const t = await getTranslations();
 
-  const { page, pageSize, startDate, endDate } = searchParams;
+  const { page, pageSize, startDate, endDate } = await searchParams;
 
   const parsedPage = page ? Number(page) : 1;
   const parsedPageSize = pageSize ? Number(pageSize) : 10;

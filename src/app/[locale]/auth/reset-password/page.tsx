@@ -2,14 +2,14 @@ import { ResetPasswordForm } from '#components/auth/ResetPasswordForm';
 import { getTranslations } from '#lib/i18n/server';
 
 interface ResetPasswordPageProps {
-  searchParams: { token?: string };
+  searchParams: Promise<{ token?: string }>;
 }
 
 export default async function ResetPasswordPage({
   searchParams,
 }: ResetPasswordPageProps) {
   const t = await getTranslations();
-  const token = searchParams.token;
+  const { token } = await searchParams;
 
   if (!token) {
     return (
