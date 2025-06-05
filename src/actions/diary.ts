@@ -1,8 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import { createDiaryEntry, updateDiaryEntry, deleteDiaryEntry } from '#lib/dal';
-import type { DiaryData } from '#lib/dal';
 import { requireAuth } from '#lib/auth';
 import { redirect } from '#i18n/navigation';
 import { type ActionState } from './types';
@@ -43,7 +41,6 @@ export async function createDiaryEntryAction(
       };
     }
     await createDiaryEntry({ ...result.data });
-    revalidatePath('/diary');
   } catch (error) {
     console.error('Error creating diary entry:', error);
     return {
@@ -79,8 +76,6 @@ export async function updateDiaryEntryAction(
       };
     }
     await updateDiaryEntry(id, { ...result.data });
-    revalidatePath('/diary');
-    revalidatePath(`/diary/${id}`);
   } catch (error) {
     console.error('Error updating diary entry:', error);
     return {
@@ -103,7 +98,6 @@ export async function deleteDiaryEntryAction(
   try {
     await requireAuth();
     await deleteDiaryEntry(id);
-    revalidatePath('/diary');
     return { success: true };
   } catch (error) {
     console.error('Error deleting diary entry:', error);

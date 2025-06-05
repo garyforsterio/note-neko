@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 import { redirect } from '#i18n/navigation';
 import { type ActionState } from '#actions/types';
 
@@ -22,7 +22,7 @@ export async function actionName(state: ActionState, formData: FormData) {
     }
 
     // Process data
-    revalidatePath('/path');
+    revalidateTag('path');
     redirect({
       href: '/success',
       locale: 'en',

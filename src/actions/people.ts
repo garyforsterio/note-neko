@@ -9,7 +9,6 @@ import {
 import { requireAuth } from '#lib/auth';
 import { z } from 'zod';
 import { type ActionState } from './types';
-import { revalidatePath } from 'next/cache';
 import { redirect } from '#i18n/navigation';
 
 const personSchema = z.object({
@@ -47,7 +46,6 @@ export async function createPersonAction(
       };
     }
     await createPerson({ ...result.data });
-    revalidatePath('/people');
   } catch (error) {
     console.error('Error creating person:', error);
     return {
@@ -76,9 +74,6 @@ export async function updatePersonAction(
     }
 
     await updatePerson(result.data.id as string, { ...result.data });
-
-    revalidatePath('/people');
-    revalidatePath(`/people/${result.data.id}`);
   } catch (error) {
     console.error('Error updating person:', error);
     return {
@@ -100,7 +95,6 @@ export async function deletePersonAction(
   try {
     await requireAuth();
     await deletePerson(id);
-    revalidatePath('/people');
   } catch (error) {
     console.error('Error deleting person:', error);
     return {
@@ -129,7 +123,6 @@ export async function createPersonWithoutRedirectAction(
       };
     }
     const person = await createPerson({ ...result.data });
-    revalidatePath('/people');
     return {
       success: true,
       data: {
