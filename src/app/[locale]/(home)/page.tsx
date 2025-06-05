@@ -23,6 +23,7 @@ export default async function Home() {
               fill
               className="object-cover"
               priority
+              placeholder="blur"
             />
           </div>
           <div className="absolute inset-0 bg-black/40" />
