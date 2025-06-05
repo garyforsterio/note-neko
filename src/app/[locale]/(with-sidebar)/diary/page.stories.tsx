@@ -13,6 +13,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Empty: Story = {
+  args: {
+    searchParams: Promise.resolve({}),
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(canvas.getByText('Diary')).toBeInTheDocument();
@@ -24,6 +27,9 @@ export const Empty: Story = {
 };
 
 export const WithEntries: Story = {
+  args: {
+    searchParams: Promise.resolve({}),
+  },
   async play({ mount, canvasElement }) {
     // Setup test data
     await db.user.create({
@@ -61,6 +67,9 @@ export const WithEntries: Story = {
 };
 
 export const WithMentionsAndLocations: Story = {
+  args: {
+    searchParams: Promise.resolve({}),
+  },
   async play({ mount, canvasElement }) {
     // Setup test data
     await db.user.create({
