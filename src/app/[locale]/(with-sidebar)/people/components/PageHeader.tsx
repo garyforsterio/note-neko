@@ -1,10 +1,8 @@
-'use client';
-
 import { Link } from '#i18n/navigation';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from '#lib/i18n/server';
 
-export default function PageHeader() {
-  const t = useTranslations();
+export default async function PageHeader() {
+  const t = await getTranslations();
 
   return (
     <div className="flex justify-between items-center mb-8">
