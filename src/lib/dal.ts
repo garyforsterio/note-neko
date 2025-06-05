@@ -1,6 +1,7 @@
 import { db } from '#lib/db';
 import { Prisma } from '@prisma/client';
 import { requireAuth } from '#lib/auth';
+import { cache } from 'react';
 
 export interface PersonData {
   id?: string;
@@ -54,7 +55,7 @@ export type DiaryEntryWithRelations = Prisma.DiaryEntryGetPayload<{
   };
 }>;
 
-export async function getPeople(): Promise<PersonWithMentions[]> {
+export const getPeople = cache(async (): Promise<PersonWithMentions[]> => {
   const user = await requireAuth();
   return db.person.findMany({
     where: { userId: user.id },
@@ -76,32 +77,32 @@ export async function getPeople(): Promise<PersonWithMentions[]> {
       },
     },
   });
-}
+});
 
-export async function getPerson(
-  id: string
-): Promise<PersonWithMentions | null> {
-  const user = await requireAuth();
-  return db.person.findFirst({
-    where: { id, userId: user.id },
-    include: {
-      mentions: {
-        include: {
-          diaryEntry: {
-            include: {
-              mentions: {
-                include: {
-                  person: true,
+export const getPerson = cache(
+  async (id: string): Promise<PersonWithMentions | null> => {
+    const user = await requireAuth();
+    return db.person.findFirst({
+      where: { id, userId: user.id },
+      include: {
+        mentions: {
+          include: {
+            diaryEntry: {
+              include: {
+                mentions: {
+                  include: {
+                    person: true,
+                  },
                 },
+                locations: true,
               },
-              locations: true,
             },
           },
         },
       },
-    },
-  });
-}
+    });
+  }
+);
 
 export async function createPerson(data: PersonData) {
   const user = await requireAuth();
@@ -141,39 +142,41 @@ export async function deletePerson(id: string) {
   });
 }
 
-export async function getDiaryEntries(): Promise<DiaryEntryWithRelations[]> {
-  const user = await requireAuth();
+export const getDiaryEntries = cache(
+  async (): Promise<DiaryEntryWithRelations[]> => {
+    const user = await requireAuth();
 
-  return db.diaryEntry.findMany({
-    where: { userId: user.id },
-    orderBy: { date: 'desc' },
-    include: {
-      mentions: {
-        include: {
-          person: true,
+    return db.diaryEntry.findMany({
+      where: { userId: user.id },
+      orderBy: { date: 'desc' },
+      include: {
+        mentions: {
+          include: {
+            person: true,
+          },
         },
+        locations: true,
       },
-      locations: true,
-    },
-  });
-}
+    });
+  }
+);
 
-export async function getDiaryEntry(
-  id: string
-): Promise<DiaryEntryWithRelations | null> {
-  const user = await requireAuth();
-  return db.diaryEntry.findFirst({
-    where: { id, userId: user.id },
-    include: {
-      mentions: {
-        include: {
-          person: true,
+export const getDiaryEntry = cache(
+  async (id: string): Promise<DiaryEntryWithRelations | null> => {
+    const user = await requireAuth();
+    return db.diaryEntry.findFirst({
+      where: { id, userId: user.id },
+      include: {
+        mentions: {
+          include: {
+            person: true,
+          },
         },
+        locations: true,
       },
-      locations: true,
-    },
-  });
-}
+    });
+  }
+);
 
 export async function createDiaryEntry(data: DiaryData) {
   const user = await requireAuth();
