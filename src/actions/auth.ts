@@ -132,7 +132,7 @@ export async function login(state: AuthActionState, formData: FormData) {
   });
 
   return redirect({
-    href: '/',
+    href: '/diary',
     locale: 'en',
   });
 }
