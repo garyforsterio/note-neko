@@ -4,12 +4,12 @@ import { useActionState } from 'react';
 import { Link } from '#i18n/navigation';
 import { signUp } from '#actions/auth';
 import { useTranslations } from 'next-intl';
-import { type ActionState } from '#actions/types';
+import { type AuthActionState } from '#actions/types';
 import ErrorMessage from '#components/ErrorMessage';
 
 export function SignUpForm() {
   const t = useTranslations();
-  const [state, action, isPending] = useActionState<ActionState, FormData>(
+  const [state, action, isPending] = useActionState<AuthActionState, FormData>(
     signUp,
     {}
   );
@@ -28,6 +28,7 @@ export function SignUpForm() {
             type="email"
             autoComplete="email"
             required
+            defaultValue={state.email}
             className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder={t('auth.signup.email')}
           />

@@ -8,7 +8,7 @@ import { redirect } from '#i18n/navigation';
 import { sendEmail } from '#lib/email';
 import { jwtVerify } from 'jose';
 import { getTranslations } from '#lib/i18n/server';
-import { type ActionState } from './types';
+import { type AuthActionState } from './types';
 import { z } from 'zod';
 
 if (!process.env.JWT_SECRET) {
@@ -48,7 +48,7 @@ const resetPasswordSchema = z
     message: 'Passwords do not match',
   });
 
-export async function signUp(state: ActionState, formData: FormData) {
+export async function signUp(state: AuthActionState, formData: FormData) {
   const t = await getTranslations();
 
   const result = signUpSchema.safeParse(Object.fromEntries(formData));
@@ -56,6 +56,7 @@ export async function signUp(state: ActionState, formData: FormData) {
     return {
       success: false,
       error: result.error.errors.map((e) => e.message).join(', '),
+      email: formData.get('email') as string,
     };
   }
   const existingUser = await db.user.findUnique({
@@ -66,6 +67,7 @@ export async function signUp(state: ActionState, formData: FormData) {
     return {
       success: false,
       error: t('auth.signup.error.emailExists'),
+      email: result.data.email,
     };
   }
 
@@ -84,13 +86,14 @@ export async function signUp(state: ActionState, formData: FormData) {
   });
 }
 
-export async function login(state: ActionState, formData: FormData) {
+export async function login(state: AuthActionState, formData: FormData) {
   const t = await getTranslations();
   const result = loginSchema.safeParse(Object.fromEntries(formData));
   if (!result.success) {
     return {
       success: false,
       error: result.error.errors.map((e) => e.message).join(', '),
+      email: formData.get('email') as string,
     };
   }
   const user = await db.user.findUnique({
@@ -101,6 +104,7 @@ export async function login(state: ActionState, formData: FormData) {
     return {
       success: false,
       error: t('auth.login.error.invalidCredentials'),
+      email: result.data.email,
     };
   }
 
@@ -110,6 +114,7 @@ export async function login(state: ActionState, formData: FormData) {
     return {
       success: false,
       error: t('auth.login.error.invalidCredentials'),
+      email: result.data.email,
     };
   }
 
@@ -125,8 +130,6 @@ export async function login(state: ActionState, formData: FormData) {
     sameSite: 'lax',
     maxAge: 60 * 60 * 24, // 24 hours
   });
-
-  console.log('token', token);
 
   return redirect({
     href: '/',
@@ -144,7 +147,7 @@ export async function logout() {
 }
 
 export async function requestPasswordReset(
-  state: ActionState,
+  state: AuthActionState,
   formData: FormData
 ) {
   const t = await getTranslations();
@@ -191,7 +194,10 @@ export async function requestPasswordReset(
   };
 }
 
-export async function resetPassword(state: ActionState, formData: FormData) {
+export async function resetPassword(
+  state: AuthActionState,
+  formData: FormData
+) {
   const t = await getTranslations();
   const result = resetPasswordSchema.safeParse(Object.fromEntries(formData));
   if (!result.success) {

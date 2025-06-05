@@ -5,13 +5,13 @@ import { Link } from '#i18n/navigation';
 import { useSearchParams } from 'next/navigation';
 import { login } from '#actions/auth';
 import { useTranslations } from 'next-intl';
-import { type ActionState } from '#actions/types';
+import { type AuthActionState } from '#actions/types';
 import ErrorMessage from '#components/ErrorMessage';
 
 export function LoginForm() {
   const t = useTranslations();
   const searchParams = useSearchParams();
-  const [state, action, isPending] = useActionState<ActionState, FormData>(
+  const [state, action, isPending] = useActionState<AuthActionState, FormData>(
     login,
     {}
   );
@@ -39,6 +39,7 @@ export function LoginForm() {
             type="email"
             autoComplete="email"
             required
+            defaultValue={state.email}
             className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
             placeholder={t('auth.login.email')}
           />
