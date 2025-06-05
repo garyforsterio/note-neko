@@ -1,4 +1,6 @@
-# Life Tracker
+# Note Neko
+
+![Note Neko](<./src/app//[locale]/(home)/hero-image.png>)
 
 A personal life tracking application built with Next.js 15, featuring a daily diary, people profile management system, and location tracking.
 
