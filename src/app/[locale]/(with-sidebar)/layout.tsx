@@ -6,11 +6,11 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const entries = await getDiaryEntries();
+  const entries = getDiaryEntries();
 
   return (
     <>
-      <Navigation entries={entries.entries} />
+      <Navigation entries={entries} />
       <main className="min-h-screen bg-gray-50 md:pl-72 pb-16 md:pb-0">
         {children}
       </main>
