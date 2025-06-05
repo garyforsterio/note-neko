@@ -50,12 +50,16 @@ export default function Calendar({
       setSelectionStart(
         new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
       );
+    } else {
+      setSelectionStart(null);
     }
     if (endDate) {
       const date = parseISO(endDate);
       setSelectionEnd(
         new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
       );
+    } else {
+      setSelectionEnd(null);
     }
   }, [searchParams]);
 

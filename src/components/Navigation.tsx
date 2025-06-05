@@ -1,14 +1,8 @@
 'use client';
 
-import { Link } from '#i18n/navigation';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import {
-  BookOpen,
-  Users,
-  X,
-  Calendar as CalendarIcon,
-  Settings,
-} from 'lucide-react';
+import { Link, usePathname, useRouter } from '#i18n/navigation';
+import { useSearchParams } from 'next/navigation';
+import { BookOpen, Users, X, Settings } from 'lucide-react';
 import { cn } from '#lib/utils';
 import Calendar from './Calendar';
 import { useTranslations } from 'next-intl';
@@ -54,7 +48,7 @@ export default function Navigation({ entries }: NavigationProps) {
           params.set(key, value);
         }
       });
-      router.push(`${pathname}?${params.toString()}`);
+      router.push(`/diary?${params.toString()}`);
     },
     [pathname, router, searchParams]
   );
@@ -84,7 +78,7 @@ export default function Navigation({ entries }: NavigationProps) {
           <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
             <div className="flex flex-shrink-0 items-center px-4">
               <Link href="/" className="text-xl font-bold text-gray-900">
-                Life Tracker
+                Neko Note
               </Link>
             </div>
             <nav className="mt-5 flex-1 space-y-1 bg-white px-2">
@@ -116,7 +110,7 @@ export default function Navigation({ entries }: NavigationProps) {
               })}
             </nav>
 
-            {pathname.startsWith('/en/diary') && (
+            {pathname.startsWith('/diary') && (
               <div className="px-4 pb-4 space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-medium text-gray-700">
@@ -168,7 +162,7 @@ export default function Navigation({ entries }: NavigationProps) {
       {/* Mobile Navigation */}
       <div className="md:hidden">
         {/* Floating Action Button */}
-        {pathname.startsWith('/en/diary') && (
+        {pathname.startsWith('/diary') && (
           <button
             onClick={() => setIsMobileFiltersOpen(true)}
             className="fixed bottom-20 right-4 z-20 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors"
