@@ -23,6 +23,53 @@
     "back": "戻る",
     "edit": "編集"
   },
+  "home": {
+    "hero": {
+      "title": "Neko Note",
+      "subtitle": "シンプルなメモアプリで、あなたの力を引き出します。",
+      "cta": "メモを始める",
+      "heroImageAlt": "Neko Note ヒーロー画像"
+    },
+    "features": {
+      "dailyDiary": {
+        "title": "日記機能",
+        "description": "クリーンで直感的なインターフェースで、日々の活動や交流を記録。進捗を追跡し、経験の包括的な記録を維持します。"
+      },
+      "peopleProfiles": {
+        "title": "人物プロフィール",
+        "description": "交流から詳細な人物像を自動生成。将来の出会いや関係構築のための貴重な参照となる包括的なプロフィールを構築します。"
+      },
+      "locationHistory": {
+        "title": "場所の履歴",
+        "description": "様々な場所への訪問を記録・整理。将来の参照のために、会場、活動、経験を追跡します。"
+      }
+    },
+    "testimonials": {
+      "title": "ユーザーの声",
+      "sarah": {
+        "name": "サラ「名前を忘れる」チェン",
+        "title": "プロフェッショナル・ピープル・プレイザー",
+        "quote": "名前を自信を持って忘れられるようになりました！",
+        "avatarAlt": "サラのアバター"
+      },
+      "michael": {
+        "name": "マイケル「迷子の達人」ロドリゲス",
+        "title": "方向音痴認定",
+        "quote": "ついに、深夜の考えを批判しない日記ができました！",
+        "avatarAlt": "マイケルのアバター"
+      },
+      "emma": {
+        "name": "エマ「金魚脳」トンプソン",
+        "title": "記憶力向上愛好家",
+        "quote": "ついに金魚より賢くなれました！",
+        "avatarAlt": "エマのアバター"
+      }
+    },
+    "footer": {
+      "createdBy": "作成者",
+      "githubAlt": "GitHub"
+    }
+  },
   "people": {
     "addedOn": "{date}に追加",
     "addPerson": "新しい人",

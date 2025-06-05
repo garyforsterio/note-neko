@@ -83,6 +83,53 @@
     "deleteEntry": "Delete entry",
     "confirmDelete": "Are you sure you want to delete this diary entry? This action cannot be undone."
   },
+  "home": {
+    "hero": {
+      "title": "Neko Note",
+      "subtitle": "Simple note taking app to empower you.",
+      "cta": "Start Taking Notes",
+      "heroImageAlt": "Neko Note Hero"
+    },
+    "features": {
+      "dailyDiary": {
+        "title": "Daily Diary",
+        "description": "Document your daily activities and interactions with a clean, intuitive interface. Track your progress and maintain a comprehensive record of your experiences."
+      },
+      "peopleProfiles": {
+        "title": "People Profiles",
+        "description": "Automatically generate detailed personas from your interactions. Build comprehensive profiles that serve as valuable references for future encounters and relationship building."
+      },
+      "locationHistory": {
+        "title": "Location History",
+        "description": "Document and organize your visits to different places. Keep track of venues, activities, and experiences for future reference."
+      }
+    },
+    "testimonials": {
+      "title": "What Our Users Say",
+      "sarah": {
+        "name": "Sarah \"Forgot-Your-Name\" Chen",
+        "title": "Professional People Pleaser",
+        "quote": "Now I can forget names with confidence!",
+        "avatarAlt": "Sarah's avatar"
+      },
+      "michael": {
+        "name": "Michael \"Lost & Found\" Rodriguez",
+        "title": "Certified Directionally Challenged",
+        "quote": "Finally, a diary that doesn't judge my 3 AM thoughts!",
+        "avatarAlt": "Michael's avatar"
+      },
+      "emma": {
+        "name": "Emma \"Goldfish Brain\" Thompson",
+        "title": "Memory Enthusiast",
+        "quote": "Finally smarter than my goldfish!",
+        "avatarAlt": "Emma's avatar"
+      }
+    },
+    "footer": {
+      "createdBy": "Created by",
+      "githubAlt": "GitHub"
+    }
+  },
   "people": {
     "addedOn": "Added on {date}",
     "addPerson": "New Person",
