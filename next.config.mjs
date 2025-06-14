@@ -11,6 +11,8 @@ const nextConfig = {
   },
   experimental: {
     nodeMiddleware: true,
+    reactCompiler: true,
+    ppr: true,
   },
 };
 
