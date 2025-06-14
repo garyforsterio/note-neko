@@ -36,6 +36,7 @@ export async function createPersonAction(
   state: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAuth();
   try {
     const data = getPersonFormFormData(formData);
     const result = personSchema.safeParse(data);
@@ -63,6 +64,7 @@ export async function updatePersonAction(
   state: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAuth();
   try {
     const data = getPersonFormFormData(formData);
     const result = personSchema.safeParse(data);
@@ -91,6 +93,7 @@ export async function deletePersonAction(
   state: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAuth();
   const id = formData.get('id') as string;
   try {
     await requireAuth();
@@ -111,6 +114,7 @@ export async function deletePersonAction(
 export async function createPersonWithoutRedirectAction(
   name: string
 ): Promise<ActionState & { data?: { id: string; name: string } }> {
+  await requireAuth();
   try {
     const result = personSchema.safeParse({
       name,

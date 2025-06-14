@@ -7,7 +7,3 @@ export const requireAuth = fn(actual.requireAuth).mockName('requireAuth');
 export const getCurrentUser = fn(actual.getCurrentUser).mockName(
   'getCurrentUser'
 );
-
-export const ensureLoggedIn = fn(actual.ensureLoggedIn).mockName(
-  'ensureLoggedIn'
-);

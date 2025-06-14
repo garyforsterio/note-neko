@@ -7,7 +7,7 @@ import { getTranslations } from '#lib/i18n/server.mock';
 import { useTranslations } from 'next-intl';
 import { rscDecorator } from './decorators/rsc';
 import { i18NDecorator } from './decorators/i18n';
-import { ensureLoggedIn, getCurrentUser, requireAuth } from '#lib/auth.mock.js';
+import { getCurrentUser, requireAuth } from '#lib/auth.mock.js';
 export const decorators = [];
 
 const preview: Preview = {
@@ -66,7 +66,6 @@ const preview: Preview = {
       id: 'test-user-id',
       email: 'test@test.com',
     });
-    ensureLoggedIn.mockResolvedValue();
     requireAuth.mockResolvedValue({
       id: 'test-user-id',
       email: 'test@test.com',

@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { jwtVerify } from 'jose';
 import { routing } from '#i18n/routing';
 import createMiddleware from 'next-intl/middleware';
+import { validateTokens } from '#lib/auth';
 
 const i18nMiddleware = createMiddleware(routing);
 
@@ -28,22 +28,15 @@ export async function middleware(request: NextRequest) {
 
   // Allow public paths
   if (!PUBLIC_PATHS.includes(pathnameWithoutLocale)) {
-    const token = request.cookies.get('token')?.value;
+    const userId = await validateTokens();
 
-    if (!token) {
+    if (!userId) {
       const url = new URL(`/${locale}/auth/login`, request.url);
       url.searchParams.set('from', pathname);
       return NextResponse.redirect(url);
     }
 
-    try {
-      await jwtVerify(token, JWT_SECRET);
-      return NextResponse.next();
-    } catch {
-      const url = new URL(`/${locale}/auth/login`, request.url);
-      url.searchParams.set('from', pathname);
-      return NextResponse.redirect(url);
-    }
+    return NextResponse.next();
   }
 
   return i18nMiddleware(request);
@@ -60,4 +53,5 @@ export const config = {
      */
     '/((?!api|images|manifest.json|_next/static|_next/image|favicon.ico).*)',
   ],
+  runtime: 'nodejs',
 };

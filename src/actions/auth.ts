@@ -1,21 +1,13 @@
 'use server';
 
 import { hash, compare } from 'bcryptjs';
-import { cookies } from 'next/headers';
-import { SignJWT } from 'jose';
 import { db } from '#lib/db';
 import { redirect } from '#i18n/navigation';
 import { sendEmail } from '#lib/email';
-import { jwtVerify } from 'jose';
 import { getTranslations } from '#lib/i18n/server';
 import { type AuthActionState } from './types';
 import { z } from 'zod';
-
-if (!process.env.JWT_SECRET) {
-  throw new Error('JWT_SECRET is not set');
-}
-
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
+import { createUserSession, deleteUserSession } from '#lib/auth';
 
 const signUpSchema = z
   .object({
@@ -118,18 +110,7 @@ export async function login(state: AuthActionState, formData: FormData) {
     };
   }
 
-  const token = await new SignJWT({ userId: user.id })
-    .setProtectedHeader({ alg: 'HS256' })
-    .setExpirationTime('24h')
-    .sign(JWT_SECRET);
-
-  const cookieStore = await cookies();
-  cookieStore.set('token', token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 60 * 60 * 24, // 24 hours
-  });
+  await createUserSession(user.id);
 
   return redirect({
     href: '/diary',
@@ -138,8 +119,8 @@ export async function login(state: AuthActionState, formData: FormData) {
 }
 
 export async function logout() {
-  const cookieStore = await cookies();
-  cookieStore.delete('token');
+  await deleteUserSession();
+
   return redirect({
     href: '/auth/login',
     locale: 'en',
@@ -237,28 +218,4 @@ export async function resetPassword(
     href: '/auth/login?reset=true',
     locale: 'en',
   });
-}
-
-export async function getCurrentUser() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('token')?.value;
-
-  if (!token) {
-    return null;
-  }
-
-  try {
-    const { payload } = await jwtVerify(token, JWT_SECRET);
-    const user = await db.user.findUnique({
-      where: { id: payload.userId as string },
-      select: {
-        id: true,
-        email: true,
-      },
-    });
-
-    return user;
-  } catch {
-    return null;
-  }
 }

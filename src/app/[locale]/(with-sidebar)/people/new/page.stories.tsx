@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import NewPersonPage from './page';
 import { expect, within } from '@storybook/test';
-import { ensureLoggedIn } from '#lib/auth.mock.js';
 
 const meta = {
   title: 'app/[locale]/People/new/page',

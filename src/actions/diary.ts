@@ -25,6 +25,7 @@ export async function createDiaryEntryAction(
   state: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAuth();
   try {
     const data = {
       content: formData.get('content') as string,
@@ -59,6 +60,7 @@ export async function updateDiaryEntryAction(
   state: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAuth();
   try {
     const id = formData.get('id') as string;
     const data = {
@@ -94,9 +96,9 @@ export async function deleteDiaryEntryAction(
   state: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  await requireAuth();
   const id = formData.get('id') as string;
   try {
-    await requireAuth();
     await deleteDiaryEntry(id);
     return { success: true };
   } catch (error) {

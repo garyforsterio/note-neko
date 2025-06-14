@@ -3,7 +3,6 @@ import { Link } from '#i18n/navigation';
 import { format } from 'date-fns';
 import { MapPin } from 'lucide-react';
 import { getTranslations } from '#lib/i18n/server';
-import { ensureLoggedIn } from '#lib/auth';
 import { notFound } from 'next/navigation';
 import { renderMarkdown } from '#lib/markdown';
 import DeleteButton from '../components/DeleteButton';
@@ -17,8 +16,6 @@ interface DiaryEntryPageProps {
 
 export default async function DiaryEntryPage({ params }: DiaryEntryPageProps) {
   const t = await getTranslations();
-  await ensureLoggedIn();
-
   const entry = await getDiaryEntry((await params).id);
 
   if (!entry) {

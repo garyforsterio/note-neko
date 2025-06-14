@@ -9,6 +9,9 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    nodeMiddleware: true,
+  },
 };
 
 const withNextIntl = createNextIntlPlugin();
