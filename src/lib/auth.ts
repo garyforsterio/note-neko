@@ -123,7 +123,7 @@ export async function getCurrentUser() {
 export async function requireAuth() {
   const user = await getCurrentUser();
   if (!user) {
-    redirect({
+    return redirect({
       href: '/auth/login',
       locale: 'en',
     });
