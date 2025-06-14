@@ -18,8 +18,9 @@
     "lint": "next lint",
     "typecheck": "tsc",
     "prisma:generate": "prisma generate --no-engine && pnpm run prisma:generate-dmmf",
-    "prisma:setup": "dotenv -e .env.local prisma migrate dev",
-    "prisma:seed": "dotenv -e .env.local prisma db seed",
+    "prisma:migrate-dev": "dotenv -e .env.development prisma migrate dev",
+    "prisma:migrate-deploy": "dotenv -e .env.production prisma migrate deploy",
+    "prisma:seed": "dotenv -e .env.development prisma db seed",
     "prisma:generate-dmmf": "tsx prisma/generate-dmmf.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
