@@ -5,20 +5,14 @@ import { validateTokens } from '#lib/auth';
 
 const i18nMiddleware = createMiddleware(routing);
 
-if (!process.env.JWT_SECRET) {
-  throw new Error('JWT_SECRET is not set');
-}
-
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
-
-const PUBLIC_PATHS = [
-  '',
-  '/',
+const AUTH_PATHS = [
   '/auth/login',
   '/auth/signup',
   '/auth/forgot-password',
   '/auth/reset-password',
 ];
+
+const PUBLIC_PATHS = ['', '/', ...AUTH_PATHS];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -37,6 +31,15 @@ export async function middleware(request: NextRequest) {
     }
 
     return NextResponse.next();
+  }
+
+  // If the user is logged in and tries to access an auth page, redirect to the diary page
+  if (AUTH_PATHS.includes(pathnameWithoutLocale)) {
+    const userId = await validateTokens();
+    if (userId) {
+      const url = new URL(`/${locale}/diary`, request.url);
+      return NextResponse.redirect(url);
+    }
   }
 
   return i18nMiddleware(request);
