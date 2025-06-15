@@ -7,6 +7,7 @@ import { getTranslations } from '#lib/i18n/server';
 import DeleteButton from './DeleteButton';
 import { DiaryMentions } from './DiaryMentions';
 import { DiaryLocations } from './DiaryLocations';
+import Markdown from 'react-markdown';
 
 interface DiaryEntryProps {
   entry: DiaryEntryWithRelations;
@@ -44,15 +45,13 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
       </div>
 
       <div className="prose max-w-none">
-        <div
-          dangerouslySetInnerHTML={{
-            __html: await renderMarkdown(
-              entry.content,
-              entry.mentions.map((m) => m.person),
-              entry.locations
-            ),
-          }}
-        />
+        <Markdown>
+          {renderMarkdown(
+            entry.content,
+            entry.mentions.map((m) => m.person),
+            entry.locations
+          )}
+        </Markdown>
       </div>
 
       <DiaryMentions mentions={entry.mentions} />

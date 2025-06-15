@@ -14,6 +14,7 @@ import ErrorMessage from '#components/ErrorMessage';
 import PeopleMention from './PeopleMention';
 import LocationMentionSheet from './LocationMentionSheet';
 import { getGoogleMapsUrl } from '#lib/utils/maps';
+import Markdown from 'react-markdown';
 
 interface Person {
   id: string;
@@ -284,15 +285,13 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 
         {isPreview ? (
           <div className="prose max-w-none p-4 bg-white rounded-md border border-gray-300">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: renderMarkdown(
-                  content,
-                  entry?.mentions.map((m) => m.person),
-                  locations
-                ),
-              }}
-            />
+            <Markdown>
+              {renderMarkdown(
+                content,
+                entry?.mentions.map((m) => m.person),
+                locations
+              )}
+            </Markdown>
           </div>
         ) : (
           <textarea

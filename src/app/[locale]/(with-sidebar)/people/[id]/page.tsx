@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import DeleteButton from '../components/DeleteButton';
 import { renderMarkdown } from '#lib/markdown';
 import EditButton from '../components/EditButton';
+import Markdown from 'react-markdown';
 
 interface PersonPageProps {
   params: Promise<{
@@ -102,18 +103,13 @@ export default async function PersonPage({ params }: PersonPageProps) {
                     {format(mention.diaryEntry.date, 'MMMM d, yyyy')}
                   </Link>
                 </div>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: await renderMarkdown(
-                      mention.diaryEntry.content,
-                      mention.diaryEntry.mentions.map((m) => m.person),
-                      mention.diaryEntry.locations
-                    ),
-                  }}
-                />
-                {/* <p className="text-gray-600 whitespace-pre-wrap">
-                  {mention.diaryEntry.content}
-                </p> */}
+                <Markdown>
+                  {renderMarkdown(
+                    mention.diaryEntry.content,
+                    mention.diaryEntry.mentions.map((m) => m.person),
+                    mention.diaryEntry.locations
+                  )}
+                </Markdown>
               </div>
             ))}
           </div>

@@ -1,11 +1,4 @@
-import { marked } from 'marked';
 import { getGoogleMapsUrl } from './utils/maps';
-
-// Configure marked options
-marked.setOptions({
-  gfm: true, // GitHub Flavored Markdown
-  breaks: true, // Convert line breaks to <br>
-});
 
 interface SimplePerson {
   id: string;
@@ -47,5 +40,5 @@ export const renderMarkdown = (
     );
   });
 
-  return marked(transformedContent);
+  return transformedContent;
 };

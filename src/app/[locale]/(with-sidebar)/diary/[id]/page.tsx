@@ -7,7 +7,7 @@ import { notFound } from 'next/navigation';
 import { renderMarkdown } from '#lib/markdown';
 import DeleteButton from '../components/DeleteButton';
 import { getGoogleMapsUrl } from '#lib/utils/maps';
-
+import Markdown from 'react-markdown';
 interface DiaryEntryPageProps {
   params: Promise<{
     id: string;
@@ -47,15 +47,13 @@ export default async function DiaryEntryPage({ params }: DiaryEntryPageProps) {
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
         <div className="prose max-w-none">
-          <div
-            dangerouslySetInnerHTML={{
-              __html: await renderMarkdown(
-                entry.content,
-                entry.mentions.map((m) => m.person),
-                entry.locations
-              ),
-            }}
-          />
+          <Markdown>
+            {renderMarkdown(
+              entry.content,
+              entry.mentions.map((m) => m.person),
+              entry.locations
+            )}
+          </Markdown>
         </div>
 
         {entry.mentions.length > 0 && (
