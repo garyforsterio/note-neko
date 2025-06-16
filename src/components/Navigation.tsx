@@ -161,7 +161,7 @@ export default function Navigation({ entries }: NavigationProps) {
 			{/* Mobile Navigation */}
 			<div className="md:hidden">
 				{/* Floating Action Button */}
-				{pathname.startsWith("/diary") && (
+				{pathname === "/diary" && (
 					<button
 						type="button"
 						onClick={() => setIsMobileFiltersOpen(true)}
