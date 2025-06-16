@@ -1,11 +1,4 @@
-import {
-	Bold,
-	Italic,
-	MapPin,
-	Strikethrough,
-	Underline,
-	User,
-} from "lucide-react";
+import { Bold, Italic, MapPin, Underline, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 interface FormattingToolbarProps {

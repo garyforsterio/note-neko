@@ -7,44 +7,19 @@ import { createPersonWithoutRedirectAction } from "#actions/people";
 import { useGooglePlaces } from "#hooks/useGooglePlaces";
 import { useRouter } from "#i18n/navigation";
 
+import type { Person } from "@prisma/client";
 import { useActionState } from "react";
 import Markdown from "react-markdown";
 import type { ActionState } from "#actions/types";
 import ErrorMessage from "#components/ErrorMessage";
+import type { DiaryEntryWithRelations } from "#lib/dal";
 import { renderMarkdown } from "#lib/markdown";
 import FormattingToolbar from "./FormattingToolbar";
 import LocationMentionSheet from "./LocationMentionSheet";
 import PeopleMention from "./PeopleMention";
 
-interface Person {
-	id: string;
-	name: string;
-	nickname?: string | null;
-	birthday: Date | null;
-	howWeMet: string | null;
-	interests: string[];
-}
-
 interface DiaryFormProps {
-	entry?: {
-		id: string;
-		content: string;
-		date: Date;
-		mentions: {
-			id: string;
-			person: {
-				id: string;
-				name: string;
-			};
-		}[];
-		locations?: {
-			id: string;
-			name: string;
-			placeId: string;
-			lat: number;
-			lng: number;
-		}[];
-	};
+	entry?: DiaryEntryWithRelations;
 	people: Person[];
 }
 

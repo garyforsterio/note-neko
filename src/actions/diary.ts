@@ -16,7 +16,7 @@ const diaryLocationSchema = z.object({
 
 const diarySchema = z.object({
 	content: z.string().min(1, "Content is required"),
-	date: z.string().min(1, "Date is required"),
+	date: z.date(),
 	mentions: z.array(z.string()),
 	locations: z.array(diaryLocationSchema),
 });
@@ -29,7 +29,7 @@ export async function createDiaryEntryAction(
 	try {
 		const data = {
 			content: formData.get("content") as string,
-			date: formData.get("date") as string,
+			date: new Date(formData.get("date") as string),
 			mentions: JSON.parse((formData.get("mentions") as string) || "[]"),
 			locations: JSON.parse((formData.get("locations") as string) || "[]"),
 		};
@@ -41,7 +41,7 @@ export async function createDiaryEntryAction(
 				error: result.error.errors.map((e) => e.message).join(", "),
 			};
 		}
-		await createDiaryEntry({ ...result.data });
+		await createDiaryEntry(result.data);
 	} catch (error) {
 		console.error("Error creating diary entry:", error);
 		return {
@@ -65,7 +65,7 @@ export async function updateDiaryEntryAction(
 		const id = formData.get("id") as string;
 		const data = {
 			content: formData.get("content") as string,
-			date: formData.get("date") as string,
+			date: new Date(formData.get("date") as string),
 			mentions: JSON.parse((formData.get("mentions") as string) || "[]"),
 			locations: JSON.parse((formData.get("locations") as string) || "[]"),
 		};
@@ -77,7 +77,7 @@ export async function updateDiaryEntryAction(
 				error: result.error.errors.map((e) => e.message).join(", "),
 			};
 		}
-		await updateDiaryEntry(id, { ...result.data });
+		await updateDiaryEntry(id, result.data);
 	} catch (error) {
 		console.error("Error updating diary entry:", error);
 		return {

@@ -1,27 +1,23 @@
 "use server";
 
+import type { Person } from "@prisma/client";
 import { z } from "zod";
 import { redirect } from "#i18n/navigation";
 import { requireAuth } from "#lib/auth";
-import {
-	type PersonData,
-	createPerson,
-	deletePerson,
-	updatePerson,
-} from "#lib/dal";
+import { createPerson, deletePerson, updatePerson } from "#lib/dal";
 import type { ActionState } from "./types";
 
 const personSchema = z.object({
 	id: z.string().optional(),
 	name: z.string().min(1, "Name is required"),
 	nickname: z.string().optional(),
-	birthday: z.string().optional(),
+	birthday: z.date().optional(),
 	howWeMet: z.string().optional(),
 	interests: z.array(z.string()),
 	notes: z.string().optional(),
 });
 
-function getPersonFormFormData(formData: FormData): PersonData {
+function getPersonFormFormData(formData: FormData) {
 	const data = Object.fromEntries(formData);
 	return {
 		...data,
@@ -29,7 +25,8 @@ function getPersonFormFormData(formData: FormData): PersonData {
 			.split(",")
 			.map((i) => i.trim())
 			.filter(Boolean),
-	} as PersonData;
+		birthday: data.birthday ? new Date(data.birthday?.toString()) : null,
+	} as Person;
 }
 
 export async function createPersonAction(

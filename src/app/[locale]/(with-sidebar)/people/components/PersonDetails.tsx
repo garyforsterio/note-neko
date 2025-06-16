@@ -1,11 +1,6 @@
+import type { Person } from "@prisma/client";
 import { format } from "date-fns";
 import { getTranslations } from "#lib/i18n/server";
-
-interface Person {
-	nickname: string | null;
-	birthday: Date | null;
-	howWeMet: string | null;
-}
 
 interface PersonDetailsProps {
 	person: Person;

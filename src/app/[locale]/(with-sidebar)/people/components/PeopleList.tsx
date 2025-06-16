@@ -1,30 +1,10 @@
 "use client";
 
+import type { Person } from "@prisma/client";
 import { format } from "date-fns";
 import { Pencil } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "#i18n/navigation";
-
-interface DiaryMention {
-	id: string;
-	content: string;
-	date: Date;
-	createdAt: Date;
-	updatedAt: Date;
-}
-
-interface Person {
-	id: string;
-	name: string;
-	nickname?: string | null;
-	birthday: Date | null;
-	howWeMet: string | null;
-	interests: string[];
-	notes: string | null;
-	createdAt: Date;
-	updatedAt: Date;
-	mentions: DiaryMention[];
-}
 
 interface PeopleListProps {
 	people: Person[];

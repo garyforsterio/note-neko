@@ -1,16 +1,7 @@
+import type { Person } from "@prisma/client";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 import ActionSheet from "#components/ActionSheet";
 import { Link } from "#i18n/navigation";
-
-interface Person {
-	id: string;
-	name: string;
-	nickname?: string | null;
-	birthday: Date | null;
-	howWeMet: string | null;
-	interests: string[];
-}
 
 interface PeopleMentionProps {
 	isOpen: boolean;

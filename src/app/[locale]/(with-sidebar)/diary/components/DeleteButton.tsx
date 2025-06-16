@@ -8,13 +8,9 @@ import type { ActionState } from "#actions/types";
 
 interface DeleteButtonProps {
 	id: string;
-	className?: string;
 }
 
-export default function DeleteButton({
-	id,
-	className = "",
-}: DeleteButtonProps) {
+export default function DeleteButton({ id }: DeleteButtonProps) {
 	const t = useTranslations();
 	const [state, formAction, isPending] = useActionState<ActionState, FormData>(
 		deleteDiaryEntryAction,
@@ -26,7 +22,7 @@ export default function DeleteButton({
 			<input type="hidden" name="id" value={id} />
 			<button
 				type="submit"
-				className={`p-2 text-gray-500 hover:text-red-600 transition-colors cursor-pointer ${className}`}
+				className="p-2 text-gray-500 hover:text-red-600 transition-colors cursor-pointer"
 				aria-label={t("diary.deleteEntry")}
 				title={t("diary.deleteEntry")}
 				disabled={isPending}

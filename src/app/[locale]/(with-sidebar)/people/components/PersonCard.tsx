@@ -1,3 +1,4 @@
+import type { Person } from "@prisma/client";
 import { format } from "date-fns";
 import { Link } from "#i18n/navigation";
 import { getTranslations } from "#lib/i18n/server";
@@ -5,18 +6,6 @@ import DeleteButton from "./DeleteButton";
 import EditButton from "./EditButton";
 import PersonDetails from "./PersonDetails";
 import PersonInterests from "./PersonInterests";
-interface Person {
-	id: string;
-	name: string;
-	nickname: string | null;
-	birthday: Date | null;
-	howWeMet: string | null;
-	interests: string[];
-	notes: string | null;
-	createdAt: Date;
-	updatedAt: Date;
-	userId: string;
-}
 
 interface PersonCardProps {
 	person: Person;

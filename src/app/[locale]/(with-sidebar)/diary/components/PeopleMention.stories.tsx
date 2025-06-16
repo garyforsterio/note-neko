@@ -20,6 +20,10 @@ const mockPeople = [
 		birthday: new Date("1990-01-01"),
 		howWeMet: "At a conference",
 		interests: ["Programming", "Reading"],
+		notes: null,
+		createdAt: new Date(),
+		updatedAt: new Date(),
+		userId: "test-user-id",
 	},
 	{
 		id: "2",
@@ -28,6 +32,10 @@ const mockPeople = [
 		birthday: new Date("1992-05-15"),
 		howWeMet: "Through mutual friends",
 		interests: ["Photography", "Travel"],
+		notes: null,
+		createdAt: new Date(),
+		updatedAt: new Date(),
+		userId: "test-user-id",
 	},
 	{
 		id: "3",
@@ -36,6 +44,10 @@ const mockPeople = [
 		birthday: null,
 		howWeMet: null,
 		interests: [],
+		notes: null,
+		createdAt: new Date(),
+		updatedAt: new Date(),
+		userId: "test-user-id",
 	},
 ];
 

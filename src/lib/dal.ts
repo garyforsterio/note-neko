@@ -4,28 +4,6 @@ import { cache } from "react";
 import { requireAuth } from "#lib/auth";
 import { db } from "#lib/db";
 
-export interface PersonData {
-	id?: string;
-	name: string;
-	nickname?: string;
-	birthday?: string;
-	howWeMet?: string;
-	interests: string[];
-	notes?: string;
-}
-
-export interface DiaryData {
-	content: string;
-	date: string;
-	mentions: string[];
-	locations?: Array<{
-		name: string;
-		placeId: string;
-		lat: number;
-		lng: number;
-	}>;
-}
-
 type PersonWithMentions = Prisma.PersonGetPayload<{
 	include: {
 		mentions: {
@@ -117,13 +95,13 @@ export const getPerson = cache(
 	},
 );
 
-export async function createPerson(data: PersonData) {
+export async function createPerson(data: Prisma.PersonCreateWithoutUserInput) {
 	const user = await requireAuth();
 	return db.person.create({
 		data: {
 			name: data.name,
 			nickname: data.nickname,
-			birthday: data.birthday ? new Date(data.birthday) : null,
+			birthday: data.birthday,
 			howWeMet: data.howWeMet,
 			interests: data.interests,
 			notes: data.notes,
@@ -132,7 +110,10 @@ export async function createPerson(data: PersonData) {
 	});
 }
 
-export async function updatePerson(id: string, data: PersonData) {
+export async function updatePerson(
+	id: string,
+	data: Omit<Prisma.PersonUpdateInput, "user">,
+) {
 	const user = await requireAuth();
 	revalidateTag("person");
 	return db.person.update({
@@ -140,7 +121,7 @@ export async function updatePerson(id: string, data: PersonData) {
 		data: {
 			name: data.name,
 			nickname: data.nickname,
-			birthday: data.birthday ? new Date(data.birthday) : null,
+			birthday: data.birthday,
 			howWeMet: data.howWeMet,
 			interests: data.interests,
 			notes: data.notes,
@@ -240,23 +221,33 @@ export const getDiaryEntry = cache(
 	},
 );
 
-export async function createDiaryEntry(data: DiaryData) {
+export async function createDiaryEntry({
+	content,
+	date,
+	mentions,
+	locations,
+}: {
+	content: string;
+	date: Date;
+	mentions: string[];
+	locations: Prisma.DiaryLocationCreateWithoutDiaryEntryInput[];
+}) {
 	const user = await requireAuth();
 	revalidateTag("diaryEntry");
 	return db.diaryEntry.create({
 		data: {
-			content: data.content,
-			date: new Date(data.date),
+			content,
+			date,
 			userId: user.id,
 			mentions: {
-				create: data.mentions?.map((personId) => ({
+				create: mentions.map((personId) => ({
 					person: {
 						connect: { id: personId },
 					},
 				})),
 			},
 			locations: {
-				create: data.locations?.map((location) => ({
+				create: locations.map((location) => ({
 					name: location.name,
 					placeId: location.placeId,
 					lat: location.lat,
@@ -275,7 +266,20 @@ export async function createDiaryEntry(data: DiaryData) {
 	});
 }
 
-export async function updateDiaryEntry(id: string, data: DiaryData) {
+export async function updateDiaryEntry(
+	id: string,
+	{
+		content,
+		date,
+		mentions,
+		locations,
+	}: {
+		content: string;
+		date: Date;
+		mentions: string[];
+		locations: Prisma.DiaryLocationCreateWithoutDiaryEntryInput[];
+	},
+) {
 	const user = await requireAuth();
 	revalidateTag("diaryEntry");
 	// First, delete all existing mentions and locations
@@ -290,18 +294,18 @@ export async function updateDiaryEntry(id: string, data: DiaryData) {
 	return db.diaryEntry.update({
 		where: { id },
 		data: {
-			content: data.content,
-			date: new Date(data.date),
+			content,
+			date,
 			userId: user.id,
 			mentions: {
-				create: data.mentions?.map((personId) => ({
+				create: mentions.map((personId) => ({
 					person: {
 						connect: { id: personId },
 					},
 				})),
 			},
 			locations: {
-				create: data.locations?.map((location) => ({
+				create: locations.map((location) => ({
 					name: location.name,
 					placeId: location.placeId,
 					lat: location.lat,
