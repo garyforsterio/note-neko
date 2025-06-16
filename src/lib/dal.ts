@@ -221,6 +221,20 @@ export const getDiaryEntry = cache(
 	},
 );
 
+async function getAllDiaryIdsCached(userId: string) {
+	"use cache";
+	cacheTag("diaryEntries");
+	return db.diaryEntry.findMany({
+		where: { userId },
+		select: { id: true, date: true },
+	});
+}
+
+export const getAllDiaryIds = cache(async () => {
+	const user = await requireAuth();
+	return getAllDiaryIdsCached(user.id);
+});
+
 export async function createDiaryEntry({
 	content,
 	date,

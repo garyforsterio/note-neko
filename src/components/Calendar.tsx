@@ -15,24 +15,22 @@ import {
 } from "date-fns";
 import { ChevronLeft, ChevronRight, MousePointer } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { use, useEffect, useState } from "react";
 import { Link } from "#i18n/navigation";
+import type { getAllDiaryIds } from "#lib/dal";
 
 interface CalendarProps {
-	entries: {
-		id: string;
-		date: Date;
-	}[];
+	entries: ReturnType<typeof getAllDiaryIds>;
 	onDateRangeChange?: (startDate: Date | null, endDate: Date | null) => void;
 }
 
 export default function Calendar({
-	entries,
+	entries: entriesPromise,
 	onDateRangeChange,
 }: CalendarProps) {
 	const t = useTranslations();
-	const router = useRouter();
+	const entries = use(entriesPromise);
 	const searchParams = useSearchParams();
 	const [currentMonth, setCurrentMonth] = useState(new Date());
 	const [selectionStart, setSelectionStart] = useState<Date | null>(null);
@@ -122,13 +120,6 @@ export default function Calendar({
 			Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
 		);
 		setSelectionEnd(utcDate);
-	};
-
-	const handleMouseUp = () => {
-		setIsSelecting(false);
-		if (selectionStart && selectionEnd && onDateRangeChange) {
-			onDateRangeChange(selectionStart, selectionEnd);
-		}
 	};
 
 	useEffect(() => {

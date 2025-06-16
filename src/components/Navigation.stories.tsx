@@ -14,14 +14,11 @@ export default meta;
 type Story = StoryObj<typeof Navigation>;
 
 // Sample entries for the calendar
-const sampleEntries = Promise.resolve({
-	entries: [
-		{ id: "1", date: new Date("2024-03-01") },
-		{ id: "2", date: new Date("2024-03-15") },
-		{ id: "3", date: new Date("2024-03-20") },
-	],
-	total: 3,
-});
+const sampleEntries = Promise.resolve([
+	{ id: "1", date: new Date("2024-03-01") },
+	{ id: "2", date: new Date("2024-03-15") },
+	{ id: "3", date: new Date("2024-03-20") },
+]);
 
 export const Default: Story = {
 	args: {

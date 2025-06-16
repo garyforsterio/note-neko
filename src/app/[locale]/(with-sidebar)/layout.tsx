@@ -1,12 +1,12 @@
 import Navigation from "#components/Navigation";
-import { getDiaryEntries } from "#lib/dal";
+import { getAllDiaryIds } from "#lib/dal";
 
 export default async function Layout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
-	const entries = getDiaryEntries();
+	const entries = getAllDiaryIds();
 
 	return (
 		<>

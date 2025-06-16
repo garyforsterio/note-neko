@@ -5,17 +5,12 @@ import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { use, useCallback, useState } from "react";
 import { Link, usePathname, useRouter } from "#i18n/navigation";
+import type { getAllDiaryIds } from "#lib/dal";
 import { cn } from "#lib/utils";
 import Calendar from "./Calendar";
 
 interface NavigationProps {
-	entries: Promise<{
-		entries: {
-			id: string;
-			date: Date;
-		}[];
-		total: number;
-	}>;
+	entries: ReturnType<typeof getAllDiaryIds>;
 }
 
 const navigation = [
@@ -31,11 +26,8 @@ const navigation = [
 	},
 ];
 
-export default function Navigation({
-	entries: entriesPromise,
-}: NavigationProps) {
+export default function Navigation({ entries }: NavigationProps) {
 	const t = useTranslations();
-	const entries = use(entriesPromise);
 	const pathname = usePathname();
 	const router = useRouter();
 	const searchParams = useSearchParams();
@@ -156,7 +148,7 @@ export default function Navigation({
 
 								{entries && (
 									<Calendar
-										entries={entries.entries}
+										entries={entries}
 										onDateRangeChange={handleDateRangeChange}
 									/>
 								)}
@@ -287,20 +279,18 @@ export default function Navigation({
 								</div>
 							)}
 
-							{entries && (
-								<div className="mt-4">
-									<h4 className="text-sm font-medium text-gray-700 mb-2">
-										{t("diary.selectDateRange")}
-									</h4>
-									<Calendar
-										entries={entries.entries}
-										onDateRangeChange={(start, end) => {
-											handleDateRangeChange(start, end);
-											setIsMobileFiltersOpen(false);
-										}}
-									/>
-								</div>
-							)}
+							<div className="mt-4">
+								<h4 className="text-sm font-medium text-gray-700 mb-2">
+									{t("diary.selectDateRange")}
+								</h4>
+								<Calendar
+									entries={entries}
+									onDateRangeChange={(start, end) => {
+										handleDateRangeChange(start, end);
+										setIsMobileFiltersOpen(false);
+									}}
+								/>
+							</div>
 						</div>
 					</div>
 				</div>
