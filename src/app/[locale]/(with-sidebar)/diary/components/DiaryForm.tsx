@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { createDiaryEntryAction, updateDiaryEntryAction } from "#actions/diary";
 import { createPersonWithoutRedirectAction } from "#actions/people";
 import { useGooglePlaces } from "#hooks/useGooglePlaces";
@@ -82,18 +82,6 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 	);
 
 	const [isAddingPerson, startTransition] = useTransition();
-
-	useEffect(() => {
-		const handleEscape = (e: KeyboardEvent) => {
-			if (e.key === "Escape") {
-				setShowLocationMention(false);
-				setShowPeopleMention(false);
-			}
-		};
-
-		document.addEventListener("keydown", handleEscape);
-		return () => document.removeEventListener("keydown", handleEscape);
-	}, []);
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 		if (e.key !== "Enter" || !(showPeopleMention || showLocationMention)) {
