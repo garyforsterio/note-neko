@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
 interface ActionSheetProps {
@@ -15,6 +15,8 @@ export default function ActionSheet({
 	title,
 	children,
 }: ActionSheetProps) {
+	const actionSheetRef = useRef<HTMLDivElement>(null);
+
 	useEffect(() => {
 		const handleEscape = (e: KeyboardEvent) => {
 			if (e.key === "Escape") {
@@ -25,6 +27,16 @@ export default function ActionSheet({
 		if (isOpen) {
 			document.addEventListener("keydown", handleEscape);
 			document.body.style.overflow = "hidden";
+
+			// Scroll to make the action sheet visible
+			if (actionSheetRef.current) {
+				const rect = actionSheetRef.current.getBoundingClientRect();
+				const scrollY = window.scrollY + rect.top;
+				window.scrollTo({
+					top: scrollY,
+					behavior: "smooth",
+				});
+			}
 		}
 
 		return () => {
@@ -39,7 +51,10 @@ export default function ActionSheet({
 		<>
 			{/* Mobile Action Sheet */}
 			<div className="md:hidden fixed inset-x-0 bottom-0 z-50">
-				<div className="bg-white rounded-t-2xl transform transition-transform duration-300 ease-in-out">
+				<div
+					ref={actionSheetRef}
+					className="bg-white rounded-t-2xl transform transition-transform duration-300 ease-in-out"
+				>
 					<div className="p-4 border-b">
 						<div className="flex justify-between items-center">
 							<h2 className="text-xl font-bold">{title}</h2>
