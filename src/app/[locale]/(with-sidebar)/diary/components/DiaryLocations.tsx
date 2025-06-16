@@ -1,7 +1,7 @@
 import { MapPin } from "lucide-react";
 import type { DiaryEntryWithRelations } from "#lib/dal";
-import { getGoogleMapsUrl } from "#lib/utils/maps";
 import { getTranslations } from "#lib/i18n/server";
+import { getGoogleMapsUrl } from "#lib/utils/maps";
 
 interface DiaryLocationsProps {
 	locations: DiaryEntryWithRelations["locations"];

@@ -1,11 +1,11 @@
 "use client";
 
-import { useActionState, useState } from "react";
-import { Link } from "#i18n/navigation";
-import { requestPasswordReset } from "#actions/auth";
 import { useTranslations } from "next-intl";
+import { useActionState, useState } from "react";
+import { requestPasswordReset } from "#actions/auth";
 import type { ActionState } from "#actions/types";
 import ErrorMessage from "#components/ErrorMessage";
+import { Link } from "#i18n/navigation";
 
 export function ForgotPasswordForm() {
 	const t = useTranslations();

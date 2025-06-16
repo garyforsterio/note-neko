@@ -1,11 +1,11 @@
 "use client";
 
-import { useActionState } from "react";
-import { Link } from "#i18n/navigation";
-import { signUp } from "#actions/auth";
 import { useTranslations } from "next-intl";
+import { useActionState } from "react";
+import { signUp } from "#actions/auth";
 import type { AuthActionState } from "#actions/types";
 import ErrorMessage from "#components/ErrorMessage";
+import { Link } from "#i18n/navigation";
 
 export function SignUpForm() {
 	const t = useTranslations();

@@ -1,12 +1,12 @@
+import { format } from "date-fns";
+import { notFound } from "next/navigation";
+import Markdown from "react-markdown";
+import { Link } from "#i18n/navigation";
 import { getPerson } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
-import { notFound } from "next/navigation";
-import { Link } from "#i18n/navigation";
-import { format } from "date-fns";
-import DeleteButton from "../components/DeleteButton";
 import { renderMarkdown } from "#lib/markdown";
+import DeleteButton from "../components/DeleteButton";
 import EditButton from "../components/EditButton";
-import Markdown from "react-markdown";
 
 interface PersonPageProps {
 	params: Promise<{

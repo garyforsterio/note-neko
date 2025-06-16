@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { expect, within } from "@storybook/test";
 import Navigation from "./Navigation";
-import { within, expect } from "@storybook/test";
 
 const meta: Meta<typeof Navigation> = {
 	title: "Components/Navigation",

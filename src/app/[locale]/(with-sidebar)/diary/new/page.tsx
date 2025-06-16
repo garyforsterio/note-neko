@@ -1,6 +1,6 @@
 import { getPeople } from "#lib/dal";
-import DiaryForm from "../components/DiaryForm";
 import { getTranslations } from "#lib/i18n/server";
+import DiaryForm from "../components/DiaryForm";
 
 export default async function NewDiaryEntryPage() {
 	const t = await getTranslations();

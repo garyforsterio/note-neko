@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import NewPersonPage from "./page";
 import { expect, within } from "@storybook/test";
+import NewPersonPage from "./page";
 
 const meta = {
 	title: "app/[locale]/People/new/page",

@@ -1,7 +1,7 @@
-import { getPerson } from "#lib/dal";
-import PersonForm from "../../components/PersonForm";
-import { getTranslations } from "#lib/i18n/server";
 import { notFound } from "next/navigation";
+import { getPerson } from "#lib/dal";
+import { getTranslations } from "#lib/i18n/server";
+import PersonForm from "../../components/PersonForm";
 
 interface EditPersonPageProps {
 	params: Promise<{

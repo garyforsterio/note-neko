@@ -1,15 +1,15 @@
 "use server";
 
+import { z } from "zod";
+import { redirect } from "#i18n/navigation";
+import { requireAuth } from "#lib/auth";
 import {
+	type PersonData,
 	createPerson,
 	deletePerson,
-	type PersonData,
 	updatePerson,
 } from "#lib/dal";
-import { requireAuth } from "#lib/auth";
-import { z } from "zod";
 import type { ActionState } from "./types";
-import { redirect } from "#i18n/navigation";
 
 const personSchema = z.object({
 	id: z.string().optional(),

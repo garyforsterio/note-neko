@@ -1,12 +1,12 @@
-import { Link } from "#i18n/navigation";
-import Image from "next/image";
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
+import { Link } from "#i18n/navigation";
 
-import HeroImage from "./hero-image.png";
 import Emma from "./emma.svg";
+import GithubIcon from "./github.svg";
+import HeroImage from "./hero-image.png";
 import Michael from "./michael.svg";
 import Sarah from "./sarah.svg";
-import GithubIcon from "./github.svg";
 
 export default async function Home() {
 	const t = await getTranslations("home");

@@ -1,12 +1,12 @@
 "use client";
 
-import { Link, usePathname, useRouter } from "#i18n/navigation";
+import { BookOpen, Settings, Users, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { BookOpen, Users, X, Settings } from "lucide-react";
+import { use, useCallback, useState } from "react";
+import { Link, usePathname, useRouter } from "#i18n/navigation";
 import { cn } from "#lib/utils";
 import Calendar from "./Calendar";
-import { useTranslations } from "next-intl";
-import { use, useCallback, useState } from "react";
 
 interface NavigationProps {
 	entries: Promise<{

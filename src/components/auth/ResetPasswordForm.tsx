@@ -1,11 +1,11 @@
 "use client";
 
-import { useActionState } from "react";
-import { Link } from "#i18n/navigation";
-import { resetPassword } from "#actions/auth";
 import { useTranslations } from "next-intl";
+import { useActionState } from "react";
+import { resetPassword } from "#actions/auth";
 import type { ActionState } from "#actions/types";
 import ErrorMessage from "#components/ErrorMessage";
+import { Link } from "#i18n/navigation";
 interface ResetPasswordFormProps {
 	token: string;
 }

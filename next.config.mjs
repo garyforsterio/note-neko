@@ -1,19 +1,19 @@
-import createNextIntlPlugin from 'next-intl/plugin';
+import createNextIntlPlugin from "next-intl/plugin";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        hostname: 'api.dicebear.com',
-      },
-    ],
-  },
-  experimental: {
-    nodeMiddleware: true,
-    reactCompiler: true,
-    ppr: true,
-  },
+	images: {
+		remotePatterns: [
+			{
+				hostname: "api.dicebear.com",
+			},
+		],
+	},
+	experimental: {
+		nodeMiddleware: true,
+		reactCompiler: true,
+		ppr: true,
+	},
 };
 
 const withNextIntl = createNextIntlPlugin();

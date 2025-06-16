@@ -1,6 +1,6 @@
-import { beforeAll } from 'vitest';
-import { setProjectAnnotations } from '@storybook/experimental-nextjs-vite';
-import * as previewAnnotations from './preview';
+import { setProjectAnnotations } from "@storybook/experimental-nextjs-vite";
+import { beforeAll } from "vitest";
+import * as previewAnnotations from "./preview";
 
 const annotations = setProjectAnnotations([previewAnnotations]);
 

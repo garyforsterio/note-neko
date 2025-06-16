@@ -1,7 +1,7 @@
-import { db } from "#lib/db";
 import type { Prisma } from "@prisma/client";
-import { requireAuth } from "#lib/auth";
 import { cache } from "react";
+import { requireAuth } from "#lib/auth";
+import { db } from "#lib/db";
 
 export interface PersonData {
 	id?: string;

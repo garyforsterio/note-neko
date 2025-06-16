@@ -1,7 +1,7 @@
+import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { jwtVerify, SignJWT } from "jose";
-import { db } from "#lib/db";
 import { redirect } from "#i18n/navigation";
+import { db } from "#lib/db";
 
 if (!process.env.JWT_SECRET) {
 	throw new Error("JWT_SECRET is not set");

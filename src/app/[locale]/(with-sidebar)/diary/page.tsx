@@ -1,7 +1,7 @@
 import { getDiaryEntries } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
-import { DiaryHeader } from "./components/DiaryHeader";
 import { DiaryEntry } from "./components/DiaryEntry";
+import { DiaryHeader } from "./components/DiaryHeader";
 import { DiaryPagination } from "./components/DiaryPagination";
 
 interface PageProps {

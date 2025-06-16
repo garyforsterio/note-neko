@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import NewDiaryEntryPage from "./page";
-import { db } from "#lib/db.mock";
 import { expect, within } from "@storybook/test";
+import { db } from "#lib/db.mock";
+import NewDiaryEntryPage from "./page";
 
 const meta = {
 	title: "app/[locale]/Diary/new/page",

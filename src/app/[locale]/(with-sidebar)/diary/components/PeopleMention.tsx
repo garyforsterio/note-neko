@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
-import { Link } from "#i18n/navigation";
-import ActionSheet from "#components/ActionSheet";
 import { useState } from "react";
+import ActionSheet from "#components/ActionSheet";
+import { Link } from "#i18n/navigation";
 
 interface Person {
 	id: string;

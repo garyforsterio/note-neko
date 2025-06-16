@@ -1,11 +1,11 @@
 "use client";
 
-import { useActionState, useState } from "react";
-import { useRouter } from "#i18n/navigation";
-import { createPersonAction, updatePersonAction } from "#actions/people";
 import { useTranslations } from "next-intl";
-import ErrorMessage from "#components/ErrorMessage";
+import { useActionState, useState } from "react";
+import { createPersonAction, updatePersonAction } from "#actions/people";
 import type { ActionState } from "#actions/types";
+import ErrorMessage from "#components/ErrorMessage";
+import { useRouter } from "#i18n/navigation";
 
 interface PersonFormProps {
 	person?: {

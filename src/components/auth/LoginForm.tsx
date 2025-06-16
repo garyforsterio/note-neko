@@ -1,12 +1,12 @@
 "use client";
 
-import { useActionState } from "react";
-import { Link } from "#i18n/navigation";
-import { useSearchParams } from "next/navigation";
-import { login } from "#actions/auth";
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
+import { useActionState } from "react";
+import { login } from "#actions/auth";
 import type { AuthActionState } from "#actions/types";
 import ErrorMessage from "#components/ErrorMessage";
+import { Link } from "#i18n/navigation";
 
 export function LoginForm() {
 	const t = useTranslations();

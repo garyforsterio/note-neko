@@ -1,5 +1,5 @@
-import { Link } from "#i18n/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Link } from "#i18n/navigation";
 import { getTranslations } from "#lib/i18n/server";
 
 interface DiaryPaginationProps {

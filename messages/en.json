@@ -1,167 +1,167 @@
 {
-  "auth": {
-    "title": "Authentication",
-    "login": {
-      "title": "Sign in to your account",
-      "email": "Email address",
-      "password": "Password",
-      "submit": "Sign in",
-      "submitting": "Signing in...",
-      "forgotPassword": "Forgot your password?",
-      "noAccount": "Don't have an account?",
-      "registered": "Your account has been created. Please sign in.",
-      "reset": "Your password has been reset. Please sign in.",
-      "error": {
-        "required": "Please check your credentials and try again.",
-        "invalidCredentials": "Invalid email or password."
-      }
-    },
-    "signup": {
-      "title": "Create your account",
-      "email": "Email address",
-      "password": "Password",
-      "confirmPassword": "Confirm password",
-      "submit": "Sign up",
-      "submitting": "Creating account...",
-      "hasAccount": "Already have an account?",
-      "error": {
-        "required": "Please check your information and try again.",
-        "passwordMismatch": "Passwords do not match.",
-        "emailExists": "An account with this email already exists."
-      }
-    },
-    "forgotPassword": {
-      "title": "Reset your password",
-      "email": "Email address",
-      "submit": "Send reset link",
-      "submitting": "Sending reset link...",
-      "backToLogin": "Back to login",
-      "success": "If an account exists with that email, we've sent a password reset link. Please check your email.",
-      "error": {
-        "required": "Please check your email and try again."
-      }
-    },
-    "resetPassword": {
-      "title": "Set new password",
-      "password": "New password",
-      "confirmPassword": "Confirm new password",
-      "submit": "Reset password",
-      "submitting": "Resetting password...",
-      "backToLogin": "Back to login",
-      "error": {
-        "required": "Please check your information and try again.",
-        "passwordMismatch": "Passwords do not match.",
-        "invalidToken": "Invalid or expired reset token."
-      }
-    }
-  },
-  "calendar": {
-    "nextMonth": "Next month",
-    "previousMonth": "Previous month",
-    "dragToSelect": "Click and drag to select a date range"
-  },
-  "common": {
-    "cancel": "Cancel",
-    "create": "Create",
-    "save": "Save",
-    "saving": "Saving",
-    "back": "Back",
-    "edit": "Edit"
-  },
-  "diary": {
-    "contentPlaceholder": "Write your diary entry here...",
-    "date": "Date",
-    "editEntry": "Edit Entry",
-    "locations": "Locations",
-    "mentions": "Mentions",
-    "newEntry": "New Entry",
-    "noEntries": "No diary entries yet",
-    "searchLocation": "Search for a location...",
-    "title": "Diary",
-    "writtenOn": "Written on {date}",
-    "noLocationsFound": "No locations found",
-    "addLocation": "Add location",
-    "deleteEntry": "Delete entry",
-    "confirmDelete": "Are you sure you want to delete this diary entry? This action cannot be undone.",
-    "startDate": "Start Date",
-    "endDate": "End Date",
-    "itemsPerPage": "Items per page",
-    "applyFilters": "Apply Filters",
-    "pageInfo": "Page {page} of {totalPages}",
-    "clearDateRange": "Clear date range",
-    "filters": "Filters",
-    "selectDateRange": "Select date range"
-  },
-  "home": {
-    "hero": {
-      "title": "Note Neko",
-      "subtitle": "Simple note taking app to empower you.",
-      "cta": "Start Taking Notes",
-      "heroImageAlt": "Note Neko Hero"
-    },
-    "features": {
-      "dailyDiary": {
-        "title": "Daily Diary",
-        "description": "Document your daily activities and interactions with a clean, intuitive interface. Track your progress and maintain a comprehensive record of your experiences."
-      },
-      "peopleProfiles": {
-        "title": "People Profiles",
-        "description": "Automatically generate detailed personas from your interactions. Build comprehensive profiles that serve as valuable references for future encounters and relationship building."
-      },
-      "locationHistory": {
-        "title": "Location History",
-        "description": "Document and organize your visits to different places. Keep track of venues, activities, and experiences for future reference."
-      }
-    },
-    "testimonials": {
-      "title": "What Our Users Say",
-      "sarah": {
-        "name": "Sarah \"Forgot-Your-Name\" Chen",
-        "title": "Professional People Pleaser",
-        "quote": "Now I can forget names with confidence!",
-        "avatarAlt": "Sarah's avatar"
-      },
-      "michael": {
-        "name": "Michael \"Lost & Found\" Rodriguez",
-        "title": "Certified Directionally Challenged",
-        "quote": "Finally, a diary that doesn't judge my 3 AM thoughts!",
-        "avatarAlt": "Michael's avatar"
-      },
-      "emma": {
-        "name": "Emma \"Goldfish Brain\" Thompson",
-        "title": "Memory Enthusiast",
-        "quote": "Finally smarter than my goldfish!",
-        "avatarAlt": "Emma's avatar"
-      }
-    },
-    "footer": {
-      "createdBy": "Created by",
-      "githubAlt": "GitHub"
-    }
-  },
-  "people": {
-    "addedOn": "Added on {date}",
-    "addPerson": "New Person",
-    "birthday": "Birthday",
-    "cancel": "Cancel",
-    "confirmDelete": "Really delete {name}?",
-    "deleteProfile": "Delete profile",
-    "editProfile": "Edit profile",
-    "howWeMet": "How we met",
-    "interests": "Interests",
-    "interestsPlaceholder": "What they like etc",
-    "mentionedIn": "Mentioned in",
-    "name": "Name",
-    "newPerson": "New Person",
-    "nickname": "Nickname",
-    "noPeople": "No people added yet",
-    "notes": "Notes",
-    "save": "Save",
-    "saving": "Saving",
-    "title": "People",
-    "update": "Update",
-    "mention": "Mention someone",
-    "createNew": "Add {name}",
-    "creating": "Creating {name}..."
-  }
+	"auth": {
+		"title": "Authentication",
+		"login": {
+			"title": "Sign in to your account",
+			"email": "Email address",
+			"password": "Password",
+			"submit": "Sign in",
+			"submitting": "Signing in...",
+			"forgotPassword": "Forgot your password?",
+			"noAccount": "Don't have an account?",
+			"registered": "Your account has been created. Please sign in.",
+			"reset": "Your password has been reset. Please sign in.",
+			"error": {
+				"required": "Please check your credentials and try again.",
+				"invalidCredentials": "Invalid email or password."
+			}
+		},
+		"signup": {
+			"title": "Create your account",
+			"email": "Email address",
+			"password": "Password",
+			"confirmPassword": "Confirm password",
+			"submit": "Sign up",
+			"submitting": "Creating account...",
+			"hasAccount": "Already have an account?",
+			"error": {
+				"required": "Please check your information and try again.",
+				"passwordMismatch": "Passwords do not match.",
+				"emailExists": "An account with this email already exists."
+			}
+		},
+		"forgotPassword": {
+			"title": "Reset your password",
+			"email": "Email address",
+			"submit": "Send reset link",
+			"submitting": "Sending reset link...",
+			"backToLogin": "Back to login",
+			"success": "If an account exists with that email, we've sent a password reset link. Please check your email.",
+			"error": {
+				"required": "Please check your email and try again."
+			}
+		},
+		"resetPassword": {
+			"title": "Set new password",
+			"password": "New password",
+			"confirmPassword": "Confirm new password",
+			"submit": "Reset password",
+			"submitting": "Resetting password...",
+			"backToLogin": "Back to login",
+			"error": {
+				"required": "Please check your information and try again.",
+				"passwordMismatch": "Passwords do not match.",
+				"invalidToken": "Invalid or expired reset token."
+			}
+		}
+	},
+	"calendar": {
+		"nextMonth": "Next month",
+		"previousMonth": "Previous month",
+		"dragToSelect": "Click and drag to select a date range"
+	},
+	"common": {
+		"cancel": "Cancel",
+		"create": "Create",
+		"save": "Save",
+		"saving": "Saving",
+		"back": "Back",
+		"edit": "Edit"
+	},
+	"diary": {
+		"contentPlaceholder": "Write your diary entry here...",
+		"date": "Date",
+		"editEntry": "Edit Entry",
+		"locations": "Locations",
+		"mentions": "Mentions",
+		"newEntry": "New Entry",
+		"noEntries": "No diary entries yet",
+		"searchLocation": "Search for a location...",
+		"title": "Diary",
+		"writtenOn": "Written on {date}",
+		"noLocationsFound": "No locations found",
+		"addLocation": "Add location",
+		"deleteEntry": "Delete entry",
+		"confirmDelete": "Are you sure you want to delete this diary entry? This action cannot be undone.",
+		"startDate": "Start Date",
+		"endDate": "End Date",
+		"itemsPerPage": "Items per page",
+		"applyFilters": "Apply Filters",
+		"pageInfo": "Page {page} of {totalPages}",
+		"clearDateRange": "Clear date range",
+		"filters": "Filters",
+		"selectDateRange": "Select date range"
+	},
+	"home": {
+		"hero": {
+			"title": "Note Neko",
+			"subtitle": "Simple note taking app to empower you.",
+			"cta": "Start Taking Notes",
+			"heroImageAlt": "Note Neko Hero"
+		},
+		"features": {
+			"dailyDiary": {
+				"title": "Daily Diary",
+				"description": "Document your daily activities and interactions with a clean, intuitive interface. Track your progress and maintain a comprehensive record of your experiences."
+			},
+			"peopleProfiles": {
+				"title": "People Profiles",
+				"description": "Automatically generate detailed personas from your interactions. Build comprehensive profiles that serve as valuable references for future encounters and relationship building."
+			},
+			"locationHistory": {
+				"title": "Location History",
+				"description": "Document and organize your visits to different places. Keep track of venues, activities, and experiences for future reference."
+			}
+		},
+		"testimonials": {
+			"title": "What Our Users Say",
+			"sarah": {
+				"name": "Sarah \"Forgot-Your-Name\" Chen",
+				"title": "Professional People Pleaser",
+				"quote": "Now I can forget names with confidence!",
+				"avatarAlt": "Sarah's avatar"
+			},
+			"michael": {
+				"name": "Michael \"Lost & Found\" Rodriguez",
+				"title": "Certified Directionally Challenged",
+				"quote": "Finally, a diary that doesn't judge my 3 AM thoughts!",
+				"avatarAlt": "Michael's avatar"
+			},
+			"emma": {
+				"name": "Emma \"Goldfish Brain\" Thompson",
+				"title": "Memory Enthusiast",
+				"quote": "Finally smarter than my goldfish!",
+				"avatarAlt": "Emma's avatar"
+			}
+		},
+		"footer": {
+			"createdBy": "Created by",
+			"githubAlt": "GitHub"
+		}
+	},
+	"people": {
+		"addedOn": "Added on {date}",
+		"addPerson": "New Person",
+		"birthday": "Birthday",
+		"cancel": "Cancel",
+		"confirmDelete": "Really delete {name}?",
+		"deleteProfile": "Delete profile",
+		"editProfile": "Edit profile",
+		"howWeMet": "How we met",
+		"interests": "Interests",
+		"interestsPlaceholder": "What they like etc",
+		"mentionedIn": "Mentioned in",
+		"name": "Name",
+		"newPerson": "New Person",
+		"nickname": "Nickname",
+		"noPeople": "No people added yet",
+		"notes": "Notes",
+		"save": "Save",
+		"saving": "Saving",
+		"title": "People",
+		"update": "Update",
+		"mention": "Mention someone",
+		"createNew": "Add {name}",
+		"creating": "Creating {name}..."
+	}
 }

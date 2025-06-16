@@ -1,5 +1,5 @@
-import { getTranslations } from "#lib/i18n/server";
 import { format } from "date-fns";
+import { getTranslations } from "#lib/i18n/server";
 
 interface Person {
 	nickname: string | null;

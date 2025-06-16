@@ -1,11 +1,11 @@
 "use client";
 import { Trash2 } from "lucide-react";
-import { deletePersonAction } from "#actions/people";
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
+import { deletePersonAction } from "#actions/people";
+import type { ActionState } from "#actions/types";
 import ErrorMessage from "#components/ErrorMessage";
 import { cn } from "#lib/utils";
-import type { ActionState } from "#actions/types";
 
 interface DeleteButtonProps {
 	personId: string;

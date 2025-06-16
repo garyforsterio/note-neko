@@ -1,7 +1,7 @@
 import { getPeople } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
-import PersonCard from "./components/PersonCard";
 import PageHeader from "./components/PageHeader";
+import PersonCard from "./components/PersonCard";
 
 export default async function PeoplePage() {
 	const t = await getTranslations();

@@ -1,5 +1,5 @@
-import PersonForm from "../components/PersonForm";
 import { getTranslations } from "#lib/i18n/server";
+import PersonForm from "../components/PersonForm";
 
 export default async function NewPersonPage() {
 	const t = await getTranslations();

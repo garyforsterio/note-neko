@@ -1,13 +1,13 @@
-import { Link } from "#i18n/navigation";
-import { Pencil } from "lucide-react";
 import { format } from "date-fns";
-import type { DiaryEntryWithRelations } from "#lib/dal";
-import { renderMarkdown } from "#lib/markdown";
-import { getTranslations } from "#lib/i18n/server";
-import DeleteButton from "./DeleteButton";
-import { DiaryMentions } from "./DiaryMentions";
-import { DiaryLocations } from "./DiaryLocations";
+import { Pencil } from "lucide-react";
 import Markdown from "react-markdown";
+import { Link } from "#i18n/navigation";
+import type { DiaryEntryWithRelations } from "#lib/dal";
+import { getTranslations } from "#lib/i18n/server";
+import { renderMarkdown } from "#lib/markdown";
+import DeleteButton from "./DeleteButton";
+import { DiaryLocations } from "./DiaryLocations";
+import { DiaryMentions } from "./DiaryMentions";
 
 interface DiaryEntryProps {
 	entry: DiaryEntryWithRelations;

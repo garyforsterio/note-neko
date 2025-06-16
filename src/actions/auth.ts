@@ -1,13 +1,13 @@
 "use server";
 
-import { hash, compare } from "bcryptjs";
-import { db } from "#lib/db";
+import { compare, hash } from "bcryptjs";
+import { z } from "zod";
 import { redirect } from "#i18n/navigation";
+import { createUserSession, deleteUserSession } from "#lib/auth";
+import { db } from "#lib/db";
 import { sendEmail } from "#lib/email";
 import { getTranslations } from "#lib/i18n/server";
 import type { AuthActionState } from "./types";
-import { z } from "zod";
-import { createUserSession, deleteUserSession } from "#lib/auth";
 
 const signUpSchema = z
 	.object({
