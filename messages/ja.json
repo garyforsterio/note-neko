@@ -176,5 +176,9 @@
 		"mention": "誰かを言及",
 		"createNew": "{name}を追加",
 		"creating": "{name}を作成中..."
+	},
+	"error": {
+		"title": "エラーが発生しました",
+		"tryAgain": "再試行"
 	}
 }

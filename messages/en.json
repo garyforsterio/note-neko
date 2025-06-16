@@ -176,5 +176,9 @@
 		"mention": "Mention someone",
 		"createNew": "Add {name}",
 		"creating": "Creating {name}..."
+	},
+	"error": {
+		"title": "Something went wrong!",
+		"tryAgain": "Try again"
 	}
 }
