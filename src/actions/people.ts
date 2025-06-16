@@ -25,7 +25,7 @@ function getPersonFormFormData(formData: FormData) {
 			.split(",")
 			.map((i) => i.trim())
 			.filter(Boolean),
-		birthday: data.birthday ? new Date(data.birthday?.toString()) : null,
+		birthday: data.birthday ? new Date(data.birthday?.toString()) : undefined,
 	} as Person;
 }
 
@@ -65,6 +65,8 @@ export async function updatePersonAction(
 	try {
 		const data = getPersonFormFormData(formData);
 		const result = personSchema.safeParse(data);
+		console.log(data);
+
 		if (!result.success) {
 			return {
 				success: false,
