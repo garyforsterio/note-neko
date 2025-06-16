@@ -1,4 +1,5 @@
 import type { Prisma } from "@prisma/client";
+import { unstable_cacheTag as cacheTag, revalidateTag } from "next/cache";
 import { cache } from "react";
 import { requireAuth } from "#lib/auth";
 import { db } from "#lib/db";
@@ -25,7 +26,7 @@ export interface DiaryData {
 	}>;
 }
 
-export type PersonWithMentions = Prisma.PersonGetPayload<{
+type PersonWithMentions = Prisma.PersonGetPayload<{
 	include: {
 		mentions: {
 			include: {
@@ -55,10 +56,11 @@ export type DiaryEntryWithRelations = Prisma.DiaryEntryGetPayload<{
 	};
 }>;
 
-export const getPeople = cache(async (): Promise<PersonWithMentions[]> => {
-	const user = await requireAuth();
+async function getPeopleCached(userId: string) {
+	"use cache";
+	cacheTag("people");
 	return db.person.findMany({
-		where: { userId: user.id },
+		where: { userId },
 		orderBy: { name: "asc" },
 		include: {
 			mentions: {
@@ -77,30 +79,41 @@ export const getPeople = cache(async (): Promise<PersonWithMentions[]> => {
 			},
 		},
 	});
+}
+
+export const getPeople = cache(async (): Promise<PersonWithMentions[]> => {
+	const user = await requireAuth();
+	return getPeopleCached(user.id);
 });
 
-export const getPerson = cache(
-	async (id: string): Promise<PersonWithMentions | null> => {
-		const user = await requireAuth();
-		return db.person.findFirst({
-			where: { id, userId: user.id },
-			include: {
-				mentions: {
-					include: {
-						diaryEntry: {
-							include: {
-								mentions: {
-									include: {
-										person: true,
-									},
+async function getPersonCached(userId: string, id: string) {
+	"use cache";
+	cacheTag("person");
+	return db.person.findFirst({
+		where: { id, userId },
+		include: {
+			mentions: {
+				include: {
+					diaryEntry: {
+						include: {
+							mentions: {
+								include: {
+									person: true,
 								},
-								locations: true,
 							},
+							locations: true,
 						},
 					},
 				},
 			},
-		});
+		},
+	});
+}
+
+export const getPerson = cache(
+	async (id: string): Promise<PersonWithMentions | null> => {
+		const user = await requireAuth();
+		return getPersonCached(user.id, id);
 	},
 );
 
@@ -121,6 +134,7 @@ export async function createPerson(data: PersonData) {
 
 export async function updatePerson(id: string, data: PersonData) {
 	const user = await requireAuth();
+	revalidateTag("person");
 	return db.person.update({
 		where: { id, userId: user.id },
 		data: {
@@ -137,6 +151,7 @@ export async function updatePerson(id: string, data: PersonData) {
 
 export async function deletePerson(id: string) {
 	const user = await requireAuth();
+	revalidateTag("person");
 	return db.person.delete({
 		where: { id, userId: user.id },
 	});
@@ -149,55 +164,32 @@ export interface DiaryEntriesOptions {
 	endDate?: Date;
 }
 
-export const getDiaryEntries = cache(
-	async (
-		options: DiaryEntriesOptions = {},
-	): Promise<{
-		entries: DiaryEntryWithRelations[];
-		total: number;
-	}> => {
-		const user = await requireAuth();
-		const { page = 1, pageSize = 10, startDate, endDate } = options;
+async function getDiaryEntriesCached(
+	userId: string,
+	options: DiaryEntriesOptions,
+) {
+	"use cache";
+	cacheTag("diaryEntries");
+	const { page = 1, pageSize = 10, startDate, endDate } = options;
 
-		const where = {
-			userId: user.id,
-			...(startDate && endDate
-				? {
-						date: {
-							gte: startDate,
-							lte: endDate,
-						},
-					}
-				: {}),
-		};
-
-		const [entries, total] = await Promise.all([
-			db.diaryEntry.findMany({
-				where,
-				orderBy: { date: "desc" },
-				skip: (page - 1) * pageSize,
-				take: pageSize,
-				include: {
-					mentions: {
-						include: {
-							person: true,
-						},
+	const where = {
+		userId,
+		...(startDate && endDate
+			? {
+					date: {
+						gte: startDate,
+						lte: endDate,
 					},
-					locations: true,
-				},
-			}),
-			db.diaryEntry.count({ where }),
-		]);
+				}
+			: {}),
+	};
 
-		return { entries, total };
-	},
-);
-
-export const getDiaryEntry = cache(
-	async (id: string): Promise<DiaryEntryWithRelations | null> => {
-		const user = await requireAuth();
-		return db.diaryEntry.findFirst({
-			where: { id, userId: user.id },
+	const [entries, total] = await Promise.all([
+		db.diaryEntry.findMany({
+			where,
+			orderBy: { date: "desc" },
+			skip: (page - 1) * pageSize,
+			take: pageSize,
 			include: {
 				mentions: {
 					include: {
@@ -206,12 +198,51 @@ export const getDiaryEntry = cache(
 				},
 				locations: true,
 			},
-		});
+		}),
+		db.diaryEntry.count({ where }),
+	]);
+
+	return { entries, total };
+}
+
+export const getDiaryEntries = cache(
+	async (
+		options: DiaryEntriesOptions = {},
+	): Promise<{
+		entries: DiaryEntryWithRelations[];
+		total: number;
+	}> => {
+		const user = await requireAuth();
+		return getDiaryEntriesCached(user.id, options);
+	},
+);
+
+async function getDiaryEntryCached(userId: string, id: string) {
+	"use cache";
+	cacheTag("diaryEntry");
+	return db.diaryEntry.findFirst({
+		where: { id, userId },
+		include: {
+			mentions: {
+				include: {
+					person: true,
+				},
+			},
+			locations: true,
+		},
+	});
+}
+
+export const getDiaryEntry = cache(
+	async (id: string): Promise<DiaryEntryWithRelations | null> => {
+		const user = await requireAuth();
+		return getDiaryEntryCached(user.id, id);
 	},
 );
 
 export async function createDiaryEntry(data: DiaryData) {
 	const user = await requireAuth();
+	revalidateTag("diaryEntry");
 	return db.diaryEntry.create({
 		data: {
 			content: data.content,
@@ -246,6 +277,7 @@ export async function createDiaryEntry(data: DiaryData) {
 
 export async function updateDiaryEntry(id: string, data: DiaryData) {
 	const user = await requireAuth();
+	revalidateTag("diaryEntry");
 	// First, delete all existing mentions and locations
 	await db.diaryMention.deleteMany({
 		where: { diaryEntryId: id },
@@ -290,6 +322,7 @@ export async function updateDiaryEntry(id: string, data: DiaryData) {
 
 export async function deleteDiaryEntry(id: string) {
 	const user = await requireAuth();
+	revalidateTag("diaryEntry");
 	return db.diaryEntry.delete({
 		where: { id, userId: user.id },
 	});

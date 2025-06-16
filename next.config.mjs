@@ -13,6 +13,7 @@ const nextConfig = {
 		nodeMiddleware: true,
 		reactCompiler: true,
 		ppr: true,
+		useCache: true,
 	},
 };
 
