@@ -96,14 +96,15 @@
 		"preview": "Preview",
 		"shareEntry": "Share entry",
 		"shareNotSupported": "Sharing is not supported on your device",
-		"shareError": "An error occurred while sharing",
+		"shareError": "Unable to share, please check browser settings and try again",
 		"formatting": {
 			"bold": "Bold",
 			"italic": "Italic",
 			"underline": "Underline",
 			"addPerson": "Add Person",
 			"addLocation": "Add Location"
-		}
+		},
+		"shareAllEntries": "Share all"
 	},
 	"home": {
 		"hero": {

@@ -34,7 +34,11 @@ export default async function DiaryPage({ searchParams }: PageProps) {
 
 	return (
 		<div className="container mx-auto px-4 py-8">
-			<DiaryHeader startDate={parsedStartDate} endDate={parsedEndDate} />
+			<DiaryHeader
+				startDate={parsedStartDate}
+				endDate={parsedEndDate}
+				entries={entries}
+			/>
 
 			<div className="space-y-6">
 				{entries.length === 0 ? (
