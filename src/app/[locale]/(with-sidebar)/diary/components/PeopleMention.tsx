@@ -50,6 +50,7 @@ export default function PeopleMention({
 								<div className="flex items-center justify-between mb-2">
 									<Link
 										href={`/people/${person.id}`}
+										target="_blank"
 										className="font-medium text-blue-600 hover:text-blue-800"
 									>
 										{person.name}
@@ -62,7 +63,7 @@ export default function PeopleMention({
 										}}
 										className="px-3 py-1 text-sm text-white bg-blue-600 rounded hover:bg-blue-700"
 									>
-										{t("diary.mentions")}
+										{t("diary.mention")}
 									</button>
 								</div>
 								{person.nickname && (
