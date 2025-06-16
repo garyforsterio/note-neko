@@ -1,1 +1,1 @@
-export * from 'next-intl/server';
+export * from "next-intl/server";

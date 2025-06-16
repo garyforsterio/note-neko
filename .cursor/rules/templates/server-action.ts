@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import { revalidateTag } from 'next/cache';
 import { redirect } from '#i18n/navigation';
-import { type ActionState } from '#actions/types';
+import type { ActionState } from '#actions/types';
 
 const schema = z.object({
   // Add validation schema

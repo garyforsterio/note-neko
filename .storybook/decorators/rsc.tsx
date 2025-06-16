@@ -1,4 +1,4 @@
-import { type Decorator } from '@storybook/react';
+import type { Decorator } from '@storybook/react';
 import { Suspense } from 'react';
 
 let PrevStory: Parameters<Decorator<object>>[0] | null = null;

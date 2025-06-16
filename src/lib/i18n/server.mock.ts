@@ -1,7 +1,7 @@
-import { fn } from '@storybook/test';
+import { fn } from "@storybook/test";
 
-import * as actual from './server';
+import * as actual from "./server";
 
 export const getTranslations = fn(actual.getTranslations).mockName(
-  'getTranslations'
+	"getTranslations",
 );
