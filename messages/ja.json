@@ -82,7 +82,16 @@
 		"pageInfo": "{page}ページ / {totalPages}ページ中",
 		"clearDateRange": "日付範囲をクリア",
 		"filters": "フィルター",
-		"selectDateRange": "日付範囲を選択"
+		"selectDateRange": "日付範囲を選択",
+		"edit": "編集",
+		"preview": "プレビュー",
+		"formatting": {
+			"bold": "太字",
+			"italic": "斜体",
+			"underline": "下線",
+			"addPerson": "人を追加",
+			"addLocation": "場所を追加"
+		}
 	},
 	"common": {
 		"cancel": "キャンセル",

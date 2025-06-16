@@ -90,7 +90,16 @@
 		"pageInfo": "Page {page} of {totalPages}",
 		"clearDateRange": "Clear date range",
 		"filters": "Filters",
-		"selectDateRange": "Select date range"
+		"selectDateRange": "Select date range",
+		"edit": "Edit",
+		"preview": "Preview",
+		"formatting": {
+			"bold": "Bold",
+			"italic": "Italic",
+			"underline": "Underline",
+			"addPerson": "Add Person",
+			"addLocation": "Add Location"
+		}
 	},
 	"home": {
 		"hero": {

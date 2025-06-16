@@ -12,7 +12,7 @@ import Markdown from "react-markdown";
 import type { ActionState } from "#actions/types";
 import ErrorMessage from "#components/ErrorMessage";
 import { renderMarkdown } from "#lib/markdown";
-import { getGoogleMapsUrl } from "#lib/utils/maps";
+import FormattingToolbar from "./FormattingToolbar";
 import LocationMentionSheet from "./LocationMentionSheet";
 import PeopleMention from "./PeopleMention";
 
@@ -51,7 +51,6 @@ interface DiaryFormProps {
 export default function DiaryForm({ entry, people }: DiaryFormProps) {
 	const t = useTranslations();
 	const router = useRouter();
-	const [content, setContent] = useState(entry?.content || "");
 	const [selectedDate, setSelectedDate] = useState<Date>(
 		entry?.date || new Date(),
 	);
@@ -97,39 +96,43 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 	}, []);
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-		if (e.key === "Enter" && (showPeopleMention || showLocationMention)) {
-			e.preventDefault();
+		if (e.key !== "Enter" || !(showPeopleMention || showLocationMention)) {
+			return;
+		}
+
+		e.preventDefault();
+
+		if (showPeopleMention) {
 			const filteredPeople = people.filter((person) =>
 				person.name.toLowerCase().includes(mentionSearchTerm.toLowerCase()),
 			);
-
-			if (showPeopleMention) {
-				if (filteredPeople.length > 0 && filteredPeople[0]) {
-					handlePersonSelect(filteredPeople[0]);
-				} else if (mentionSearchTerm.trim()) {
-					// Create new person
-					const newPerson = {
-						name: mentionSearchTerm.trim(),
-					};
-					handlePersonSelect(newPerson);
-				}
-			} else if (showLocationMention && locationPredictions.length > 0) {
-				const firstPrediction = locationPredictions[0];
-				if (firstPrediction) {
-					handleLocationSelect({
-						name: firstPrediction.name,
-						placeId: firstPrediction.placeId,
-						lat: firstPrediction.lat,
-						lng: firstPrediction.lng,
-					});
-				}
+			if (filteredPeople.length > 0 && filteredPeople[0]) {
+				handlePersonSelect(filteredPeople[0]);
+				return;
 			}
+
+			if (mentionSearchTerm.trim()) {
+				// Create new person
+				handlePersonSelect({
+					name: mentionSearchTerm.trim(),
+				});
+				return;
+			}
+			return;
+		}
+
+		if (showLocationMention && locationPredictions[0]) {
+			handleLocationSelect({
+				name: locationPredictions[0].name,
+				placeId: locationPredictions[0].placeId,
+				lat: locationPredictions[0].lat,
+				lng: locationPredictions[0].lng,
+			});
 		}
 	};
 
 	const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		const newValue = e.target.value;
-		setContent(newValue);
 
 		// Handle @ mentions
 		const cursorPosition = e.target.selectionStart;
@@ -164,6 +167,8 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 
 			if (!textarea) return;
 
+			const content = textarea.value;
+
 			const cursorPosition = textarea.selectionStart;
 			const textBeforeCursor = content.slice(0, cursorPosition);
 			const textAfterCursor = content.slice(cursorPosition);
@@ -189,7 +194,7 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 
 				const newValue = `${textBeforeCursor.slice(0, mentionStart)}[person:${personId}]${textAfterCursor}`;
 
-				setContent(newValue);
+				textarea.value = newValue;
 				// Ensure that the person is not already in the selectedPeople array
 				const newSelectedPeople = selectedPeople.filter((p) => p !== personId);
 				setSelectedPeople([...newSelectedPeople, personId]);
@@ -207,6 +212,8 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 		const textarea = textareaRef.current;
 		if (!textarea) return;
 
+		const content = textarea.value;
+
 		const cursorPosition = textarea.selectionStart;
 		const textBeforeCursor = content.slice(0, cursorPosition);
 		const textAfterCursor = content.slice(cursorPosition);
@@ -216,7 +223,7 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 			const mentionStart = cursorPosition - locationMatch[0].length;
 			const newValue = `${textBeforeCursor.slice(0, mentionStart)}[location:${location.placeId}]${textAfterCursor}`;
 
-			setContent(newValue);
+			textarea.value = newValue;
 			// Ensure that the location is not already in the locations array
 			const newLocations = locations.filter(
 				(l) => l.placeId !== location.placeId,
@@ -230,7 +237,6 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 	return (
 		<form action={action} className="space-y-6">
 			<ErrorMessage message={state.error} />
-			<input type="hidden" name="content" value={content} />
 			<div className="mb-4">
 				<label
 					htmlFor="date"
@@ -264,7 +270,7 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 							!isPreview ? "bg-blue-600 text-white" : "bg-gray-100"
 						}`}
 					>
-						Edit
+						{t("diary.edit")}
 					</button>
 					<button
 						type="button"
@@ -273,15 +279,29 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 							isPreview ? "bg-blue-600 text-white" : "bg-gray-100"
 						}`}
 					>
-						Preview
+						{t("diary.preview")}
 					</button>
 				</div>
+
+				{!isPreview && (
+					<FormattingToolbar
+						textareaRef={textareaRef}
+						onMentionPerson={() => {
+							setShowPeopleMention(true);
+							setMentionSearchTerm("");
+						}}
+						onMentionLocation={() => {
+							setShowLocationMention(true);
+							setMentionSearchTerm("");
+						}}
+					/>
+				)}
 
 				{isPreview ? (
 					<div className="prose max-w-none p-4 bg-white rounded-md border border-gray-300">
 						<Markdown>
 							{renderMarkdown(
-								content,
+								textareaRef.current?.value || "",
 								entry?.mentions.map((m) => m.person),
 								locations,
 							)}
@@ -289,8 +309,8 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 					</div>
 				) : (
 					<textarea
+						name="content"
 						ref={textareaRef}
-						value={content}
 						onChange={handleTextChange}
 						onKeyDown={handleKeyDown}
 						className="w-full h-64 p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
