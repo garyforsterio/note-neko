@@ -85,6 +85,9 @@
 		"selectDateRange": "日付範囲を選択",
 		"edit": "編集",
 		"preview": "プレビュー",
+		"shareEntry": "エントリーを共有",
+		"shareNotSupported": "このデバイスでは共有機能がサポートされていません",
+		"shareError": "共有中にエラーが発生しました",
 		"formatting": {
 			"bold": "太字",
 			"italic": "斜体",

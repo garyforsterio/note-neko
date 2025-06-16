@@ -1,10 +1,9 @@
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
-import Markdown from "react-markdown";
+import { DiaryContent } from "#components/DiaryContent";
 import { Link } from "#i18n/navigation";
 import { getPerson } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
-import { renderMarkdown } from "#lib/markdown";
 import DeleteButton from "../components/DeleteButton";
 import EditButton from "../components/EditButton";
 
@@ -103,13 +102,11 @@ export default async function PersonPage({ params }: PersonPageProps) {
 										{format(mention.diaryEntry.date, "MMMM d, yyyy")}
 									</Link>
 								</div>
-								<Markdown>
-									{renderMarkdown(
-										mention.diaryEntry.content,
-										mention.diaryEntry.mentions.map((m) => m.person),
-										mention.diaryEntry.locations,
-									)}
-								</Markdown>
+								<DiaryContent
+									content={mention.diaryEntry.content}
+									people={mention.diaryEntry.mentions.map((m) => m.person)}
+									locations={mention.diaryEntry.locations}
+								/>
 							</div>
 						))}
 					</div>

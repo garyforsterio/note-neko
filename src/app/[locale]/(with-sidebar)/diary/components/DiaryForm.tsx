@@ -9,11 +9,10 @@ import { useRouter } from "#i18n/navigation";
 
 import type { Person } from "@prisma/client";
 import { useActionState } from "react";
-import Markdown from "react-markdown";
 import type { ActionState } from "#actions/types";
+import { DiaryContent } from "#components/DiaryContent";
 import ErrorMessage from "#components/ErrorMessage";
 import type { DiaryEntryWithRelations } from "#lib/dal";
-import { renderMarkdown } from "#lib/markdown";
 import FormattingToolbar from "./FormattingToolbar";
 import LocationMentionSheet from "./LocationMentionSheet";
 import PeopleMention from "./PeopleMention";
@@ -26,9 +25,6 @@ interface DiaryFormProps {
 export default function DiaryForm({ entry, people }: DiaryFormProps) {
 	const t = useTranslations();
 	const router = useRouter();
-	const [selectedDate, setSelectedDate] = useState<Date>(
-		entry?.date || new Date(),
-	);
 	const [selectedPeople, setSelectedPeople] = useState<string[]>(
 		entry?.mentions.map((m) => m.person.id) || [],
 	);
@@ -211,8 +207,7 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 					type="date"
 					id="date"
 					name="date"
-					value={selectedDate.toISOString().split("T")[0]}
-					onChange={(e) => setSelectedDate(new Date(e.target.value))}
+					defaultValue={entry?.date.toISOString().split("T")[0]}
 					className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
 				/>
 			</div>
@@ -260,26 +255,26 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 					/>
 				)}
 
-				{isPreview ? (
-					<div className="prose max-w-none p-4 bg-white rounded-md border border-gray-300">
-						<Markdown>
-							{renderMarkdown(
-								textareaRef.current?.value || "",
-								entry?.mentions.map((m) => m.person),
-								locations,
-							)}
-						</Markdown>
-					</div>
-				) : (
-					<textarea
-						name="content"
-						ref={textareaRef}
-						onChange={handleTextChange}
-						onKeyDown={handleKeyDown}
-						className="w-full h-64 p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-						placeholder={t("diary.contentPlaceholder")}
+				<div
+					hidden={!isPreview}
+					className="prose max-w-none p-4 bg-white rounded-md border border-gray-300"
+				>
+					<DiaryContent
+						content={textareaRef.current?.value || ""}
+						people={entry?.mentions.map((m) => m.person) || []}
+						locations={locations}
 					/>
-				)}
+				</div>
+				<textarea
+					hidden={isPreview}
+					name="content"
+					ref={textareaRef}
+					defaultValue={entry?.content}
+					onChange={handleTextChange}
+					onKeyDown={handleKeyDown}
+					className="w-full h-64 p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+					placeholder={t("diary.contentPlaceholder")}
+				/>
 
 				<PeopleMention
 					isOpen={showPeopleMention}

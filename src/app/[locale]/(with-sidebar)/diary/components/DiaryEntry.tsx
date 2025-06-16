@@ -1,13 +1,13 @@
 import { format } from "date-fns";
 import { Pencil } from "lucide-react";
-import Markdown from "react-markdown";
+import { DiaryContent } from "#components/DiaryContent";
 import { Link } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
-import { renderMarkdown } from "#lib/markdown";
 import DeleteButton from "./DeleteButton";
 import { DiaryLocations } from "./DiaryLocations";
 import { DiaryMentions } from "./DiaryMentions";
+import ShareButton from "./ShareButton";
 
 interface DiaryEntryProps {
 	entry: DiaryEntryWithRelations;
@@ -40,18 +40,17 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
 					>
 						<Pencil className="h-4 w-4" />
 					</Link>
+					<ShareButton entry={entry} />
 					<DeleteButton id={entry.id} />
 				</div>
 			</div>
 
 			<div className="prose max-w-none">
-				<Markdown>
-					{renderMarkdown(
-						entry.content,
-						entry.mentions.map((m) => m.person),
-						entry.locations,
-					)}
-				</Markdown>
+				<DiaryContent
+					content={entry.content}
+					people={entry.mentions.map((m) => m.person)}
+					locations={entry.locations}
+				/>
 			</div>
 
 			<DiaryMentions mentions={entry.mentions} />

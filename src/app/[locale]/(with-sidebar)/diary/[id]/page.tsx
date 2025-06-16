@@ -1,11 +1,10 @@
 import { format } from "date-fns";
 import { MapPin } from "lucide-react";
 import { notFound } from "next/navigation";
-import Markdown from "react-markdown";
+import { DiaryContent } from "#components/DiaryContent";
 import { Link } from "#i18n/navigation";
 import { getDiaryEntry } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
-import { renderMarkdown } from "#lib/markdown";
 import { getGoogleMapsUrl } from "#lib/utils/maps";
 import DeleteButton from "../components/DeleteButton";
 interface DiaryEntryPageProps {
@@ -47,13 +46,11 @@ export default async function DiaryEntryPage({ params }: DiaryEntryPageProps) {
 
 			<div className="bg-white rounded-lg shadow-md p-6 mb-8">
 				<div className="prose max-w-none">
-					<Markdown>
-						{renderMarkdown(
-							entry.content,
-							entry.mentions.map((m) => m.person),
-							entry.locations,
-						)}
-					</Markdown>
+					<DiaryContent
+						content={entry.content}
+						people={entry.mentions.map((m) => m.person)}
+						locations={entry.locations}
+					/>
 				</div>
 
 				{entry.mentions.length > 0 && (

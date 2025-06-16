@@ -93,6 +93,9 @@
 		"selectDateRange": "Select date range",
 		"edit": "Edit",
 		"preview": "Preview",
+		"shareEntry": "Share entry",
+		"shareNotSupported": "Sharing is not supported on your device",
+		"shareError": "An error occurred while sharing",
 		"formatting": {
 			"bold": "Bold",
 			"italic": "Italic",
