@@ -1,5 +1,6 @@
 "use client";
 
+import * as Sentry from "@sentry/nextjs";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 
@@ -12,6 +13,7 @@ export default function RootError({
 }) {
 	const t = useTranslations();
 	useEffect(() => {
+		Sentry.captureException(error);
 		console.error(error);
 	}, [error]);
 
