@@ -66,12 +66,14 @@ async function refreshAccessToken() {
 		include: { user: true },
 	});
 
-	if (!storedToken || storedToken.expiresAt < new Date()) {
-		if (storedToken) {
-			await db.refreshToken.delete({
-				where: { id: storedToken.id },
-			});
-		}
+	if (!storedToken) {
+		return null;
+	}
+
+	if (storedToken.expiresAt < new Date()) {
+		await db.refreshToken.delete({
+			where: { id: storedToken.id },
+		});
 		return null;
 	}
 
