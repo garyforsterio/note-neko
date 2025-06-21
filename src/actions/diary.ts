@@ -5,6 +5,7 @@ import { requireAuth } from "#lib/auth";
 import { createDiaryEntry, deleteDiaryEntry, updateDiaryEntry } from "#lib/dal";
 import type { ActionState } from "./types";
 
+import * as Sentry from "@sentry/nextjs";
 import { z } from "zod";
 
 const diaryLocationSchema = z.object({
@@ -43,7 +44,7 @@ export async function createDiaryEntryAction(
 		}
 		await createDiaryEntry(result.data);
 	} catch (error) {
-		console.error("Error creating diary entry:", error);
+		Sentry.captureException(error);
 		return {
 			success: false,
 			error:
@@ -79,7 +80,7 @@ export async function updateDiaryEntryAction(
 		}
 		await updateDiaryEntry(id, result.data);
 	} catch (error) {
-		console.error("Error updating diary entry:", error);
+		Sentry.captureException(error);
 		return {
 			success: false,
 			error:
@@ -102,7 +103,7 @@ export async function deleteDiaryEntryAction(
 		await deleteDiaryEntry(id);
 		return { success: true };
 	} catch (error) {
-		console.error("Error deleting diary entry:", error);
+		Sentry.captureException(error);
 		return {
 			success: false,
 			error:

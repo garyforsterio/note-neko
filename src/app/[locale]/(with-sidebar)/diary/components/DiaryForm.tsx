@@ -8,6 +8,7 @@ import { useGooglePlaces } from "#hooks/useGooglePlaces";
 import { useRouter } from "#i18n/navigation";
 
 import type { Person } from "@prisma/client";
+import * as Sentry from "@sentry/nextjs";
 import { useActionState } from "react";
 import type { ActionState } from "#actions/types";
 import { DiaryContent } from "#components/DiaryContent";
@@ -146,7 +147,7 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 						personName = result.data.name;
 					} else {
 						// Handle error case
-						console.error("Failed to create person:", result.error);
+						Sentry.captureException(result.error);
 						return;
 					}
 				}

@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { useEffect, useRef, useState } from "react";
 import { loadGoogleMapsScript } from "#lib/googleMaps";
 
@@ -24,7 +25,7 @@ export function useGooglePlaces(searchTerm: string, isActive: boolean) {
 					placeRef.current = library;
 				}
 			} catch (error) {
-				console.error("Error loading Google Maps:", error);
+				Sentry.captureException(error);
 			}
 		};
 
@@ -51,7 +52,7 @@ export function useGooglePlaces(searchTerm: string, isActive: boolean) {
 					});
 					setPredictions(formattedPredictions);
 				} catch (error) {
-					console.error("Error searching places:", error);
+					Sentry.captureException(error);
 					setPredictions([]);
 				}
 			} else if (!isActive) {

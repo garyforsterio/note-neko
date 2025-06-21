@@ -1,5 +1,6 @@
 "use client";
 
+import * as Sentry from "@sentry/nextjs";
 import { format } from "date-fns";
 import { Share2 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -46,7 +47,7 @@ export default function ShareAllButton({
 			});
 		} catch (error) {
 			if (error instanceof Error && error.name !== "AbortError") {
-				console.error("Error sharing:", error);
+				Sentry.captureException(error);
 				alert(t("diary.shareError"));
 			}
 		}

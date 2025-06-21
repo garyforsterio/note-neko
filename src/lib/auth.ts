@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { redirect } from "#i18n/navigation";
@@ -58,6 +59,7 @@ async function refreshAccessToken() {
 	const refreshToken = cookieStore.get("refreshToken")?.value;
 
 	if (!refreshToken) {
+		console.debug("No refresh token found");
 		return null;
 	}
 
@@ -67,6 +69,7 @@ async function refreshAccessToken() {
 	});
 
 	if (!storedToken) {
+		console.debug("No stored token found");
 		return null;
 	}
 
@@ -74,6 +77,7 @@ async function refreshAccessToken() {
 		await db.refreshToken.delete({
 			where: { id: storedToken.id },
 		});
+		console.debug("Token expired, deleting");
 		return null;
 	}
 
@@ -82,6 +86,8 @@ async function refreshAccessToken() {
 	await db.refreshToken.delete({
 		where: { id: storedToken.id },
 	});
+
+	console.debug("Access token refreshed");
 
 	return accessToken;
 }
@@ -92,6 +98,7 @@ export async function validateTokens(): Promise<string | null> {
 		cookieStore.get("accessToken")?.value;
 
 	if (!accessToken) {
+		console.debug("No access token found, refreshing");
 		accessToken = await refreshAccessToken();
 		if (!accessToken) return null;
 	}
@@ -99,7 +106,8 @@ export async function validateTokens(): Promise<string | null> {
 	try {
 		const { payload } = await jwtVerify(accessToken, JWT_SECRET);
 		return payload.userId as string;
-	} catch {
+	} catch (error) {
+		Sentry.captureException(error);
 		return null;
 	}
 }
@@ -117,7 +125,8 @@ export async function getCurrentUser() {
 		});
 
 		return user;
-	} catch {
+	} catch (error) {
+		Sentry.captureException(error);
 		return null;
 	}
 }

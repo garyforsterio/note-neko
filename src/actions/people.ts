@@ -1,6 +1,7 @@
 "use server";
 
 import type { Person } from "@prisma/client";
+import * as Sentry from "@sentry/nextjs";
 import { z } from "zod";
 import { redirect } from "#i18n/navigation";
 import { requireAuth } from "#lib/auth";
@@ -45,7 +46,7 @@ export async function createPersonAction(
 		}
 		await createPerson({ ...result.data });
 	} catch (error) {
-		console.error("Error creating person:", error);
+		Sentry.captureException(error);
 		return {
 			success: false,
 			error: error instanceof Error ? error.message : "Failed to create person",
@@ -76,7 +77,7 @@ export async function updatePersonAction(
 
 		await updatePerson(result.data.id as string, { ...result.data });
 	} catch (error) {
-		console.error("Error updating person:", error);
+		Sentry.captureException(error);
 		return {
 			success: false,
 			error: error instanceof Error ? error.message : "Failed to update person",
@@ -98,7 +99,7 @@ export async function deletePersonAction(
 		await requireAuth();
 		await deletePerson(id);
 	} catch (error) {
-		console.error("Error deleting person:", error);
+		Sentry.captureException(error);
 		return {
 			success: false,
 			error: error instanceof Error ? error.message : "Failed to delete person",
@@ -134,7 +135,7 @@ export async function createPersonWithoutRedirectAction(
 			},
 		};
 	} catch (error) {
-		console.error("Error creating person:", error);
+		Sentry.captureException(error);
 		return {
 			success: false,
 			error: error instanceof Error ? error.message : "Failed to create person",
