@@ -1,6 +1,5 @@
 {
 	"auth": {
-		"title": "Authentication",
 		"login": {
 			"title": "Sign in to your account",
 			"email": "Email address",
