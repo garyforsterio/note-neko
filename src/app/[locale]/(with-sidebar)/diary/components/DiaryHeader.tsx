@@ -22,11 +22,7 @@ export async function DiaryHeader({
 			<div className="flex justify-between items-center">
 				<h1 className="text-4xl font-bold">{t("diary.title")}</h1>
 				<div className="flex items-center gap-4">
-					<ShareAllButton
-						startDate={startDate}
-						endDate={endDate}
-						entries={entries}
-					/>
+					<ShareAllButton entries={entries} />
 					<Link
 						href="/diary/new"
 						className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"

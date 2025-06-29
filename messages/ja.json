@@ -95,7 +95,8 @@
 			"underline": "下線",
 			"addPerson": "人を追加",
 			"addLocation": "場所を追加"
-		}
+		},
+		"copyEntry": "コピー"
 	},
 	"common": {
 		"cancel": "キャンセル",

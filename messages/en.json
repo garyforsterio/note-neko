@@ -104,7 +104,8 @@
 			"addPerson": "Add Person",
 			"addLocation": "Add Location"
 		},
-		"shareAllEntries": "Share all"
+		"shareAllEntries": "Share all",
+		"copyEntry": "Copy"
 	},
 	"home": {
 		"hero": {
