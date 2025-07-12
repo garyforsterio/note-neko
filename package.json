@@ -14,6 +14,7 @@
 		"build": "next build",
 		"start": "next start",
 		"test": "vitest",
+		"test:unit": "vitest run --config vitest.unit.config.ts",
 		"coverage": "vitest run --coverage",
 		"lint": "pnpm biome lint --write ./src",
 		"format": "pnpm biome format --write ./src",

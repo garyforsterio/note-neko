@@ -30,5 +30,8 @@ jobs:
       - name: Run typecheck
         run: pnpm typecheck
 
-      - name: Run vitest
+      - name: Run storybook tests
         run: pnpm test
+
+      - name: Run unit tests
+        run: pnpm test:unit
