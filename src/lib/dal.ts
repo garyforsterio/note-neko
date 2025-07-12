@@ -60,8 +60,8 @@ async function getPeopleCached(userId: string) {
 }
 
 export const getPeople = cache(async (): Promise<PersonWithMentions[]> => {
-	const user = await requireAuth();
-	return getPeopleCached(user.id);
+	const { userId } = await requireAuth();
+	return getPeopleCached(userId);
 });
 
 async function getPersonCached(userId: string, id: string) {
@@ -90,13 +90,13 @@ async function getPersonCached(userId: string, id: string) {
 
 export const getPerson = cache(
 	async (id: string): Promise<PersonWithMentions | null> => {
-		const user = await requireAuth();
-		return getPersonCached(user.id, id);
+		const { userId } = await requireAuth();
+		return getPersonCached(userId, id);
 	},
 );
 
 export async function createPerson(data: Prisma.PersonCreateWithoutUserInput) {
-	const user = await requireAuth();
+	const { userId } = await requireAuth();
 	return db.person.create({
 		data: {
 			name: data.name,
@@ -105,7 +105,7 @@ export async function createPerson(data: Prisma.PersonCreateWithoutUserInput) {
 			howWeMet: data.howWeMet,
 			interests: data.interests,
 			notes: data.notes,
-			userId: user.id,
+			userId: userId,
 		},
 	});
 }
@@ -114,10 +114,10 @@ export async function updatePerson(
 	id: string,
 	data: Omit<Prisma.PersonUpdateInput, "user">,
 ) {
-	const user = await requireAuth();
+	const { userId } = await requireAuth();
 	revalidateTag("person");
 	return db.person.update({
-		where: { id, userId: user.id },
+		where: { id, userId: userId },
 		data: {
 			name: data.name,
 			nickname: data.nickname,
@@ -125,16 +125,16 @@ export async function updatePerson(
 			howWeMet: data.howWeMet,
 			interests: data.interests,
 			notes: data.notes,
-			userId: user.id,
+			userId: userId,
 		},
 	});
 }
 
 export async function deletePerson(id: string) {
-	const user = await requireAuth();
+	const { userId } = await requireAuth();
 	revalidateTag("person");
 	return db.person.delete({
-		where: { id, userId: user.id },
+		where: { id, userId: userId },
 	});
 }
 
@@ -193,8 +193,8 @@ export const getDiaryEntries = cache(
 		entries: DiaryEntryWithRelations[];
 		total: number;
 	}> => {
-		const user = await requireAuth();
-		return getDiaryEntriesCached(user.id, options);
+		const { userId } = await requireAuth();
+		return getDiaryEntriesCached(userId, options);
 	},
 );
 
@@ -216,8 +216,8 @@ async function getDiaryEntryCached(userId: string, id: string) {
 
 export const getDiaryEntry = cache(
 	async (id: string): Promise<DiaryEntryWithRelations | null> => {
-		const user = await requireAuth();
-		return getDiaryEntryCached(user.id, id);
+		const { userId } = await requireAuth();
+		return getDiaryEntryCached(userId, id);
 	},
 );
 
@@ -231,8 +231,8 @@ async function getAllDiaryIdsCached(userId: string) {
 }
 
 export const getAllDiaryIds = cache(async () => {
-	const user = await requireAuth();
-	return getAllDiaryIdsCached(user.id);
+	const { userId } = await requireAuth();
+	return getAllDiaryIdsCached(userId);
 });
 
 export async function createDiaryEntry({
@@ -246,13 +246,13 @@ export async function createDiaryEntry({
 	mentions: string[];
 	locations: Prisma.DiaryLocationCreateWithoutDiaryEntryInput[];
 }) {
-	const user = await requireAuth();
+	const { userId } = await requireAuth();
 	revalidateTag("diaryEntry");
 	return db.diaryEntry.create({
 		data: {
 			content,
 			date,
-			userId: user.id,
+			userId: userId,
 			mentions: {
 				create: mentions.map((personId) => ({
 					person: {
@@ -294,7 +294,7 @@ export async function updateDiaryEntry(
 		locations: Prisma.DiaryLocationCreateWithoutDiaryEntryInput[];
 	},
 ) {
-	const user = await requireAuth();
+	const { userId } = await requireAuth();
 	revalidateTag("diaryEntry");
 	// First, delete all existing mentions and locations
 	await db.diaryMention.deleteMany({
@@ -310,7 +310,7 @@ export async function updateDiaryEntry(
 		data: {
 			content,
 			date,
-			userId: user.id,
+			userId: userId,
 			mentions: {
 				create: mentions.map((personId) => ({
 					person: {
@@ -339,9 +339,9 @@ export async function updateDiaryEntry(
 }
 
 export async function deleteDiaryEntry(id: string) {
-	const user = await requireAuth();
+	const { userId } = await requireAuth();
 	revalidateTag("diaryEntry");
 	return db.diaryEntry.delete({
-		where: { id, userId: user.id },
+		where: { id, userId: userId },
 	});
 }

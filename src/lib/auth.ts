@@ -1,6 +1,7 @@
 import * as Sentry from "@sentry/nextjs";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import { cache } from "react";
 import { redirect } from "#i18n/navigation";
 import { db } from "#lib/db";
 
@@ -54,15 +55,7 @@ export async function createUserSession(userId: string): Promise<string> {
 	return accessToken;
 }
 
-async function refreshAccessToken() {
-	const cookieStore = await cookies();
-	const refreshToken = cookieStore.get("refreshToken")?.value;
-
-	if (!refreshToken) {
-		console.debug("No refresh token found");
-		return null;
-	}
-
+async function refreshAccessToken(refreshToken: string) {
 	const storedToken = await db.refreshToken.findUnique({
 		where: { token: refreshToken },
 		include: { user: true },
@@ -92,54 +85,52 @@ async function refreshAccessToken() {
 	return accessToken;
 }
 
-export async function validateTokens(): Promise<string | null> {
-	const cookieStore = await cookies();
-	let accessToken: string | undefined | null =
-		cookieStore.get("accessToken")?.value;
+export const validateTokens = cache(
+	async (): Promise<{
+		userId: string;
+		wasRefreshed: boolean;
+	} | null> => {
+		const cookieStore = await cookies();
+		const refreshToken = cookieStore.get("refreshToken")?.value;
 
-	if (!accessToken) {
-		console.debug("No access token found, refreshing");
-		accessToken = await refreshAccessToken();
-		if (!accessToken) return null;
-	}
+		if (!refreshToken) {
+			console.debug("No refresh token found");
+			return null;
+		}
 
-	try {
-		const { payload } = await jwtVerify(accessToken, JWT_SECRET);
-		return payload.userId as string;
-	} catch (error) {
-		Sentry.captureException(error);
-		return null;
-	}
-}
+		let accessToken: string | undefined | null =
+			cookieStore.get("accessToken")?.value;
+		let wasRefreshed = false;
 
-export async function getCurrentUser() {
-	try {
-		const userId = await validateTokens();
-		if (!userId) return null;
-		const user = await db.user.findUnique({
-			where: { id: userId },
-			select: {
-				id: true,
-				email: true,
-			},
-		});
+		if (!accessToken) {
+			console.debug("No access token found, refreshing");
+			accessToken = await refreshAccessToken(refreshToken);
+			if (!accessToken) return null;
+			wasRefreshed = true;
+		}
 
-		return user;
-	} catch (error) {
-		Sentry.captureException(error);
-		return null;
-	}
-}
+		try {
+			const { payload } = await jwtVerify(accessToken, JWT_SECRET);
+			return {
+				userId: payload.userId as string,
+				wasRefreshed,
+			};
+		} catch (error) {
+			Sentry.captureException(error);
+			return null;
+		}
+	},
+);
 
 export async function requireAuth() {
-	const user = await getCurrentUser();
-	if (!user) {
+	const result = await validateTokens();
+	if (!result) {
 		return redirect({
 			href: "/auth/login",
 			locale: "en",
 		});
 	}
-	return user;
+	return result;
 }
 
 export async function deleteUserSession() {

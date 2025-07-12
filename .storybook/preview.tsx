@@ -3,7 +3,7 @@ import "../src/app/[locale]/globals.css";
 import { userEvent } from "@storybook/test";
 import * as MockDate from "mockdate";
 import { useTranslations } from "next-intl";
-import { getCurrentUser, requireAuth } from "#lib/auth.mock.js";
+import { requireAuth } from "#lib/auth.mock.js";
 import { initializeDB } from "#lib/db.mock";
 import { getTranslations } from "#lib/i18n/server.mock";
 import { i18NDecorator } from "./decorators/i18n";
@@ -63,14 +63,9 @@ const preview: Preview = {
 		// reset the database to avoid hanging state between stories
 		initializeDB();
 
-		// mock the auth
-		getCurrentUser.mockResolvedValue({
-			id: "test-user-id",
-			email: "test@test.com",
-		});
 		requireAuth.mockResolvedValue({
-			id: "test-user-id",
-			email: "test@test.com",
+			userId: "test-user-id",
+			wasRefreshed: false,
 		});
 	},
 };

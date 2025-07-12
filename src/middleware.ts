@@ -22,12 +22,17 @@ export async function middleware(request: NextRequest) {
 
 	// Allow public paths
 	if (!PUBLIC_PATHS.includes(pathnameWithoutLocale)) {
-		const userId = await validateTokens();
+		const result = await validateTokens();
 
-		if (!userId) {
+		if (!result) {
 			const url = new URL(`/${locale}/auth/login`, request.url);
 			url.searchParams.set("from", pathname);
 			return NextResponse.redirect(url);
+		}
+
+		// If access token was refreshed, redirect to same URL with 307 status
+		if (result.wasRefreshed) {
+			return NextResponse.redirect(request.url, 307);
 		}
 
 		return NextResponse.next();
@@ -35,8 +40,8 @@ export async function middleware(request: NextRequest) {
 
 	// If the user is logged in and tries to access an auth page, redirect to the diary page
 	if (AUTH_PATHS.includes(pathnameWithoutLocale)) {
-		const userId = await validateTokens();
-		if (userId) {
+		const result = await validateTokens();
+		if (result) {
 			const url = new URL(`/${locale}/diary`, request.url);
 			return NextResponse.redirect(url);
 		}
