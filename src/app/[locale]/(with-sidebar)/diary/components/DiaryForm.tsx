@@ -18,6 +18,13 @@ import FormattingToolbar from "./FormattingToolbar";
 import LocationMentionSheet from "./LocationMentionSheet";
 import PeopleMention from "./PeopleMention";
 
+// Needs to account for user's timezone
+function getLocalDateString(date: Date) {
+	const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+	const formattedDate = localDate.toISOString().split("T")[0];
+	return formattedDate;
+}
+
 interface DiaryFormProps {
 	entry?: DiaryEntryWithRelations;
 	people: Person[];
@@ -209,9 +216,9 @@ export default function DiaryForm({ entry, people }: DiaryFormProps) {
 					id="date"
 					name="date"
 					defaultValue={
-						(entry?.date ? new Date(entry.date) : new Date())
-							.toISOString()
-							.split("T")[0]
+						entry?.date
+							? getLocalDateString(entry.date)
+							: getLocalDateString(new Date())
 					}
 					className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
 				/>
