@@ -1,43 +1,58 @@
 "use client";
 
+import { getFormProps, getInputProps, useForm } from "@conform-to/react";
+import { getZodConstraint, parseWithZod } from "@conform-to/zod";
 import { useTranslations } from "next-intl";
-import { useActionState, useState } from "react";
+import { useActionState } from "react";
 import { requestPasswordReset } from "#actions/auth";
-import type { ActionState } from "#actions/types";
 import ErrorMessage from "#components/ErrorMessage";
 import { Link } from "#i18n/navigation";
+import { forgotPasswordSchema } from "#schema/auth";
 
 export function ForgotPasswordForm() {
 	const t = useTranslations();
-	const [state, action, isPending] = useActionState<ActionState, FormData>(
+	const [lastResult, action, isPending] = useActionState(
 		requestPasswordReset,
-		{},
+		null,
 	);
 
+	const [form, fields] = useForm({
+		// Sync the result of last submission
+		lastResult,
+
+		// Reuse the validation logic on the client
+		onValidate: ({ formData }) => {
+			return parseWithZod(formData, { schema: forgotPasswordSchema });
+		},
+
+		// To derive all validation attributes
+		constraint: getZodConstraint(forgotPasswordSchema),
+
+		// Validate the form on blur event triggered
+		shouldValidate: "onBlur",
+		shouldRevalidate: "onInput",
+	});
 	return (
-		<form className="mt-8 space-y-6" action={action}>
-			{state.success && (
+		<form className="mt-8 space-y-6" {...getFormProps(form)} action={action}>
+			{lastResult?.status === "success" && (
 				<div className="rounded-md bg-green-50 p-4">
 					<div className="text-sm text-green-700">
 						{t("auth.forgotPassword.success")}
 					</div>
 				</div>
 			)}
-			<ErrorMessage message={state.error} />
 			<div className="rounded-md shadow-sm -space-y-px">
 				<div>
-					<label htmlFor="email" className="sr-only">
+					<label htmlFor={fields.email.id} className="sr-only">
 						{t("auth.forgotPassword.email")}
 					</label>
 					<input
-						id="email"
-						name="email"
-						type="email"
+						{...getInputProps(fields.email, { type: "email" })}
 						autoComplete="email"
-						required
 						className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
 						placeholder={t("auth.forgotPassword.email")}
 					/>
+					<ErrorMessage id={fields.email.id} errors={fields.email.errors} />
 				</div>
 			</div>
 
@@ -52,10 +67,12 @@ export function ForgotPasswordForm() {
 				</div>
 			</div>
 
+			<ErrorMessage errors={form.errors} />
+
 			<div>
 				<button
 					type="submit"
-					aria-disabled={isPending}
+					disabled={isPending || !form.valid}
 					className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
 				>
 					{isPending

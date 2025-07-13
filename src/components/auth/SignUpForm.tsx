@@ -1,64 +1,76 @@
 "use client";
 
+import { getFormProps, getInputProps, useForm } from "@conform-to/react";
+import { getZodConstraint, parseWithZod } from "@conform-to/zod";
 import { useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { signUp } from "#actions/auth";
-import type { AuthActionState } from "#actions/types";
 import ErrorMessage from "#components/ErrorMessage";
 import { Link } from "#i18n/navigation";
+import { signUpSchema } from "#schema/auth";
 
 export function SignUpForm() {
 	const t = useTranslations();
-	const [state, action, isPending] = useActionState<AuthActionState, FormData>(
-		signUp,
-		{},
-	);
+	const [lastResult, formAction, isPending] = useActionState(signUp, null);
+
+	const [form, fields] = useForm({
+		lastResult,
+		onValidate: ({ formData }) => {
+			return parseWithZod(formData, { schema: signUpSchema });
+		},
+		constraint: getZodConstraint(signUpSchema),
+		shouldValidate: "onBlur",
+		shouldRevalidate: "onInput",
+	});
 
 	return (
-		<form className="mt-8 space-y-6" action={action}>
-			<ErrorMessage message={state.error} />
+		<form
+			className="mt-8 space-y-6"
+			{...getFormProps(form)}
+			action={formAction}
+		>
+			<ErrorMessage errors={form.errors} />
 			<div className="rounded-md shadow-sm -space-y-px">
 				<div>
-					<label htmlFor="email" className="sr-only">
+					<label htmlFor={fields.email.id} className="sr-only">
 						{t("auth.signup.email")}
 					</label>
 					<input
-						id="email"
-						name="email"
-						type="email"
+						{...getInputProps(fields.email, { type: "email" })}
 						autoComplete="email"
-						required
-						defaultValue={state.email}
 						className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
 						placeholder={t("auth.signup.email")}
 					/>
+					<ErrorMessage id={fields.email.id} errors={fields.email.errors} />
 				</div>
 				<div>
-					<label htmlFor="password" className="sr-only">
+					<label htmlFor={fields.password.id} className="sr-only">
 						{t("auth.signup.password")}
 					</label>
 					<input
-						id="password"
-						name="password"
-						type="password"
+						{...getInputProps(fields.password, { type: "password" })}
 						autoComplete="new-password"
-						required
 						className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
 						placeholder={t("auth.signup.password")}
 					/>
+					<ErrorMessage
+						id={fields.password.id}
+						errors={fields.password.errors}
+					/>
 				</div>
 				<div>
-					<label htmlFor="confirmPassword" className="sr-only">
+					<label htmlFor={fields.confirmPassword.id} className="sr-only">
 						{t("auth.signup.confirmPassword")}
 					</label>
 					<input
-						id="confirmPassword"
-						name="confirmPassword"
-						type="password"
+						{...getInputProps(fields.confirmPassword, { type: "password" })}
 						autoComplete="new-password"
-						required
 						className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
 						placeholder={t("auth.signup.confirmPassword")}
+					/>
+					<ErrorMessage
+						id={fields.confirmPassword.id}
+						errors={fields.confirmPassword.errors}
 					/>
 				</div>
 			</div>
@@ -77,7 +89,7 @@ export function SignUpForm() {
 			<div>
 				<button
 					type="submit"
-					aria-disabled={isPending}
+					disabled={isPending || !form.valid}
 					className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
 				>
 					{isPending ? t("auth.signup.submitting") : t("auth.signup.submit")}
