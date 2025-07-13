@@ -22,8 +22,11 @@ export default function PeopleMention({
 }: PeopleMentionProps) {
 	const t = useTranslations();
 
-	const filteredPeople = people.filter((person) =>
-		person.name.toLowerCase().includes(searchTerm.toLowerCase()),
+	const lowerCaseSearchTerm = searchTerm.toLowerCase();
+	const filteredPeople = people.filter(
+		(person) =>
+			person.name.toLowerCase().includes(lowerCaseSearchTerm) ||
+			person.nickname?.toLowerCase().includes(lowerCaseSearchTerm),
 	);
 
 	return (
