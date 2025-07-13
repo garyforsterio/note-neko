@@ -41,6 +41,7 @@ export function LoginForm() {
 
 	return (
 		<form className="mt-8 space-y-6" {...getFormProps(form)} action={action}>
+			<ErrorMessage errors={form.errors} />
 			{registered && (
 				<div className="rounded-md bg-green-50 p-4">
 					<div className="text-sm text-green-700">
@@ -48,7 +49,6 @@ export function LoginForm() {
 					</div>
 				</div>
 			)}
-			<ErrorMessage message={form.errors?.join(", ")} />
 			<div className="rounded-md shadow-sm -space-y-px">
 				<div>
 					<label htmlFor={fields.email.id} className="sr-only">
@@ -97,7 +97,6 @@ export function LoginForm() {
 					</Link>
 				</div>
 			</div>
-			<ErrorMessage errors={form.errors} />
 
 			<div>
 				<button

@@ -34,6 +34,7 @@ export function ForgotPasswordForm() {
 	});
 	return (
 		<form className="mt-8 space-y-6" {...getFormProps(form)} action={action}>
+			<ErrorMessage errors={form.errors} />
 			{lastResult?.status === "success" && (
 				<div className="rounded-md bg-green-50 p-4">
 					<div className="text-sm text-green-700">
@@ -41,6 +42,7 @@ export function ForgotPasswordForm() {
 					</div>
 				</div>
 			)}
+
 			<div className="rounded-md shadow-sm -space-y-px">
 				<div>
 					<label htmlFor={fields.email.id} className="sr-only">
@@ -66,8 +68,6 @@ export function ForgotPasswordForm() {
 					</Link>
 				</div>
 			</div>
-
-			<ErrorMessage errors={form.errors} />
 
 			<div>
 				<button
