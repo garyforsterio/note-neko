@@ -2,35 +2,31 @@
 
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
-import type { ActionState } from "#actions/types";
 import { redirect } from "#i18n/navigation";
+import { parseWithZod } from "@conform-to/zod";
 
 const schema = z.object({
 	// Add validation schema
 });
 
-export async function actionName(state: ActionState, formData: FormData) {
+export async function actionName(lastResult: unknown, formData: FormData) {
 	try {
-		const data = Object.fromEntries(formData);
-		const result = schema.safeParse(data);
+		const submission = parseWithZod(formData, { schema });
 
-		if (!result.success) {
-			return {
-				success: false,
-				error: result.error.errors.map((e) => e.message).join(", "),
-			};
+		if (submission.status !== "success") {
+			return submission.reply();
 		}
 
-		// Process data
+		// Process data here
+		await someDatabaseOperation(submission.value);
 		revalidateTag("path");
 		redirect({
 			href: "/success",
 			locale: "en",
 		});
 	} catch (error) {
-		return {
-			success: false,
-			error: error instanceof Error ? error.message : "An error occurred",
-		};
+		return submission.reply({
+			formErrors: [t("error.generic")],
+		});
 	}
 }

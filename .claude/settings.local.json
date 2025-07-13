@@ -1,6 +1,19 @@
 {
 	"permissions": {
-		"allow": ["Bash(pnpm test:*)", "Bash(pnpm vitest run:*)"],
+		"allow": [
+			"Bash(pnpm test:*)",
+			"Bash(pnpm vitest run:*)",
+			"Bash(pnpm list:*)",
+			"Bash(pnpm install:*)",
+			"WebFetch(domain:github.com)",
+			"Bash(find:*)",
+			"Bash(grep:*)",
+			"Bash(pnpm add:*)",
+			"Bash(git add:*)",
+			"Bash(git commit:*)",
+			"Bash(pnpm typecheck:*)",
+			"Bash(pnpm build:*)"
+		],
 		"deny": []
 	}
 }
