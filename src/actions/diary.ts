@@ -4,97 +4,169 @@ import { parseWithZod } from "@conform-to/zod";
 import * as Sentry from "@sentry/nextjs";
 import { getLocale } from "next-intl/server";
 import { revalidateTag } from "next/cache";
-import { z } from "zod";
 import { redirect } from "#i18n/navigation";
 import { requireAuth } from "#lib/auth";
-import { createDiaryEntry, deleteDiaryEntry, updateDiaryEntry } from "#lib/dal";
+import {
+	createDiaryEntry,
+	createPerson,
+	deleteDiaryEntry,
+	updateDiaryEntry,
+} from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
-import { deleteDiaryEntrySchema } from "#schema/diary";
-import type { ActionState } from "./types";
+import { deleteDiaryEntrySchema, diaryEntrySchema } from "#schema/diary";
+import { extractEntitiesFromText } from "./extractEntities";
 
-const diaryLocationSchema = z.object({
-	name: z.string().min(1, "Location name is required"),
-	placeId: z.string().min(1, "Place ID is required"),
-	lat: z.number(),
-	lng: z.number(),
-});
+/**
+ * Escape special regex characters in a string
+ */
+function escapeRegex(string: string): string {
+	return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
-const diarySchema = z.object({
-	content: z.string().min(1, "Content is required"),
-	date: z.date(),
-	mentions: z.array(z.string()),
-	locations: z.array(diaryLocationSchema),
-});
+/**
+ * Shared function to process AI entity extraction and create/update diary entry
+ */
+async function processDiaryEntry(
+	submission: { value: { content: string; date: Date; id?: string } },
+	isUpdate = false,
+) {
+	const t = await getTranslations();
 
-export async function createDiaryEntryAction(
-	state: ActionState,
-	formData: FormData,
-): Promise<ActionState> {
-	await requireAuth();
 	try {
-		const data = {
-			content: formData.get("content") as string,
-			date: new Date(formData.get("date") as string),
-			mentions: JSON.parse((formData.get("mentions") as string) || "[]"),
-			locations: JSON.parse((formData.get("locations") as string) || "[]"),
-		};
+		// Extract entities using AI
+		const extractedEntities = await extractEntitiesFromText(
+			submission.value.content,
+		);
 
-		const result = diarySchema.safeParse(data);
-		if (!result.success) {
-			return {
-				success: false,
-				error: result.error.errors.map((e) => e.message).join(", "),
-			};
+		// Process people - create new ones if they don't exist and confidence is high
+		const mentions: string[] = [];
+		for (const person of extractedEntities.people) {
+			if (person.existingPerson) {
+				// Use existing person
+				mentions.push(person.existingPerson.id);
+			} else if (person.confidence > 0.7) {
+				// Create new person if confidence is high
+				const newPerson = await createPerson({ name: person.name });
+				mentions.push(newPerson.id);
+			}
+			// Skip people with low confidence for now
 		}
-		await createDiaryEntry(result.data);
+
+		// Process locations - only include if we have Google Places data
+		const locations = extractedEntities.locations
+			.filter(
+				(location) => location.googlePlaceResult && location.confidence > 0.6,
+			)
+			.map((location) => location.googlePlaceResult)
+			.filter(
+				(place): place is NonNullable<typeof place> => place !== undefined,
+			)
+			.map((place) => ({
+				name: place.name,
+				placeId: place.placeId,
+				lat: place.lat,
+				lng: place.lng,
+			}));
+
+		// Process content to insert links for matched entities
+		let processedContent = submission.value.content;
+
+		// Insert person links for matched people (not new people)
+		for (const person of extractedEntities.people) {
+			if (person.existingPerson) {
+				const regex = new RegExp(`\\b${escapeRegex(person.name)}\\b`, "gi");
+				processedContent = processedContent.replace(
+					regex,
+					`[${person.name}](/people/${person.existingPerson.id})`,
+				);
+			}
+		}
+
+		// Insert location links for locations with Google Places data
+		for (const location of extractedEntities.locations) {
+			if (location.googlePlaceResult) {
+				const regex = new RegExp(`\\b${escapeRegex(location.name)}\\b`, "gi");
+				const mapsUrl = `https://www.google.com/maps/place/?q=place_id:${location.googlePlaceResult.placeId}`;
+				processedContent = processedContent.replace(
+					regex,
+					`[${location.name}](${mapsUrl})`,
+				);
+			}
+		}
+
+		// Create or update the diary entry with processed content
+		if (isUpdate && submission.value.id) {
+			await updateDiaryEntry(submission.value.id, {
+				content: processedContent,
+				date: submission.value.date,
+				mentions,
+				locations,
+			});
+		} else {
+			await createDiaryEntry({
+				content: processedContent,
+				date: submission.value.date,
+				mentions,
+				locations,
+			});
+		}
+
+		// Revalidate the diary cache
+		revalidateTag("diaryEntry");
+		return null; // Success
 	} catch (error) {
 		Sentry.captureException(error);
-		return {
-			success: false,
-			error:
-				error instanceof Error ? error.message : "Failed to create diary entry",
-		};
+		const errorMessage = isUpdate ? "error.updateFailed" : "error.createFailed";
+		return { formErrors: [t(errorMessage)] };
 	}
-	return redirect({
-		href: "/diary",
-		locale: "en",
-	});
+}
+
+export async function createDiaryEntryAction(
+	prevState: unknown,
+	formData: FormData,
+) {
+	await requireAuth();
+
+	const submission = parseWithZod(formData, { schema: diaryEntrySchema });
+
+	if (submission.status !== "success") {
+		return submission.reply();
+	}
+
+	const result = await processDiaryEntry(submission, false);
+	if (result) {
+		return submission.reply(result);
+	}
+
+	const locale = await getLocale();
+	redirect({ href: "/diary", locale });
 }
 
 export async function updateDiaryEntryAction(
-	state: ActionState,
+	prevState: unknown,
 	formData: FormData,
-): Promise<ActionState> {
+) {
 	await requireAuth();
-	try {
-		const id = formData.get("id") as string;
-		const data = {
-			content: formData.get("content") as string,
-			date: new Date(formData.get("date") as string),
-			mentions: JSON.parse((formData.get("mentions") as string) || "[]"),
-			locations: JSON.parse((formData.get("locations") as string) || "[]"),
-		};
 
-		const result = diarySchema.safeParse(data);
-		if (!result.success) {
-			return {
-				success: false,
-				error: result.error.errors.map((e) => e.message).join(", "),
-			};
-		}
-		await updateDiaryEntry(id, result.data);
-	} catch (error) {
-		Sentry.captureException(error);
-		return {
-			success: false,
-			error:
-				error instanceof Error ? error.message : "Failed to update diary entry",
-		};
+	const submission = parseWithZod(formData, { schema: diaryEntrySchema });
+
+	if (submission.status !== "success") {
+		return submission.reply();
 	}
-	return redirect({
-		href: "/diary",
-		locale: "en",
-	});
+
+	if (!submission.value.id) {
+		return submission.reply({
+			formErrors: ["Diary entry ID is required for update"],
+		});
+	}
+
+	const result = await processDiaryEntry(submission, true);
+	if (result) {
+		return submission.reply(result);
+	}
+
+	const locale = await getLocale();
+	redirect({ href: "/diary", locale });
 }
 
 export async function deleteDiaryEntryAction(
