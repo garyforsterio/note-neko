@@ -34,9 +34,3 @@ export const resetPasswordSchema = z
 		path: ["confirmPassword"],
 		message: "Passwords do not match",
 	});
-
-// Type exports for convenience
-export type LoginData = z.infer<typeof loginSchema>;
-export type SignUpData = z.infer<typeof signUpSchema>;
-export type ForgotPasswordData = z.infer<typeof forgotPasswordSchema>;
-export type ResetPasswordData = z.infer<typeof resetPasswordSchema>;
