@@ -2,6 +2,7 @@
 
 import { parseWithZod } from "@conform-to/zod";
 import { compare, hash } from "bcryptjs";
+import { getLocale } from "next-intl/server";
 import { redirect } from "#i18n/navigation";
 import { createUserSession, deleteUserSession } from "#lib/auth";
 import { db } from "#lib/db";
@@ -42,9 +43,10 @@ export async function signUp(lastResult: unknown, formData: FormData) {
 		},
 	});
 
+	const locale = await getLocale();
 	return redirect({
 		href: "/auth/login?registered=true",
-		locale: "en",
+		locale,
 	});
 }
 
@@ -74,18 +76,20 @@ export async function login(lastResult: unknown, formData: FormData) {
 
 	await createUserSession(user.id);
 
+	const locale = await getLocale();
 	return redirect({
 		href: "/diary",
-		locale: "en",
+		locale,
 	});
 }
 
 export async function logout() {
 	await deleteUserSession();
 
+	const locale = await getLocale();
 	return redirect({
 		href: "/auth/login",
-		locale: "en",
+		locale,
 	});
 }
 
@@ -162,8 +166,9 @@ export async function resetPassword(lastResult: unknown, formData: FormData) {
 		},
 	});
 
+	const locale = await getLocale();
 	return redirect({
 		href: "/auth/login?reset=true",
-		locale: "en",
+		locale,
 	});
 }
