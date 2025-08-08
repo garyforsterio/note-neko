@@ -90,37 +90,29 @@ export default function DiaryForm({ entry }: DiaryFormProps) {
 			const entryId = lastResult.entryId;
 
 			// Start background processing for new entries
-			if (!entry) {
-				startProcessing(entryId, ""); // Content not needed anymore
+			startProcessing(entryId, ""); // Content not needed anymore
 
-				// Show persistent processing toast
-				const toastResult = toast({
-					variant: "loading",
-					title: t("diary.analyzingEntry"),
-					description: t("diary.analyzingDescription"),
-					action: (
-						<Link
-							href="/diary/new"
-							className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium inline-block"
-						>
-							{t("diary.addAnotherEntry")}
-						</Link>
-					),
-				});
-				processingToastIdRef.current = toastResult.id;
+			// Show persistent processing toast
+			const toastResult = toast({
+				variant: "loading",
+				title: t("diary.analyzingEntry"),
+				description: t("diary.analyzingDescription"),
+				action: (
+					<Link
+						href="/diary/new"
+						className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium inline-block"
+					>
+						{t("diary.addAnotherEntry")}
+					</Link>
+				),
+			});
+			processingToastIdRef.current = toastResult.id;
 
-				startBackgroundProcessing(entryId);
-				// Navigate immediately to the new entry
-				router.push(`/diary/${entryId}`);
-			} else {
-				// For updates, show a simple success toast
-				toast({
-					variant: "success",
-					title: t("diary.entryUpdated"),
-				});
-			}
+			startBackgroundProcessing(entryId);
+			// Navigate immediately to the new entry
+			router.push(`/diary/${entryId}`);
 		}
-	}, [lastResult, entry, startProcessing, toast, t, router]);
+	}, [lastResult, startProcessing, toast, t, router]);
 
 	// Function to handle streaming background processing
 	const startBackgroundProcessing = async (entryId: string) => {
