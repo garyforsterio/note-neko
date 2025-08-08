@@ -4,6 +4,7 @@ import type { Viewport } from "next";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { Inter } from "next/font/google";
 import { notFound } from "next/navigation";
+import { Toaster } from "#components/ui/toaster";
 import { routing } from "#i18n/routing";
 import "./globals.css";
 
@@ -35,7 +36,10 @@ export default async function RootLayout({
 	return (
 		<html lang={locale}>
 			<body className={inter.className}>
-				<NextIntlClientProvider>{children}</NextIntlClientProvider>
+				<NextIntlClientProvider>
+					{children}
+					<Toaster />
+				</NextIntlClientProvider>
 				<Analytics />
 				<SpeedInsights />
 			</body>
