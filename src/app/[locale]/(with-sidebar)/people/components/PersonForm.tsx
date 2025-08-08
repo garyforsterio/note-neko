@@ -1,11 +1,18 @@
 "use client";
 
+import {
+	getFormProps,
+	getInputProps,
+	getTextareaProps,
+	useForm,
+} from "@conform-to/react";
+import { getZodConstraint, parseWithZod } from "@conform-to/zod";
 import { useTranslations } from "next-intl";
-import { useActionState, useState } from "react";
+import { useActionState } from "react";
 import { createPersonAction, updatePersonAction } from "#actions/people";
-import type { ActionState } from "#actions/types";
 import ErrorMessage from "#components/ErrorMessage";
 import { useRouter } from "#i18n/navigation";
+import { personSchema } from "#schema/people";
 
 interface PersonFormProps {
 	person?: {
@@ -22,115 +29,135 @@ interface PersonFormProps {
 export default function PersonForm({ person }: PersonFormProps) {
 	const router = useRouter();
 	const t = useTranslations();
-	const [state, action, isLoading] = useActionState<ActionState, FormData>(
+	const [lastResult, action, isPending] = useActionState(
 		person ? updatePersonAction : createPersonAction,
-		{},
+		undefined,
 	);
 
+	const [form, fields] = useForm({
+		// Sync the result of last submission
+		lastResult,
+
+		// Reuse the validation logic on the client
+		onValidate: ({ formData }) => {
+			return parseWithZod(formData, { schema: personSchema });
+		},
+
+		// To derive all validation attributes
+		constraint: getZodConstraint(personSchema),
+
+		// Validate the form on blur event triggered
+		shouldValidate: "onBlur",
+		shouldRevalidate: "onInput",
+
+		// Default values
+		defaultValue: person
+			? {
+					id: person.id,
+					name: person.name,
+					nickname: person.nickname || "",
+					birthday: person.birthday
+						? new Date(person.birthday).toISOString().split("T")[0]
+						: "",
+					howWeMet: person.howWeMet || "",
+					interests: person.interests.join(", "),
+					notes: person.notes || "",
+				}
+			: {},
+	});
+
 	return (
-		<form className="space-y-6" action={action}>
-			<ErrorMessage message={state.error} />
+		<form className="space-y-6" {...getFormProps(form)} action={action}>
+			<ErrorMessage errors={form.errors} />
 			<div>
 				<label
-					htmlFor="name"
+					htmlFor={fields.name.id}
 					className="block text-sm font-medium text-gray-700 mb-1"
 				>
 					{t("people.name")} *
 				</label>
-				<input hidden name="id" value={person?.id} readOnly />
+				{person && <input {...getInputProps(fields.id, { type: "hidden" })} />}
 				<input
-					type="text"
-					id="name"
-					name="name"
-					required
-					defaultValue={person?.name}
+					{...getInputProps(fields.name, { type: "text" })}
 					className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
 				/>
+				<ErrorMessage id={fields.name.id} errors={fields.name.errors} />
 			</div>
 
 			<div>
 				<label
-					htmlFor="nickname"
+					htmlFor={fields.nickname.id}
 					className="block text-sm font-medium text-gray-700 mb-1"
 				>
 					{t("people.nickname")}
 				</label>
 				<input
-					type="text"
-					id="nickname"
-					name="nickname"
-					defaultValue={person?.nickname || ""}
+					{...getInputProps(fields.nickname, { type: "text" })}
 					className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
 				/>
+				<ErrorMessage id={fields.nickname.id} errors={fields.nickname.errors} />
 			</div>
 
 			<div>
 				<label
-					htmlFor="birthday"
+					htmlFor={fields.birthday.id}
 					className="block text-sm font-medium text-gray-700 mb-1"
 				>
 					{t("people.birthday")}
 				</label>
 				<input
-					type="date"
-					id="birthday"
-					name="birthday"
-					defaultValue={
-						person?.birthday
-							? new Date(person.birthday).toISOString().split("T")[0]
-							: ""
-					}
+					{...getInputProps(fields.birthday, { type: "date" })}
 					className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
 				/>
+				<ErrorMessage id={fields.birthday.id} errors={fields.birthday.errors} />
 			</div>
 
 			<div>
 				<label
-					htmlFor="howWeMet"
+					htmlFor={fields.howWeMet.id}
 					className="block text-sm font-medium text-gray-700 mb-1"
 				>
 					{t("people.howWeMet")}
 				</label>
 				<textarea
-					id="howWeMet"
-					name="howWeMet"
-					defaultValue={person?.howWeMet || ""}
+					{...getTextareaProps(fields.howWeMet)}
 					rows={3}
 					className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
 				/>
+				<ErrorMessage id={fields.howWeMet.id} errors={fields.howWeMet.errors} />
 			</div>
 
 			<div>
 				<label
-					htmlFor="interests"
+					htmlFor={fields.interests.id}
 					className="block text-sm font-medium text-gray-700 mb-1"
 				>
 					{t("people.interests")}
 				</label>
 				<input
-					type="text"
-					id="interests"
-					name="interests"
-					defaultValue={person?.interests.join(", ")}
+					{...getInputProps(fields.interests, { type: "text" })}
 					placeholder={t("people.interestsPlaceholder")}
 					className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+				/>
+				<ErrorMessage
+					id={fields.interests.id}
+					errors={fields.interests.errors}
 				/>
 			</div>
 
 			<div>
 				<label
-					htmlFor="notes"
+					htmlFor={fields.notes.id}
 					className="block text-sm font-medium text-gray-700 mb-1"
 				>
 					{t("people.notes")}
 				</label>
 				<textarea
-					id="notes"
-					name="notes"
-					defaultValue={person?.notes || ""}
+					{...getTextareaProps(fields.notes)}
 					rows={4}
 					className="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
 				/>
+				<ErrorMessage id={fields.notes.id} errors={fields.notes.errors} />
 			</div>
 
 			<div className="flex justify-end space-x-4">
@@ -143,10 +170,10 @@ export default function PersonForm({ person }: PersonFormProps) {
 				</button>
 				<button
 					type="submit"
-					disabled={isLoading}
+					disabled={isPending || !form.valid}
 					className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 				>
-					{isLoading
+					{isPending
 						? t("people.saving")
 						: person
 							? t("people.update")

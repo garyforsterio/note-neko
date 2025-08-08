@@ -1,132 +1,166 @@
 "use server";
 
-import type { Person } from "@prisma/client";
+import { parseWithZod } from "@conform-to/zod";
 import * as Sentry from "@sentry/nextjs";
-import { z } from "zod";
+import { getLocale } from "next-intl/server";
+import { revalidateTag } from "next/cache";
 import { redirect } from "#i18n/navigation";
 import { requireAuth } from "#lib/auth";
 import { createPerson, deletePerson, updatePerson } from "#lib/dal";
-import type { ActionState } from "./types";
-
-const personSchema = z.object({
-	id: z.string().optional(),
-	name: z.string().min(1, "Name is required"),
-	nickname: z.string().optional(),
-	birthday: z.date().optional(),
-	howWeMet: z.string().optional(),
-	interests: z.array(z.string()),
-	notes: z.string().optional(),
-});
-
-function getPersonFormFormData(formData: FormData) {
-	const data = Object.fromEntries(formData);
-	return {
-		...data,
-		interests: (data.interests as string)
-			.split(",")
-			.map((i) => i.trim())
-			.filter(Boolean),
-		birthday: data.birthday ? new Date(data.birthday?.toString()) : undefined,
-	} as Person;
-}
+import { getTranslations } from "#lib/i18n/server";
+import { deletePersonSchema, personSchema } from "#schema/people";
 
 export async function createPersonAction(
-	state: ActionState,
+	prevState: unknown,
 	formData: FormData,
-): Promise<ActionState> {
+) {
 	await requireAuth();
+	const t = await getTranslations();
+
+	const submission = parseWithZod(formData, { schema: personSchema });
+
+	if (submission.status !== "success") {
+		return submission.reply();
+	}
+
 	try {
-		const data = getPersonFormFormData(formData);
-		const result = personSchema.safeParse(data);
-		if (!result.success) {
-			return {
-				success: false,
-				error: result.error.errors.map((e) => e.message).join(", "),
-			};
-		}
-		await createPerson({ ...result.data });
+		// Process the interests field from comma-separated string to array
+		const interests = submission.value.interests
+			? submission.value.interests
+					.split(",")
+					.map((i) => i.trim())
+					.filter(Boolean)
+			: [];
+
+		// Process birthday to Date if provided
+		const birthday = submission.value.birthday
+			? new Date(submission.value.birthday)
+			: null;
+
+		await createPerson({
+			name: submission.value.name,
+			nickname: submission.value.nickname || null,
+			birthday,
+			howWeMet: submission.value.howWeMet || null,
+			interests,
+			notes: submission.value.notes || null,
+		});
+
+		// Revalidate the people cache
+		revalidateTag("people");
 	} catch (error) {
 		Sentry.captureException(error);
-		return {
-			success: false,
-			error: error instanceof Error ? error.message : "Failed to create person",
-		};
+		return submission.reply({
+			formErrors: [t("error.createFailed")],
+		});
 	}
-	return redirect({
-		href: "/people",
-		locale: "en",
-	});
+
+	const locale = await getLocale();
+	redirect({ href: "/people", locale });
 }
 
 export async function updatePersonAction(
-	state: ActionState,
+	prevState: unknown,
 	formData: FormData,
-): Promise<ActionState> {
+) {
 	await requireAuth();
+	const t = await getTranslations();
+
+	const submission = parseWithZod(formData, { schema: personSchema });
+
+	if (submission.status !== "success") {
+		return submission.reply();
+	}
+
+	if (!submission.value.id) {
+		return submission.reply({
+			formErrors: ["Person ID is required for update"],
+		});
+	}
+
 	try {
-		const data = getPersonFormFormData(formData);
-		const result = personSchema.safeParse(data);
-		console.log(data);
+		// Process the interests field from comma-separated string to array
+		const interests = submission.value.interests
+			? submission.value.interests
+					.split(",")
+					.map((i) => i.trim())
+					.filter(Boolean)
+			: [];
 
-		if (!result.success) {
-			return {
-				success: false,
-				error: result.error.errors.map((e) => e.message).join(", "),
-			};
-		}
+		// Process birthday to Date if provided
+		const birthday = submission.value.birthday
+			? new Date(submission.value.birthday)
+			: null;
 
-		await updatePerson(result.data.id as string, { ...result.data });
+		await updatePerson(submission.value.id, {
+			name: submission.value.name,
+			nickname: submission.value.nickname || null,
+			birthday,
+			howWeMet: submission.value.howWeMet || null,
+			interests,
+			notes: submission.value.notes || null,
+		});
+
+		// Revalidate the people cache
+		revalidateTag("people");
 	} catch (error) {
 		Sentry.captureException(error);
-		return {
-			success: false,
-			error: error instanceof Error ? error.message : "Failed to update person",
-		};
+		return submission.reply({
+			formErrors: [t("error.updateFailed")],
+		});
 	}
-	return redirect({
-		href: "/people",
-		locale: "en",
-	});
+
+	const locale = await getLocale();
+	redirect({ href: "/people", locale });
 }
 
 export async function deletePersonAction(
-	state: ActionState,
+	prevState: unknown,
 	formData: FormData,
-): Promise<ActionState> {
+) {
 	await requireAuth();
-	const id = formData.get("id") as string;
+	const t = await getTranslations();
+
+	const submission = parseWithZod(formData, { schema: deletePersonSchema });
+
+	if (submission.status !== "success") {
+		return submission.reply();
+	}
+
 	try {
-		await requireAuth();
-		await deletePerson(id);
+		await deletePerson(submission.value.id);
+
+		// Revalidate the people cache
+		revalidateTag("people");
 	} catch (error) {
 		Sentry.captureException(error);
-		return {
-			success: false,
-			error: error instanceof Error ? error.message : "Failed to delete person",
-		};
+		return submission.reply({
+			formErrors: [t("error.deleteFailed")],
+		});
 	}
-	return redirect({
-		href: "/people",
-		locale: "en",
-	});
+
+	const locale = await getLocale();
+	redirect({ href: "/people", locale });
 }
 
 export async function createPersonWithoutRedirectAction(
 	name: string,
-): Promise<ActionState & { data?: { id: string; name: string } }> {
+): Promise<{
+	success: boolean;
+	error?: string;
+	data?: { id: string; name: string };
+}> {
 	await requireAuth();
+	const t = await getTranslations();
 	try {
-		const result = personSchema.safeParse({
+		const person = await createPerson({
 			name,
+			nickname: null,
+			birthday: null,
+			howWeMet: null,
 			interests: [],
+			notes: null,
 		});
-		if (!result.success) {
-			return {
-				success: false,
-				error: result.error.errors.map((e) => e.message).join(", "),
-			};
-		}
-		const person = await createPerson({ ...result.data });
 		return {
 			success: true,
 			data: {
@@ -138,7 +172,7 @@ export async function createPersonWithoutRedirectAction(
 		Sentry.captureException(error);
 		return {
 			success: false,
-			error: error instanceof Error ? error.message : "Failed to create person",
+			error: t("error.createFailed"),
 		};
 	}
 }

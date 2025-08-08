@@ -180,6 +180,10 @@
 	},
 	"error": {
 		"title": "Something went wrong!",
-		"tryAgain": "Try again"
+		"tryAgain": "Try again",
+		"generic": "An unexpected error occurred. Please try again.",
+		"createFailed": "Failed to create. Please try again.",
+		"updateFailed": "Failed to update. Please try again.",
+		"deleteFailed": "Failed to delete. Please try again."
 	}
 }
