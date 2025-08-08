@@ -7,9 +7,9 @@ import { DiaryPagination } from "./components/DiaryPagination";
 interface PageProps {
 	searchParams: Promise<{
 		page?: string;
-		pageSize?: string;
-		startDate?: string;
-		endDate?: string;
+		"page-size"?: string;
+		"start-date"?: string;
+		"end-date"?: string;
 		"sort-order"?: string;
 	}>;
 }
@@ -19,9 +19,9 @@ export default async function DiaryPage({ searchParams }: PageProps) {
 
 	const {
 		page,
-		pageSize,
-		startDate,
-		endDate,
+		"page-size": pageSize,
+		"start-date": startDate,
+		"end-date": endDate,
 		"sort-order": sortOrder,
 	} = await searchParams;
 

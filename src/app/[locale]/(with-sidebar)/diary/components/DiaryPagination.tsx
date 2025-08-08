@@ -28,14 +28,14 @@ export async function DiaryPagination({
 	const getPaginationUrl = (page: number) => {
 		const params = new URLSearchParams({
 			page: page.toString(),
-			pageSize: pageSize.toString(),
+			"page-size": pageSize.toString(),
 		});
 
 		if (startDate) {
-			params.append("startDate", getDateString(startDate));
+			params.append("start-date", getDateString(startDate));
 		}
 		if (endDate) {
-			params.append("endDate", getDateString(endDate));
+			params.append("end-date", getDateString(endDate));
 		}
 
 		return `/diary?${params.toString()}`;

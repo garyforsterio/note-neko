@@ -41,8 +41,8 @@ export default function Calendar({
 
 	// Initialize selection from URL params
 	useEffect(() => {
-		const startDate = searchParams.get("startDate");
-		const endDate = searchParams.get("endDate");
+		const startDate = searchParams.get("start-date");
+		const endDate = searchParams.get("end-date");
 		if (startDate) {
 			// Parse the date string and set to UTC midnight
 			const date = parseISO(startDate);
