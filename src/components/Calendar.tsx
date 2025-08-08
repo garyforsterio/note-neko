@@ -166,7 +166,12 @@ export default function Calendar({
 			setIsSelecting(false);
 			setIsDragging(false);
 			if (selectionStart && selectionEnd && onDateRangeChange) {
-				onDateRangeChange(selectionStart, selectionEnd);
+				// Ensure we have the correct order of dates
+				const start =
+					selectionStart <= selectionEnd ? selectionStart : selectionEnd;
+				const end =
+					selectionStart <= selectionEnd ? selectionEnd : selectionStart;
+				onDateRangeChange(start, end);
 			}
 		}
 	};
@@ -176,7 +181,12 @@ export default function Calendar({
 			if (isSelecting && !isDragging) {
 				setIsSelecting(false);
 				if (selectionStart && selectionEnd && onDateRangeChange) {
-					onDateRangeChange(selectionStart, selectionEnd);
+					// Ensure we have the correct order of dates
+					const start =
+						selectionStart <= selectionEnd ? selectionStart : selectionEnd;
+					const end =
+						selectionStart <= selectionEnd ? selectionEnd : selectionStart;
+					onDateRangeChange(start, end);
 				}
 			}
 		};
