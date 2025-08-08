@@ -8,6 +8,12 @@ import { createPerson } from "#lib/dal";
 
 const processRequestSchema = z.object({
 	entryId: z.string().min(1, "Entry ID is required"),
+	location: z
+		.object({
+			latitude: z.number(),
+			longitude: z.number(),
+		})
+		.optional(),
 });
 
 /**
@@ -37,7 +43,7 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		const { entryId } = validation.data;
+		const { entryId, location } = validation.data;
 
 		// Create a readable stream
 		const stream = new ReadableStream({
@@ -71,6 +77,8 @@ export async function POST(request: NextRequest) {
 
 					const extractedEntities = await extractEntitiesFromText(
 						existingEntry.content,
+						location?.latitude,
+						location?.longitude,
 					);
 
 					// Process people - create new ones if they don't exist and confidence is high

@@ -1,5 +1,7 @@
 "use server";
 
+import { getLocale } from "next-intl/server";
+import { headers } from "next/headers";
 import OpenAI from "openai";
 import { z } from "zod";
 import { requireAuth } from "#lib/auth";
@@ -64,6 +66,8 @@ export interface EntityExtractionResult {
  */
 export async function extractEntitiesFromText(
 	text: string,
+	userLat?: number,
+	userLng?: number,
 ): Promise<EntityExtractionResult> {
 	await requireAuth();
 
@@ -200,12 +204,34 @@ Guidelines:
 						};
 					}
 
-					const url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(
+					// Get user location from parameters or Vercel headers
+					const headersList = await headers();
+					const latitude = userLat || headersList.get("x-vercel-ip-latitude");
+					const longitude = userLng || headersList.get("x-vercel-ip-longitude");
+					const country = headersList.get("x-vercel-ip-country");
+
+					// Get user's locale
+					const locale = await getLocale();
+
+					// Build URL with location bias and language
+					let url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(
 						location.name,
-					)}&inputtype=textquery&fields=place_id,name,geometry&key=${
+					)}&inputtype=textquery&fields=place_id,name,geometry&language=${locale}&key=${
 						process.env.GOOGLE_MAPS_API_KEY
 					}`;
-					console.log("Geocoding request for:", location.name);
+
+					// Add location bias if available
+					if (latitude && longitude) {
+						url += `&locationbias=circle:50000@${latitude},${longitude}`;
+					} else if (country) {
+						url += `&region=${country.toLowerCase()}`;
+					}
+
+					console.log("Geocoding request for:", location.name, {
+						hasLocationBias: !!(latitude && longitude),
+						hasRegion: !!country,
+						language: locale,
+					});
 
 					const response = await fetch(url);
 

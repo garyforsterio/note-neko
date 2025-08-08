@@ -115,7 +115,9 @@
 			"addLocation": "Add Location"
 		},
 		"shareAllEntries": "Share all",
-		"copyEntry": "Copy"
+		"copyEntry": "Copy",
+		"locationPermission": "Enable location access for better place suggestions",
+		"enableLocation": "Enable location"
 	},
 	"home": {
 		"hero": {

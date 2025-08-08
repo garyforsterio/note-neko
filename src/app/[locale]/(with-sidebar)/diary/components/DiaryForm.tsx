@@ -16,6 +16,7 @@ import { useActionState } from "react";
 import ErrorMessage from "#components/ErrorMessage";
 import { useProcessing } from "#contexts/ProcessingContext";
 import { useToast } from "#hooks/use-toast";
+import { useUserLocation } from "#hooks/useUserLocation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
 import { diaryEntrySchema } from "#schema/diary";
 
@@ -43,6 +44,7 @@ export default function DiaryForm({ entry }: DiaryFormProps) {
 	const { toast, dismiss } = useToast();
 	const { startProcessing, updateStatus, completeProcessing } = useProcessing();
 	const processingToastIdRef = useRef<string | null>(null);
+	const { location, requestLocation } = useUserLocation();
 
 	const [lastResult, action, isPending] = useActionState(
 		entry ? updateDiaryEntryAction : createDiaryEntryAction,
@@ -128,7 +130,15 @@ export default function DiaryForm({ entry }: DiaryFormProps) {
 			const response = await fetch("/api/diary/process", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ entryId }),
+				body: JSON.stringify({
+					entryId,
+					location: location
+						? {
+								latitude: location.latitude,
+								longitude: location.longitude,
+							}
+						: undefined,
+				}),
 			});
 
 			if (!response.body) {
@@ -213,6 +223,46 @@ export default function DiaryForm({ entry }: DiaryFormProps) {
 				/>
 				<ErrorMessage id={fields.date.id} errors={fields.date.errors} />
 			</div>
+
+			{!entry && !location && (
+				<div className="bg-gray-50 border border-gray-200 rounded-md p-4">
+					<div className="flex items-start space-x-3">
+						<svg
+							className="w-5 h-5 text-gray-400 mt-0.5"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+							aria-hidden="true"
+						>
+							<title>Location icon</title>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+							/>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+							/>
+						</svg>
+						<div className="flex-1">
+							<p className="text-sm text-gray-700">
+								{t("diary.locationPermission")}
+							</p>
+							<button
+								type="button"
+								onClick={requestLocation}
+								className="mt-2 text-sm text-blue-600 hover:text-blue-700 font-medium"
+							>
+								{t("diary.enableLocation")}
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
 
 			<div>
 				<label

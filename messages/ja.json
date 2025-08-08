@@ -106,7 +106,9 @@
 			"addPerson": "人を追加",
 			"addLocation": "場所を追加"
 		},
-		"copyEntry": "コピー"
+		"copyEntry": "コピー",
+		"locationPermission": "より正確な場所の提案のために位置情報へのアクセスを有効にしてください",
+		"enableLocation": "位置情報を有効にする"
 	},
 	"common": {
 		"cancel": "キャンセル",
