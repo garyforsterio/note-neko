@@ -27,12 +27,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Tech Stack
 - **Framework**: Next.js 15 with App Router and React 19
-- **Database**: PostgreSQL with Prisma ORM
+- **Database**: PostgreSQL with Prisma ORM (using Accelerate for edge optimization)
 - **Styling**: Tailwind CSS 4
-- **Testing**: Vitest for unit tests, Playwright for E2E, Storybook for component testing
+- **Forms**: @conform-to with Zod validation
+- **Testing**: Vitest for unit tests, Playwright for browser testing, Storybook for component testing
 - **Authentication**: Custom JWT-based auth with refresh tokens
 - **Internationalization**: next-intl for i18n support
-- **Package Manager**: pnpm (required, uses workspaces)
+- **Error Tracking**: Sentry integration
+- **Package Manager**: pnpm (required)
 
 ### Project Structure
 ```
@@ -46,7 +48,11 @@ src/
 │   └── api/          # API routes
 ├── components/       # Reusable components
 ├── lib/              # Utility functions and configurations
+│   ├── auth.ts      # JWT authentication
+│   ├── dal.ts       # Data access layer with caching
+│   └── db.ts        # Prisma client
 ├── hooks/            # Custom React hooks
+├── schema/           # Zod validation schemas
 └── messages/         # i18n translation files
 ```
 
@@ -61,20 +67,34 @@ src/
 #### Server Actions Pattern
 - All server actions in `src/actions/*.ts` files
 - Must use `'use server'` directive
-- Must use `ActionState` type for return values
-- Must use Zod for validation
+- Use Conform and Zod for form validation
 - Must use `requireAuth` for protected actions
-- Must revalidate affected paths after mutations
+- Return pattern:
+  ```typescript
+  const submission = parseWithZod(formData, { schema })
+  if (submission.status !== 'success') {
+    return submission.reply()
+  }
+  // perform action
+  redirect('/path')
+  ```
 
 #### Form Handling
-- Use `useActionState` hook for form state management
-- Use form `action` prop to connect to server actions
-- Handle loading states with `isPending`
-- Display error messages from `ActionState`
+- Use `@conform-to/react` for form state management
+- Use `parseWithZod` for server-side validation
+- Create schemas in `src/schema/*.ts`
+- Handle validation errors with `submission.reply()`
+- Use `redirect()` after successful mutations
 - Never use `fetch()` in client components - always use server actions
 
+#### Data Access Layer
+- Cached database operations in `src/lib/dal.ts`
+- Use `unstable_cache` with proper cache tags
+- Revalidate specific tags after mutations
+- Example cache tags: `diaries`, `diary:${id}`, `people`, `person:${id}`
+
 #### Database Layer
-- Uses Prisma with PostgreSQL
+- Uses Prisma with PostgreSQL (Accelerate for edge)
 - Database connection in `src/lib/db.ts`
 - Models: User, Person, DiaryEntry, DiaryMention, DiaryLocation, RefreshToken
 - All operations should go through Prisma client
@@ -84,6 +104,7 @@ src/
 - `requireAuth` utility in `src/lib/auth.ts` for protected routes
 - Tokens stored in httpOnly cookies
 - Password hashing with bcryptjs
+- Token expiry: JWT (1 hour), Refresh (30 days)
 
 #### Import Mapping
 - `#lib/db` - Database client (mocked in Storybook)
@@ -108,22 +129,41 @@ src/
 - Test both success and error states
 - Verify form validation and submission
 
+### Environment Variables
+Required environment variables:
+- `DATABASE_URL` - PostgreSQL connection string (Prisma Accelerate format)
+- `JWT_SECRET` - Secret for JWT signing
+- `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` - Google Maps API for location features
+- `SENTRY_AUTH_TOKEN` - Sentry authentication token
+- `VERCEL_OIDC_TOKEN` - Vercel deployment token
+
 ### Internationalization
 - All user-facing strings must be internationalized
 - Add new translation keys to all locale JSON files in `messages/` folder
 - Server components: use `getTranslations` from `next-intl/server`
 - Client components: use `useTranslations` from `next-intl`
+- Supported locales: English (en), Japanese (ja)
 
 ### Code Quality
 - Use Biome for linting and formatting (not ESLint/Prettier)
+- Tab indentation, double quotes for JavaScript strings
 - TypeScript strict mode enabled
 - Follow progressive enhancement patterns
 - Ensure proper ARIA attributes for accessibility
 - All components should have proper loading states
+- Conventional commits enforced with commitlint
 
 ### Common Patterns
 - Page components are Server Components that handle data fetching
 - Form components are Client Components that use server actions
-- Loading states handled via `loading.tsx` files and `isPending` state
-- Error handling via `error.tsx` files and `ActionState` error messages
+- Loading states handled via `loading.tsx` files
+- Error handling via `error.tsx` files
+- Form validation schemas in `src/schema/` directory
+- Cached data operations in `src/lib/dal.ts`
 - Reusable UI components in `src/components/ui/`
+
+### External Integrations
+- Google Places API for location autocomplete in diary entries
+- Dicebear avatars for user profile images
+- Sentry for error tracking and monitoring
+- Vercel Analytics and Speed Insights
