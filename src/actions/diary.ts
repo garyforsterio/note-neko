@@ -1,12 +1,16 @@
 "use server";
 
+import { parseWithZod } from "@conform-to/zod";
+import * as Sentry from "@sentry/nextjs";
+import { getLocale } from "next-intl/server";
+import { revalidateTag } from "next/cache";
+import { z } from "zod";
 import { redirect } from "#i18n/navigation";
 import { requireAuth } from "#lib/auth";
 import { createDiaryEntry, deleteDiaryEntry, updateDiaryEntry } from "#lib/dal";
+import { getTranslations } from "#lib/i18n/server";
+import { deleteDiaryEntrySchema } from "#schema/diary";
 import type { ActionState } from "./types";
-
-import * as Sentry from "@sentry/nextjs";
-import { z } from "zod";
 
 const diaryLocationSchema = z.object({
 	name: z.string().min(1, "Location name is required"),
@@ -94,20 +98,30 @@ export async function updateDiaryEntryAction(
 }
 
 export async function deleteDiaryEntryAction(
-	state: ActionState,
+	prevState: unknown,
 	formData: FormData,
-): Promise<ActionState> {
+) {
 	await requireAuth();
-	const id = formData.get("id") as string;
+	const t = await getTranslations();
+
+	const submission = parseWithZod(formData, { schema: deleteDiaryEntrySchema });
+
+	if (submission.status !== "success") {
+		return submission.reply();
+	}
+
 	try {
-		await deleteDiaryEntry(id);
-		return { success: true };
+		await deleteDiaryEntry(submission.value.id);
+
+		// Revalidate the diary cache
+		revalidateTag("diaryEntry");
 	} catch (error) {
 		Sentry.captureException(error);
-		return {
-			success: false,
-			error:
-				error instanceof Error ? error.message : "Failed to delete diary entry",
-		};
+		return submission.reply({
+			formErrors: [t("error.deleteFailed")],
+		});
 	}
+
+	const locale = await getLocale();
+	redirect({ href: "/diary", locale });
 }
