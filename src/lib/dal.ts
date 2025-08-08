@@ -143,6 +143,7 @@ export interface DiaryEntriesOptions {
 	pageSize?: number;
 	startDate?: Date;
 	endDate?: Date;
+	sortOrder?: "asc" | "desc";
 }
 
 async function getDiaryEntriesCached(
@@ -151,7 +152,13 @@ async function getDiaryEntriesCached(
 ) {
 	"use cache";
 	cacheTag("diaryEntries");
-	const { page = 1, pageSize = 10, startDate, endDate } = options;
+	const {
+		page = 1,
+		pageSize = 10,
+		startDate,
+		endDate,
+		sortOrder = "desc",
+	} = options;
 
 	const where = {
 		userId,
@@ -168,7 +175,7 @@ async function getDiaryEntriesCached(
 	const [entries, total] = await Promise.all([
 		db.diaryEntry.findMany({
 			where,
-			orderBy: { date: "desc" },
+			orderBy: { date: sortOrder },
 			skip: (page - 1) * pageSize,
 			take: pageSize,
 			include: {

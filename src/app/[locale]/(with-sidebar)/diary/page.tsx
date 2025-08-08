@@ -10,24 +10,34 @@ interface PageProps {
 		pageSize?: string;
 		startDate?: string;
 		endDate?: string;
+		"sort-order"?: string;
 	}>;
 }
 
 export default async function DiaryPage({ searchParams }: PageProps) {
 	const t = await getTranslations();
 
-	const { page, pageSize, startDate, endDate } = await searchParams;
+	const {
+		page,
+		pageSize,
+		startDate,
+		endDate,
+		"sort-order": sortOrder,
+	} = await searchParams;
 
 	const parsedPage = page ? Number(page) : 1;
 	const parsedPageSize = pageSize ? Number(pageSize) : 10;
 	const parsedStartDate = startDate ? new Date(startDate) : undefined;
 	const parsedEndDate = endDate ? new Date(endDate) : undefined;
+	const parsedSortOrder =
+		sortOrder === "asc" || sortOrder === "desc" ? sortOrder : "desc";
 
 	const { entries, total } = await getDiaryEntries({
 		page: parsedPage,
 		pageSize: parsedPageSize,
 		startDate: parsedStartDate,
 		endDate: parsedEndDate,
+		sortOrder: parsedSortOrder,
 	});
 
 	const totalPages = Math.ceil(total / parsedPageSize);

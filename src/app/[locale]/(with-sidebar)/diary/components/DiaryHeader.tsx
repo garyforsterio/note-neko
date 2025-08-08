@@ -3,6 +3,7 @@ import { Link } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
 import ShareAllButton from "./ShareAllButton";
+import { SortToggle } from "./SortToggle";
 
 interface DiaryHeaderProps {
 	startDate?: Date;
@@ -32,18 +33,23 @@ export async function DiaryHeader({
 				</div>
 			</div>
 
-			{(startDate || endDate) && (
-				<div className="text-sm text-gray-600">
-					{startDate && endDate
-						? `${format(startDate, "MMM d")} - ${format(
-								endDate,
-								"MMM d, yyyy",
-							)}`
-						: startDate
-							? format(startDate, "MMM d, yyyy")
-							: endDate && format(endDate, "MMM d, yyyy")}
+			<div className="flex items-center justify-between">
+				<div>
+					{(startDate || endDate) && (
+						<div className="text-sm text-gray-600">
+							{startDate && endDate
+								? `${format(startDate, "MMM d")} - ${format(
+										endDate,
+										"MMM d, yyyy",
+									)}`
+								: startDate
+									? format(startDate, "MMM d, yyyy")
+									: endDate && format(endDate, "MMM d, yyyy")}
+						</div>
+					)}
 				</div>
-			)}
+				<SortToggle />
+			</div>
 		</div>
 	);
 }
