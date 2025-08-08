@@ -133,7 +133,9 @@ Guidelines:
 - Use 0.8+ confidence for obvious partial matches (e.g., "John" → "John Smith") 
 - Use 0.7+ confidence for likely matches with context clues
 - Avoid common words that aren't people/places
-- DON'T extract: "today", "yesterday", "morning", "home", "work", "bed", etc.${peopleContext}`,
+- DON'T extract: "today", "yesterday", "morning", "home", "work", "bed", etc.
+- For locations: When a specific place name is connected to a broader location (e.g., "Lawson Roppongi", "Starbucks Shibuya"), treat it as ONE location, not two separate locations. The first part is usually a business/venue name and the second part is the area/district.
+- DON'T extract both "Lawson Roppongi" AND "Roppongi" - only extract "Lawson Roppongi" as a single location${peopleContext}`,
 				},
 				{
 					role: "user",

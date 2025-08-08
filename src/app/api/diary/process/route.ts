@@ -88,6 +88,8 @@ export async function POST(request: NextRequest) {
 					});
 
 					const mentions: string[] = [];
+					const newlyCreatedPeople: Array<{ name: string; id: string }> = [];
+
 					for (const person of extractedEntities.people) {
 						if (person.existingPerson) {
 							// Use existing person
@@ -96,6 +98,8 @@ export async function POST(request: NextRequest) {
 							// Create new person if confidence is high
 							const newPerson = await createPerson({ name: person.name });
 							mentions.push(newPerson.id);
+							// Track newly created people for linking
+							newlyCreatedPeople.push({ name: person.name, id: newPerson.id });
 						}
 						// Skip people with low confidence for now
 					}
@@ -131,33 +135,62 @@ export async function POST(request: NextRequest) {
 
 					let processedContent = existingEntry.content;
 
-					// Insert person links for matched people (not new people)
+					// Collect all entities to process, sorted by length (longest first to avoid nested replacements)
+					const entitiesToReplace: Array<{
+						searchText: string;
+						replacement: string;
+						type: "person" | "location";
+					}> = [];
+
+					// Add person links for matched people
 					for (const person of extractedEntities.people) {
 						if (person.existingPerson) {
-							const regex = new RegExp(
-								`\\b${escapeRegex(person.name)}\\b`,
-								"gi",
-							);
-							processedContent = processedContent.replace(
-								regex,
-								`[${person.name}](/people/${person.existingPerson.id})`,
-							);
+							entitiesToReplace.push({
+								searchText: person.name,
+								replacement: `[${person.name}](/people/${person.existingPerson.id})`,
+								type: "person",
+							});
 						}
 					}
 
-					// Insert location links for locations with Google Places data
+					// Add person links for newly created people
+					for (const newPerson of newlyCreatedPeople) {
+						entitiesToReplace.push({
+							searchText: newPerson.name,
+							replacement: `[${newPerson.name}](/people/${newPerson.id})`,
+							type: "person",
+						});
+					}
+
+					// Add location links for locations with Google Places data
 					for (const location of extractedEntities.locations) {
 						if (location.googlePlaceResult) {
-							const regex = new RegExp(
-								`\\b${escapeRegex(location.name)}\\b`,
-								"gi",
-							);
-							const mapsUrl = `https://www.google.com/maps/place/?q=place_id:${location.googlePlaceResult.placeId}`;
-							processedContent = processedContent.replace(
-								regex,
-								`[${location.name}](${mapsUrl})`,
-							);
+							const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.name)}&query_place_id=${location.googlePlaceResult.placeId}`;
+							entitiesToReplace.push({
+								searchText: location.name,
+								replacement: `[${location.name}](${mapsUrl})`,
+								type: "location",
+							});
 						}
+					}
+
+					// Sort by length (longest first) to prevent nested replacements
+					entitiesToReplace.sort(
+						(a, b) => b.searchText.length - a.searchText.length,
+					);
+
+					// Replace each entity, ensuring we don't replace inside existing links
+					for (const entity of entitiesToReplace) {
+						// Create a regex that matches the text only if it's not already in a markdown link
+						// Negative lookbehind for [ and negative lookahead for ](
+						const regex = new RegExp(
+							`(?<!\\[)\\b${escapeRegex(entity.searchText)}\\b(?!\\]\\()`,
+							"gi",
+						);
+						processedContent = processedContent.replace(
+							regex,
+							entity.replacement,
+						);
 					}
 
 					// Update the diary entry with processed content
