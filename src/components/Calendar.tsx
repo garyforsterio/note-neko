@@ -37,6 +37,7 @@ export default function Calendar({
 	const [selectionEnd, setSelectionEnd] = useState<Date | null>(null);
 	const [isSelecting, setIsSelecting] = useState(false);
 	const [showTooltip, setShowTooltip] = useState(true);
+	const [isDragging, setIsDragging] = useState(false);
 
 	// Initialize selection from URL params
 	useEffect(() => {
@@ -99,8 +100,7 @@ export default function Calendar({
 		});
 	};
 
-	const handleMouseDown = (e: React.MouseEvent, date: Date) => {
-		e.preventDefault(); // Prevent text selection
+	const startSelection = (date: Date) => {
 		if (!isSameMonth(date, currentMonth)) return;
 		// Create UTC date at midnight
 		const utcDate = new Date(
@@ -112,9 +112,16 @@ export default function Calendar({
 		setShowTooltip(false);
 	};
 
+	const handleMouseDown = (e: React.MouseEvent, date: Date) => {
+		e.preventDefault(); // Prevent text selection
+		setIsDragging(false);
+		startSelection(date);
+	};
+
 	const handleMouseEnter = (date: Date) => {
 		if (!isSelecting || !selectionStart || !isSameMonth(date, currentMonth))
 			return;
+		if (isDragging) return; // Prevent mouse events when dragging
 		// Create UTC date at midnight
 		const utcDate = new Date(
 			Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
@@ -122,9 +129,51 @@ export default function Calendar({
 		setSelectionEnd(utcDate);
 	};
 
+	const getDateFromTouch = (touch: React.Touch): Date | null => {
+		const element = document.elementFromPoint(touch.clientX, touch.clientY);
+		const dateElement = element?.closest("[data-date]");
+		if (!dateElement) return null;
+
+		const dateStr = dateElement.getAttribute("data-date");
+		return dateStr ? new Date(dateStr) : null;
+	};
+
+	const handleTouchStart = (e: React.TouchEvent, date: Date) => {
+		e.preventDefault(); // Prevent scrolling
+		setIsDragging(true);
+		startSelection(date);
+	};
+
+	const handleTouchMove = (e: React.TouchEvent) => {
+		if (!isSelecting || !selectionStart || !isDragging) return;
+		e.preventDefault(); // Prevent scrolling
+
+		const touch = e.touches[0];
+		if (!touch) return;
+
+		const date = getDateFromTouch(touch);
+		if (date && isSameMonth(date, currentMonth)) {
+			const utcDate = new Date(
+				Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
+			);
+			setSelectionEnd(utcDate);
+		}
+	};
+
+	const handleTouchEnd = (e: React.TouchEvent) => {
+		if (isDragging && isSelecting) {
+			e.preventDefault();
+			setIsSelecting(false);
+			setIsDragging(false);
+			if (selectionStart && selectionEnd && onDateRangeChange) {
+				onDateRangeChange(selectionStart, selectionEnd);
+			}
+		}
+	};
+
 	useEffect(() => {
 		const handleGlobalMouseUp = () => {
-			if (isSelecting) {
+			if (isSelecting && !isDragging) {
 				setIsSelecting(false);
 				if (selectionStart && selectionEnd && onDateRangeChange) {
 					onDateRangeChange(selectionStart, selectionEnd);
@@ -134,7 +183,13 @@ export default function Calendar({
 
 		window.addEventListener("mouseup", handleGlobalMouseUp);
 		return () => window.removeEventListener("mouseup", handleGlobalMouseUp);
-	}, [isSelecting, selectionStart, selectionEnd, onDateRangeChange]);
+	}, [
+		isSelecting,
+		isDragging,
+		selectionStart,
+		selectionEnd,
+		onDateRangeChange,
+	]);
 
 	return (
 		<div className="bg-white rounded-lg shadow-md p-6 mb-8 select-none">
@@ -169,7 +224,11 @@ export default function Calendar({
 				</div>
 			)}
 
-			<div className="grid grid-cols-7 gap-2">
+			<div
+				className="grid grid-cols-7 gap-2"
+				onTouchMove={handleTouchMove}
+				onTouchEnd={handleTouchEnd}
+			>
 				{["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
 					<div
 						key={day}
@@ -185,16 +244,18 @@ export default function Calendar({
 					return (
 						<div
 							key={day.toString()}
+							data-date={day.toISOString()}
 							onMouseDown={(e) => handleMouseDown(e, day)}
 							onMouseEnter={() => handleMouseEnter(day)}
+							onTouchStart={(e) => handleTouchStart(e, day)}
 							className={`
-                relative aspect-square p-2 text-center rounded-lg min-w-0
+                relative aspect-square p-2 text-center rounded-lg min-w-0 touch-none
                 ${!isSameMonth(day, currentMonth) ? "text-gray-300" : ""}
                 ${isToday(day) ? "bg-blue-50" : ""}
                 ${hasEntry(day) ? "hover:bg-blue-100 cursor-pointer" : ""}
                 ${isSelected ? "bg-blue-100" : ""}
                 ${isSameMonth(day, currentMonth) ? "cursor-pointer" : ""}
-                ${isSelecting ? "cursor-grab active:cursor-grabbing" : ""}
+                ${isSelecting || isDragging ? "cursor-grab active:cursor-grabbing" : ""}
               `}
 						>
 							{entry ? (
