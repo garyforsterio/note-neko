@@ -45,9 +45,9 @@ export async function DiaryPagination({
 		<div className="mt-8 flex justify-center items-center gap-2">
 			<Link
 				href={getPaginationUrl(currentPage - 1)}
-				className={`p-2 rounded-md ${
+				className={`p-4 rounded-md min-h-[44px] min-w-[44px] flex items-center justify-center ${
 					currentPage > 1
-						? "text-gray-600 hover:bg-gray-100"
+						? "text-gray-600 hover:bg-gray-100 active:bg-gray-200"
 						: "text-gray-300 cursor-not-allowed"
 				}`}
 				aria-disabled={currentPage <= 1}
@@ -61,9 +61,9 @@ export async function DiaryPagination({
 
 			<Link
 				href={getPaginationUrl(currentPage + 1)}
-				className={`p-2 rounded-md ${
+				className={`p-4 rounded-md min-h-[44px] min-w-[44px] flex items-center justify-center ${
 					currentPage < totalPages
-						? "text-gray-600 hover:bg-gray-100"
+						? "text-gray-600 hover:bg-gray-100 active:bg-gray-200"
 						: "text-gray-300 cursor-not-allowed"
 				}`}
 				aria-disabled={currentPage >= totalPages}
