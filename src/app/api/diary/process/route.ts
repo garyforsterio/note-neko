@@ -1,3 +1,4 @@
+import { getLocale } from "next-intl/server";
 import { revalidateTag } from "next/cache";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
@@ -26,6 +27,7 @@ function escapeRegex(string: string): string {
 export async function POST(request: NextRequest) {
 	try {
 		await requireAuth();
+		const locale = await getLocale();
 
 		const requestBody = await request.json();
 		const validation = processRequestSchema.safeParse(requestBody);
@@ -147,7 +149,7 @@ export async function POST(request: NextRequest) {
 						if (person.existingPerson) {
 							entitiesToReplace.push({
 								searchText: person.name,
-								replacement: `[${person.name}](/people/${person.existingPerson.id})`,
+								replacement: `[${person.name}](/${locale}/people/${person.existingPerson.id})`,
 								type: "person",
 							});
 						}
@@ -157,7 +159,7 @@ export async function POST(request: NextRequest) {
 					for (const newPerson of newlyCreatedPeople) {
 						entitiesToReplace.push({
 							searchText: newPerson.name,
-							replacement: `[${newPerson.name}](/people/${newPerson.id})`,
+							replacement: `[${newPerson.name}](/${locale}/people/${newPerson.id})`,
 							type: "person",
 						});
 					}
