@@ -31,9 +31,9 @@ export default function Navigation({ entries }: NavigationProps) {
 	const pathname = usePathname();
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const pageSize = searchParams.get("pageSize") || "10";
-	const startDate = searchParams.get("startDate");
-	const endDate = searchParams.get("endDate");
+	const pageSize = searchParams.get("page-size") || "10";
+	const startDate = searchParams.get("start-date");
+	const endDate = searchParams.get("end-date");
 	const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
 	const updateFilters = useCallback(
@@ -54,8 +54,8 @@ export default function Navigation({ entries }: NavigationProps) {
 	const handleDateRangeChange = useCallback(
 		(start: Date | null, end: Date | null) => {
 			updateFilters({
-				startDate: start?.toISOString().split("T")[0] || null,
-				endDate: end?.toISOString().split("T")[0] || null,
+				"start-date": start?.toISOString().split("T")[0] || null,
+				"end-date": end?.toISOString().split("T")[0] || null,
 			});
 		},
 		[updateFilters],
@@ -63,8 +63,8 @@ export default function Navigation({ entries }: NavigationProps) {
 
 	const clearDateRange = useCallback(() => {
 		updateFilters({
-			startDate: null,
-			endDate: null,
+			"start-date": null,
+			"end-date": null,
 		});
 	}, [updateFilters]);
 
@@ -117,7 +117,7 @@ export default function Navigation({ entries }: NavigationProps) {
 									<select
 										value={pageSize}
 										onChange={(e) =>
-											updateFilters({ pageSize: e.target.value })
+											updateFilters({ "page-size": e.target.value })
 										}
 										className="block w-24 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
 									>
@@ -246,7 +246,7 @@ export default function Navigation({ entries }: NavigationProps) {
 								<select
 									value={pageSize}
 									onChange={(e) => {
-										updateFilters({ pageSize: e.target.value });
+										updateFilters({ "page-size": e.target.value });
 										setIsMobileFiltersOpen(false);
 									}}
 									className="block w-24 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"

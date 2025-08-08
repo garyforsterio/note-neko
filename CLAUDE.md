@@ -153,6 +153,10 @@ Required environment variables:
 - All components should have proper loading states
 - Conventional commits enforced with commitlint
 
+### URL and Parameter Conventions
+- Use hyphen-case (kebab-case) for URL query parameters (e.g., `sort-order`, `page-size`)
+- Maintain consistent parameter naming across the application
+
 ### Common Patterns
 - Page components are Server Components that handle data fetching
 - Form components are Client Components that use server actions
