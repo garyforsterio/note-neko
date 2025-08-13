@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { getLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { DiaryContent } from "#components/DiaryContent";
 import { Link } from "#i18n/navigation";
@@ -15,6 +16,7 @@ interface PersonPageProps {
 
 export default async function PersonPage({ params }: PersonPageProps) {
 	const t = await getTranslations();
+	const locale = await getLocale();
 	const person = await getPerson((await params).id);
 
 	if (!person) {
@@ -106,6 +108,7 @@ export default async function PersonPage({ params }: PersonPageProps) {
 									content={mention.diaryEntry.content}
 									people={mention.diaryEntry.mentions.map((m) => m.person)}
 									locations={mention.diaryEntry.locations}
+									locale={locale}
 								/>
 							</div>
 						))}

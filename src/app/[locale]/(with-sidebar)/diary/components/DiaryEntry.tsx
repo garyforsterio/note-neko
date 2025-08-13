@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { Pencil } from "lucide-react";
+import { getLocale } from "next-intl/server";
 import { DiaryContent } from "#components/DiaryContent";
 import { Link } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
@@ -15,6 +16,7 @@ interface DiaryEntryProps {
 
 export async function DiaryEntry({ entry }: DiaryEntryProps) {
 	const t = await getTranslations();
+	const locale = await getLocale();
 
 	return (
 		<div className="bg-white p-6 rounded-lg shadow-md">
@@ -40,7 +42,7 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
 					>
 						<Pencil className="h-4 w-4" />
 					</Link>
-					<ShareButton entry={entry} />
+					<ShareButton entry={entry} locale={locale} />
 					<DeleteButton id={entry.id} />
 				</div>
 			</div>
@@ -50,6 +52,7 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
 					content={entry.content}
 					people={entry.mentions.map((m) => m.person)}
 					locations={entry.locations}
+					locale={locale}
 				/>
 			</div>
 

@@ -1,4 +1,3 @@
-import { getLocale } from "next-intl/server";
 import { revalidateTag } from "next/cache";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
@@ -27,7 +26,6 @@ function escapeRegex(string: string): string {
 export async function POST(request: NextRequest) {
 	try {
 		await requireAuth();
-		const locale = await getLocale();
 
 		const requestBody = await request.json();
 		const validation = processRequestSchema.safeParse(requestBody);
@@ -129,10 +127,10 @@ export async function POST(request: NextRequest) {
 							lng: place.lng,
 						}));
 
-					// Process content to insert links for matched entities
+					// Process content to insert ID references for matched entities
 					sendMessage({
 						type: "progress",
-						message: "Adding links to people and places...",
+						message: "Adding references to people and places...",
 					});
 
 					let processedContent = existingEntry.content;
@@ -144,33 +142,32 @@ export async function POST(request: NextRequest) {
 						type: "person" | "location";
 					}> = [];
 
-					// Add person links for matched people
+					// Add person references for matched people
 					for (const person of extractedEntities.people) {
 						if (person.existingPerson) {
 							entitiesToReplace.push({
 								searchText: person.name,
-								replacement: `[${person.name}](/${locale}/people/${person.existingPerson.id})`,
+								replacement: `[person:${person.existingPerson.id}]`,
 								type: "person",
 							});
 						}
 					}
 
-					// Add person links for newly created people
+					// Add person references for newly created people
 					for (const newPerson of newlyCreatedPeople) {
 						entitiesToReplace.push({
 							searchText: newPerson.name,
-							replacement: `[${newPerson.name}](/${locale}/people/${newPerson.id})`,
+							replacement: `[person:${newPerson.id}]`,
 							type: "person",
 						});
 					}
 
-					// Add location links for locations with Google Places data
+					// Add location references for locations with Google Places data
 					for (const location of extractedEntities.locations) {
 						if (location.googlePlaceResult) {
-							const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.name)}&query_place_id=${location.googlePlaceResult.placeId}`;
 							entitiesToReplace.push({
 								searchText: location.name,
-								replacement: `[${location.name}](${mapsUrl})`,
+								replacement: `[location:${location.googlePlaceResult.placeId}]`,
 								type: "location",
 							});
 						}
@@ -181,12 +178,12 @@ export async function POST(request: NextRequest) {
 						(a, b) => b.searchText.length - a.searchText.length,
 					);
 
-					// Replace each entity, ensuring we don't replace inside existing links
+					// Replace each entity, ensuring we don't replace inside existing references
 					for (const entity of entitiesToReplace) {
-						// Create a regex that matches the text only if it's not already in a markdown link
-						// Negative lookbehind for [ and negative lookahead for ](
+						// Create a regex that matches the text only if it's not already in a reference
+						// Negative lookbehind for [ and negative lookahead for :
 						const regex = new RegExp(
-							`(?<!\\[)\\b${escapeRegex(entity.searchText)}\\b(?!\\]\\()`,
+							`(?<!\\[)\\b${escapeRegex(entity.searchText)}\\b(?!:)`,
 							"gi",
 						);
 						processedContent = processedContent.replace(

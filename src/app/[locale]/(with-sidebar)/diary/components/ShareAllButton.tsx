@@ -10,9 +10,13 @@ import type { DiaryEntryWithRelations } from "#lib/dal";
 
 interface ShareAllButtonProps {
 	entries: DiaryEntryWithRelations[];
+	locale: string;
 }
 
-export default function ShareAllButton({ entries }: ShareAllButtonProps) {
+export default function ShareAllButton({
+	entries,
+	locale,
+}: ShareAllButtonProps) {
 	const t = useTranslations();
 	const contentRef = useRef<HTMLDivElement>(null);
 	const [isCopied, setIsCopied] = useState(false);
@@ -96,6 +100,7 @@ export default function ShareAllButton({ entries }: ShareAllButtonProps) {
 								content={entry.content}
 								people={entry.mentions.map((mention) => mention.person)}
 								locations={entry.locations}
+								locale={locale}
 							/>
 						</div>
 						{index < entries.length - 1 && "\n\n---\n\n"}

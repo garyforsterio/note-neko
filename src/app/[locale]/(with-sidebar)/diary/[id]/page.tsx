@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { MapPin } from "lucide-react";
+import { getLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { DiaryContent } from "#components/DiaryContent";
 import { Link } from "#i18n/navigation";
@@ -15,6 +16,7 @@ interface DiaryEntryPageProps {
 
 export default async function DiaryEntryPage({ params }: DiaryEntryPageProps) {
 	const t = await getTranslations();
+	const locale = await getLocale();
 	const entry = await getDiaryEntry((await params).id);
 
 	if (!entry) {
@@ -50,6 +52,7 @@ export default async function DiaryEntryPage({ params }: DiaryEntryPageProps) {
 						content={entry.content}
 						people={entry.mentions.map((m) => m.person)}
 						locations={entry.locations}
+						locale={locale}
 					/>
 				</div>
 

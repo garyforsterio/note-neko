@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { getLocale } from "next-intl/server";
 import { Link } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
@@ -17,13 +18,14 @@ export async function DiaryHeader({
 	entries,
 }: DiaryHeaderProps) {
 	const t = await getTranslations();
+	const locale = await getLocale();
 
 	return (
 		<div className="flex flex-col gap-4 mb-8">
 			<div className="flex justify-between items-center">
 				<h1 className="text-4xl font-bold">{t("diary.title")}</h1>
 				<div className="flex items-center gap-4">
-					<ShareAllButton entries={entries} />
+					<ShareAllButton entries={entries} locale={locale} />
 					<Link
 						href="/diary/new"
 						className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"

@@ -7,17 +7,19 @@ function populateLinks({
 	content,
 	people,
 	locations,
+	locale,
 }: {
 	content: string;
 	people?: Person[];
 	locations?: Prisma.DiaryLocationCreateWithoutDiaryEntryInput[];
+	locale: string;
 }) {
 	let transformedContent = content;
 	// Replace person mentions with markdown links
 	for (const person of people ?? []) {
 		transformedContent = transformedContent.replace(
 			new RegExp(`\\[person:${person.id}\\]`, "g"),
-			`[${person.nickname || person.name}](/en/people/${person.id})`,
+			`[${person.nickname || person.name}](/${locale}/people/${person.id})`,
 		);
 	}
 
@@ -40,12 +42,14 @@ interface DiaryContentProps {
 	content: string;
 	people: Person[];
 	locations: Prisma.DiaryLocationCreateWithoutDiaryEntryInput[];
+	locale: string;
 }
 
 export function DiaryContent({
 	content,
 	people,
 	locations,
+	locale,
 }: DiaryContentProps) {
 	return (
 		<Markdown
@@ -129,6 +133,7 @@ export function DiaryContent({
 				content,
 				people,
 				locations,
+				locale,
 			})}
 		</Markdown>
 	);

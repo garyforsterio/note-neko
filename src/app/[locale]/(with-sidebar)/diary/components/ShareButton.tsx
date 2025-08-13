@@ -10,9 +10,10 @@ import type { DiaryEntryWithRelations } from "#lib/dal";
 
 interface ShareButtonProps {
 	entry: DiaryEntryWithRelations;
+	locale: string;
 }
 
-export default function ShareButton({ entry }: ShareButtonProps) {
+export default function ShareButton({ entry, locale }: ShareButtonProps) {
 	const [isCopied, setIsCopied] = useState(false);
 	const t = useTranslations();
 	const contentRef = useRef<HTMLDivElement>(null);
@@ -81,6 +82,7 @@ export default function ShareButton({ entry }: ShareButtonProps) {
 					content={entry.content}
 					people={entry.mentions.map((mention) => mention.person)}
 					locations={entry.locations}
+					locale={locale}
 				/>
 			</div>
 		</>
