@@ -4,7 +4,7 @@ import type { Person, Prisma } from "@prisma/client";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import { useState, useTransition } from "react";
-import { updateDiaryEntryWithEntitiesAction } from "#actions/diary";
+import { updateDiaryEntryAction } from "#actions/diary";
 import { DiaryContent } from "#components/DiaryContent";
 import RefineEditor from "#components/diary/RefineEditor";
 import RewriteEditor from "#components/diary/RewriteEditor";
@@ -53,10 +53,7 @@ export default function DiaryEditForm({
 				formData.append("peopleIds", JSON.stringify(people.map((p) => p.id)));
 				formData.append("locations", JSON.stringify(locations));
 
-				const result = await updateDiaryEntryWithEntitiesAction(
-					undefined,
-					formData,
-				);
+				const result = await updateDiaryEntryAction(undefined, formData);
 
 				if (result?.status === "error") {
 					toast({

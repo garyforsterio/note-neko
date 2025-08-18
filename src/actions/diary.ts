@@ -70,51 +70,6 @@ export async function updateDiaryEntryAction(
 	}
 
 	try {
-		// Update diary entry with original content (no AI processing)
-		await updateDiaryEntry(submission.value.id, {
-			content: submission.value.content,
-			date: submission.value.date,
-			mentions: [], // Keep empty for now
-			locations: [], // Keep empty for now
-		});
-
-		// Revalidate the diary cache
-		revalidateTag("diaryEntry");
-
-		// Return success with entry ID (no redirect)
-		const result = submission.reply({
-			formErrors: [],
-		});
-		// Add the entryId to the result
-		return { ...result, entryId: submission.value.id };
-	} catch (error) {
-		Sentry.captureException(error);
-		return submission.reply({
-			formErrors: [t("error.updateFailed")],
-		});
-	}
-}
-
-export async function updateDiaryEntryWithEntitiesAction(
-	prevState: unknown,
-	formData: FormData,
-) {
-	await requireAuth();
-	const t = await getTranslations();
-
-	const submission = parseWithZod(formData, { schema: diaryEntrySchema });
-
-	if (submission.status !== "success") {
-		return submission.reply();
-	}
-
-	if (!submission.value.id) {
-		return submission.reply({
-			formErrors: ["Diary entry ID is required for update"],
-		});
-	}
-
-	try {
 		// Extract people IDs and locations from formData
 		const peopleIdsJson = formData.get("peopleIds") as string;
 		const locationsJson = formData.get("locations") as string;

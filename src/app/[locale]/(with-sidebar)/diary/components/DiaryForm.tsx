@@ -9,7 +9,7 @@ import {
 import { getZodConstraint, parseWithZod } from "@conform-to/zod";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
-import { createDiaryEntryAction, updateDiaryEntryAction } from "#actions/diary";
+import { createDiaryEntryAction } from "#actions/diary";
 import { Link, useRouter } from "#i18n/navigation";
 
 import { useActionState } from "react";
@@ -17,7 +17,6 @@ import ErrorMessage from "#components/ErrorMessage";
 import { useProcessing } from "#contexts/ProcessingContext";
 import { useToast } from "#hooks/use-toast";
 import { useUserLocation } from "#hooks/useUserLocation";
-import type { DiaryEntryWithRelations } from "#lib/dal";
 import { diaryEntrySchema } from "#schema/diary";
 
 // Needs to account for user's timezone
@@ -27,17 +26,9 @@ function getLocalDateString(date: Date) {
 	return formattedDate;
 }
 
-// Strip markdown links from content for editing
-function stripMarkdownLinks(content: string): string {
-	// Replace [text](url) with just text
-	return content.replace(/\[([^\]]+)\]\([^\)]+\)/g, "$1");
-}
+// This component is now only for creating new diary entries
 
-interface DiaryFormProps {
-	entry?: DiaryEntryWithRelations;
-}
-
-export default function DiaryForm({ entry }: DiaryFormProps) {
+export default function DiaryForm() {
 	const t = useTranslations();
 	const router = useRouter();
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -47,7 +38,7 @@ export default function DiaryForm({ entry }: DiaryFormProps) {
 	const { location, requestLocation } = useUserLocation();
 
 	const [lastResult, action, isPending] = useActionState(
-		entry ? updateDiaryEntryAction : createDiaryEntryAction,
+		createDiaryEntryAction,
 		undefined,
 	);
 
@@ -68,15 +59,9 @@ export default function DiaryForm({ entry }: DiaryFormProps) {
 		shouldRevalidate: "onInput",
 
 		// Default values
-		defaultValue: entry
-			? {
-					id: entry.id,
-					content: stripMarkdownLinks(entry.content), // Strip links for editing
-					date: getLocalDateString(entry.date),
-				}
-			: {
-					date: getLocalDateString(new Date()),
-				},
+		defaultValue: {
+			date: getLocalDateString(new Date()),
+		},
 	});
 
 	// Handle successful form submission
@@ -208,7 +193,6 @@ export default function DiaryForm({ entry }: DiaryFormProps) {
 				>
 					{t("diary.date")} *
 				</label>
-				{entry && <input {...getInputProps(fields.id, { type: "hidden" })} />}
 				<input
 					{...getInputProps(fields.date, { type: "date" })}
 					className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -216,7 +200,7 @@ export default function DiaryForm({ entry }: DiaryFormProps) {
 				<ErrorMessage id={fields.date.id} errors={fields.date.errors} />
 			</div>
 
-			{!entry && !location && (
+			{!location && (
 				<div className="bg-gray-50 border border-gray-200 rounded-md p-4">
 					<div className="flex items-start space-x-3">
 						<svg
@@ -320,11 +304,7 @@ export default function DiaryForm({ entry }: DiaryFormProps) {
 					disabled={isPending || !form.valid}
 					className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 				>
-					{isPending
-						? t("common.saving")
-						: entry
-							? t("common.save")
-							: t("common.create")}
+					{isPending ? t("common.saving") : t("common.create")}
 				</button>
 			</div>
 		</form>
