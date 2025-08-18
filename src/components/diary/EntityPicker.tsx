@@ -12,8 +12,7 @@ interface EntityPickerProps {
 	type: "person" | "location";
 	onSelect: (entity: Person | DiaryLocation) => void;
 	onClose: () => void;
-	existingPeople?: Person[];
-	existingLocations?: DiaryLocation[];
+	people: Person[];
 	position?: { top: number; left: number };
 	initialQuery?: string;
 }
@@ -22,8 +21,7 @@ export default function EntityPicker({
 	type,
 	onSelect,
 	onClose,
-	existingPeople = [],
-	existingLocations = [],
+	people,
 	position,
 	initialQuery = "",
 }: EntityPickerProps) {
@@ -38,7 +36,7 @@ export default function EntityPicker({
 	useEffect(() => {
 		if (type === "person") {
 			// For people, use local filtering
-			const filtered = existingPeople.filter(
+			const filtered = people.filter(
 				(person) =>
 					person.name.toLowerCase().includes(search.toLowerCase()) ||
 					person.nickname?.toLowerCase().includes(search.toLowerCase()),
@@ -77,7 +75,7 @@ export default function EntityPicker({
 			const timeoutId = setTimeout(searchLocations, 500);
 			return () => clearTimeout(timeoutId);
 		}
-	}, [search, type, existingPeople]);
+	}, [search, type, people]);
 
 	// Focus search input on mount and trigger initial search if query provided
 	useEffect(() => {

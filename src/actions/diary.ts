@@ -12,7 +12,7 @@ import { getTranslations } from "#lib/i18n/server";
 import { deleteDiaryEntrySchema, diaryEntrySchema } from "#schema/diary";
 
 export async function createDiaryEntryAction(
-	prevState: unknown,
+	_prevState: unknown,
 	formData: FormData,
 ) {
 	await requireAuth();
@@ -51,7 +51,7 @@ export async function createDiaryEntryAction(
 }
 
 export async function updateDiaryEntryAction(
-	prevState: unknown,
+	_prevState: unknown,
 	formData: FormData,
 ) {
 	await requireAuth();
@@ -121,7 +121,7 @@ export async function updateDiaryEntryAction(
 }
 
 export async function deleteDiaryEntryAction(
-	prevState: unknown,
+	_prevState: unknown,
 	formData: FormData,
 ) {
 	await requireAuth();

@@ -11,7 +11,7 @@ import { getTranslations } from "#lib/i18n/server";
 import { deletePersonSchema, personSchema } from "#schema/people";
 
 export async function createPersonAction(
-	prevState: unknown,
+	_prevState: unknown,
 	formData: FormData,
 ) {
 	await requireAuth();
@@ -60,7 +60,7 @@ export async function createPersonAction(
 }
 
 export async function updatePersonAction(
-	prevState: unknown,
+	_prevState: unknown,
 	formData: FormData,
 ) {
 	await requireAuth();
@@ -115,7 +115,7 @@ export async function updatePersonAction(
 }
 
 export async function deletePersonAction(
-	prevState: unknown,
+	_prevState: unknown,
 	formData: FormData,
 ) {
 	await requireAuth();

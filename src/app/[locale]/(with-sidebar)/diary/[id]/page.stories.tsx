@@ -46,7 +46,7 @@ export const WithMentionsAndLocations: Story = {
 		});
 
 		// Create a test entry with mentions and locations
-		const entry = await db.diaryEntry.create({
+		const _entry = await db.diaryEntry.create({
 			data: {
 				id: "123",
 				date: new Date(),

@@ -17,7 +17,7 @@ import {
 
 const RESET_TOKEN_EXPIRY = 1000 * 60 * 60; // 1 hour
 
-export async function signUp(lastResult: unknown, formData: FormData) {
+export async function signUp(_lastResult: unknown, formData: FormData) {
 	const t = await getTranslations();
 
 	const submission = parseWithZod(formData, { schema: signUpSchema });
@@ -50,7 +50,7 @@ export async function signUp(lastResult: unknown, formData: FormData) {
 	});
 }
 
-export async function login(lastResult: unknown, formData: FormData) {
+export async function login(_lastResult: unknown, formData: FormData) {
 	const t = await getTranslations();
 	const submission = parseWithZod(formData, { schema: loginSchema });
 	if (submission.status !== "success") {
@@ -94,7 +94,7 @@ export async function logout() {
 }
 
 export async function requestPasswordReset(
-	lastResult: unknown,
+	_lastResult: unknown,
 	formData: FormData,
 ) {
 	const t = await getTranslations();
@@ -134,7 +134,7 @@ export async function requestPasswordReset(
 	return submission.reply();
 }
 
-export async function resetPassword(lastResult: unknown, formData: FormData) {
+export async function resetPassword(_lastResult: unknown, formData: FormData) {
 	const t = await getTranslations();
 	const submission = parseWithZod(formData, { schema: resetPasswordSchema });
 	if (submission.status !== "success") {

@@ -398,8 +398,7 @@ export default function RefineEditor({
 					type={showEntityPicker.type}
 					onSelect={handleAddEntity}
 					onClose={() => setShowEntityPicker(null)}
-					existingPeople={allPeople}
-					existingLocations={locations}
+					people={allPeople}
 					position={showEntityPicker.position}
 					initialQuery={showEntityPicker.initialQuery}
 				/>

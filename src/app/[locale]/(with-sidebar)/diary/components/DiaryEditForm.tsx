@@ -68,7 +68,7 @@ export default function DiaryEditForm({
 					});
 					router.push(`/diary/${entry.id}`);
 				}
-			} catch (error) {
+			} catch (_error) {
 				toast({
 					variant: "destructive",
 					title: t("error.updateFailed"),
