@@ -134,6 +134,7 @@ Guidelines:
 - Use 0.7+ confidence for likely matches with context clues
 - Avoid common words that aren't people/places
 - DON'T extract: "today", "yesterday", "morning", "home", "work", "bed", etc.
+- DON'T extract public figures, celebrities, music artists, actors, politicians, or any famous people - only extract people who are personally known to the diary writer
 - For locations: When a specific place name is connected to a broader location (e.g., "Lawson Roppongi", "Starbucks Shibuya"), treat it as ONE location, not two separate locations. The first part is usually a business/venue name and the second part is the area/district.
 - DON'T extract both "Lawson Roppongi" AND "Roppongi" - only extract "Lawson Roppongi" as a single location${peopleContext}`,
 				},
