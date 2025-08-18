@@ -1,19 +1,20 @@
 import { notFound } from "next/navigation";
-import { getDiaryEntry } from "#lib/dal";
+import { getDiaryEntry, getPeople } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
-import DiaryForm from "../../components/DiaryForm";
+import DiaryEditForm from "../../components/DiaryEditForm";
 
-interface EditDiaryEntryPageProps {
+interface DiaryEditPageProps {
 	params: Promise<{
 		id: string;
 	}>;
 }
 
-export default async function EditDiaryEntryPage({
-	params,
-}: EditDiaryEntryPageProps) {
+export default async function DiaryEditPage({ params }: DiaryEditPageProps) {
 	const t = await getTranslations();
-	const entry = await getDiaryEntry((await params).id);
+	const [entry, allPeople] = await Promise.all([
+		getDiaryEntry((await params).id),
+		getPeople(),
+	]);
 
 	if (!entry) {
 		notFound();
@@ -21,8 +22,8 @@ export default async function EditDiaryEntryPage({
 
 	return (
 		<div className="container mx-auto px-4 py-8">
-			<h1 className="text-2xl font-bold mb-6">{t("diary.editEntry")}</h1>
-			<DiaryForm entry={entry} />
+			<h1 className="text-3xl font-bold mb-8">{t("diary.editEntry")}</h1>
+			<DiaryEditForm entry={entry} allPeople={allPeople} />
 		</div>
 	);
 }

@@ -97,6 +97,21 @@
 		"analyzingEntry": "日記エントリーを分析中",
 		"analyzingDescription": "AIがテキスト内で言及された人物と場所を識別しています",
 		"shareEntry": "エントリーを共有",
+		"editMode": "編集モード",
+		"refineMode": "調整",
+		"rewriteMode": "書き換え",
+		"editor": "エディター",
+		"preview": "プレビュー",
+		"showPreview": "プレビューを表示",
+		"hidePreview": "プレビューを非表示",
+		"markAsPerson": "人物としてマーク",
+		"markAsLocation": "場所としてマーク",
+		"searchPeople": "人物を検索...",
+		"searchLocations": "場所を検索...",
+		"rewriteModeDescription": "エンティティ参照をプレースホルダー形式で含む生のテキストを編集します。",
+		"rewriteModeHelp": "人物には[person:id]、場所には[location:placeId]を使用してください。",
+		"saved": "保存しました",
+		"entrySaved": "日記エントリーが正常に保存されました。",
 		"shareNotSupported": "このデバイスでは共有機能がサポートされていません",
 		"shareError": "共有中にエラーが発生しました",
 		"formatting": {
@@ -116,7 +131,9 @@
 		"save": "保存",
 		"saving": "保存中",
 		"back": "戻る",
-		"edit": "編集"
+		"edit": "編集",
+		"loading": "読み込み中...",
+		"noResults": "結果が見つかりません"
 	},
 	"home": {
 		"hero": {

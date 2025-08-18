@@ -1,6 +1,7 @@
 "use server";
 
 import { parseWithZod } from "@conform-to/zod";
+import type { Prisma } from "@prisma/client";
 import * as Sentry from "@sentry/nextjs";
 import { getLocale } from "next-intl/server";
 import { revalidateTag } from "next/cache";
@@ -86,6 +87,76 @@ export async function updateDiaryEntryAction(
 		});
 		// Add the entryId to the result
 		return { ...result, entryId: submission.value.id };
+	} catch (error) {
+		Sentry.captureException(error);
+		return submission.reply({
+			formErrors: [t("error.updateFailed")],
+		});
+	}
+}
+
+export async function updateDiaryEntryWithEntitiesAction(
+	prevState: unknown,
+	formData: FormData,
+) {
+	await requireAuth();
+	const t = await getTranslations();
+
+	const submission = parseWithZod(formData, { schema: diaryEntrySchema });
+
+	if (submission.status !== "success") {
+		return submission.reply();
+	}
+
+	if (!submission.value.id) {
+		return submission.reply({
+			formErrors: ["Diary entry ID is required for update"],
+		});
+	}
+
+	try {
+		// Extract people IDs and locations from formData
+		const peopleIdsJson = formData.get("peopleIds") as string;
+		const locationsJson = formData.get("locations") as string;
+
+		const providedPeopleIds = peopleIdsJson ? JSON.parse(peopleIdsJson) : [];
+		const providedLocations = locationsJson ? JSON.parse(locationsJson) : [];
+
+		// Parse content to find actually referenced entities
+		const content = submission.value.content;
+		const personReferences = [...content.matchAll(/\[person:([^\]]+)\]/g)];
+		const locationReferences = [...content.matchAll(/\[location:([^\]]+)\]/g)];
+
+		// Extract referenced person IDs and location place IDs
+		const referencedPersonIds = personReferences.map((match) => match[1]);
+		const referencedLocationPlaceIds = locationReferences.map(
+			(match) => match[1],
+		);
+
+		// Filter entities to only include those actually referenced in content
+		const finalPeopleIds = providedPeopleIds.filter((id: string) =>
+			referencedPersonIds.includes(id),
+		);
+		const finalLocations = providedLocations.filter(
+			(location: Prisma.DiaryLocationCreateWithoutDiaryEntryInput) =>
+				referencedLocationPlaceIds.includes(location.placeId),
+		);
+
+		// Update diary entry with only referenced entities
+		await updateDiaryEntry(submission.value.id, {
+			content: submission.value.content,
+			date: submission.value.date,
+			mentions: finalPeopleIds,
+			locations: finalLocations,
+		});
+
+		// Revalidate the diary cache
+		revalidateTag("diaryEntry");
+
+		// Return success
+		return submission.reply({
+			formErrors: [],
+		});
 	} catch (error) {
 		Sentry.captureException(error);
 		return submission.reply({

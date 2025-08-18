@@ -65,7 +65,9 @@
 		"save": "Save",
 		"saving": "Saving",
 		"back": "Back",
-		"edit": "Edit"
+		"edit": "Edit",
+		"loading": "Loading...",
+		"noResults": "No results found"
 	},
 	"diary": {
 		"contentPlaceholder": "Write your diary entry here...",
@@ -105,6 +107,21 @@
 		"analyzingEntry": "Analyzing your diary entry",
 		"analyzingDescription": "AI is identifying people and places mentioned in your text",
 		"shareEntry": "Share entry",
+		"editMode": "Edit Mode",
+		"refineMode": "Refine",
+		"rewriteMode": "Rewrite",
+		"editor": "Editor",
+		"preview": "Preview",
+		"showPreview": "Show Preview",
+		"hidePreview": "Hide Preview",
+		"markAsPerson": "Mark as Person",
+		"markAsLocation": "Mark as Location",
+		"searchPeople": "Search people...",
+		"searchLocations": "Search locations...",
+		"rewriteModeDescription": "Edit the raw text with entity references in their placeholder format.",
+		"rewriteModeHelp": "Use [person:id] for people and [location:placeId] for locations.",
+		"saved": "Saved",
+		"entrySaved": "Your diary entry has been saved successfully.",
 		"shareNotSupported": "Sharing is not supported on your device",
 		"shareError": "Unable to share, please check browser settings and try again",
 		"formatting": {

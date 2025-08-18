@@ -143,9 +143,7 @@ export async function deletePersonAction(
 	redirect({ href: "/people", locale });
 }
 
-export async function createPersonWithoutRedirectAction(
-	name: string,
-): Promise<{
+export async function createPersonWithoutRedirectAction(name: string): Promise<{
 	success: boolean;
 	error?: string;
 	data?: { id: string; name: string };
