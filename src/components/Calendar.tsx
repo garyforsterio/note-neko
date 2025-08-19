@@ -89,7 +89,7 @@ export default function Calendar({
 	const defaultClassNames = getDefaultClassNames();
 
 	return (
-		<div className="flex justify-center">
+		<div className="flex justify-center flex-col">
 			{!range && (
 				<div className="mb-4 p-2 bg-blue-50 text-blue-700 text-sm rounded-md text-center">
 					{t("calendar.clickToSelectRange")}

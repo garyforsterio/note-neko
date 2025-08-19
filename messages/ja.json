@@ -206,7 +206,22 @@
 		"update": "更新",
 		"mention": "誰かを言及",
 		"createNew": "{name}を追加",
-		"creating": "{name}を作成中..."
+		"creating": "{name}を作成中...",
+		"aiSummary": {
+			"title": "関係性構築",
+			"loading": "関係性の洞察を生成中...",
+			"error": "関係性の洞察の生成に失敗しました。後でもう一度お試しください。",
+			"noData": "関係性の提案を生成するのに十分な情報がありません。",
+			"conversationTopics": "次の会話トピック",
+			"activitySuggestions": "アクティビティのアイデア",
+			"relationshipTips": "関係性のヒント",
+			"suggestedInterests": "可能性のある興味",
+			"suggestedInterestsNote": "破線の枠はあなたのやり取りに基づくAIの提案を示します",
+			"attribution": "より深い関係を築くためにAIが生成"
+		},
+		"suggestedInterests": "提案された興味",
+		"suggestedInterestsNote": "破線の枠はあなたのやり取りに基づくAIの提案を示します",
+		"suggestedInterest": "これはAI分析に基づく提案された興味です"
 	},
 	"error": {
 		"title": "エラーが発生しました",

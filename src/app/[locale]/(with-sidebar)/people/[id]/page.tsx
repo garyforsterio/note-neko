@@ -1,7 +1,11 @@
 import { format } from "date-fns";
 import { getLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { DiaryContent } from "#components/DiaryContent";
+import { PersonInterests } from "#components/PersonInterests";
+import { PersonSummary } from "#components/PersonSummary";
+import { PersonSummarySkeleton } from "#components/PersonSummarySkeleton";
 import { Link } from "#i18n/navigation";
 import { getPerson } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
@@ -61,23 +65,7 @@ export default async function PersonPage({ params }: PersonPageProps) {
 					</div>
 				)}
 
-				{person.interests.length > 0 && (
-					<div className="mb-4">
-						<h2 className="text-lg font-semibold mb-2">
-							{t("people.interests")}
-						</h2>
-						<div className="flex flex-wrap gap-2">
-							{person.interests.map((interest) => (
-								<span
-									key={interest}
-									className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
-								>
-									{interest}
-								</span>
-							))}
-						</div>
-					</div>
-				)}
+				<PersonInterests currentInterests={person.interests} />
 
 				{person.notes && (
 					<div className="mb-4">
@@ -86,6 +74,11 @@ export default async function PersonPage({ params }: PersonPageProps) {
 					</div>
 				)}
 			</div>
+
+			{/* AI Summary Section */}
+			<Suspense fallback={<PersonSummarySkeleton />}>
+				<PersonSummary personId={person.id} />
+			</Suspense>
 
 			{person.mentions.length > 0 && (
 				<div>
