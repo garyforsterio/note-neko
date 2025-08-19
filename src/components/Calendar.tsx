@@ -1,24 +1,17 @@
 "use client";
 
-import {
-	eachDayOfInterval,
-	endOfDay,
-	endOfMonth,
-	format,
-	isSameDay,
-	isSameMonth,
-	isToday,
-	isWithinInterval,
-	parseISO,
-	startOfDay,
-	startOfMonth,
-} from "date-fns";
-import { ChevronLeft, ChevronRight, MousePointer } from "lucide-react";
+import { format, isSameDay, parseISO } from "date-fns";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { use, useEffect, useState } from "react";
-import { Link } from "#i18n/navigation";
+import {
+	type DateRange,
+	DayPicker,
+	getDefaultClassNames,
+} from "react-day-picker";
 import type { getAllDiaryIds } from "#lib/dal";
+import "react-day-picker/style.css";
 
 interface CalendarProps {
 	entries: ReturnType<typeof getAllDiaryIds>;
@@ -32,262 +25,106 @@ export default function Calendar({
 	const t = useTranslations();
 	const entries = use(entriesPromise);
 	const searchParams = useSearchParams();
-	const [currentMonth, setCurrentMonth] = useState(new Date());
-	const [selectionStart, setSelectionStart] = useState<Date | null>(null);
-	const [selectionEnd, setSelectionEnd] = useState<Date | null>(null);
-	const [isSelecting, setIsSelecting] = useState(false);
-	const [showTooltip, setShowTooltip] = useState(true);
-	const [isDragging, setIsDragging] = useState(false);
+	const [range, setRange] = useState<DateRange | undefined>();
+	const [month, setMonth] = useState<Date>(() => new Date());
 
 	// Initialize selection from URL params
 	useEffect(() => {
 		const startDate = searchParams.get("start-date");
 		const endDate = searchParams.get("end-date");
-		if (startDate) {
-			// Parse the date string and set to UTC midnight
-			const date = parseISO(startDate);
-			setSelectionStart(
-				new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())),
-			);
-		} else {
-			setSelectionStart(null);
-		}
-		if (endDate) {
-			const date = parseISO(endDate);
-			setSelectionEnd(
-				new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())),
-			);
-		} else {
-			setSelectionEnd(null);
+
+		// Parse dates as local dates to avoid timezone issues
+		const parseLocalDate = (dateStr: string) => {
+			const parts = dateStr.split("-").map(Number);
+			if (parts.length !== 3 || parts.some((part) => Number.isNaN(part))) {
+				throw new Error(`Invalid date format: ${dateStr}`);
+			}
+			const year = parts[0];
+			const month = parts[1];
+			const day = parts[2];
+			if (year === undefined || month === undefined || day === undefined) {
+				throw new Error(`Invalid date parts: ${dateStr}`);
+			}
+			return new Date(year, month - 1, day); // month is 0-indexed
+		};
+
+		try {
+			if (startDate && endDate) {
+				const start = parseLocalDate(startDate);
+				const end = parseLocalDate(endDate);
+				setRange({ from: start, to: end });
+			} else if (startDate) {
+				const start = parseLocalDate(startDate);
+				setRange({ from: start, to: start });
+			} else {
+				setRange(undefined);
+			}
+		} catch (error) {
+			// If date parsing fails, clear the range
+			console.warn("Invalid date format in URL params:", error);
+			setRange(undefined);
 		}
 	}, [searchParams]);
 
-	// Hide tooltip after 5 seconds
-	useEffect(() => {
-		if (showTooltip) {
-			const timer = setTimeout(() => {
-				setShowTooltip(false);
-			}, 5000);
-			return () => clearTimeout(timer);
-		}
-	}, [showTooltip]);
+	// Get dates that have entries
+	const entriesMap = new Map<string, boolean>();
+	for (const entry of entries) {
+		const dateStr = format(new Date(entry.date), "yyyy-MM-dd");
+		entriesMap.set(dateStr, true);
+	}
 
-	const monthStart = startOfMonth(currentMonth);
-	const monthEnd = endOfMonth(currentMonth);
-	const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
+	const handleRangeSelect = (newRange: DateRange | undefined) => {
+		setRange(newRange);
 
-	const previousMonth = () => {
-		setCurrentMonth(
-			new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1),
-		);
-	};
-
-	const nextMonth = () => {
-		setCurrentMonth(
-			new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1),
-		);
-	};
-
-	const hasEntry = (date: Date) => {
-		return entries.some((entry) => isSameDay(new Date(entry.date), date));
-	};
-
-	const isInSelection = (date: Date) => {
-		if (!selectionStart || !selectionEnd) return false;
-		return isWithinInterval(date, {
-			start: startOfDay(selectionStart),
-			end: endOfDay(selectionEnd),
-		});
-	};
-
-	const startSelection = (date: Date) => {
-		if (!isSameMonth(date, currentMonth)) return;
-		// Create UTC date at midnight
-		const utcDate = new Date(
-			Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
-		);
-		setIsSelecting(true);
-		setSelectionStart(utcDate);
-		setSelectionEnd(utcDate);
-		setShowTooltip(false);
-	};
-
-	const handleMouseDown = (e: React.MouseEvent, date: Date) => {
-		e.preventDefault(); // Prevent text selection
-		setIsDragging(false);
-		startSelection(date);
-	};
-
-	const handleMouseEnter = (date: Date) => {
-		if (!isSelecting || !selectionStart || !isSameMonth(date, currentMonth))
-			return;
-		if (isDragging) return; // Prevent mouse events when dragging
-		// Create UTC date at midnight
-		const utcDate = new Date(
-			Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
-		);
-		setSelectionEnd(utcDate);
-	};
-
-	const getDateFromTouch = (touch: React.Touch): Date | null => {
-		const element = document.elementFromPoint(touch.clientX, touch.clientY);
-		const dateElement = element?.closest("[data-date]");
-		if (!dateElement) return null;
-
-		const dateStr = dateElement.getAttribute("data-date");
-		return dateStr ? new Date(dateStr) : null;
-	};
-
-	const handleTouchStart = (e: React.TouchEvent, date: Date) => {
-		e.preventDefault(); // Prevent scrolling
-		setIsDragging(true);
-		startSelection(date);
-	};
-
-	const handleTouchMove = (e: React.TouchEvent) => {
-		if (!isSelecting || !selectionStart || !isDragging) return;
-		e.preventDefault(); // Prevent scrolling
-
-		const touch = e.touches[0];
-		if (!touch) return;
-
-		const date = getDateFromTouch(touch);
-		if (date && isSameMonth(date, currentMonth)) {
-			const utcDate = new Date(
-				Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
-			);
-			setSelectionEnd(utcDate);
+		if (newRange?.from && newRange?.to && onDateRangeChange) {
+			onDateRangeChange(newRange.from, newRange.to);
+		} else if (newRange?.from && !newRange?.to && onDateRangeChange) {
+			// When only one date is selected, treat it as a single-day range
+			onDateRangeChange(newRange.from, newRange.from);
+		} else if (!newRange && onDateRangeChange) {
+			onDateRangeChange(null, null);
 		}
 	};
 
-	const handleTouchEnd = (e: React.TouchEvent) => {
-		if (isDragging && isSelecting) {
-			e.preventDefault();
-			setIsSelecting(false);
-			setIsDragging(false);
-			if (selectionStart && selectionEnd && onDateRangeChange) {
-				// Ensure we have the correct order of dates
-				const start =
-					selectionStart <= selectionEnd ? selectionStart : selectionEnd;
-				const end =
-					selectionStart <= selectionEnd ? selectionEnd : selectionStart;
-				onDateRangeChange(start, end);
-			}
-		}
-	};
-
-	useEffect(() => {
-		const handleGlobalMouseUp = () => {
-			if (isSelecting && !isDragging) {
-				setIsSelecting(false);
-				if (selectionStart && selectionEnd && onDateRangeChange) {
-					// Ensure we have the correct order of dates
-					const start =
-						selectionStart <= selectionEnd ? selectionStart : selectionEnd;
-					const end =
-						selectionStart <= selectionEnd ? selectionEnd : selectionStart;
-					onDateRangeChange(start, end);
-				}
-			}
-		};
-
-		window.addEventListener("mouseup", handleGlobalMouseUp);
-		return () => window.removeEventListener("mouseup", handleGlobalMouseUp);
-	}, [
-		isSelecting,
-		isDragging,
-		selectionStart,
-		selectionEnd,
-		onDateRangeChange,
-	]);
+	const defaultClassNames = getDefaultClassNames();
 
 	return (
-		<div className="bg-white rounded-lg shadow-md p-6 mb-8 select-none">
-			<div className="flex items-center justify-between mb-4">
-				<h2 className="text-lg font-semibold">
-					{format(currentMonth, "MMMM yyyy")}
-				</h2>
-				<div className="flex space-x-2">
-					<button
-						type="button"
-						onClick={previousMonth}
-						className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-						title={t("calendar.previousMonth")}
-					>
-						<ChevronLeft className="h-5 w-5" />
-					</button>
-					<button
-						type="button"
-						onClick={nextMonth}
-						className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-						title={t("calendar.nextMonth")}
-					>
-						<ChevronRight className="h-5 w-5" />
-					</button>
-				</div>
-			</div>
-
-			{showTooltip && !selectionStart && !selectionEnd && (
-				<div className="mb-4 p-2 bg-blue-50 text-blue-700 text-sm rounded-md flex items-center gap-2">
-					<MousePointer className="h-4 w-4" />
-					<span>{t("calendar.dragToSelect")}</span>
+		<div className="flex justify-center">
+			{!range && (
+				<div className="mb-4 p-2 bg-blue-50 text-blue-700 text-sm rounded-md text-center">
+					{t("calendar.clickToSelectRange")}
 				</div>
 			)}
 
-			<div
-				className="grid grid-cols-7 gap-2"
-				onTouchMove={handleTouchMove}
-				onTouchEnd={handleTouchEnd}
-			>
-				{["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-					<div
-						key={day}
-						className="text-center text-sm font-medium text-gray-500 py-2"
-					>
-						{day}
-					</div>
-				))}
-
-				{days?.map((day) => {
-					const entry = entries.find((e) => isSameDay(new Date(e.date), day));
-					const isSelected = isInSelection(day);
-					return (
-						<div
-							key={day.toString()}
-							data-date={day.toISOString()}
-							onMouseDown={(e) => handleMouseDown(e, day)}
-							onMouseEnter={() => handleMouseEnter(day)}
-							onTouchStart={(e) => handleTouchStart(e, day)}
-							className={`
-                relative aspect-square p-2 text-center rounded-lg min-w-0 touch-none
-                ${!isSameMonth(day, currentMonth) ? "text-gray-300" : ""}
-                ${isToday(day) ? "bg-blue-50" : ""}
-                ${hasEntry(day) ? "hover:bg-blue-100 cursor-pointer" : ""}
-                ${isSelected ? "bg-blue-100" : ""}
-                ${isSameMonth(day, currentMonth) ? "cursor-pointer" : ""}
-                ${isSelecting || isDragging ? "cursor-grab active:cursor-grabbing" : ""}
-              `}
-						>
-							{entry ? (
-								<Link
-									href={`/diary/${entry.id}`}
-									className="h-full w-full flex items-center justify-center"
-									title={format(day, "MMMM d, yyyy")}
-								>
-									<span className="relative">
-										{format(day, "d")}
-										<span className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-blue-600 rounded-full" />
-									</span>
-								</Link>
-							) : (
-								<div className="h-full w-full flex items-center justify-center">
-									{format(day, "d")}
-								</div>
-							)}
-						</div>
-					);
-				})}
-			</div>
+			<DayPicker
+				mode="range"
+				selected={range}
+				onSelect={handleRangeSelect}
+				month={month}
+				onMonthChange={setMonth}
+				showOutsideDays
+				modifiers={{
+					hasEntry: (date) => entriesMap.has(format(date, "yyyy-MM-dd")),
+				}}
+				modifiersClassNames={{
+					hasEntry: "has-entry",
+				}}
+				classNames={{
+					caption_label: `${defaultClassNames.caption_label} text-lg font-semibold`,
+					weekday: "text-center text-sm font-medium text-gray-500 py-2",
+					day: "relative",
+					day_button:
+						"w-10 h-10 p-0 font-normal text-sm hover:bg-gray-100 rounded-lg transition-colors cursor-pointer",
+					selected: "bg-blue-600 text-white hover:bg-blue-700",
+					range_start: "bg-blue-600 text-white hover:bg-blue-700 rounded-l-lg",
+					range_end: "bg-blue-600 text-white hover:bg-blue-700 rounded-r-lg",
+					range_middle: "bg-blue-100 text-gray-900 hover:bg-blue-200",
+					today: "font-bold bg-blue-50",
+					outside: "text-gray-300",
+					disabled: "text-gray-300 cursor-not-allowed",
+					hidden: "invisible",
+				}}
+			/>
 		</div>
 	);
 }

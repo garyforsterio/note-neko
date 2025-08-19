@@ -12,7 +12,7 @@ export default async function Layout({
 	return (
 		<ProcessingProvider>
 			<Navigation entries={entries} />
-			<main className="min-h-screen bg-gray-50 md:pl-72 pb-16 md:pb-0">
+			<main className="min-h-screen bg-gray-50 md:pl-80 pb-16 md:pb-0">
 				{children}
 			</main>
 		</ProcessingProvider>

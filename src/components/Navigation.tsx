@@ -53,9 +53,17 @@ export default function Navigation({ entries }: NavigationProps) {
 
 	const handleDateRangeChange = useCallback(
 		(start: Date | null, end: Date | null) => {
+			// Use local date formatting to avoid timezone issues
+			const formatLocalDate = (date: Date) => {
+				const year = date.getFullYear();
+				const month = String(date.getMonth() + 1).padStart(2, "0");
+				const day = String(date.getDate()).padStart(2, "0");
+				return `${year}-${month}-${day}`;
+			};
+
 			updateFilters({
-				"start-date": start?.toISOString().split("T")[0] || null,
-				"end-date": end?.toISOString().split("T")[0] || null,
+				"start-date": start ? formatLocalDate(start) : null,
+				"end-date": end ? formatLocalDate(end) : null,
 			});
 		},
 		[updateFilters],
@@ -71,7 +79,7 @@ export default function Navigation({ entries }: NavigationProps) {
 	return (
 		<>
 			{/* Desktop Sidebar */}
-			<div className="hidden md:fixed md:inset-y-0 md:flex md:w-72 md:flex-col">
+			<div className="hidden md:fixed md:inset-y-0 md:flex md:w-80 md:flex-col">
 				<div className="flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-white">
 					<div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
 						<div className="flex flex-shrink-0 items-center px-4">

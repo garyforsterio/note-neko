@@ -57,7 +57,8 @@
 	"calendar": {
 		"nextMonth": "Next month",
 		"previousMonth": "Previous month",
-		"dragToSelect": "Click and drag to select a date range"
+		"dragToSelect": "Click and drag to select a date range",
+		"clickToSelectRange": "Click a date to start selection, then click another date to complete the range"
 	},
 	"common": {
 		"cancel": "Cancel",

@@ -57,7 +57,8 @@
 	"calendar": {
 		"previousMonth": "前月",
 		"nextMonth": "次月",
-		"dragToSelect": "日付範囲を選択するにはクリックしてドラッグしてください"
+		"dragToSelect": "日付範囲を選択するにはクリックしてドラッグしてください",
+		"clickToSelectRange": "最初に開始日をクリックし、次に終了日をクリックして範囲を選択してください"
 	},
 	"diary": {
 		"title": "日記",
