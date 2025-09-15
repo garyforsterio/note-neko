@@ -58,11 +58,7 @@ A personal life tracking application built with Next.js 15, featuring a daily di
    pnpm prisma:setup
    ```
 
-4. Create a `.env` file in the root directory with the following content:
-
-   ```
-   DATABASE_URL="postgresql://postgres:postgres@localhost:5432/life_tracker?schema=public"
-   ```
+4. Copy `.env.example` to `.env` file in the root directory and populate content:
 
 5. Start the development server:
 
