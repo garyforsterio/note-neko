@@ -21,7 +21,12 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
 
 	const [form, fields] = useForm({
 		lastResult,
-		defaultValue: { token },
+		defaultValue: {
+			token,
+			password: "",
+			confirmPassword: "",
+			...lastResult?.initialValue,
+		},
 		onValidate: ({ formData }) => {
 			return parseWithZod(formData, { schema: resetPasswordSchema });
 		},

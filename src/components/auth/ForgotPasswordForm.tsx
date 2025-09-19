@@ -19,7 +19,7 @@ export function ForgotPasswordForm() {
 	const [form, fields] = useForm({
 		// Sync the result of last submission
 		lastResult,
-
+		defaultValue: { email: "", ...lastResult?.initialValue },
 		// Reuse the validation logic on the client
 		onValidate: ({ formData }) => {
 			return parseWithZod(formData, { schema: forgotPasswordSchema });

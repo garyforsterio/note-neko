@@ -23,7 +23,7 @@ export function LoginForm() {
 	const [form, fields] = useForm({
 		// Sync the result of last submission
 		lastResult,
-
+		defaultValue: { email: "", password: "", ...lastResult?.initialValue },
 		// Reuse the validation logic on the client
 		onValidate: ({ formData }) => {
 			return parseWithZod(formData, { schema: loginSchema });
@@ -56,6 +56,7 @@ export function LoginForm() {
 					</label>
 					<input
 						{...getInputProps(fields.email, { type: "email" })}
+						defaultValue={fields.email.defaultValue}
 						autoComplete="email"
 						className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
 						placeholder={t("auth.login.email")}

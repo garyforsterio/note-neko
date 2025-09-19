@@ -15,6 +15,12 @@ export function SignUpForm() {
 
 	const [form, fields] = useForm({
 		lastResult,
+		defaultValue: {
+			email: "",
+			password: "",
+			confirmPassword: "",
+			...lastResult?.initialValue,
+		},
 		onValidate: ({ formData }) => {
 			return parseWithZod(formData, { schema: signUpSchema });
 		},
