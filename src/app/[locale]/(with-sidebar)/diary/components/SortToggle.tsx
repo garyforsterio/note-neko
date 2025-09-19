@@ -3,7 +3,6 @@
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
 
 export function SortToggle() {
 	const t = useTranslations();
@@ -11,12 +10,13 @@ export function SortToggle() {
 	const searchParams = useSearchParams();
 	const currentSort = searchParams.get("sort-order") || "desc";
 
-	const toggleSort = useCallback(() => {
-		const params = new URLSearchParams(searchParams.toString());
+	const toggleSort = () => {
+		const params = new URLSearchParams(searchParams);
 		const newSort = currentSort === "desc" ? "asc" : "desc";
 		params.set("sort-order", newSort);
+		params.set("page", "1");
 		router.push(`/diary?${params.toString()}`);
-	}, [router, searchParams, currentSort]);
+	};
 
 	return (
 		<button

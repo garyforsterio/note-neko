@@ -38,7 +38,7 @@ export default function Navigation({ entries }: NavigationProps) {
 
 	const updateFilters = useCallback(
 		(updates: Record<string, string | null>) => {
-			const params = new URLSearchParams(searchParams.toString());
+			const params = new URLSearchParams(searchParams);
 			for (const [key, value] of Object.entries(updates)) {
 				if (value === null) {
 					params.delete(key);
@@ -275,10 +275,7 @@ export default function Navigation({ entries }: NavigationProps) {
 									</span>
 									<button
 										type="button"
-										onClick={() => {
-											clearDateRange();
-											setIsMobileFiltersOpen(false);
-										}}
+										onClick={clearDateRange}
 										className="p-1 hover:bg-gray-100 rounded-full transition-colors"
 										title={t("diary.clearDateRange")}
 									>
@@ -295,7 +292,6 @@ export default function Navigation({ entries }: NavigationProps) {
 									entries={entries}
 									onDateRangeChange={(start, end) => {
 										handleDateRangeChange(start, end);
-										setIsMobileFiltersOpen(false);
 									}}
 								/>
 							</div>

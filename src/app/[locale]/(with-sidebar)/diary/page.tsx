@@ -16,6 +16,7 @@ interface PageProps {
 
 export default async function DiaryPage({ searchParams }: PageProps) {
 	const t = await getTranslations();
+	const params = await searchParams;
 
 	const {
 		page,
@@ -23,7 +24,7 @@ export default async function DiaryPage({ searchParams }: PageProps) {
 		"start-date": startDate,
 		"end-date": endDate,
 		"sort-order": sortOrder,
-	} = await searchParams;
+	} = params;
 
 	const parsedPage = page ? Number(page) : 1;
 	const parsedPageSize = pageSize ? Number(pageSize) : 10;
@@ -64,8 +65,7 @@ export default async function DiaryPage({ searchParams }: PageProps) {
 				currentPage={parsedPage}
 				totalPages={totalPages}
 				pageSize={parsedPageSize}
-				startDate={parsedStartDate}
-				endDate={parsedEndDate}
+				params={params}
 			/>
 		</div>
 	);

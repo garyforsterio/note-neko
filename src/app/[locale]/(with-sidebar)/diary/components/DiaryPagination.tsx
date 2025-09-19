@@ -6,39 +6,26 @@ interface DiaryPaginationProps {
 	currentPage: number;
 	totalPages: number;
 	pageSize: number;
-	startDate?: Date;
-	endDate?: Date;
-}
-
-function getDateString(date: Date | undefined): string {
-	if (!date) return "";
-	return date.toISOString().split("T")[0] as string;
+	params: Record<string, string>;
 }
 
 export async function DiaryPagination({
 	currentPage,
 	totalPages,
 	pageSize,
-	startDate,
-	endDate,
+	params,
 }: DiaryPaginationProps) {
 	const t = await getTranslations();
 	if (totalPages <= 1) return null;
 
 	const getPaginationUrl = (page: number) => {
-		const params = new URLSearchParams({
+		const newParams = new URLSearchParams({
+			...params,
 			page: page.toString(),
 			"page-size": pageSize.toString(),
 		});
 
-		if (startDate) {
-			params.append("start-date", getDateString(startDate));
-		}
-		if (endDate) {
-			params.append("end-date", getDateString(endDate));
-		}
-
-		return `/diary?${params.toString()}`;
+		return `/diary?${newParams.toString()}`;
 	};
 
 	return (
