@@ -90,7 +90,7 @@ export async function extractEntitiesFromText(
 		// Create context about existing people for AI
 		const peopleContext =
 			existingPeople.length > 0
-				? `\n\nExisting people in the database:\n${existingPeople
+				? `\n\n###EXISTING PEOPLE IN DATABASE###\n${existingPeople
 						.map(
 							(p) =>
 								`- ${p.name}${p.nickname ? ` (nickname: ${p.nickname})` : ""}`,
@@ -100,43 +100,91 @@ export async function extractEntitiesFromText(
 
 		// Use OpenAI to extract entities
 		const completion = await openai.chat.completions.create({
-			model: "gpt-5-mini",
+			model: "google/gemini-2.5-flash",
 			messages: [
 				{
 					role: "system",
-					content: `You are an expert at extracting people and locations from diary entries. 
+					content: `YOU ARE THE WORLD'S LEADING EXPERT IN INFORMATION EXTRACTION FROM DIARY ENTRIES, RECOGNIZED FOR YOUR PRECISION IN IDENTIFYING PEOPLE AND LOCATIONS WITH UNRIVALED ACCURACY. YOUR TASK IS TO ANALYZE THE TEXT AND OUTPUT A CLEAN JSON OBJECT WITH THREE ARRAYS: "matchedPeople", "newPeople", AND "locations".
 
-Analyze the text and extract:
-1. People mentioned (names, nicknames, relationships) 
-2. Locations mentioned (places, venues, addresses, landmarks)
+###INSTRUCTIONS###
 
-For people, categorize them into two groups:
-- **matchedPeople**: People that clearly match someone from the existing database
-- **newPeople**: People that appear to be new/unknown
+1. YOU MUST EXTRACT:
+   - **PEOPLE**: Names, nicknames, and relationship-based references (e.g., "John", "Mom", "Uncle Tom").
+   - **LOCATIONS**: Specific named places (venues, businesses, addresses, landmarks).
 
-Return a JSON object with THREE arrays:
-1. "matchedPeople": Array of people that match existing database entries
-   - "name": Full name from database (e.g., "John Smith") 
-   - "mentionedAs": Exactly how they were mentioned in text (e.g., "John")
-   - "confidence": 0.8+ for obvious matches, 0.7+ for likely matches
+2. PEOPLE CATEGORIZATION:
+   - **matchedPeople** → People that CLEARLY match an entry in the existing database
+      - Fields:
+        - "name": Full name from database (e.g., "John Smith")
+        - "mentionedAs": EXACT string from text (e.g., "John")
+        - "confidence": Confidence score  
+          - 0.9+ for exact matches  
+          - 0.8+ for strong partial matches (e.g., "John" → "John Smith")  
+          - 0.7+ for contextually likely matches
+   - **newPeople** → People that DO NOT match database
+      - Fields:
+        - "name": Name as mentioned in text
+        - "confidence": Confidence score (0.7+ recommended for a valid person)
 
-2. "newPeople": Array of people that don't match existing database
-   - "name": Name as mentioned in text
-   - "confidence": How confident this is a real person (0.7+ recommended)
+3. LOCATIONS:
+   - Fields:
+     - "name": Location string as mentioned in text
+     - "confidence": Confidence score (0.6+ recommended)
+   - TREAT compound business + district (e.g., "Starbucks Shibuya") as ONE location.
+   - DO NOT split into separate entries (e.g., NOT "Starbucks" + "Shibuya").
 
-3. "locations": Array of places mentioned
-   - "name": Location as mentioned in text
-   - "confidence": How confident this is a real place (0.6+ recommended)
+4. CONFIDENCE RULES:
+   - USE 0.9+ for exact name matches
+   - USE 0.8+ for clear partial matches
+   - USE 0.7+ for context-driven likely matches
 
-Guidelines:
-- Use 0.9+ confidence for exact matches
-- Use 0.8+ confidence for obvious partial matches (e.g., "John" → "John Smith") 
-- Use 0.7+ confidence for likely matches with context clues
-- Avoid common words that aren't people/places
-- DON'T extract: "today", "yesterday", "morning", "home", "work", "bed", etc.
-- DON'T extract public figures, celebrities, music artists, actors, politicians, or any famous people - only extract people who are personally known to the diary writer
-- For locations: When a specific place name is connected to a broader location (e.g., "Lawson Roppongi", "Starbucks Shibuya"), treat it as ONE location, not two separate locations. The first part is usually a business/venue name and the second part is the area/district.
-- DON'T extract both "Lawson Roppongi" AND "Roppongi" - only extract "Lawson Roppongi" as a single location${peopleContext}`,
+###CHAIN OF THOUGHTS###
+
+FOLLOW these steps BEFORE producing the JSON:
+
+1. **UNDERSTAND**: Read the diary text carefully and identify candidate names and place mentions.
+2. **BASICS**: Separate mentions into possible PEOPLE vs. LOCATIONS.
+3. **BREAK DOWN**: Compare names against the existing database to decide if they belong in matchedPeople or newPeople.
+4. **ANALYZE**: Apply confidence scoring based on rules (exact/partial/context).
+5. **BUILD**: Format extractions into the JSON structure with precision.
+6. **EDGE CASES**: Check against “What Not To Do” rules to avoid false positives.
+7. **FINAL ANSWER**: Output the JSON object ONLY, without commentary.
+
+###WHAT NOT TO DO###
+
+- DO NOT extract vague time/setting words: "today", "yesterday", "tonight", "morning", "home", "work", "bed".
+- DO NOT extract generic venues without unique names: "the gym", "a bar", "a restaurant".
+- DO NOT extract broad regions: "Tokyo", "Germany", "California".
+- DO NOT extract BOTH a compound location and its parts ("Lawson Roppongi" AND "Roppongi") → ONLY keep the full compound ("Lawson Roppongi").
+- DO NOT extract houses as locations. If text says "John's house", extract "John" as person, NOT "house" as location.
+- DO NOT extract public figures, celebrities, politicians, or famous people → ONLY extract personally known individuals relevant to the diary writer.
+- DO NOT include duplicate entries across arrays.
+
+###OUTPUT FORMAT###
+
+RETURN JSON ONLY, with this structure:
+{
+  "matchedPeople": [
+    {
+      "name": "John Smith",
+      "mentionedAs": "John",
+      "confidence": 0.9
+    }
+  ],
+  "newPeople": [
+    {
+      "name": "Uncle Tom",
+      "confidence": 0.8
+    }
+  ],
+  "locations": [
+    {
+      "name": "Starbucks Shibuya",
+      "confidence": 0.85
+    }
+  ]
+}
+${peopleContext}`,
 				},
 				{
 					role: "user",
