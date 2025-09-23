@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 import { requireAuth } from "#lib/auth";
 
 export default async function SettingsPage() {
@@ -15,30 +16,51 @@ export default async function SettingsPage() {
 					<p className="text-gray-600 mb-6">{t("welcome.description")}</p>
 
 					<div className="grid gap-4">
-						<div className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+						<Link
+							href="/settings/profile"
+							className="p-4 border rounded-lg hover:bg-gray-50 transition-colors block"
+						>
 							<h3 className="font-medium mb-2">
 								{t("sections.profile.title")}
 							</h3>
 							<p className="text-sm text-gray-600">
 								{t("sections.profile.description")}
 							</p>
-						</div>
+						</Link>
 
-						<div className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+						<Link
+							href="/settings/social"
+							className="p-4 border rounded-lg hover:bg-gray-50 transition-colors block"
+						>
 							<h3 className="font-medium mb-2">{t("sections.social.title")}</h3>
 							<p className="text-sm text-gray-600">
 								{t("sections.social.description")}
 							</p>
-						</div>
+						</Link>
 
-						<div className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+						<Link
+							href="/settings/privacy"
+							className="p-4 border rounded-lg hover:bg-gray-50 transition-colors block"
+						>
+							<h3 className="font-medium mb-2">
+								{t("sections.privacy.title")}
+							</h3>
+							<p className="text-sm text-gray-600">
+								{t("sections.privacy.description")}
+							</p>
+						</Link>
+
+						<Link
+							href="/settings/account"
+							className="p-4 border rounded-lg hover:bg-gray-50 transition-colors block"
+						>
 							<h3 className="font-medium mb-2">
 								{t("sections.account.title")}
 							</h3>
 							<p className="text-sm text-gray-600">
 								{t("sections.account.description")}
 							</p>
-						</div>
+						</Link>
 					</div>
 				</div>
 			</div>
