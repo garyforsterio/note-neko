@@ -68,7 +68,8 @@
 		"back": "Back",
 		"edit": "Edit",
 		"loading": "Loading...",
-		"noResults": "No results found"
+		"noResults": "No results found",
+		"logout": "Log out"
 	},
 	"diary": {
 		"contentPlaceholder": "Write your diary entry here...",
