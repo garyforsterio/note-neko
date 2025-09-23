@@ -1,0 +1,237 @@
+# Cursor Rules for Note Neko
+
+This file provides guidance to Cursor AI when working with code in this repository.
+
+## Documentation Structure
+
+For detailed information about the codebase, refer to these documentation files:
+
+- **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System design, tech stack, request flows, caching strategy
+- **[docs/DATABASE.md](docs/DATABASE.md)** - Schema documentation, relationships, query patterns
+- **[docs/API.md](docs/API.md)** - Server actions, API routes, authentication details
+- **[docs/COMPONENTS.md](docs/COMPONENTS.md)** - Component patterns, UI guidelines, accessibility
+- **[docs/PROCESSES.md](docs/PROCESSES.md)** - Development workflows, testing, deployment
+
+## Quick Reference
+
+### Tech Stack
+- **Framework**: Next.js 15 with App Router and React 19
+- **Database**: PostgreSQL with Prisma ORM (Accelerate for edge)
+- **Styling**: Tailwind CSS 4
+- **Forms**: @conform-to with Zod validation
+- **Testing**: Vitest, Storybook
+- **Auth**: JWT with refresh tokens
+- **Package Manager**: pnpm (required)
+
+### Development Commands
+
+```bash
+pnpm dev              # Start development server
+pnpm build            # Build for production
+pnpm test             # Run tests
+pnpm lint             # Lint with Biome
+pnpm format           # Format with Biome
+pnpm typecheck        # TypeScript checking
+pnpm storybook        # Start Storybook
+```
+
+### Database Commands
+
+```bash
+pnpm prisma:generate      # Generate Prisma client
+pnpm prisma:migrate-dev   # Run migrations (dev)
+pnpm prisma:migrate-deploy # Deploy migrations (prod)
+pnpm prisma:seed          # Seed database
+```
+
+## Code Guidelines
+
+### Component Development
+
+#### Server Components (Default)
+- No `'use client'` directive
+- Use `getTranslations` from `next-intl/server`
+- Can fetch data directly
+- Located in `src/app/` and `src/components/`
+
+#### Client Components
+- Must have `'use client'` directive
+- Use `useTranslations` from `next-intl`
+- Handle interactivity and forms
+- Use server actions for mutations
+
+### Server Actions Pattern
+
+All server actions in `src/actions/*.ts`:
+
+```typescript
+'use server';
+
+import { parseWithZod } from '@conform-to/zod';
+import { requireAuth } from '#lib/auth';
+import { redirect } from 'next/navigation';
+
+export async function actionName(formData: FormData) {
+  await requireAuth(); // For protected actions
+
+  const submission = parseWithZod(formData, { schema });
+  if (submission.status !== 'success') {
+    return submission.reply();
+  }
+
+  // Perform action
+  redirect('/success-path');
+}
+```
+
+### Data Access Layer
+
+Cached operations in `src/lib/dal.ts`:
+
+```typescript
+export async function getData() {
+  'use cache';
+  cacheTag('data-tag');
+
+  const userId = await requireAuth();
+  return db.model.findMany({ where: { userId } });
+}
+```
+
+Cache tags: `diaries`, `diary:${id}`, `people`, `person:${id}`
+
+### Form Handling
+
+Using Conform and Zod:
+
+```typescript
+// Schema in src/schema/
+export const formSchema = z.object({
+  field: z.string().min(1),
+});
+
+// Client component
+'use client';
+import { useForm } from '@conform-to/react';
+import { useFormState } from 'react-dom';
+
+export function Form() {
+  const [lastResult, action] = useFormState(serverAction);
+  const [form, fields] = useForm({ lastResult });
+
+  return <form action={action} {...getFormProps(form)}>...</form>;
+}
+```
+
+### Import Paths
+
+- `#lib/*` - Library utilities
+- `#actions/*` - Server actions
+- `#schema/*` - Zod schemas
+- `#components/*` - Components
+- `#*` - General src imports
+
+## Testing Requirements
+
+### Storybook Stories
+- Create `.stories.tsx` for each component
+- Include Empty and WithData states
+- Mock auth with `requireAuth.mockResolvedValue`
+- Use play functions for interaction testing
+
+### Unit Tests
+- Use Vitest for testing
+- Mock database operations
+- Test success and error states
+
+## Code Quality
+
+### Before Committing
+1. Format: `pnpm format`
+2. Lint: `pnpm lint`
+3. Type check: `pnpm typecheck`
+4. Test: `pnpm test`
+
+### Commit Messages
+Follow conventional commits:
+- `feat:` - New feature
+- `fix:` - Bug fix
+- `docs:` - Documentation
+- `refactor:` - Code restructuring
+- `test:` - Testing
+- `chore:` - Maintenance
+
+## Important Patterns
+
+### Authentication
+- All routes under `(with-sidebar)` require auth
+- Use `requireAuth()` in server actions
+- JWT stored in httpOnly cookies
+
+### Internationalization
+- Server: `getTranslations()` from `next-intl/server`
+- Client: `useTranslations()` from `next-intl`
+- Locales: `en`, `ja`
+
+### URL Parameters
+- Use hyphen-case (kebab-case) for query params
+- Example: `sort-order`, `page-size`
+
+## Environment Variables
+
+Required in `.env.local`:
+- `DATABASE_URL` - PostgreSQL connection
+- `JWT_SECRET` - JWT signing secret
+- `OPENROUTER_API_KEY` - AI API key
+- `GOOGLE_MAPS_API_KEY` - Maps API key
+- `SENTRY_AUTH_TOKEN` - Error tracking
+- `VERCEL_OIDC_TOKEN` - Deployment token
+
+## Documentation Updates
+
+When making changes, update relevant docs:
+- Architecture changes → `docs/ARCHITECTURE.md`
+- Database changes → `docs/DATABASE.md`
+- API changes → `docs/API.md`
+- Component changes → `docs/COMPONENTS.md`
+- Process changes → `docs/PROCESSES.md`
+
+## Code Style
+
+- Use Biome for linting/formatting (not ESLint/Prettier)
+- Tab indentation
+- Double quotes for strings
+- TypeScript strict mode
+- No unnecessary comments
+- Follow existing patterns in codebase
+
+## Security
+
+- Never commit secrets
+- Validate all user input
+- Use server-side validation
+- Protected routes with `requireAuth()`
+- HttpOnly cookies for tokens
+
+## Performance
+
+- Default to Server Components
+- Use caching in DAL
+- Optimize images with Next.js Image
+- Lazy load heavy components
+- Use Prisma Accelerate for edge
+
+## External Services
+
+- **OpenRouter API** - AI entity extraction
+- **Google Maps API** - Location geocoding
+- **Sentry** - Error tracking
+- **Vercel** - Hosting & analytics
+- **Dicebear** - Avatar generation
+
+## Getting Help
+
+- Check documentation files first
+- Review existing similar code
+- Follow established patterns
+- Test thoroughly before committing
