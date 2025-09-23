@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
+import { SignOutButton } from "#components/SignOutButton";
 import { requireAuth } from "#lib/auth";
 
 export default async function SettingsPage() {
@@ -61,6 +62,10 @@ export default async function SettingsPage() {
 								{t("sections.account.description")}
 							</p>
 						</Link>
+					</div>
+
+					<div className="mt-6 pt-6 border-t border-gray-200">
+						<SignOutButton />
 					</div>
 				</div>
 			</div>
