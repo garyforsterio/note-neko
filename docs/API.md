@@ -70,17 +70,30 @@ Resets user password with token.
 
 ### Diary Actions (`src/actions/diary.ts`)
 
-#### `createDiaryEntry(formData: FormData)`
-Creates new diary entry.
+#### `createDiaryEntryAction(formData: FormData)`
+Creates new diary entry with AI processing for entity extraction.
 
 **Input:**
 - `content`: string - Diary content (required)
 - `date`: string - Entry date (ISO format)
-- `mentions`: string[] - Person IDs to mention
-- `locations`: JSON - Location data array
+- `location`: JSON - Optional user location for better geocoding
+  ```json
+  {
+    "latitude": number,
+    "longitude": number
+  }
+  ```
+
+**Processing Steps:**
+1. Creates initial diary entry with original content
+2. Extracts people and locations using AI (via `extractEntitiesFromText`)
+3. Creates new people if confidence > 0.7
+4. Geocodes locations with Google Places API
+5. Updates diary content with entity references (`[person:id]`, `[location:placeId]`)
+6. Saves enhanced entry with extracted entities
 
 **Returns:**
-- Success: Redirects to `/diary`
+- Success: Redirects to `/diary/{entryId}/edit` for validation
 - Failure: Form validation errors
 
 **Protected:** Yes (requires authentication)
@@ -247,50 +260,7 @@ Uses AI to extract people and locations from diary text.
 
 ## API Routes
 
-### POST `/api/diary/process`
-
-Processes diary entry with AI to extract entities and enhance content.
-
-**Request Body:**
-```json
-{
-  "entryId": "string",
-  "location": {
-    "latitude": number,
-    "longitude": number
-  }
-}
-```
-
-**Response:** Server-Sent Events stream
-
-**Event Types:**
-```typescript
-// Progress event
-{
-  "type": "progress",
-  "message": "Processing status message"
-}
-
-// Completion event
-{
-  "type": "complete",
-  "success": boolean,
-  "message": "Completion message",
-  "error": "Optional error message"
-}
-```
-
-**Protected:** Yes (requires authentication)
-
-**Processing Steps:**
-1. Analyze diary content with AI
-2. Identify mentioned people
-3. Create new people if confidence > 0.7
-4. Identify mentioned locations
-5. Geocode locations with Google Maps
-6. Update diary content with entity tags
-7. Save enhanced entry to database
+Currently, Note Neko primarily uses Server Actions for data mutations. API routes are reserved for future streaming or complex operations that cannot be handled by Server Actions.
 
 ## Data Access Layer Functions
 

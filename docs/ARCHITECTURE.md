@@ -77,8 +77,7 @@ src/
 │   │   │   ├── diary/   # Diary entries pages
 │   │   │   └── people/  # People management pages
 │   │   └── auth/        # Authentication pages
-│   └── api/             # API routes
-│       └── diary/process/ # Diary AI processing endpoint
+│   └── api/             # API routes (future use)
 │
 ├── components/          # Reusable React components
 │   ├── ui/             # Base UI components
@@ -112,10 +111,10 @@ src/
 1. **Client Form** → User submits form (Client Component)
 2. **Server Action** → Form data sent to server action
 3. **Validation** → Zod schema validates input
-4. **Business Logic** → Process data (e.g., create diary entry)
-5. **Database** → Prisma performs database operation
+4. **Business Logic** → Process data (e.g., create diary entry with AI)
+5. **Database Operations** → Multiple Prisma operations (create, update, etc.)
 6. **Cache Invalidation** → Revalidate relevant cache tags
-7. **Redirect** → Navigate to success page
+7. **Redirect** → Navigate to appropriate page (e.g., edit for validation)
 
 ## Data Flow Patterns
 
@@ -131,15 +130,21 @@ export default async function DiaryPage() {
 ### Server Actions Pattern
 ```typescript
 // Server action in src/actions/diary.ts
-export async function createDiaryEntry(formData: FormData) {
+export async function createDiaryEntryAction(formData: FormData) {
   'use server';
   await requireAuth();
   const submission = parseWithZod(formData, { schema });
   if (submission.status !== 'success') {
     return submission.reply();
   }
-  // Process and save
-  redirect('/diary');
+
+  // Create entry, extract entities with AI, update content
+  const entry = await createDiaryEntry(submission.value);
+  const entities = await extractEntitiesFromText(entry.content);
+  await updateDiaryEntry(entry.id, processedData);
+
+  // Redirect to edit page for validation
+  redirect(`/diary/${entry.id}/edit`);
 }
 ```
 
@@ -198,13 +203,16 @@ All routes under `(with-sidebar)` require authentication:
 
 ### Entity Extraction Pipeline
 
-1. **Diary Entry Created** → User writes diary content
-2. **Process Button** → Triggers AI processing
-3. **API Route** → `/api/diary/process` handles request
-4. **OpenRouter API** → Extracts people and locations
-5. **Google Maps API** → Geocodes location references
-6. **Database Update** → Creates people, adds mentions/locations
-7. **Content Enhancement** → Adds `[person:id]` and `[location:id]` tags
+1. **Diary Form Submission** → User submits diary content via form
+2. **Server Action Processing** → `createDiaryEntryAction` handles form data
+3. **Initial Entry Creation** → Creates diary entry with original content
+4. **AI Entity Extraction** → Calls `extractEntitiesFromText` with diary content
+5. **OpenRouter API** → Uses Gemini 2.5 Flash to extract people and locations
+6. **People Processing** → Creates new people if confidence > 0.7
+7. **Location Geocoding** → Google Maps API geocodes location references
+8. **Content Enhancement** → Adds `[person:id]` and `[location:placeId]` tags
+9. **Database Update** → Updates entry with processed content and entities
+10. **Redirect to Edit** → User redirected to edit page for validation
 
 ## Internationalization
 

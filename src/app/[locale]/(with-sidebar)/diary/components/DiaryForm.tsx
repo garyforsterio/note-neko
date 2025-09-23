@@ -8,14 +8,12 @@ import {
 } from "@conform-to/react";
 import { getZodConstraint, parseWithZod } from "@conform-to/zod";
 import { useTranslations } from "next-intl";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { createDiaryEntryAction } from "#actions/diary";
-import { Link, useRouter } from "#i18n/navigation";
+import { useRouter } from "#i18n/navigation";
 
 import { useActionState } from "react";
 import ErrorMessage from "#components/ErrorMessage";
-import { useProcessing } from "#contexts/ProcessingContext";
-import { useToast } from "#hooks/use-toast";
 import { useUserLocation } from "#hooks/useUserLocation";
 import { diaryEntrySchema } from "#schema/diary";
 
@@ -32,9 +30,6 @@ export default function DiaryForm() {
 	const t = useTranslations();
 	const router = useRouter();
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
-	const { toast, dismiss } = useToast();
-	const { startProcessing, updateStatus, completeProcessing } = useProcessing();
-	const processingToastIdRef = useRef<string | null>(null);
 	const { location, requestLocation } = useUserLocation();
 
 	const [lastResult, action, isPending] = useActionState(
@@ -64,127 +59,27 @@ export default function DiaryForm() {
 		},
 	});
 
-	// Handle successful form submission
-	useEffect(() => {
-		if (
-			lastResult?.status === "success" &&
-			lastResult &&
-			"entryId" in lastResult &&
-			typeof lastResult.entryId === "string"
-		) {
-			const entryId = lastResult.entryId;
-
-			// Start background processing for new entries
-			startProcessing(entryId, ""); // Content not needed anymore
-
-			// Show persistent processing toast
-			const toastResult = toast({
-				variant: "loading",
-				title: t("diary.analyzingEntry"),
-				description: t("diary.analyzingDescription"),
-				action: (
-					<Link
-						href="/diary/new"
-						className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium inline-block"
-					>
-						{t("diary.addAnotherEntry")}
-					</Link>
-				),
-			});
-			processingToastIdRef.current = toastResult.id;
-
-			startBackgroundProcessing(entryId);
-			// Navigate immediately to the new entry
-			router.push(`/diary/${entryId}`);
-		}
-	}, [lastResult, startProcessing, toast, t, router]);
-
-	// Function to handle streaming background processing
-	const startBackgroundProcessing = async (entryId: string) => {
-		try {
-			updateStatus(entryId, "processing");
-
-			const response = await fetch("/api/diary/process", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					entryId,
-					location: location
-						? {
-								latitude: location.latitude,
-								longitude: location.longitude,
-							}
-						: undefined,
+	// Create enhanced form action that includes location data
+	const actionWithLocation = async (formData: FormData) => {
+		// Add location data to form if available
+		if (location) {
+			formData.append(
+				"location",
+				JSON.stringify({
+					latitude: location.latitude,
+					longitude: location.longitude,
 				}),
-			});
-
-			if (!response.body) {
-				throw new Error("No response stream");
-			}
-
-			const reader = response.body.getReader();
-			const decoder = new TextDecoder();
-
-			while (true) {
-				const { done, value } = await reader.read();
-				if (done) break;
-
-				const chunk = decoder.decode(value);
-				const lines = chunk.split("\n");
-
-				for (const line of lines) {
-					if (line.startsWith("data: ")) {
-						try {
-							const data = JSON.parse(line.slice(6));
-
-							if (data.type === "complete") {
-								completeProcessing(entryId, data.success, data.error);
-
-								// Dismiss the processing toast
-								if (processingToastIdRef.current) {
-									dismiss(processingToastIdRef.current);
-									processingToastIdRef.current = null;
-								}
-
-								// Refresh the current page to show updated entry content
-								if (data.success) {
-									router.refresh();
-								} else {
-									// Show error toast if processing failed
-									toast({
-										variant: "destructive",
-										title: t("diary.processingFailed"),
-										description: data.error || t("error.generic"),
-									});
-								}
-							}
-						} catch (e) {
-							console.error("Failed to parse streaming message:", e);
-						}
-					}
-				}
-			}
-		} catch (error) {
-			console.error("Background processing error:", error);
-			completeProcessing(entryId, false, "Network error");
-
-			// Dismiss the processing toast
-			if (processingToastIdRef.current) {
-				dismiss(processingToastIdRef.current);
-				processingToastIdRef.current = null;
-			}
-
-			// Show error toast
-			toast({
-				variant: "destructive",
-				title: t("diary.processingFailed"),
-				description: t("error.generic"),
-			});
+			);
 		}
+		return action(formData);
 	};
 
 	return (
-		<form className="space-y-6" {...getFormProps(form)} action={action}>
+		<form
+			className="space-y-6"
+			{...getFormProps(form)}
+			action={actionWithLocation}
+		>
 			<ErrorMessage errors={form.errors} />
 			<div className="mb-4">
 				<label
@@ -283,8 +178,12 @@ export default function DiaryForm() {
 							/>
 						</svg>
 						<div>
-							<p className="text-blue-800 font-medium">{t("common.saving")}</p>
-							<p className="text-blue-600 text-sm">{t("diary.savingEntry")}</p>
+							<p className="text-blue-800 font-medium">
+								{t("diary.analyzingEntry")}
+							</p>
+							<p className="text-blue-600 text-sm">
+								{t("diary.analyzingDescription")}
+							</p>
 						</div>
 					</div>
 				</div>
@@ -304,7 +203,7 @@ export default function DiaryForm() {
 					disabled={isPending || !form.valid}
 					className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 				>
-					{isPending ? t("common.saving") : t("common.create")}
+					{isPending ? t("diary.analyzing") : t("common.create")}
 				</button>
 			</div>
 		</form>

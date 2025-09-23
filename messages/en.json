@@ -106,6 +106,7 @@
 		"addAnotherEntry": "Add Another Entry",
 		"processingFailed": "Processing failed",
 		"savingEntry": "Creating your diary entry...",
+		"analyzing": "Analyzing...",
 		"analyzingEntry": "Analyzing your diary entry",
 		"analyzingDescription": "AI is identifying people and places mentioned in your text",
 		"shareEntry": "Share entry",
