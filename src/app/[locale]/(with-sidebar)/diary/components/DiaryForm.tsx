@@ -145,7 +145,7 @@ export default function DiaryForm() {
 				<textarea
 					{...getTextareaProps(fields.content)}
 					ref={textareaRef}
-					rows={16}
+					rows={5}
 					className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
 					placeholder={t("diary.contentPlaceholder")}
 				/>
