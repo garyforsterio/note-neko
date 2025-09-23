@@ -15,7 +15,8 @@
 			"Bash(pnpm build:*)",
 			"Bash(pnpm lint:*)",
 			"Bash(pnpm format:*)",
-			"Bash(ls:*)"
+			"Bash(ls:*)",
+			"WebSearch"
 		],
 		"deny": []
 	}

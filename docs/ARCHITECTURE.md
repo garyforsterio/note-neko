@@ -42,6 +42,7 @@ External Services:
 - Default to Server Components for all new components
 - Client Components only when interactivity is required
 - Server-side rendering for optimal performance and SEO
+- **NEVER use API route handlers** - use Server Actions exclusively
 
 ### 2. Type Safety
 - TypeScript strict mode enabled throughout
@@ -71,13 +72,12 @@ src/
 │   └── extractEntities.ts # AI entity extraction
 │
 ├── app/                  # Next.js App Router
-│   ├── [locale]/        # Internationalized routes
-│   │   ├── (home)/      # Public home page
-│   │   ├── (with-sidebar)/ # Authenticated app layout
-│   │   │   ├── diary/   # Diary entries pages
-│   │   │   └── people/  # People management pages
-│   │   └── auth/        # Authentication pages
-│   └── api/             # API routes (future use)
+│   └── [locale]/        # Internationalized routes
+│       ├── (home)/      # Public home page
+│       ├── (with-sidebar)/ # Authenticated app layout
+│       │   ├── diary/   # Diary entries pages
+│       │   └── people/  # People management pages
+│       └── auth/        # Authentication pages
 │
 ├── components/          # Reusable React components
 │   ├── ui/             # Base UI components

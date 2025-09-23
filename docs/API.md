@@ -2,7 +2,22 @@
 
 ## Overview
 
-Note Neko uses a combination of Server Actions and API routes for handling data mutations and complex operations. Server Actions are preferred for form submissions, while API routes handle streaming responses and complex processing.
+Note Neko uses Server Actions for ALL data mutations and complex operations. **API route handlers should NEVER be used** - they are legacy patterns that have been superseded by Server Actions in modern Next.js applications.
+
+## Important Guidelines
+
+**❌ NEVER use API route handlers (`/app/api/*/route.ts` files)**
+- API routes add unnecessary complexity
+- Server Actions provide better type safety
+- Server Actions integrate seamlessly with React forms
+- Server Actions support progressive enhancement
+- Better caching and invalidation patterns
+
+**✅ ALWAYS use Server Actions instead**
+- Located in `src/actions/` directory
+- Use the `'use server'` directive
+- Direct function calls from components
+- Built-in form integration with `useFormState`
 
 ## Server Actions
 
@@ -252,9 +267,105 @@ Uses AI to extract people and locations from diary text.
 
 **Protected:** No (internal use)
 
-## API Routes
+### Social Media Actions (`src/actions/social.ts`)
 
-Currently, Note Neko primarily uses Server Actions for data mutations. API routes are reserved for future streaming or complex operations that cannot be handled by Server Actions.
+#### `getUserSocialAccounts()`
+Gets user's connected social media accounts.
+
+**Input:** None
+
+**Returns:**
+```typescript
+SocialAccount[] = Array<{
+  id: string;
+  platform: SocialPlatform;
+  platformId: string;
+  username?: string;
+  displayName?: string;
+  profileUrl?: string;
+  profilePictureUrl?: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}>
+```
+
+**Protected:** Yes (requires authentication)
+
+#### `disconnectSocialAccount(accountId: string)`
+Disconnects a social media account.
+
+**Input:**
+- `accountId`: string - Social account ID to disconnect
+
+**Returns:**
+- Success: Redirects to `/settings/social`
+- Failure: Error response
+
+**Protected:** Yes (requires authentication)
+
+#### `addPersonSocialProfile(formData: FormData)`
+Adds a social media profile to a person.
+
+**Input:**
+- `personId`: string - Person ID to add profile to
+- `platform`: SocialPlatform - Social media platform
+- `username`: string - Username/handle on the platform
+- `profileUrl`: string - Optional profile URL
+
+**Returns:**
+- Success: Redirects to `/people/{personId}`
+- Failure: Form validation errors
+
+**Protected:** Yes (requires authentication)
+
+#### `removePersonSocialProfile(profileId: string)`
+Removes a social media profile from a person.
+
+**Input:**
+- `profileId`: string - Profile ID to remove
+
+**Returns:**
+- Success: Redirects to `/people/{personId}`
+- Failure: Error response
+
+**Protected:** Yes (requires authentication)
+
+#### `searchInstagramProfiles(query: string)`
+Searches for Instagram profiles (requires connected Instagram account).
+
+**Input:**
+- `query`: string - Search query
+
+**Returns:**
+```typescript
+InstagramProfile[] = Array<{
+  id: string;
+  username: string;
+  displayName?: string;
+}>
+```
+
+**Protected:** Yes (requires authentication and connected Instagram account)
+
+#### `exchangeInstagramToken(formData: FormData)`
+Exchanges Instagram authorization code for access token and stores the account.
+
+**Input:**
+- `code`: string - Authorization code from Instagram OAuth callback
+
+**Processing:**
+1. Exchanges authorization code for short-lived access token
+2. Attempts to exchange short-lived token for long-lived token (60 days)
+3. Fetches user profile data from Instagram API
+4. Stores or updates social account in database with token and profile info
+
+**Returns:**
+- Success: Redirects to `/settings/social`
+- Failure: Throws error with descriptive message
+
+**Protected:** Yes (requires authentication)
+
 
 ## Data Access Layer Functions
 

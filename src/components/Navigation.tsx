@@ -1,6 +1,16 @@
 "use client";
 
-import { BookOpen, LogOut, Settings, Users, X } from "lucide-react";
+import {
+	BookOpen,
+	CreditCard,
+	LogOut,
+	Settings,
+	Share2,
+	Shield,
+	User,
+	Users,
+	X,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { use, useCallback, useState } from "react";
@@ -24,6 +34,33 @@ const navigation = [
 		name: "People",
 		href: "/people",
 		icon: Users,
+	},
+	{
+		name: "Settings",
+		href: "/settings",
+		icon: Settings,
+		subItems: [
+			{
+				name: "profile",
+				href: "/settings/profile",
+				icon: User,
+			},
+			{
+				name: "social",
+				href: "/settings/social",
+				icon: Share2,
+			},
+			{
+				name: "privacy",
+				href: "/settings/privacy",
+				icon: Shield,
+			},
+			{
+				name: "account",
+				href: "/settings/account",
+				icon: CreditCard,
+			},
+		],
 	},
 ];
 
@@ -91,28 +128,82 @@ export default function Navigation({ entries }: NavigationProps) {
 						<nav className="mt-5 flex-1 space-y-1 bg-white px-2">
 							{navigation.map((item) => {
 								const isActive = pathname.startsWith(item.href);
+								const isSettingsSection =
+									item.name === "Settings" && pathname.startsWith("/settings");
+
 								return (
-									<Link
-										key={item.name}
-										href={item.href}
-										className={cn(
-											isActive
-												? "bg-gray-100 text-gray-900"
-												: "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-											"group flex items-center px-2 py-2 text-sm font-medium rounded-md",
-										)}
-									>
-										<item.icon
+									<div key={item.name}>
+										<Link
+											href={item.href}
 											className={cn(
 												isActive
-													? "text-gray-500"
-													: "text-gray-400 group-hover:text-gray-500",
-												"mr-3 flex-shrink-0 h-6 w-6",
+													? "bg-gray-100 text-gray-900"
+													: "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+												"group flex items-center px-2 py-2 text-sm font-medium rounded-md",
 											)}
-											aria-hidden="true"
-										/>
-										{item.name}
-									</Link>
+										>
+											<item.icon
+												className={cn(
+													isActive
+														? "text-gray-500"
+														: "text-gray-400 group-hover:text-gray-500",
+													"mr-3 flex-shrink-0 h-6 w-6",
+												)}
+												aria-hidden="true"
+											/>
+											{item.name}
+										</Link>
+
+										{/* Settings Subitems */}
+										{isSettingsSection && item.subItems && (
+											<div className="mt-1 ml-9 space-y-1">
+												{item.subItems.map((subItem) => {
+													const isSubActive =
+														pathname === subItem.href ||
+														pathname.startsWith(`${subItem.href}/`);
+													return (
+														<Link
+															key={subItem.name}
+															href={subItem.href}
+															className={cn(
+																isSubActive
+																	? "bg-gray-100 text-gray-900"
+																	: "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+																"group flex items-center px-2 py-1.5 text-sm font-medium rounded-md",
+															)}
+														>
+															<subItem.icon
+																className={cn(
+																	isSubActive
+																		? "text-gray-500"
+																		: "text-gray-400 group-hover:text-gray-500",
+																	"mr-2 flex-shrink-0 h-4 w-4",
+																)}
+																aria-hidden="true"
+															/>
+															{t(`settings.navigation.${subItem.name}`)}
+														</Link>
+													);
+												})}
+
+												{/* Logout Button */}
+												<div className="pt-2 mt-2 border-t border-gray-200">
+													<button
+														type="button"
+														onClick={async () => {
+															if (confirm(t("settings.logout.confirm"))) {
+																await logout();
+															}
+														}}
+														className="group flex items-center w-full px-2 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md transition-colors"
+													>
+														<LogOut className="mr-2 flex-shrink-0 h-4 w-4" />
+														{t("settings.logout.title")}
+													</button>
+												</div>
+											</div>
+										)}
+									</div>
 								);
 							})}
 						</nav>
@@ -163,22 +254,6 @@ export default function Navigation({ entries }: NavigationProps) {
 								)}
 							</div>
 						)}
-
-						{/* Logout Button */}
-						<div className="px-4 py-4 border-t border-gray-200">
-							<form action={logout}>
-								<button
-									type="submit"
-									className="w-full flex items-center px-2 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors"
-								>
-									<LogOut
-										className="mr-3 flex-shrink-0 h-6 w-6 text-gray-400"
-										aria-hidden="true"
-									/>
-									{t("common.logout")}
-								</button>
-							</form>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -223,16 +298,6 @@ export default function Navigation({ entries }: NavigationProps) {
 								</Link>
 							);
 						})}
-						{/* Logout Button */}
-						<form action={logout} className="border-l border-gray-200">
-							<button
-								type="submit"
-								className="flex flex-col items-center px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-900"
-							>
-								<LogOut className="h-6 w-6 text-gray-400" aria-hidden="true" />
-								<span className="mt-1">{t("common.logout")}</span>
-							</button>
-						</form>
 					</nav>
 				</div>
 

@@ -460,6 +460,30 @@ test('renders diary entry', () => {
 </div>
 ```
 
+### External Links Security
+**CRITICAL: All external links MUST include `rel="noopener noreferrer"`** for security:
+
+```typescript
+// ✅ Correct - External link with security attributes
+<a
+  href="https://external-site.com"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  External Link
+</a>
+
+// ❌ Incorrect - Missing security attributes
+<a href="https://external-site.com">
+  External Link
+</a>
+```
+
+**Why this is required:**
+- `noopener` prevents the external site from accessing `window.opener`
+- `noreferrer` prevents sending the referrer header to the external site
+- Protects against reverse tabnabbing attacks and privacy leaks
+
 ### Keyboard Navigation
 - All interactive elements keyboard accessible
 - Proper focus management

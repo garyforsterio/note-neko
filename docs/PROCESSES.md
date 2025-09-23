@@ -368,6 +368,35 @@ curl https://your-app.vercel.app/api/health
 
 ## Code Quality Process
 
+### String Literal Constants
+- **ALWAYS extract constant-like string literals** (URLs, API endpoints, configuration values, error messages used multiple times)
+- If used once in the same file, extraction is required for readability
+- If used in multiple places, MUST be extracted to a separate constants file
+- Examples of literals that should be extracted:
+  - API URLs: `https://api.example.com/oauth/access_token`
+  - Configuration values: `"authorization_code"`
+  - Repeated error messages
+  - Magic strings used as identifiers
+
+```typescript
+// ❌ Bad: Inline URLs and constants
+const response = await fetch("https://api.example.com/oauth/access_token", {
+  body: new URLSearchParams({
+    grant_type: "authorization_code"
+  })
+});
+
+// ✅ Good: Extract as constants
+const INSTAGRAM_TOKEN_URL = "https://api.example.com/oauth/access_token";
+const GRANT_TYPE_AUTH_CODE = "authorization_code";
+
+const response = await fetch(INSTAGRAM_TOKEN_URL, {
+  body: new URLSearchParams({
+    grant_type: GRANT_TYPE_AUTH_CODE
+  })
+});
+```
+
 ### Linting and Formatting
 
 #### Biome Configuration

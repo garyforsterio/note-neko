@@ -232,5 +232,40 @@
 		"createFailed": "作成に失敗しました。もう一度お試しください。",
 		"updateFailed": "更新に失敗しました。もう一度お試しください。",
 		"deleteFailed": "削除に失敗しました。もう一度お試しください。"
+	},
+	"settings": {
+		"title": "設定",
+		"welcome": {
+			"title": "設定へようこそ",
+			"description": "アカウントの設定、ソーシャル接続、プライバシー設定を管理します。"
+		},
+		"navigation": {
+			"profile": "プロフィール",
+			"social": "ソーシャルアカウント",
+			"privacy": "プライバシー",
+			"account": "アカウント"
+		},
+		"sections": {
+			"profile": {
+				"title": "プロフィール設定",
+				"description": "個人情報と設定を更新します。"
+			},
+			"social": {
+				"title": "ソーシャルメディアアカウント",
+				"description": "ソーシャルメディア連携を接続・管理します。"
+			},
+			"privacy": {
+				"title": "プライバシー設定",
+				"description": "データプライバシーと共有設定を制御します。"
+			},
+			"account": {
+				"title": "アカウント管理",
+				"description": "アカウント設定とサブスクリプションを管理します。"
+			}
+		},
+		"logout": {
+			"title": "サインアウト",
+			"confirm": "サインアウトしてもよろしいですか？"
+		}
 	}
 }
