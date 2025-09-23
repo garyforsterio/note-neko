@@ -107,7 +107,8 @@ export default function Calendar({
 					hasEntry: (date) => entriesMap.has(format(date, "yyyy-MM-dd")),
 				}}
 				modifiersClassNames={{
-					hasEntry: "has-entry",
+					hasEntry:
+						"relative after:content-[''] after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-blue-600 after:rounded-full",
 				}}
 				classNames={{
 					caption_label: `${defaultClassNames.caption_label} text-lg font-semibold`,
