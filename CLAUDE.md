@@ -89,9 +89,12 @@ Required environment variables:
 
 ### Documentation Requirements
 
-When making any changes to the codebase:
+**CRITICAL: Documentation updates are MANDATORY for ALL code changes**
+
+When making any changes to the codebase you MUST:
 - Update relevant documentation files to reflect current design, architecture, and processes
 - Keep documentation succinct and well-organized
+- NEVER complete a task without checking if documentation needs updates
 - Documentation is organized in the following files:
   - **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System design and architecture changes
   - **[docs/DATABASE.md](docs/DATABASE.md)** - Database schema and model changes

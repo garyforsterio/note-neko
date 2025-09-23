@@ -38,9 +38,9 @@ export async function searchLocationsAction(
 		const locale = await getLocale();
 
 		// Build Google Places API URL
-		let url = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(
+		let url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(
 			query.trim(),
-		)}&inputtype=textquery&fields=place_id,name,geometry&language=${locale}&key=${
+		)}&fields=place_id,name,geometry&language=${locale}&key=${
 			process.env.GOOGLE_MAPS_API_KEY
 		}`;
 
@@ -70,7 +70,7 @@ export async function searchLocationsAction(
 		}
 
 		const data = (await response.json()) as {
-			candidates: Array<{
+			results: Array<{
 				place_id: string;
 				name: string;
 				geometry: {
@@ -89,11 +89,11 @@ export async function searchLocationsAction(
 		}
 
 		// Transform results to our interface
-		const locations: LocationResult[] = data.candidates.map((candidate) => ({
-			name: candidate.name,
-			placeId: candidate.place_id,
-			lat: candidate.geometry.location.lat,
-			lng: candidate.geometry.location.lng,
+		const locations: LocationResult[] = data.results.map((result) => ({
+			name: result.name,
+			placeId: result.place_id,
+			lat: result.geometry.location.lat,
+			lng: result.geometry.location.lng,
 		}));
 
 		console.log(`Found ${locations.length} locations for query: ${query}`);

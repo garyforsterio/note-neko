@@ -184,26 +184,20 @@ Generates AI summary of interactions with person.
 
 ### Location Actions (`src/actions/locations.ts`)
 
-#### `searchLocations(query: string, latitude?: number, longitude?: number)`
-Searches for locations using Google Places API.
+#### `searchLocationsAction(query: string)`
+Searches for locations using Google Places Text Search API. Returns multiple location options for user selection.
 
 **Input:**
 - `query`: string - Search query
-- `latitude`: number - Optional user latitude
-- `longitude`: number - Optional user longitude
 
 **Returns:**
 ```typescript
-{
-  predictions: Array<{
-    description: string;
-    place_id: string;
-    structured_formatting: {
-      main_text: string;
-      secondary_text: string;
-    };
-  }>;
-}
+LocationResult[] = Array<{
+  name: string;
+  placeId: string;
+  lat: number;
+  lng: number;
+}>
 ```
 
 **Protected:** Yes (requires authentication)
