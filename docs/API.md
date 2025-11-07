@@ -407,7 +407,7 @@ Gets diary entries for specific month.
 
 ### Cache Management
 
-#### `revalidateTag(tag: string)`
+#### `updateTag(tag: string)`
 Invalidates cache for specific tag.
 
 Common tags:

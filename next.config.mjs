@@ -10,12 +10,8 @@ const nextConfig = {
 			},
 		],
 	},
-	experimental: {
-		nodeMiddleware: true,
-		reactCompiler: true,
-		ppr: true,
-		useCache: true,
-	},
+	cacheComponents: true,
+	reactCompiler: true,
 };
 
 const withNextIntl = createNextIntlPlugin();

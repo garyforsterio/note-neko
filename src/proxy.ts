@@ -14,7 +14,7 @@ const AUTH_PATHS = [
 
 const PUBLIC_PATHS = ["", "/", ...AUTH_PATHS];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
 	const { pathname } = request.nextUrl;
 
 	const locale = pathname.split("/")[1] || "en";
@@ -61,5 +61,4 @@ export const config = {
 		 */
 		"/((?!api|images|.well-known|monitoring|manifest.json|_next/static|_next/image|favicon.ico).*)",
 	],
-	runtime: "nodejs",
 };

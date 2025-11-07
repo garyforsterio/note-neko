@@ -1,5 +1,5 @@
 import type { Prisma } from "@prisma/client";
-import { unstable_cacheTag as cacheTag, revalidateTag } from "next/cache";
+import { cacheTag, updateTag } from "next/cache";
 import { cache } from "react";
 import { requireAuth } from "#lib/auth";
 import { db } from "#lib/db";
@@ -115,7 +115,7 @@ export async function updatePerson(
 	data: Omit<Prisma.PersonUpdateInput, "user">,
 ) {
 	const { userId } = await requireAuth();
-	revalidateTag("person");
+	updateTag("person");
 	return db.person.update({
 		where: { id, userId: userId },
 		data: {
@@ -132,7 +132,7 @@ export async function updatePerson(
 
 export async function deletePerson(id: string) {
 	const { userId } = await requireAuth();
-	revalidateTag("person");
+	updateTag("person");
 	return db.person.delete({
 		where: { id, userId: userId },
 	});
@@ -254,7 +254,7 @@ export async function createDiaryEntry({
 	locations: Prisma.DiaryLocationCreateWithoutDiaryEntryInput[];
 }) {
 	const { userId } = await requireAuth();
-	revalidateTag("diaryEntry");
+	updateTag("diaryEntry");
 	return db.diaryEntry.create({
 		data: {
 			content,
@@ -302,7 +302,7 @@ export async function updateDiaryEntry(
 	},
 ) {
 	const { userId } = await requireAuth();
-	revalidateTag("diaryEntry");
+	updateTag("diaryEntry");
 	// First, delete all existing mentions and locations
 	await db.diaryMention.deleteMany({
 		where: { diaryEntryId: id },
@@ -347,7 +347,7 @@ export async function updateDiaryEntry(
 
 export async function deleteDiaryEntry(id: string) {
 	const { userId } = await requireAuth();
-	revalidateTag("diaryEntry");
+	updateTag("diaryEntry");
 	return db.diaryEntry.delete({
 		where: { id, userId: userId },
 	});

@@ -50,7 +50,6 @@ External Services:
 - Prisma for type-safe database operations
 
 ### 3. Performance Optimization
-- Data Access Layer with caching using `unstable_cache`
 - Prisma Accelerate for edge optimization
 - Progressive enhancement patterns
 - Optimistic UI updates where appropriate
@@ -179,8 +178,8 @@ export function DiaryForm() {
 
 Cache tags are revalidated after mutations:
 ```typescript
-revalidateTag('diaries'); // After diary creation
-revalidateTag(`diary:${id}`); // After diary update
+updateTag('diaries'); // After diary creation
+updateTag(`diary:${id}`); // After diary update
 ```
 
 ## Authentication Architecture
