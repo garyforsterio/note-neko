@@ -5,10 +5,6 @@ import { cache } from "react";
 import { redirect } from "#i18n/navigation";
 import { db } from "#lib/db";
 
-if (!process.env.JWT_SECRET) {
-	throw new Error("JWT_SECRET is not set");
-}
-
 const JWT_SECRET = new TextEncoder().encode(
 	process.env.JWT_SECRET || "your-secret-key",
 );

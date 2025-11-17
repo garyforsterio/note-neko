@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { use, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { logout } from "#actions/auth";
 import { Link, usePathname, useRouter } from "#i18n/navigation";
 import type { getAllDiaryIds } from "#lib/dal";

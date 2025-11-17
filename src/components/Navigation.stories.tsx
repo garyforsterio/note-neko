@@ -53,7 +53,9 @@ export const Default: Story = {
 };
 
 export const WithoutEntries: Story = {
-	args: {},
+	args: {
+		entries: Promise.resolve([]),
+	},
 	parameters: {
 		viewport: {
 			defaultViewport: "desktop",

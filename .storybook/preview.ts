@@ -1,4 +1,5 @@
-import type { Preview } from "@storybook/react";
+import type { Preview } from "@storybook/nextjs-vite";
+
 import "../src/app/[locale]/globals.css";
 import { userEvent } from "@storybook/test";
 import * as MockDate from "mockdate";
@@ -7,8 +8,6 @@ import { requireAuth } from "#lib/auth.mock.js";
 import { initializeDB } from "#lib/db.mock";
 import { getTranslations } from "#lib/i18n/server.mock";
 import { i18NDecorator } from "./decorators/i18n";
-import { rscDecorator } from "./decorators/rsc";
-export const decorators = [];
 
 const preview: Preview = {
 	parameters: {
@@ -19,11 +18,6 @@ const preview: Preview = {
 			matchers: {
 				color: /(background|color)$/i,
 				date: /Date$/i,
-			},
-		},
-		docs: {
-			story: {
-				autoplay: true,
 			},
 		},
 	},
@@ -42,9 +36,8 @@ const preview: Preview = {
 	initialGlobals: {
 		locale: "en",
 	},
-	decorators: [rscDecorator, i18NDecorator],
-	tags: ["autodocs"],
-	async beforeEach({ context, parameters, globals }) {
+	decorators: [i18NDecorator],
+	async beforeEach({ context }) {
 		// mock backend translations with useTranslations https://github.com/amannn/next-intl/discussions/771
 		getTranslations.mockImplementation(
 			useTranslations as unknown as typeof getTranslations,

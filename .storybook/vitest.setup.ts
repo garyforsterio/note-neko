@@ -1,13 +1,11 @@
-import { setProjectAnnotations } from "@storybook/experimental-nextjs-vite";
-import { beforeAll } from "vitest";
+import { setProjectAnnotations } from "@storybook/nextjs-vite";
 import { vi } from "vitest";
-import * as previewAnnotations from "./preview";
+import * as projectAnnotations from "./preview";
 
 // Mock environment variables
 vi.stubEnv("JWT_SECRET", "test-secret-key");
 vi.stubEnv("NODE_ENV", "test");
 
-const annotations = setProjectAnnotations([previewAnnotations]);
-
-// Run Storybook's beforeAll hook
-beforeAll(annotations.beforeAll);
+// This is an important step to apply the right configuration when testing your stories.
+// More info at: https://storybook.js.org/docs/api/portable-stories/portable-stories-vitest#setprojectannotations
+setProjectAnnotations([projectAnnotations]);
