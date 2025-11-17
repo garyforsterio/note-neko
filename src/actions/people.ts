@@ -3,7 +3,6 @@
 import { parseWithZod } from "@conform-to/zod";
 import * as Sentry from "@sentry/nextjs";
 import { getLocale } from "next-intl/server";
-import { updateTag } from "next/cache";
 import { redirect } from "#i18n/navigation";
 import { requireAuth } from "#lib/auth";
 import { createPerson, deletePerson, updatePerson } from "#lib/dal";
@@ -45,9 +44,6 @@ export async function createPersonAction(
 			interests,
 			notes: submission.value.notes || null,
 		});
-
-		// Revalidate the people cache
-		updateTag("people");
 	} catch (error) {
 		Sentry.captureException(error);
 		return submission.reply({
@@ -100,9 +96,6 @@ export async function updatePersonAction(
 			interests,
 			notes: submission.value.notes || null,
 		});
-
-		// Revalidate the people cache
-		updateTag("people");
 	} catch (error) {
 		Sentry.captureException(error);
 		return submission.reply({
@@ -129,9 +122,6 @@ export async function deletePersonAction(
 
 	try {
 		await deletePerson(submission.value.id);
-
-		// Revalidate the people cache
-		updateTag("people");
 	} catch (error) {
 		Sentry.captureException(error);
 		return submission.reply({

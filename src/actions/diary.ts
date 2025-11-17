@@ -4,7 +4,6 @@ import { parseWithZod } from "@conform-to/zod";
 import type { Prisma } from "@prisma/client";
 import * as Sentry from "@sentry/nextjs";
 import { getLocale } from "next-intl/server";
-import { updateTag } from "next/cache";
 import { extractEntitiesFromText } from "#actions/extractEntities";
 import { redirect } from "#i18n/navigation";
 import { requireAuth } from "#lib/auth";
@@ -158,9 +157,6 @@ export async function createDiaryEntryAction(
 			locations,
 			date: submission.value.date, // Preserve the original date
 		});
-
-		// Revalidate the diary cache
-		updateTag("diaryEntry");
 	} catch (error) {
 		Sentry.captureException(error);
 		return submission.reply({
@@ -228,9 +224,6 @@ export async function updateDiaryEntryAction(
 			locations: finalLocations,
 		});
 
-		// Revalidate the diary cache
-		updateTag("diaryEntry");
-
 		// Return success
 		return submission.reply({
 			formErrors: [],
@@ -258,9 +251,6 @@ export async function deleteDiaryEntryAction(
 
 	try {
 		await deleteDiaryEntry(submission.value.id);
-
-		// Revalidate the diary cache
-		updateTag("diaryEntry");
 	} catch (error) {
 		Sentry.captureException(error);
 		return submission.reply({

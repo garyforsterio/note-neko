@@ -1,5 +1,4 @@
 import type { Prisma } from "@prisma/client";
-import { cacheTag, updateTag } from "next/cache";
 import { cache } from "react";
 import { requireAuth } from "#lib/auth";
 import { db } from "#lib/db";
@@ -35,8 +34,6 @@ export type DiaryEntryWithRelations = Prisma.DiaryEntryGetPayload<{
 }>;
 
 async function getPeopleCached(userId: string) {
-	"use cache";
-	cacheTag("people");
 	return db.person.findMany({
 		where: { userId },
 		orderBy: { name: "asc" },
@@ -65,8 +62,6 @@ export const getPeople = cache(async (): Promise<PersonWithMentions[]> => {
 });
 
 async function getPersonCached(userId: string, id: string) {
-	"use cache";
-	cacheTag("person");
 	return db.person.findFirst({
 		where: { id, userId },
 		include: {
@@ -115,7 +110,6 @@ export async function updatePerson(
 	data: Omit<Prisma.PersonUpdateInput, "user">,
 ) {
 	const { userId } = await requireAuth();
-	updateTag("person");
 	return db.person.update({
 		where: { id, userId: userId },
 		data: {
@@ -132,7 +126,6 @@ export async function updatePerson(
 
 export async function deletePerson(id: string) {
 	const { userId } = await requireAuth();
-	updateTag("person");
 	return db.person.delete({
 		where: { id, userId: userId },
 	});
@@ -150,8 +143,6 @@ async function getDiaryEntriesCached(
 	userId: string,
 	options: DiaryEntriesOptions,
 ) {
-	"use cache";
-	cacheTag("diaryEntries");
 	const {
 		page = 1,
 		pageSize = 10,
@@ -206,8 +197,6 @@ export const getDiaryEntries = cache(
 );
 
 async function getDiaryEntryCached(userId: string, id: string) {
-	"use cache";
-	cacheTag("diaryEntry");
 	return db.diaryEntry.findFirst({
 		where: { id, userId },
 		include: {
@@ -229,8 +218,6 @@ export const getDiaryEntry = cache(
 );
 
 async function getAllDiaryIdsCached(userId: string) {
-	"use cache";
-	cacheTag("diaryEntries");
 	return db.diaryEntry.findMany({
 		where: { userId },
 		select: { id: true, date: true },
@@ -254,7 +241,6 @@ export async function createDiaryEntry({
 	locations: Prisma.DiaryLocationCreateWithoutDiaryEntryInput[];
 }) {
 	const { userId } = await requireAuth();
-	updateTag("diaryEntry");
 	return db.diaryEntry.create({
 		data: {
 			content,
@@ -302,7 +288,6 @@ export async function updateDiaryEntry(
 	},
 ) {
 	const { userId } = await requireAuth();
-	updateTag("diaryEntry");
 	// First, delete all existing mentions and locations
 	await db.diaryMention.deleteMany({
 		where: { diaryEntryId: id },
@@ -347,7 +332,6 @@ export async function updateDiaryEntry(
 
 export async function deleteDiaryEntry(id: string) {
 	const { userId } = await requireAuth();
-	updateTag("diaryEntry");
 	return db.diaryEntry.delete({
 		where: { id, userId: userId },
 	});
