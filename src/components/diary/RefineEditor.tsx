@@ -334,6 +334,7 @@ export default function RefineEditor({
 				ref={contentRef}
 				className="min-h-[400px] p-4 border border-gray-300 rounded-md bg-white prose max-w-none"
 				onMouseUp={handleTextSelection}
+				onTouchEnd={handleTextSelection}
 			>
 				{segments.map((segment, index) => {
 					if (segment.type === "text") {
