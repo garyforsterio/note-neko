@@ -33,9 +33,22 @@ export type DiaryEntryWithRelations = Prisma.DiaryEntryGetPayload<{
 	};
 }>;
 
-async function getPeopleCached(userId: string) {
+async function getPeopleCached(userId: string, query?: string) {
+	const where: Prisma.PersonWhereInput = {
+		userId,
+		...(query
+			? {
+					OR: [
+						{ name: { contains: query, mode: "insensitive" } },
+						{ nickname: { contains: query, mode: "insensitive" } },
+						{ notes: { contains: query, mode: "insensitive" } },
+					],
+				}
+			: {}),
+	};
+
 	return db.person.findMany({
-		where: { userId },
+		where,
 		orderBy: { name: "asc" },
 		include: {
 			mentions: {
@@ -56,10 +69,12 @@ async function getPeopleCached(userId: string) {
 	});
 }
 
-export const getPeople = cache(async (): Promise<PersonWithMentions[]> => {
-	const { userId } = await requireAuth();
-	return getPeopleCached(userId);
-});
+export const getPeople = cache(
+	async (query?: string): Promise<PersonWithMentions[]> => {
+		const { userId } = await requireAuth();
+		return getPeopleCached(userId, query);
+	},
+);
 
 async function getPersonCached(userId: string, id: string) {
 	return db.person.findFirst({

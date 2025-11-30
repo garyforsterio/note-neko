@@ -6,6 +6,9 @@ const meta = {
 	title: "app/[locale]/People/page",
 	component: People,
 	parameters: { layout: "fullscreen" },
+	args: {
+		searchParams: Promise.resolve({}),
+	},
 } satisfies Meta<typeof People>;
 export default meta;
 
