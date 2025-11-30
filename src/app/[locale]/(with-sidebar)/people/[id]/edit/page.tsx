@@ -6,7 +6,16 @@ import PersonForm from "../../components/PersonForm";
 interface EditPersonPageProps {
 	params: Promise<{
 		id: string;
+		locale: string;
 	}>;
+}
+
+export async function generateMetadata() {
+	const t = await getTranslations();
+
+	return {
+		title: t("people.editProfile"),
+	};
 }
 
 export default async function EditPersonPage({ params }: EditPersonPageProps) {

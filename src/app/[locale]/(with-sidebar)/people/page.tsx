@@ -3,6 +3,14 @@ import { getTranslations } from "#lib/i18n/server";
 import PageHeader from "./components/PageHeader";
 import PersonCard from "./components/PersonCard";
 
+export async function generateMetadata() {
+	const t = await getTranslations();
+
+	return {
+		title: t("people.title"),
+	};
+}
+
 export default async function PeoplePage() {
 	const t = await getTranslations();
 	const people = await getPeople();

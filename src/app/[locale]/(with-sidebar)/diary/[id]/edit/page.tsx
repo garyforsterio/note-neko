@@ -6,7 +6,16 @@ import DiaryEditForm from "../../components/DiaryEditForm";
 interface DiaryEditPageProps {
 	params: Promise<{
 		id: string;
+		locale: string;
 	}>;
+}
+
+export async function generateMetadata() {
+	const t = await getTranslations();
+
+	return {
+		title: t("diary.editEntry"),
+	};
 }
 
 export default async function DiaryEditPage({ params }: DiaryEditPageProps) {

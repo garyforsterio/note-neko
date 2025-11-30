@@ -1,6 +1,14 @@
 import { getTranslations } from "next-intl/server";
 import { requireAuth } from "#lib/auth";
 
+export async function generateMetadata() {
+	const t = await getTranslations();
+
+	return {
+		title: t("settings.sections.account.title"),
+	};
+}
+
 export default async function AccountSettingsPage() {
 	await requireAuth();
 	const t = await getTranslations("settings");

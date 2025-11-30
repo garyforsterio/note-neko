@@ -14,6 +14,14 @@ interface PageProps {
 	}>;
 }
 
+export async function generateMetadata() {
+	const t = await getTranslations();
+
+	return {
+		title: t("diary.title"),
+	};
+}
+
 export default async function DiaryPage({ searchParams }: PageProps) {
 	const t = await getTranslations();
 	const params = await searchParams;

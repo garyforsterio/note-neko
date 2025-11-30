@@ -5,6 +5,14 @@ interface ResetPasswordPageProps {
 	searchParams: Promise<{ token?: string }>;
 }
 
+export async function generateMetadata() {
+	const t = await getTranslations();
+
+	return {
+		title: t("auth.resetPassword.title"),
+	};
+}
+
 export default async function ResetPasswordPage({
 	searchParams,
 }: ResetPasswordPageProps) {

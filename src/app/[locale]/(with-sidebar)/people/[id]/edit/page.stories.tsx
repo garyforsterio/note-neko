@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 
 export const WithExistingData: Story = {
 	args: {
-		params: Promise.resolve({ id: "123" }),
+		params: Promise.resolve({ id: "123", locale: "en" }),
 	},
 	async play({ mount, canvasElement }) {
 		// Setup test data

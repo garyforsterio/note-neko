@@ -15,7 +15,21 @@ import EditButton from "../components/EditButton";
 interface PersonPageProps {
 	params: Promise<{
 		id: string;
+		locale: string;
 	}>;
+}
+
+export async function generateMetadata({ params }: PersonPageProps) {
+	const { id } = await params;
+	const person = await getPerson(id);
+
+	if (!person) {
+		return {};
+	}
+
+	return {
+		title: person.name,
+	};
 }
 
 export default async function PersonPage({ params }: PersonPageProps) {

@@ -2,6 +2,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Viewport } from "next";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Inter } from "next/font/google";
 import { notFound } from "next/navigation";
 import { Toaster } from "#components/ui/toaster";
@@ -18,6 +19,18 @@ export const viewport: Viewport = {
 
 export async function generateStaticParams() {
 	return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata() {
+	const t = await getTranslations();
+
+	return {
+		title: {
+			template: `%s | ${t("home.hero.title")}`,
+			default: t("home.hero.title"),
+		},
+		description: t("home.hero.subtitle"),
+	};
 }
 
 export default async function RootLayout({

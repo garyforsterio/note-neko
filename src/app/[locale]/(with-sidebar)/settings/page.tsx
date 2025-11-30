@@ -3,6 +3,14 @@ import Link from "next/link";
 import { SignOutButton } from "#components/SignOutButton";
 import { requireAuth } from "#lib/auth";
 
+export async function generateMetadata() {
+	const t = await getTranslations();
+
+	return {
+		title: t("settings.title"),
+	};
+}
+
 export default async function SettingsPage() {
 	await requireAuth();
 	const t = await getTranslations("settings");

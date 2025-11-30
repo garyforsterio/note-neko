@@ -1,6 +1,14 @@
 import { LoginForm } from "#components/auth/LoginForm";
 import { getTranslations } from "#lib/i18n/server";
 
+export async function generateMetadata() {
+	const t = await getTranslations();
+
+	return {
+		title: t("auth.login.title"),
+	};
+}
+
 export default async function LoginPage() {
 	const t = await getTranslations();
 

@@ -11,7 +11,21 @@ import DeleteButton from "../components/DeleteButton";
 interface DiaryEntryPageProps {
 	params: Promise<{
 		id: string;
+		locale: string;
 	}>;
+}
+
+export async function generateMetadata({ params }: DiaryEntryPageProps) {
+	const { id } = await params;
+	const entry = await getDiaryEntry(id);
+
+	if (!entry) {
+		return {};
+	}
+
+	return {
+		title: format(new Date(entry.date), "MMMM d, yyyy"),
+	};
 }
 
 export default async function DiaryEntryPage({ params }: DiaryEntryPageProps) {
