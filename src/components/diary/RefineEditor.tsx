@@ -43,6 +43,7 @@ export default function RefineEditor({
 		position: { top: number; left: number };
 		editingSegment?: ContentSegment;
 		initialQuery?: string;
+		selection?: { start: number; end: number };
 	} | null>(null);
 	const contentRef = useRef<HTMLDivElement>(null);
 
@@ -257,10 +258,13 @@ export default function RefineEditor({
 						onEntitiesChange(people, newLocations);
 					}
 				}
-			} else if (selectedText) {
+			} else if (showEntityPicker?.selection || selectedText) {
+				const selection = showEntityPicker?.selection || selectedText;
+				if (!selection) return;
+
 				// Replace the specific selected text using position-based replacement
-				const beforeSelection = content.substring(0, selectedText.start);
-				const afterSelection = content.substring(selectedText.end);
+				const beforeSelection = content.substring(0, selection.start);
+				const afterSelection = content.substring(selection.end);
 				const newContent = beforeSelection + replacement + afterSelection;
 				onChange(newContent);
 
@@ -341,6 +345,7 @@ export default function RefineEditor({
 						left: rect.left - contentRect.left,
 					},
 					initialQuery: selectedText.text,
+					selection: { start: selectedText.start, end: selectedText.end },
 				});
 			}
 		},
