@@ -1,5 +1,6 @@
 import { getDiaryEntries } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
+import { calculateMissingDiaryStats } from "#lib/utils/diary";
 import { DiaryEntry } from "./components/DiaryEntry";
 import { DiaryHeader } from "./components/DiaryHeader";
 import { DiaryPagination } from "./components/DiaryPagination";
@@ -51,12 +52,30 @@ export default async function DiaryPage({ searchParams }: PageProps) {
 
 	const totalPages = Math.ceil(total / parsedPageSize);
 
+	// Calculate missing entries stats
+	let missingCount = 0;
+	let nextMissingDate: string | undefined;
+
+	if (
+		parsedPage === 1 &&
+		parsedSortOrder === "desc" &&
+		!parsedStartDate &&
+		!parsedEndDate &&
+		entries.length > 0
+	) {
+		const stats = calculateMissingDiaryStats(entries[0]?.date);
+		missingCount = stats.missingCount;
+		nextMissingDate = stats.nextMissingDate;
+	}
+
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<DiaryHeader
 				startDate={parsedStartDate}
 				endDate={parsedEndDate}
 				entries={entries}
+				missingCount={missingCount}
+				nextMissingDate={nextMissingDate}
 			/>
 
 			<div className="space-y-6">

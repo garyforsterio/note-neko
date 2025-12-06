@@ -14,6 +14,7 @@ import {
 	updateDiaryEntry,
 } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
+import { getDateString, getNextDayString } from "#lib/utils/diary";
 import { deleteDiaryEntrySchema, diaryEntrySchema } from "#schema/diary";
 
 /**
@@ -164,9 +165,19 @@ export async function createDiaryEntryAction(
 		});
 	}
 
+	// Check if nextDay parameter was passed from the client (catch-up flow) and that it is the day after the current entry date (confirm date wasn't edited during catch-up flow)
+	const nextDay = formData.get("nextDay") as string;
+	const nextDayParam =
+		nextDay === getNextDayString(getDateString(submission.value.date))
+			? `?nextDay=${nextDay}`
+			: "";
+
 	// Redirect to edit page to allow user to validate extractions
 	// This is outside the try-catch because redirect() throws an error to signal the redirect
-	redirect({ href: `/diary/${entryId}/edit`, locale });
+	redirect({
+		href: `/diary/${entryId}/edit${nextDayParam}`,
+		locale,
+	});
 }
 
 export async function updateDiaryEntryAction(

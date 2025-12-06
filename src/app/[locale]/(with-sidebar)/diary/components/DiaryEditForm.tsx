@@ -1,8 +1,10 @@
 "use client";
 
 import type { Person, Prisma } from "@prisma/client";
+import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 import { updateDiaryEntryAction } from "#actions/diary";
 import { DiaryContent } from "#components/DiaryContent";
@@ -24,6 +26,7 @@ export default function DiaryEditForm({
 	const t = useTranslations();
 	const router = useRouter();
 	const locale = useLocale();
+	const searchParams = useSearchParams();
 	const { toast } = useToast();
 	const [isPending, startTransition] = useTransition();
 
@@ -42,7 +45,9 @@ export default function DiaryEditForm({
 		})),
 	);
 
-	const handleSave = () => {
+	const nextDayParam = searchParams.get("nextDay");
+
+	const handleSave = (nextDay?: string) => {
 		startTransition(async () => {
 			try {
 				const formData = new FormData();
@@ -70,7 +75,11 @@ export default function DiaryEditForm({
 						title: t("diary.saved"),
 						description: t("diary.entrySaved"),
 					});
-					router.push(`/diary/${entry.id}`);
+					if (nextDay) {
+						router.push(`/diary/new?date=${nextDay}`);
+					} else {
+						router.push("/diary");
+					}
 				}
 			} catch (_error) {
 				toast({
@@ -173,12 +182,23 @@ export default function DiaryEditForm({
 				</Link>
 				<button
 					type="button"
-					onClick={handleSave}
+					onClick={() => handleSave()}
 					disabled={isPending}
 					className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 				>
 					{isPending ? t("common.saving") : t("common.save")}
 				</button>
+				{nextDayParam && (
+					<button
+						type="button"
+						onClick={() => handleSave(nextDayParam)}
+						disabled={isPending}
+						className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+					>
+						{t("diary.nextDayEntry")}
+						<ArrowRight className="w-4 h-4" />
+					</button>
+				)}
 			</div>
 		</div>
 	);

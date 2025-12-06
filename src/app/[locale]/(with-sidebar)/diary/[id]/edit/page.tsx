@@ -14,7 +14,7 @@ export async function generateMetadata() {
 	const t = await getTranslations();
 
 	return {
-		title: t("diary.editEntry"),
+		title: t("diary.refineEntryTitle"),
 	};
 }
 
@@ -31,7 +31,7 @@ export default async function DiaryEditPage({ params }: DiaryEditPageProps) {
 
 	return (
 		<div className="container mx-auto px-4 py-8">
-			<h1 className="text-3xl font-bold mb-8">{t("diary.editEntry")}</h1>
+			<h1 className="text-3xl font-bold mb-8">{t("diary.refineEntryTitle")}</h1>
 			<DiaryEditForm entry={entry} allPeople={allPeople} />
 		</div>
 	);

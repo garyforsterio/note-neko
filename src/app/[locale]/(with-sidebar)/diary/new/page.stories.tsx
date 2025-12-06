@@ -7,6 +7,9 @@ const meta = {
 	title: "app/[locale]/Diary/new/page",
 	component: NewDiaryEntryPage,
 	parameters: { layout: "fullscreen" },
+	args: {
+		searchParams: Promise.resolve({}),
+	},
 } satisfies Meta<typeof NewDiaryEntryPage>;
 
 export default meta;

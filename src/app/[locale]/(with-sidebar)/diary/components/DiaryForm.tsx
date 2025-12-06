@@ -15,6 +15,7 @@ import { useRouter } from "#i18n/navigation";
 import { useActionState } from "react";
 import ErrorMessage from "#components/ErrorMessage";
 import { useUserLocation } from "#hooks/useUserLocation";
+import { getNextDayString } from "#lib/utils/diary";
 import { diaryEntrySchema } from "#schema/diary";
 
 // Needs to account for user's timezone
@@ -26,7 +27,11 @@ function getLocalDateString(date: Date) {
 
 // This component is now only for creating new diary entries
 
-export default function DiaryForm() {
+interface DiaryFormProps {
+	initialDate?: string;
+}
+
+export default function DiaryForm({ initialDate }: DiaryFormProps) {
 	const t = useTranslations();
 	const router = useRouter();
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -55,7 +60,7 @@ export default function DiaryForm() {
 
 		// Default values
 		defaultValue: {
-			date: getLocalDateString(new Date()),
+			date: initialDate || getLocalDateString(new Date()),
 		},
 	});
 
@@ -74,6 +79,9 @@ export default function DiaryForm() {
 		return action(formData);
 	};
 
+	// Calculate next day if initialDate is provided (for catch-up flow)
+	const nextDayStr = initialDate ? getNextDayString(initialDate) : undefined;
+
 	return (
 		<form
 			className="space-y-6"
@@ -81,6 +89,7 @@ export default function DiaryForm() {
 			action={actionWithLocation}
 		>
 			<ErrorMessage errors={form.errors} />
+			{nextDayStr && <input type="hidden" name="nextDay" value={nextDayStr} />}
 			<div className="mb-4">
 				<label
 					htmlFor={fields.date.id}

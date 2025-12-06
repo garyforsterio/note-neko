@@ -9,13 +9,20 @@ export async function generateMetadata() {
 	};
 }
 
-export default async function NewDiaryEntryPage() {
+interface PageProps {
+	searchParams: Promise<{
+		date?: string;
+	}>;
+}
+
+export default async function NewDiaryEntryPage({ searchParams }: PageProps) {
 	const t = await getTranslations();
+	const { date } = await searchParams;
 
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<h1 className="text-2xl font-bold mb-6">{t("diary.newEntry")}</h1>
-			<DiaryForm />
+			<DiaryForm initialDate={date} />
 		</div>
 	);
 }

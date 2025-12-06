@@ -38,7 +38,7 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
 					<Link
 						href={`/diary/${entry.id}/edit`}
 						className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
-						title={t("diary.editEntry")}
+						title={t("diary.refineEntryTitle")}
 					>
 						<Pencil className="h-4 w-4" />
 					</Link>

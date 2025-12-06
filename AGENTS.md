@@ -11,7 +11,7 @@ Note Neko is a Next.js 15 App Router codebase; locale routes sit in `src/app/[lo
 - UI workbenches: `pnpm storybook` for live dev, `pnpm build-storybook` for static previews.
 
 ## Coding Style & Naming Conventions
-Use TypeScript with tab indentation (Biome default) and path aliases such as `#lib/*`. Components and server actions use PascalCase, hooks use camelCase, and route segments remain kebab-case (`src/app/[locale]/people/page.tsx`). Favor Tailwind 4 utilities over custom CSS, keep copy in `/messages`, and let Biome (triggered via Lefthook) handle formatting and import order.
+Use TypeScript with tab indentation (Biome default) and path aliases such as `#lib/*`. Components and server actions use PascalCase, hooks use camelCase, and route segments remain kebab-case (`src/app/[locale]/people/page.tsx`). Favor Tailwind 4 utilities over custom CSS, keep copy in `/messages`, and let Biome (triggered via Lefthook) handle formatting and import order. Avoid inline variable mutation for calculations in render functions; extract logic to pure utility functions instead.
 
 ## Testing Guidelines
 Vitest covers unit and integration tests; every feature needs a nearby `*.test.ts[x]` plus shared setup via `src/lib/test-setup.ts`. Prefer deterministic data builders so `pnpm coverage` remains meaningful on PRs touching business logic. Storybook stories (`src/components/*.stories.tsx`) double as visual regression checks, and Playwright specs can live under `tests/` for workflow coverage—note those runs in the PR body.

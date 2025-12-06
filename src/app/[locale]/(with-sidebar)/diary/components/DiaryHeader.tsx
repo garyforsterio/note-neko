@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { History } from "lucide-react";
 import { getLocale } from "next-intl/server";
 import { Link } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
@@ -10,12 +11,16 @@ interface DiaryHeaderProps {
 	startDate?: Date;
 	endDate?: Date;
 	entries: DiaryEntryWithRelations[];
+	missingCount?: number;
+	nextMissingDate?: string;
 }
 
 export async function DiaryHeader({
 	startDate,
 	endDate,
 	entries,
+	missingCount = 0,
+	nextMissingDate,
 }: DiaryHeaderProps) {
 	const t = await getTranslations();
 	const locale = await getLocale();
@@ -25,6 +30,15 @@ export async function DiaryHeader({
 			<div className="flex justify-between items-center">
 				<h1 className="text-4xl font-bold">{t("diary.title")}</h1>
 				<div className="flex items-center gap-4">
+					{missingCount > 0 && nextMissingDate && (
+						<Link
+							href={`/diary/new?date=${nextMissingDate}`}
+							className="bg-amber-500 text-white px-4 py-2 rounded-md hover:bg-amber-600 transition-colors flex items-center gap-2"
+						>
+							<History className="w-5 h-5" />
+							{t("diary.catchUpMessage", { count: missingCount })}
+						</Link>
+					)}
 					<ShareAllButton entries={entries} locale={locale} />
 					<Link
 						href="/diary/new"
