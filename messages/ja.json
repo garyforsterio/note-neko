@@ -128,7 +128,19 @@
 		},
 		"copyEntry": "コピー",
 		"locationPermission": "より正確な場所の提案のために位置情報へのアクセスを有効にしてください",
-		"enableLocation": "位置情報を有効にする"
+		"enableLocation": "位置情報を有効にする",
+		"entryLocation": "このエントリーの場所",
+		"searchLocationPlaceholder": "このエントリーの場所を検索...",
+		"currentBrowserLocation": "現在のブラウザの位置情報",
+		"defaultLocation": "デフォルトの場所: {locationName}",
+		"usingLocation": "使用中: {location}",
+		"noLocationSelected": "場所が選択されていません。",
+		"enableBrowserLocation": "ブラウザの位置情報を有効にする",
+		"clearManualLocation": "手動で選択した場所をクリア",
+		"aiProcessingNote": "AIが日記のエントリーを処理し、人物や場所を抽出します。",
+		"locationRecommendation": "ブラウザの位置情報アクセスを有効にすることをお勧めします。",
+		"defaultLocationTip": "または、設定でデフォルトの場所を設定することもできます。",
+		"noWeatherLocation": "この場所の天気情報は利用できません。"
 	},
 	"common": {
 		"cancel": "キャンセル",
@@ -235,7 +247,15 @@
 		"generic": "予期しないエラーが発生しました。もう一度お試しください。",
 		"createFailed": "作成に失敗しました。もう一度お試しください。",
 		"updateFailed": "更新に失敗しました。もう一度お試しください。",
-		"deleteFailed": "削除に失敗しました。もう一度お試しください。"
+		"deleteFailed": "削除に失敗しました。もう一度お試しください。",
+		"location": {
+			"title": "位置情報の問題",
+			"unsupported": "お使いのブラウザは位置情報をサポートしていません",
+			"permissionDenied": "位置情報の利用が許可されていません",
+			"unavailable": "位置情報を取得できませんでした",
+			"timeout": "位置情報の取得がタイムアウトしました",
+			"unknown": "不明なエラーが発生しました"
+		}
 	},
 	"settings": {
 		"title": "設定",
@@ -270,6 +290,17 @@
 		"logout": {
 			"title": "サインアウト",
 			"confirm": "サインアウトしてもよろしいですか？"
+		},
+		"profile": {
+			"defaultLocationLabel": "日記エントリーのデフォルトの場所",
+			"defaultLocationDescription": "日記エントリー作成時にブラウザの位置情報が利用できない場合、この場所が使用されます。",
+			"searchLocationPlaceholder": "デフォルトの場所を検索...",
+			"saveChanges": "変更を保存",
+			"saveSuccess": "成功！",
+			"defaultLocationSaved": "デフォルトの場所が正常に保存されました。",
+			"saveError": "エラー！",
+			"invalidLocationData": "無効な位置情報データです。",
+			"failedToSaveDefaultLocation": "デフォルトの場所の保存に失敗しました。"
 		}
 	}
 }

@@ -25,6 +25,12 @@ model User {
   updatedAt     DateTime      @updatedAt
   people        Person[]
   diaryEntries  DiaryEntry[]
+  
+  // Default Location
+  defaultLocationPlaceId String?
+  defaultLocationName    String?
+  defaultLocationLat     Float?
+  defaultLocationLng     Float?
 }
 
 model Person {

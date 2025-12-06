@@ -351,3 +351,46 @@ export async function deleteDiaryEntry(id: string) {
 		where: { id, userId: userId },
 	});
 }
+
+// User Profile related functions
+export const getUserProfile = cache(async () => {
+	const { userId } = await requireAuth();
+	return db.user.findUnique({
+		where: { id: userId },
+		select: {
+			id: true,
+			email: true,
+			defaultLocationPlaceId: true,
+			defaultLocationName: true,
+			defaultLocationLat: true,
+			defaultLocationLng: true,
+		},
+	});
+});
+
+export async function updateUserDefaultLocation(data: {
+	placeId: string | null;
+	name: string | null;
+	lat: number | null;
+	lng: number | null;
+}) {
+	const { userId } = await requireAuth();
+	return db.user.update({
+		where: { id: userId },
+		data: {
+			defaultLocationPlaceId: data.placeId,
+			defaultLocationName: data.name,
+			defaultLocationLat: data.lat,
+			defaultLocationLng: data.lng,
+		},
+	});
+}
+
+// Helper to get simple person list for entity extraction
+export async function getSimplePeopleList() {
+	const { userId } = await requireAuth();
+	return db.person.findMany({
+		where: { userId },
+		select: { id: true, name: true, nickname: true },
+	});
+}

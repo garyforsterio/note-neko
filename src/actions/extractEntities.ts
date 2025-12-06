@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import OpenAI from "openai";
 import { z } from "zod";
 import { requireAuth } from "#lib/auth";
-import { db } from "#lib/db";
+import { getSimplePeopleList } from "#lib/dal";
 
 const openai = new OpenAI({
 	baseURL: "https://openrouter.ai/api/v1",
@@ -81,11 +81,7 @@ export async function extractEntitiesFromText(
 
 	try {
 		// Get user's existing people first to include in AI prompt
-		const { userId } = await requireAuth();
-		const existingPeople = await db.person.findMany({
-			where: { userId },
-			select: { id: true, name: true, nickname: true },
-		});
+		const existingPeople = await getSimplePeopleList();
 
 		// Create context about existing people for AI
 		const peopleContext =

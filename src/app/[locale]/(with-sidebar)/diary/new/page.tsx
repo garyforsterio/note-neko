@@ -1,3 +1,4 @@
+import { getUserProfile } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
 import DiaryForm from "../components/DiaryForm";
 
@@ -14,15 +15,34 @@ interface PageProps {
 		date?: string;
 	}>;
 }
-
 export default async function NewDiaryEntryPage({ searchParams }: PageProps) {
 	const t = await getTranslations();
 	const { date } = await searchParams;
 
+	const user = await getUserProfile();
+
+	let initialDefaultLocation = null;
+	if (
+		user?.defaultLocationPlaceId &&
+		user?.defaultLocationName &&
+		user?.defaultLocationLat !== null &&
+		user?.defaultLocationLng !== null
+	) {
+		initialDefaultLocation = {
+			placeId: user.defaultLocationPlaceId,
+			name: user.defaultLocationName,
+			lat: user.defaultLocationLat,
+			lng: user.defaultLocationLng,
+		};
+	}
+
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<h1 className="text-2xl font-bold mb-6">{t("diary.newEntry")}</h1>
-			<DiaryForm initialDate={date} />
+			<DiaryForm
+				initialDefaultLocation={initialDefaultLocation}
+				initialDate={date}
+			/>
 		</div>
 	);
 }

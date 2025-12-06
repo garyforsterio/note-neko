@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import Link from "next/link";
 import { SignOutButton } from "#components/SignOutButton";
+import { Link } from "#i18n/navigation";
 import { requireAuth } from "#lib/auth";
 
 export async function generateMetadata() {

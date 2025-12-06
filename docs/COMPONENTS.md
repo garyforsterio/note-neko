@@ -77,7 +77,7 @@ components/
 import { requireAuth } from '#lib/auth';
 
 // Relative imports for local components
-import { Button } from './ui/button';
+import { ProfileSettingsForm } from "./components/ProfileSettingsForm"
 
 // Server components
 import { getTranslations } from 'next-intl/server';

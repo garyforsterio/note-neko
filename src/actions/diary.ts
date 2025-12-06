@@ -4,6 +4,7 @@ import { parseWithZod } from "@conform-to/zod";
 import type { Prisma } from "@prisma/client";
 import * as Sentry from "@sentry/nextjs";
 import { getLocale } from "next-intl/server";
+import { z } from "zod";
 import { extractEntitiesFromText } from "#actions/extractEntities";
 import { redirect } from "#i18n/navigation";
 import { requireAuth } from "#lib/auth";
@@ -23,6 +24,15 @@ import { deleteDiaryEntrySchema, diaryEntrySchema } from "#schema/diary";
 function escapeRegex(string: string): string {
 	return string.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&");
 }
+
+const LocationDataSchema = z
+	.object({
+		latitude: z.coerce.number(),
+		longitude: z.coerce.number(),
+		placeId: z.string().optional(),
+		name: z.string().optional(),
+	})
+	.partial(); // All fields are optional at the top level for flexibility
 
 export async function createDiaryEntryAction(
 	_prevState: unknown,
@@ -52,14 +62,40 @@ export async function createDiaryEntryAction(
 		entryId = newEntry.id;
 
 		// Get location data from form data if available
-		const locationJson = formData.get("location") as string;
-		const location = locationJson ? JSON.parse(locationJson) : null;
+		const locationDataJson = formData.get("locationData");
+		let locationData: z.infer<typeof LocationDataSchema> | undefined;
+
+		if (typeof locationDataJson === "string" && locationDataJson.length > 0) {
+			try {
+				const parsed = LocationDataSchema.safeParse(
+					JSON.parse(locationDataJson),
+				);
+				if (parsed.success) {
+					locationData = parsed.data;
+				}
+			} catch (error) {
+				console.error("Failed to parse locationData JSON string:", error);
+			}
+		}
+
+		// Prepare for AI biasing
+		let userLatForBias: number | undefined;
+		let userLngForBias: number | undefined;
+
+		if (
+			locationData?.latitude !== undefined &&
+			locationData?.longitude !== undefined
+		) {
+			// If only lat/lng is available (e.g., browser geo), use for AI biasing
+			userLatForBias = locationData.latitude;
+			userLngForBias = locationData.longitude;
+		}
 
 		// Extract entities using AI
 		const extractedEntities = await extractEntitiesFromText(
 			submission.value.content,
-			location?.latitude,
-			location?.longitude,
+			userLatForBias,
+			userLngForBias,
 		);
 
 		// Process people - create new ones if they don't exist and confidence is high
@@ -80,21 +116,22 @@ export async function createDiaryEntryAction(
 			// Skip people with low confidence for now
 		}
 
-		// Process locations - only include if we have Google Places data
-		const locations = extractedEntities.locations
-			.filter(
-				(location) => location.googlePlaceResult && location.confidence > 0.6,
-			)
-			.map((location) => location.googlePlaceResult)
-			.filter(
-				(place): place is NonNullable<typeof place> => place !== undefined,
-			)
-			.map((place) => ({
-				name: place.name,
-				placeId: place.placeId,
-				lat: place.lat,
-				lng: place.lng,
-			}));
+		// Process locations from AI
+		const locations: Prisma.DiaryLocationCreateWithoutDiaryEntryInput[] =
+			extractedEntities.locations
+				.filter(
+					(location) => location.googlePlaceResult && location.confidence > 0.6,
+				)
+				.map((location) => location.googlePlaceResult)
+				.filter(
+					(place): place is NonNullable<typeof place> => place !== undefined,
+				)
+				.map((place) => ({
+					name: place.name,
+					placeId: place.placeId,
+					lat: place.lat,
+					lng: place.lng,
+				}));
 
 		// Process content to insert ID references for matched entities
 		let processedContent = submission.value.content;

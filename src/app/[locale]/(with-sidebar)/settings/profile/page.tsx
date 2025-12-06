@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
-import { requireAuth } from "#lib/auth";
+import { getUserProfile } from "#lib/dal";
+import { ProfileSettingsForm } from "./components/ProfileSettingsForm";
 
 export async function generateMetadata() {
 	const t = await getTranslations();
@@ -10,8 +11,24 @@ export async function generateMetadata() {
 }
 
 export default async function ProfileSettingsPage() {
-	await requireAuth();
 	const t = await getTranslations("settings");
+
+	const user = await getUserProfile();
+
+	let initialDefaultLocation = null;
+	if (
+		user?.defaultLocationPlaceId &&
+		user?.defaultLocationName &&
+		user?.defaultLocationLat !== null && // Ensure these are not null
+		user?.defaultLocationLng !== null
+	) {
+		initialDefaultLocation = {
+			placeId: user.defaultLocationPlaceId,
+			name: user.defaultLocationName,
+			lat: user.defaultLocationLat,
+			lng: user.defaultLocationLng,
+		};
+	}
 
 	return (
 		<div className="container mx-auto px-4 py-8">
@@ -28,9 +45,9 @@ export default async function ProfileSettingsPage() {
 						{t("sections.profile.description")}
 					</p>
 
-					<div className="text-center py-8 text-gray-500">
-						<p>Profile settings coming soon...</p>
-					</div>
+					<ProfileSettingsForm
+						initialDefaultLocation={initialDefaultLocation}
+					/>
 				</div>
 			</div>
 		</div>

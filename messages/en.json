@@ -140,7 +140,19 @@
 		"shareAllEntries": "Share all",
 		"copyEntry": "Copy",
 		"locationPermission": "Enable location access for better place suggestions",
-		"enableLocation": "Enable location"
+		"enableLocation": "Enable location",
+		"entryLocation": "Location for this Entry",
+		"currentBrowserLocation": "Current Browser Location",
+		"defaultLocation": "Your Default Location: {locationName}",
+		"usingLocation": "Using: {location}",
+		"noLocationProvided": "No location data available. ",
+		"noDefaultLocationSet": "No default location set.",
+		"setDefaultLocationInSettings": "Set a default location in settings.",
+		"aiProcessingNote": "AI will process the diary entry to extract people and locations.",
+		"locationRecommendation": "It is recommended to enable browser location access.",
+		"defaultLocationTip": "Alternatively, you can set a default location in settings.",
+		"enableBrowserLocation": "Enable Browser Location",
+		"noWeatherLocation": "Weather information not available for this location."
 	},
 	"home": {
 		"hero": {
@@ -236,7 +248,15 @@
 		"generic": "An unexpected error occurred. Please try again.",
 		"createFailed": "Failed to create. Please try again.",
 		"updateFailed": "Failed to update. Please try again.",
-		"deleteFailed": "Failed to delete. Please try again."
+		"deleteFailed": "Failed to delete. Please try again.",
+		"location": {
+			"title": "Location Error",
+			"unsupported": "Geolocation is not supported by your browser",
+			"permissionDenied": "Location permission denied",
+			"unavailable": "Location information unavailable",
+			"timeout": "Location request timed out",
+			"unknown": "An unknown error occurred"
+		}
 	},
 	"settings": {
 		"title": "Settings",
@@ -271,6 +291,17 @@
 		"logout": {
 			"title": "Sign Out",
 			"confirm": "Are you sure you want to sign out?"
+		},
+		"profile": {
+			"defaultLocationLabel": "Default Diary Entry Location",
+			"defaultLocationDescription": "This location will be used if your browser location is unavailable when creating a diary entry.",
+			"searchLocationPlaceholder": "Search for a default location...",
+			"saveChanges": "Save Changes",
+			"saveSuccess": "Success!",
+			"defaultLocationSaved": "Default location saved successfully.",
+			"saveError": "Error!",
+			"invalidLocationData": "Invalid location data provided.",
+			"failedToSaveDefaultLocation": "Failed to save default location."
 		}
 	}
 }

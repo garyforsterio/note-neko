@@ -1,6 +1,8 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useState } from "react";
+import { useToast } from "../hooks/use-toast";
 
 interface UserLocation {
 	latitude: number;
@@ -10,14 +12,14 @@ interface UserLocation {
 
 interface UseUserLocationResult {
 	location: UserLocation | null;
-	error: string | null;
 	loading: boolean;
 	requestLocation: () => void;
 }
 
 export function useUserLocation(): UseUserLocationResult {
+	const { toast } = useToast();
+	const t = useTranslations("error.location");
 	const [location, setLocation] = useState<UserLocation | null>(null);
-	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
 
 	// Silent location request (no loading state)
@@ -46,12 +48,15 @@ export function useUserLocation(): UseUserLocationResult {
 
 	const requestLocation = useCallback(() => {
 		if (!navigator.geolocation) {
-			setError("Geolocation is not supported by your browser");
+			toast({
+				title: t("title"),
+				description: t("unsupported"),
+				variant: "destructive",
+			});
 			return;
 		}
 
 		setLoading(true);
-		setError(null);
 
 		navigator.geolocation.getCurrentPosition(
 			(position) => {
@@ -65,20 +70,30 @@ export function useUserLocation(): UseUserLocationResult {
 			},
 			(err) => {
 				setLoading(false);
+				let errorKey:
+					| "permissionDenied"
+					| "unavailable"
+					| "timeout"
+					| "unknown";
 				switch (err.code) {
 					case err.PERMISSION_DENIED:
-						setError("Location permission denied");
+						errorKey = "permissionDenied";
 						break;
 					case err.POSITION_UNAVAILABLE:
-						setError("Location information unavailable");
+						errorKey = "unavailable";
 						break;
 					case err.TIMEOUT:
-						setError("Location request timed out");
+						errorKey = "timeout";
 						break;
 					default:
-						setError("An unknown error occurred");
+						errorKey = "unknown";
 						break;
 				}
+				toast({
+					title: t("title"),
+					description: t(errorKey),
+					variant: "destructive",
+				});
 			},
 			{
 				enableHighAccuracy: true,
@@ -86,7 +101,7 @@ export function useUserLocation(): UseUserLocationResult {
 				maximumAge: 0, // Always get fresh location
 			},
 		);
-	}, []);
+	}, [toast, t]);
 
 	// Check permission status on mount
 	useEffect(() => {
@@ -108,7 +123,6 @@ export function useUserLocation(): UseUserLocationResult {
 
 	return {
 		location,
-		error,
 		loading,
 		requestLocation,
 	};

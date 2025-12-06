@@ -13,10 +13,11 @@ import { createDiaryEntryAction } from "#actions/diary";
 import { useRouter } from "#i18n/navigation";
 
 import { useActionState } from "react";
+import type { LocationResult } from "#actions/locations";
 import ErrorMessage from "#components/ErrorMessage";
-import { useUserLocation } from "#hooks/useUserLocation";
 import { getNextDayString } from "#lib/utils/diary";
 import { diaryEntrySchema } from "#schema/diary";
+import { LocationInfoCard } from "./new/LocationInfoCard";
 
 // Needs to account for user's timezone
 function getLocalDateString(date: Date) {
@@ -25,17 +26,18 @@ function getLocalDateString(date: Date) {
 	return formattedDate;
 }
 
-// This component is now only for creating new diary entries
-
 interface DiaryFormProps {
+	initialDefaultLocation: LocationResult | null;
 	initialDate?: string;
 }
 
-export default function DiaryForm({ initialDate }: DiaryFormProps) {
+export default function DiaryForm({
+	initialDefaultLocation,
+	initialDate,
+}: DiaryFormProps) {
 	const t = useTranslations();
 	const router = useRouter();
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
-	const { location, requestLocation } = useUserLocation();
 
 	const [lastResult, action, isPending] = useActionState(
 		createDiaryEntryAction,
@@ -64,32 +66,16 @@ export default function DiaryForm({ initialDate }: DiaryFormProps) {
 		},
 	});
 
-	// Create enhanced form action that includes location data
-	const actionWithLocation = async (formData: FormData) => {
-		// Add location data to form if available
-		if (location) {
-			formData.append(
-				"location",
-				JSON.stringify({
-					latitude: location.latitude,
-					longitude: location.longitude,
-				}),
-			);
-		}
-		return action(formData);
-	};
-
 	// Calculate next day if initialDate is provided (for catch-up flow)
 	const nextDayStr = initialDate ? getNextDayString(initialDate) : undefined;
 
 	return (
-		<form
-			className="space-y-6"
-			{...getFormProps(form)}
-			action={actionWithLocation}
-		>
+		<form className="space-y-6" {...getFormProps(form)} action={action}>
 			<ErrorMessage errors={form.errors} />
 			{nextDayStr && <input type="hidden" name="nextDay" value={nextDayStr} />}
+
+			<LocationInfoCard initialDefaultLocation={initialDefaultLocation} />
+
 			<div className="mb-4">
 				<label
 					htmlFor={fields.date.id}
@@ -103,46 +89,6 @@ export default function DiaryForm({ initialDate }: DiaryFormProps) {
 				/>
 				<ErrorMessage id={fields.date.id} errors={fields.date.errors} />
 			</div>
-
-			{!location && (
-				<div className="bg-gray-50 border border-gray-200 rounded-md p-4">
-					<div className="flex items-start space-x-3">
-						<svg
-							className="w-5 h-5 text-gray-400 mt-0.5"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-							aria-hidden="true"
-						>
-							<title>Location icon</title>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={2}
-								d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-							/>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={2}
-								d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-							/>
-						</svg>
-						<div className="flex-1">
-							<p className="text-sm text-gray-700">
-								{t("diary.locationPermission")}
-							</p>
-							<button
-								type="button"
-								onClick={requestLocation}
-								className="mt-2 text-sm text-blue-600 hover:text-blue-700 font-medium"
-							>
-								{t("diary.enableLocation")}
-							</button>
-						</div>
-					</div>
-				</div>
-			)}
 
 			<div>
 				<label
