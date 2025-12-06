@@ -2,7 +2,7 @@
 
 import type { Person, Prisma } from "@prisma/client";
 import { useTranslations } from "next-intl";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import EntityPicker from "./EntityPicker";
 import LocationChip from "./LocationChip";
 import PersonChip from "./PersonChip";
@@ -185,6 +185,25 @@ export default function RefineEditor({
 		});
 	}, [content]);
 
+	// Listen for selection changes
+	useEffect(() => {
+		const onSelectionChange = () => {
+			const selection = window.getSelection();
+			if (selection && selection.rangeCount > 0 && contentRef.current) {
+				const range = selection.getRangeAt(0);
+				if (contentRef.current.contains(range.commonAncestorContainer)) {
+					handleTextSelection();
+					return;
+				}
+			}
+			setSelectedText(null);
+		};
+
+		document.addEventListener("selectionchange", onSelectionChange);
+		return () =>
+			document.removeEventListener("selectionchange", onSelectionChange);
+	}, [handleTextSelection]);
+
 	// Remove entity
 	const handleRemoveEntity = useCallback(
 		(segment: ContentSegment) => {
@@ -333,8 +352,6 @@ export default function RefineEditor({
 			<div
 				ref={contentRef}
 				className="min-h-[400px] p-4 border border-gray-300 rounded-md bg-white prose max-w-none"
-				onMouseUp={handleTextSelection}
-				onTouchEnd={handleTextSelection}
 			>
 				{segments.map((segment, index) => {
 					if (segment.type === "text") {
