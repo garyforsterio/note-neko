@@ -72,7 +72,7 @@
 		"logout": "Log out"
 	},
 	"diary": {
-		"contentPlaceholder": "Write your diary entry here...",
+		"contentPlaceholder": "What happened today? Capture your thoughts, feelings, and the moments that mattered...",
 		"date": "Date",
 		"refineEntryTitle": "Refine Entry",
 		"locations": "Locations",

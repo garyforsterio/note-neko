@@ -1,25 +1,32 @@
 "use client";
 
-import {
-	getFormProps,
-	getInputProps,
-	getTextareaProps,
-	useForm,
-} from "@conform-to/react";
+import { getFormProps, getTextareaProps, useForm } from "@conform-to/react";
 import { getZodConstraint, parseWithZod } from "@conform-to/zod";
 import { useTranslations } from "next-intl";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createDiaryEntryAction } from "#actions/diary";
 import { useRouter } from "#i18n/navigation";
+import { Link } from "#i18n/navigation";
 
 import { useActionState } from "react";
 import type { LocationResult } from "#actions/locations";
 import ErrorMessage from "#components/ErrorMessage";
+import { useUserLocation } from "#hooks/useUserLocation";
 import { getNextDayString } from "#lib/utils/diary";
 import { diaryEntrySchema } from "#schema/diary";
-import { LocationInfoCard } from "./new/LocationInfoCard";
 
-// Needs to account for user's timezone
+import { format, parseISO } from "date-fns";
+import {
+	Calendar as CalendarIcon,
+	CloudSun,
+	LoaderCircle,
+	MapPin,
+	Moon,
+	Sunrise,
+} from "lucide-react";
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/style.css";
+
 function getLocalDateString(date: Date) {
 	const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
 	const formattedDate = localDate.toISOString().split("T")[0];
@@ -39,116 +46,248 @@ export default function DiaryForm({
 	const router = useRouter();
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+	const [selectedDate, setSelectedDate] = useState<Date>(
+		initialDate ? parseISO(initialDate) : new Date(),
+	);
+	const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
+	const { location: browserGeolocation, requestLocation } = useUserLocation();
+
+	let locationToSubmit: {
+		latitude: number;
+		longitude: number;
+		placeId?: string;
+		name?: string;
+	} | null = null;
+	let locationDisplayString: string | null = null;
+
+	if (browserGeolocation) {
+		locationToSubmit = {
+			latitude: browserGeolocation.latitude,
+			longitude: browserGeolocation.longitude,
+		};
+		locationDisplayString = t("diary.currentBrowserLocation");
+	} else if (initialDefaultLocation) {
+		locationToSubmit = {
+			latitude: initialDefaultLocation.lat,
+			longitude: initialDefaultLocation.lng,
+			placeId: initialDefaultLocation.placeId,
+			name: initialDefaultLocation.name,
+		};
+		locationDisplayString = t("diary.defaultLocation", {
+			locationName: initialDefaultLocation.name,
+		});
+	}
+
 	const [lastResult, action, isPending] = useActionState(
 		createDiaryEntryAction,
 		undefined,
 	);
 
 	const [form, fields] = useForm({
-		// Sync the result of last submission
 		lastResult,
-
-		// Reuse the validation logic on the client
 		onValidate: ({ formData }) => {
 			return parseWithZod(formData, { schema: diaryEntrySchema });
 		},
-
-		// To derive all validation attributes
 		constraint: getZodConstraint(diaryEntrySchema),
-
-		// Validate the form on blur event triggered
 		shouldValidate: "onBlur",
 		shouldRevalidate: "onInput",
-
-		// Default values
 		defaultValue: {
 			date: initialDate || getLocalDateString(new Date()),
 		},
 	});
 
-	// Calculate next day if initialDate is provided (for catch-up flow)
 	const nextDayStr = initialDate ? getNextDayString(initialDate) : undefined;
 
+	const handleDateSelect = (date: Date | undefined) => {
+		if (date) {
+			setSelectedDate(date);
+			setIsCalendarOpen(false);
+		}
+	};
+
 	return (
-		<form className="space-y-6" {...getFormProps(form)} action={action}>
+		<form
+			className="space-y-6 max-w-4xl mx-auto"
+			{...getFormProps(form)}
+			action={action}
+		>
 			<ErrorMessage errors={form.errors} />
 			{nextDayStr && <input type="hidden" name="nextDay" value={nextDayStr} />}
 
-			<LocationInfoCard initialDefaultLocation={initialDefaultLocation} />
+			<input
+				type="hidden"
+				name={fields.date.name}
+				value={format(selectedDate, "yyyy-MM-dd")}
+				id={fields.date.id}
+			/>
 
-			<div className="mb-4">
-				<label
-					htmlFor={fields.date.id}
-					className="block text-sm font-medium text-gray-700 mb-1"
-				>
-					{t("diary.date")} *
-				</label>
+			{locationToSubmit && (
 				<input
-					{...getInputProps(fields.date, { type: "date" })}
-					className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+					type="hidden"
+					name="locationData"
+					value={JSON.stringify(locationToSubmit)}
 				/>
-				<ErrorMessage id={fields.date.id} errors={fields.date.errors} />
+			)}
+
+			<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 border-b pb-6 border-gray-100">
+				<div>
+					<h2 className="text-4xl font-bold text-gray-900 tracking-tight">
+						{format(selectedDate, "EEEE")}
+					</h2>
+					<div className="flex items-center gap-3 mt-2 relative">
+						<span className="text-xl text-gray-500 font-medium">
+							{format(selectedDate, "d MMMM yyyy")}
+						</span>
+						<button
+							type="button"
+							onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+							className="p-2 hover:bg-gray-100 rounded-full text-gray-400 hover:text-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer"
+							aria-label="Change date"
+						>
+							<CalendarIcon size={20} />
+						</button>
+
+						{isCalendarOpen && (
+							<>
+								<div
+									className="fixed inset-0 z-40"
+									onClick={() => setIsCalendarOpen(false)}
+									onKeyUp={(event) => {
+										if (event.key === "Escape") {
+											setIsCalendarOpen(false);
+										}
+									}}
+								/>
+								<div className="absolute top-full left-0 mt-4 z-50 bg-white border border-gray-100 rounded-xl shadow-2xl p-4 animate-in fade-in zoom-in-95 duration-200">
+									<DayPicker
+										mode="single"
+										selected={selectedDate}
+										onSelect={handleDateSelect}
+										showOutsideDays
+										classNames={{
+											caption: "flex justify-center pt-1 relative items-center",
+											caption_label: "text-sm font-medium text-gray-900",
+											nav: "space-x-1 flex items-center",
+											nav_button:
+												"h-7 w-7 bg-transparent hover:opacity-100 border border-gray-200 hover:bg-gray-50 p-0 opacity-50 rounded-md transition-all flex items-center justify-center cursor-pointer",
+											nav_button_previous: "absolute left-1",
+											nav_button_next: "absolute right-1",
+											table: "w-full border-collapse space-y-1",
+											head_row: "flex",
+											head_cell:
+												"text-gray-500 rounded-md w-9 font-normal text-[0.8rem]",
+											row: "flex w-full mt-2",
+											cell: "text-center text-sm p-0 relative [&:has([aria-selected])]:bg-blue-50 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+											day: "h-9 w-9 p-0 font-normal aria-selected:opacity-100 hover:bg-gray-100 rounded-md transition-colors cursor-pointer",
+											day_selected:
+												"bg-blue-600 text-white hover:bg-blue-600 hover:text-white focus:bg-blue-600 focus:text-white !rounded-md",
+											day_today: "bg-gray-100 text-gray-900 font-bold",
+											day_outside: "text-gray-300 opacity-50",
+											day_disabled:
+												"text-gray-300 opacity-50 cursor-not-allowed",
+											day_hidden: "invisible",
+										}}
+									/>
+								</div>
+							</>
+						)}
+					</div>
+
+					<div className="flex items-center gap-2 mt-3 text-sm h-6">
+						<MapPin
+							size={14}
+							className={browserGeolocation ? "text-blue-500" : "text-gray-400"}
+						/>
+						{locationDisplayString ? (
+							<div className="flex items-center gap-2">
+								<span className="text-gray-600 font-medium">
+									{locationDisplayString}
+								</span>
+								<Link
+									href="/settings/profile"
+									target="_blank"
+									className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-500 px-2 py-0.5 rounded-full transition-colors cursor-pointer"
+								>
+									Edit
+								</Link>
+							</div>
+						) : (
+							<button
+								type="button"
+								onClick={requestLocation}
+								className="text-blue-600 hover:text-blue-700 underline decoration-blue-300 hover:decoration-blue-600 transition-all cursor-pointer"
+							>
+								{t("diary.enableBrowserLocation")}
+							</button>
+						)}
+
+						{!browserGeolocation && !initialDefaultLocation && (
+							<Link
+								href="/settings/profile"
+								className="text-gray-400 hover:text-gray-600 text-xs ml-2"
+							>
+								({t("settings.navigation.profile")})
+							</Link>
+						)}
+					</div>
+				</div>
+
+				<div className="flex gap-6 text-gray-400 py-4 md:py-0 select-none">
+					<div className="flex flex-col items-center gap-1">
+						<div className="flex items-center gap-2 text-gray-500">
+							<CloudSun size={18} />
+							<span className="font-semibold text-lg">--°C</span>
+						</div>
+						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
+							Weather
+						</span>
+					</div>
+					<div className="w-px bg-gray-200 h-10 self-center" />
+					<div className="flex flex-col items-center gap-1">
+						<div className="flex items-center gap-2 text-gray-500">
+							<Sunrise size={18} />
+							<span className="font-semibold text-lg">--:--</span>
+						</div>
+						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
+							Sunrise
+						</span>
+					</div>
+					<div className="w-px bg-gray-200 h-10 self-center" />
+					<div className="flex flex-col items-center gap-1">
+						<div className="flex items-center gap-2 text-gray-500">
+							<Moon size={18} />
+							<span className="font-semibold text-lg">--%</span>
+						</div>
+						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
+							Moon
+						</span>
+					</div>
+				</div>
 			</div>
 
 			<div>
-				<label
-					htmlFor={fields.content.id}
-					className="block text-sm font-medium text-gray-700 mb-1"
-				>
-					{t("diary.content")} *
+				<label htmlFor={fields.content.id} className="sr-only">
+					{t("diary.content")}
 				</label>
 				<textarea
 					{...getTextareaProps(fields.content)}
 					ref={textareaRef}
-					rows={5}
-					className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+					rows={12}
+					className="w-full p-6 text-lg text-gray-700 bg-gray-50/50 border-0 rounded-xl focus:outline-none focus:ring-0 focus:bg-white transition-colors placeholder:text-gray-300 resize-none shadow-inner"
 					placeholder={t("diary.contentPlaceholder")}
 				/>
-				<ErrorMessage id={fields.content.id} errors={fields.content.errors} />
+				<div className="mt-3 flex items-center justify-between text-xs text-gray-400 px-2">
+					<p>{t("diary.aiProcessingNote")}</p>
+					<span className="opacity-50">{format(selectedDate, "yyyy")}</span>
+				</div>
 			</div>
 
-			{isPending && (
-				<div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-4">
-					<div className="flex items-center">
-						<svg
-							className="animate-spin h-5 w-5 text-blue-600 mr-3"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							aria-label="Loading"
-						>
-							<title>Loading...</title>
-							<circle
-								className="opacity-25"
-								cx="12"
-								cy="12"
-								r="10"
-								stroke="currentColor"
-								strokeWidth="4"
-							/>
-							<path
-								className="opacity-75"
-								fill="currentColor"
-								d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-							/>
-						</svg>
-						<div>
-							<p className="text-blue-800 font-medium">
-								{t("diary.analyzingEntry")}
-							</p>
-							<p className="text-blue-600 text-sm">
-								{t("diary.analyzingDescription")}
-							</p>
-						</div>
-					</div>
-				</div>
-			)}
-
-			<div className="flex justify-end space-x-4">
+			<div className="flex justify-end space-x-4 pt-4">
 				<button
 					type="button"
 					onClick={() => router.back()}
-					className="px-4 py-2 text-gray-600 hover:text-gray-800"
+					className="px-6 py-2.5 text-gray-500 hover:text-gray-900 font-medium transition-colors cursor-pointer"
 					disabled={isPending}
 				>
 					{t("common.cancel")}
@@ -156,8 +295,11 @@ export default function DiaryForm({
 				<button
 					type="submit"
 					disabled={isPending || !form.valid}
-					className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+					className="px-8 py-2.5 bg-gray-900 text-white rounded-full hover:bg-black transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 cursor-pointer"
 				>
+					{isPending && (
+						<LoaderCircle className="animate-spin h-4 w-4 text-white" />
+					)}
 					{isPending ? t("diary.analyzing") : t("common.create")}
 				</button>
 			</div>

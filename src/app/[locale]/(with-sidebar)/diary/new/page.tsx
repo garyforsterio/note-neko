@@ -16,7 +16,7 @@ interface PageProps {
 	}>;
 }
 export default async function NewDiaryEntryPage({ searchParams }: PageProps) {
-	const t = await getTranslations();
+	const _t = await getTranslations();
 	const { date } = await searchParams;
 
 	const user = await getUserProfile();
@@ -38,7 +38,6 @@ export default async function NewDiaryEntryPage({ searchParams }: PageProps) {
 
 	return (
 		<div className="container mx-auto px-4 py-8">
-			<h1 className="text-2xl font-bold mb-6">{t("diary.newEntry")}</h1>
 			<DiaryForm
 				initialDefaultLocation={initialDefaultLocation}
 				initialDate={date}
