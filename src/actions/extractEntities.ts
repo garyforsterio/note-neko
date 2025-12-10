@@ -100,85 +100,51 @@ export async function extractEntitiesFromText(
 			messages: [
 				{
 					role: "system",
-					content: `YOU ARE THE WORLD'S LEADING EXPERT IN INFORMATION EXTRACTION FROM DIARY ENTRIES, RECOGNIZED FOR YOUR PRECISION IN IDENTIFYING PEOPLE AND LOCATIONS WITH UNRIVALED ACCURACY. YOUR TASK IS TO ANALYZE THE TEXT AND OUTPUT A CLEAN JSON OBJECT WITH THREE ARRAYS: "matchedPeople", "newPeople", AND "locations".
+					content: `YOU ARE AN EXPERT AI ANALYST FOR DIARY ENTRIES. YOUR TASK IS TO EXTRACT PEOPLE AND LOCATIONS WITH HIGH PRECISION, FOCUSING ONLY ON REAL-WORLD INTERACTIONS AND VISITS.
 
-###INSTRUCTIONS###
+### STRICT FILTERING RULES (CRITICAL) ###
 
-1. YOU MUST EXTRACT:
-   - **PEOPLE**: Names, nicknames, and relationship-based references (e.g., "John", "Mom", "Uncle Tom").
-   - **LOCATIONS**: Specific named places (venues, businesses, addresses, landmarks).
+1. **PHYSICAL PRESENCE ONLY**:
+   - ONLY extract locations where the author was *physically present* during the entry's timeframe.
+   - **MUST EXCLUDE** locations mentioned in:
+     - TV, movies, news, sports broadcasts (e.g., "Watched the F1 in Abu Dhabi" → IGNORE "Abu Dhabi").
+     - Books, dreams, thoughts, or future plans not yet realized.
+     - General references (e.g., "The weather in London is bad" → IGNORE "London" if user is not there).
 
-2. PEOPLE CATEGORIZATION:
-   - **matchedPeople** → People that CLEARLY match an entry in the existing database
-      - Fields:
-        - "name": Full name from database (e.g., "John Smith")
-        - "mentionedAs": EXACT string from text (e.g., "John")
-        - "confidence": Confidence score  
-          - 0.9+ for exact matches  
-          - 0.8+ for strong partial matches (e.g., "John" → "John Smith")  
-          - 0.7+ for contextually likely matches
-   - **newPeople** → People that DO NOT match database
-      - Fields:
-        - "name": Name as mentioned in text
-        - "confidence": Confidence score (0.7+ recommended for a valid person)
+2. **PERSONAL CONNECTIONS ONLY**:
+   - ONLY extract people the author knows personally or interacted with directly.
+   - **MUST EXCLUDE** celebrities, athletes, or public figures mentioned in passing or viewed on screens.
+   - *Exception*: Extract them ONLY if the author explicitly describes a direct, two-way interaction (e.g., "I shook hands with...").
 
-3. LOCATIONS:
-   - Fields:
-     - "name": Location string as mentioned in text
-     - "confidence": Confidence score (0.6+ recommended)
-   - TREAT compound business + district (e.g., "Starbucks Shibuya") as ONE location.
-   - DO NOT split into separate entries (e.g., NOT "Starbucks" + "Shibuya").
+3. **AMBIGUITY & NICKNAMES**:
+   - **PRIORITIZE NICKNAMES**: If a mentioned name matches multiple existing people (e.g. "James" matches "James Smith" and "James Doe"):
+     - **PREFER** the person who explicitly has that **nickname** listed in the database, as this implies a closer relationship.
+     - Example: If DB has "James Smith (nickname: James)" and "James Doe", and text says "James", map to "James Smith".
 
-4. CONFIDENCE RULES:
-   - USE 0.9+ for exact name matches
-   - USE 0.8+ for clear partial matches
-   - USE 0.7+ for context-driven likely matches
+4. **SPECIFICITY & FORMATTING**:
+   - **EXCLUDE** broad regions ("Japan", "Europe") and generic places ("home", "work", "gym", "restaurant").
+   - **EXTRACT** specific venues ("Starbucks Shibuya", "Joe's Gym").
+   - Keep compound names together ("Disney Land Tokyo" -> One location).
 
-###CHAIN OF THOUGHTS###
+### DATA STRUCTURE ###
 
-FOLLOW these steps BEFORE producing the JSON:
+1. **matchedPeople**:
+   - People mentioned who match the "EXISTING PEOPLE" list below.
+   - Fields: "name" (from DB), "mentionedAs" (from text), "confidence" (0.9=exact, 0.7=likely).
 
-1. **UNDERSTAND**: Read the diary text carefully and identify candidate names and place mentions.
-2. **BASICS**: Separate mentions into possible PEOPLE vs. LOCATIONS.
-3. **BREAK DOWN**: Compare names against the existing database to decide if they belong in matchedPeople or newPeople.
-4. **ANALYZE**: Apply confidence scoring based on rules (exact/partial/context).
-5. **BUILD**: Format extractions into the JSON structure with precision.
-6. **EDGE CASES**: Check against “What Not To Do” rules to avoid false positives.
-7. **FINAL ANSWER**: Output the JSON object ONLY, without commentary.
+2. **newPeople**:
+   - Other personally known people mentioned.
+   - Fields: "name", "confidence".
 
-###WHAT NOT TO DO###
+3. **locations**:
+   - Specific visited places.
+   - Fields: "name", "confidence".
 
-- DO NOT extract vague time/setting words: "today", "yesterday", "tonight", "morning", "home", "work", "bed".
-- DO NOT extract generic venues without unique names: "the gym", "a bar", "a restaurant".
-- DO NOT extract broad regions: "Tokyo", "Germany", "California".
-- DO NOT extract BOTH a compound location and its parts ("Lawson Roppongi" AND "Roppongi") → ONLY keep the full compound ("Lawson Roppongi").
-- DO NOT extract houses as locations. If text says "John's house", extract "John" as person, NOT "house" as location.
-- DO NOT extract public figures, celebrities, politicians, or famous people → ONLY extract personally known individuals relevant to the diary writer.
-- DO NOT include duplicate entries across arrays.
-
-###OUTPUT FORMAT###
-
-RETURN JSON ONLY, with this structure:
+### OUTPUT FORMAT (JSON) ###
 {
-  "matchedPeople": [
-    {
-      "name": "John Smith",
-      "mentionedAs": "John",
-      "confidence": 0.9
-    }
-  ],
-  "newPeople": [
-    {
-      "name": "Uncle Tom",
-      "confidence": 0.8
-    }
-  ],
-  "locations": [
-    {
-      "name": "Starbucks Shibuya",
-      "confidence": 0.85
-    }
-  ]
+  "matchedPeople": [{ "name": "John Smith", "mentionedAs": "John", "confidence": 0.9 }],
+  "newPeople": [{ "name": "Bob", "confidence": 0.85 }],
+  "locations": [{ "name": "Central Park", "confidence": 0.9 }]
 }
 ${peopleContext}`,
 				},
