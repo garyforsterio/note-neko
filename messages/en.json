@@ -140,6 +140,7 @@
 		"shareAllEntries": "Share all",
 		"copyEntry": "Copy",
 		"locationPermission": "Enable location access for better place suggestions",
+		"unknownLocation": "Unknown Location",
 		"enableLocation": "Enable location",
 		"entryLocation": "Location for this Entry",
 		"currentBrowserLocation": "Current Browser Location",
@@ -164,7 +165,7 @@
 		"features": {
 			"dailyDiary": {
 				"title": "Daily Diary",
-				"description": "Document your daily activities and interactions with a clean, intuitive interface. Track your progress and maintain a comprehensive record of your experiences."
+				"description": "Capture your thoughts, feelings, and the moments that matter."
 			},
 			"peopleProfiles": {
 				"title": "People Profiles",

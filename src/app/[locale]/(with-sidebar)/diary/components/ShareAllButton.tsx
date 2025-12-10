@@ -71,7 +71,7 @@ export default function ShareAllButton({
 			<button
 				type="button"
 				onClick={handleCopy}
-				className="p-2 text-gray-500 hover:text-blue-600 transition-colors cursor-pointer"
+				className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all cursor-pointer"
 				title={t("diary.copyEntry")}
 				aria-label={t("diary.copyEntry")}
 			>
@@ -84,7 +84,7 @@ export default function ShareAllButton({
 			<button
 				type="button"
 				onClick={handleShare}
-				className="flex items-center gap-2 px-4 py-2 text-gray-500 hover:text-blue-600 transition-colors cursor-pointer"
+				className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all cursor-pointer"
 				title={t("diary.shareAllEntries")}
 				aria-label={t("diary.shareAllEntries")}
 			>

@@ -18,13 +18,13 @@ export default function PersonChip({
 }: PersonChipProps) {
 	return (
 		<span
-			className={`inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm ${className}`}
+			className={`inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium transition-colors border border-indigo-100/50 ${className}`}
 		>
-			<User className="w-3 h-3" />
+			<User size={14} className="opacity-70" />
 			<button
 				type="button"
 				onClick={onEdit}
-				className="hover:underline focus:outline-none"
+				className="hover:underline focus:outline-none hover:text-indigo-900"
 			>
 				{person.nickname || person.name}
 			</button>
@@ -32,10 +32,10 @@ export default function PersonChip({
 				<button
 					type="button"
 					onClick={onRemove}
-					className="ml-1 hover:bg-blue-200 rounded-full p-0.5 focus:outline-none"
+					className="ml-1 -mr-1 p-0.5 rounded-full hover:bg-indigo-200/50 text-indigo-600 hover:text-indigo-800 transition-colors focus:outline-none"
 					aria-label={`Remove ${person.name}`}
 				>
-					<X className="w-3 h-3" />
+					<X size={14} />
 				</button>
 			)}
 		</span>

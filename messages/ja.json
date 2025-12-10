@@ -128,6 +128,7 @@
 		},
 		"copyEntry": "コピー",
 		"locationPermission": "より正確な場所の提案のために位置情報へのアクセスを有効にしてください",
+		"unknownLocation": "場所不明",
 		"enableLocation": "位置情報を有効にする",
 		"entryLocation": "このエントリーの場所",
 		"searchLocationPlaceholder": "このエントリーの場所を検索...",

@@ -22,22 +22,25 @@ export function SortToggle() {
 		<button
 			type="button"
 			onClick={toggleSort}
-			className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md transition-colors"
+			className="flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-900 bg-white border border-gray-200 hover:border-gray-300 px-3 py-2 rounded-full transition-all shadow-sm hover:shadow cursor-pointer"
 			title={
 				currentSort === "desc"
 					? t("diary.sortEarliestFirst")
 					: t("diary.sortLatestFirst")
 			}
 		>
+			<span className="text-xs uppercase tracking-wide opacity-70">
+				{t("diary.date")}:
+			</span>
 			{currentSort === "desc" ? (
 				<>
-					<ArrowDown className="h-4 w-4" />
 					{t("diary.latestFirst")}
+					<ArrowDown size={14} />
 				</>
 			) : (
 				<>
-					<ArrowUp className="h-4 w-4" />
 					{t("diary.earliestFirst")}
+					<ArrowUp size={14} />
 				</>
 			)}
 		</button>
