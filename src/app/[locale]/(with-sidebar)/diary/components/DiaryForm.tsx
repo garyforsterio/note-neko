@@ -274,6 +274,8 @@ export default function DiaryForm({
 					{...getTextareaProps(fields.content)}
 					ref={textareaRef}
 					rows={12}
+					// biome-ignore lint/a11y/noAutofocus: only field
+					autoFocus
 					className="w-full p-6 text-lg text-gray-700 bg-gray-50/50 border-0 rounded-xl focus:outline-none focus:ring-0 focus:bg-white transition-colors placeholder:text-gray-300 resize-none shadow-inner"
 					placeholder={t("diary.contentPlaceholder")}
 				/>
