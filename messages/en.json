@@ -171,6 +171,10 @@
 				"title": "People Profiles",
 				"description": "Automatically generate detailed personas from your interactions. Build comprehensive profiles that serve as valuable references for future encounters and relationship building."
 			},
+			"people": {
+				"title": "People",
+				"description": "Manage your relationships and memories."
+			},
 			"locationHistory": {
 				"title": "Location History",
 				"description": "Document and organize your visits to different places. Keep track of venues, activities, and experiences for future reference."

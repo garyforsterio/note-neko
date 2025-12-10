@@ -1,7 +1,7 @@
 import { getPeople } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
 import PageHeader from "./components/PageHeader";
-import PersonCard from "./components/PersonCard";
+import PersonList from "./components/PersonList";
 
 export async function generateMetadata() {
 	const t = await getTranslations();
@@ -25,17 +25,15 @@ export default async function PeoplePage(props: Props) {
 		<div className="container mx-auto px-4 py-8">
 			<PageHeader />
 
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				{people.length === 0 ? (
-					<div className="bg-white p-6 rounded-lg shadow-md">
-						<p className="text-gray-500 text-sm">
-							{query ? t("common.noResults") : t("people.noPeople")}
-						</p>
-					</div>
-				) : (
-					people.map((person) => <PersonCard key={person.id} person={person} />)
-				)}
-			</div>
+			{people.length === 0 ? (
+				<div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+					<p className="text-gray-500">
+						{query ? t("common.noResults") : t("people.noPeople")}
+					</p>
+				</div>
+			) : (
+				<PersonList people={people} />
+			)}
 		</div>
 	);
 }
