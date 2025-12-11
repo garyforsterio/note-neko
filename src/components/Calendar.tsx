@@ -1,29 +1,26 @@
 "use client";
 
-import { format, isSameDay, parseISO } from "date-fns";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
 	type DateRange,
 	DayPicker,
 	getDefaultClassNames,
 } from "react-day-picker";
-import type { getAllDiaryIds } from "#lib/dal";
 import "react-day-picker/style.css";
 
 interface CalendarProps {
-	entries: ReturnType<typeof getAllDiaryIds>;
+	entries: { id: string; date: Date | string }[];
 	onDateRangeChange?: (startDate: Date | null, endDate: Date | null) => void;
 }
 
 export default function Calendar({
-	entries: entriesPromise,
+	entries,
 	onDateRangeChange,
 }: CalendarProps) {
 	const t = useTranslations();
-	const entries = use(entriesPromise);
 	const searchParams = useSearchParams();
 	const [range, setRange] = useState<DateRange | undefined>();
 	const [month, setMonth] = useState<Date>(() => new Date());
@@ -60,7 +57,6 @@ export default function Calendar({
 				setRange(undefined);
 			}
 		} catch (error) {
-			// If date parsing fails, clear the range
 			console.warn("Invalid date format in URL params:", error);
 			setRange(undefined);
 		}
@@ -75,14 +71,8 @@ export default function Calendar({
 
 	const handleRangeSelect = (newRange: DateRange | undefined) => {
 		setRange(newRange);
-
-		if (newRange?.from && newRange?.to && onDateRangeChange) {
-			onDateRangeChange(newRange.from, newRange.to);
-		} else if (newRange?.from && !newRange?.to && onDateRangeChange) {
-			// When only one date is selected, treat it as a single-day range
-			onDateRangeChange(newRange.from, newRange.from);
-		} else if (!newRange && onDateRangeChange) {
-			onDateRangeChange(null, null);
+		if (onDateRangeChange) {
+			onDateRangeChange(newRange?.from ?? null, newRange?.to ?? null);
 		}
 	};
 
@@ -90,11 +80,9 @@ export default function Calendar({
 
 	return (
 		<div className="flex justify-center flex-col">
-			{!range && (
-				<div className="mb-4 p-2 bg-blue-50 text-blue-700 text-sm rounded-md text-center">
-					{t("calendar.clickToSelectRange")}
-				</div>
-			)}
+			<div className="mb-4 p-2 bg-gray-50 text-gray-500 text-xs uppercase tracking-wide font-medium rounded text-center">
+				{t("calendar.clickToSelectRange")}
+			</div>
 
 			<DayPicker
 				mode="range"
@@ -108,21 +96,23 @@ export default function Calendar({
 				}}
 				modifiersClassNames={{
 					hasEntry:
-						"relative after:content-[''] after:absolute after:bottom-0.5 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-blue-600 after:rounded-full",
+						"relative after:content-[''] after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-gray-400 after:rounded-full",
 				}}
 				classNames={{
-					caption_label: `${defaultClassNames.caption_label} text-lg font-semibold`,
-					weekday: "text-center text-sm font-medium text-gray-500 py-2",
+					caption_label: `${defaultClassNames.caption_label} text-lg font-serif font-bold text-gray-900`,
+					weekday: "text-center text-xs font-bold text-gray-400 uppercase py-2",
 					day: "relative",
 					day_button:
-						"w-10 h-10 p-0 font-normal text-sm hover:bg-gray-100 rounded-lg transition-colors cursor-pointer",
-					selected: "bg-blue-600 text-white hover:bg-blue-700",
-					range_start: "bg-blue-600 text-white hover:bg-blue-700 rounded-l-lg",
-					range_end: "bg-blue-600 text-white hover:bg-blue-700 rounded-r-lg",
-					range_middle: "bg-blue-100 text-gray-900 hover:bg-blue-200",
-					today: "font-bold bg-blue-50",
-					outside: "text-gray-300",
-					disabled: "text-gray-300 cursor-not-allowed",
+						"w-10 h-10 p-0 font-medium text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer",
+					selected: "bg-gray-200 text-gray-900 hover:bg-gray-300 shadow-sm",
+					range_start:
+						"bg-gray-200 text-gray-900 hover:bg-gray-300 rounded-l-lg shadow-sm",
+					range_end:
+						"bg-gray-200 text-gray-900 hover:bg-gray-300 rounded-r-lg shadow-sm",
+					range_middle: "bg-gray-100 text-gray-900 hover:bg-gray-200",
+					today: "font-bold bg-gray-50 text-black",
+					outside: "text-gray-300 opacity-50",
+					disabled: "text-gray-200 cursor-not-allowed",
 					hidden: "invisible",
 				}}
 			/>

@@ -1,4 +1,4 @@
-import { getDiaryEntries } from "#lib/dal";
+import { getAllDiaryIds, getDiaryEntries } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
 import { calculateMissingDiaryStats } from "#lib/utils/diary";
 import { DiaryEntry } from "./components/DiaryEntry";
@@ -42,13 +42,17 @@ export default async function DiaryPage({ searchParams }: PageProps) {
 	const parsedSortOrder =
 		sortOrder === "asc" || sortOrder === "desc" ? sortOrder : "desc";
 
-	const { entries, total } = await getDiaryEntries({
-		page: parsedPage,
-		pageSize: parsedPageSize,
-		startDate: parsedStartDate,
-		endDate: parsedEndDate,
-		sortOrder: parsedSortOrder,
-	});
+	// Parallel data fetching
+	const [{ entries, total }, allEntryIds] = await Promise.all([
+		getDiaryEntries({
+			page: parsedPage,
+			pageSize: parsedPageSize,
+			startDate: parsedStartDate,
+			endDate: parsedEndDate,
+			sortOrder: parsedSortOrder,
+		}),
+		getAllDiaryIds(),
+	]);
 
 	const totalPages = Math.ceil(total / parsedPageSize);
 
@@ -74,11 +78,12 @@ export default async function DiaryPage({ searchParams }: PageProps) {
 				startDate={parsedStartDate}
 				endDate={parsedEndDate}
 				entries={entries}
+				allEntryIds={allEntryIds}
 				missingCount={missingCount}
 				nextMissingDate={nextMissingDate}
 			/>
 
-			<div className="space-y-6">
+			<div className="space-y-6 pt-4">
 				{entries.length === 0 ? (
 					<div className="bg-white p-6 rounded-lg shadow-md">
 						<p className="text-gray-500 text-sm">{t("diary.noEntries")}</p>

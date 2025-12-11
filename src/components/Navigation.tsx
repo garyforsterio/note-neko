@@ -4,6 +4,7 @@ import {
 	BookOpen,
 	CreditCard,
 	LogOut,
+	Menu,
 	Settings,
 	Share2,
 	Shield,
@@ -12,17 +13,10 @@ import {
 	X,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useSearchParams } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { logout } from "#actions/auth";
-import { Link, usePathname, useRouter } from "#i18n/navigation";
-import type { getAllDiaryIds } from "#lib/dal";
+import { Link, usePathname } from "#i18n/navigation";
 import { cn } from "#lib/utils";
-import Calendar from "./Calendar";
-
-interface NavigationProps {
-	entries: ReturnType<typeof getAllDiaryIds>;
-}
 
 const navigation = [
 	{
@@ -64,130 +58,173 @@ const navigation = [
 	},
 ];
 
-export default function Navigation({ entries }: NavigationProps) {
+export default function Navigation() {
 	const t = useTranslations();
 	const pathname = usePathname();
-	const router = useRouter();
-	const searchParams = useSearchParams();
-	const pageSize = searchParams.get("page-size") || "10";
-	const startDate = searchParams.get("start-date");
-	const endDate = searchParams.get("end-date");
-	const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
-
-	const updateFilters = useCallback(
-		(updates: Record<string, string | null>) => {
-			const params = new URLSearchParams(searchParams);
-			for (const [key, value] of Object.entries(updates)) {
-				if (value === null) {
-					params.delete(key);
-				} else {
-					params.set(key, value);
-				}
-			}
-			router.push(`/diary?${params.toString()}`);
-		},
-		[router, searchParams],
-	);
-
-	const handleDateRangeChange = useCallback(
-		(start: Date | null, end: Date | null) => {
-			// Use local date formatting to avoid timezone issues
-			const formatLocalDate = (date: Date) => {
-				const year = date.getFullYear();
-				const month = String(date.getMonth() + 1).padStart(2, "0");
-				const day = String(date.getDate()).padStart(2, "0");
-				return `${year}-${month}-${day}`;
-			};
-
-			updateFilters({
-				"start-date": start ? formatLocalDate(start) : null,
-				"end-date": end ? formatLocalDate(end) : null,
-			});
-		},
-		[updateFilters],
-	);
-
-	const clearDateRange = useCallback(() => {
-		updateFilters({
-			"start-date": null,
-			"end-date": null,
-		});
-	}, [updateFilters]);
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
 	return (
 		<>
 			{/* Desktop Sidebar */}
-			<div className="hidden md:fixed md:inset-y-0 md:flex md:w-80 md:flex-col">
-				<div className="flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-white">
-					<div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
-						<div className="flex flex-shrink-0 items-center px-4">
-							<Link href="/" className="text-xl font-bold text-gray-900">
-								Note Neko
-							</Link>
-						</div>
-						<nav className="mt-5 flex-1 space-y-1 bg-white px-2">
-							{navigation.map((item) => {
-								const isActive = pathname.startsWith(item.href);
-								const isSettingsSection =
-									item.name === "Settings" && pathname.startsWith("/settings");
+			<div className="hidden md:fixed md:inset-y-0 md:flex md:w-72 md:flex-col">
+				<div className="flex min-h-0 flex-1 flex-col border-r border-gray-100 bg-white shadow-[1px_0_20px_0_rgba(0,0,0,0.02)]">
+					{/* Brand */}
+					<div className="flex h-20 flex-shrink-0 items-center px-8">
+						<Link
+							href="/"
+							className="text-2xl font-serif font-bold text-gray-900 tracking-tight"
+						>
+							Note Neko
+						</Link>
+					</div>
 
-								return (
-									<div key={item.name}>
-										<Link
-											href={item.href}
+					{/* Navigation Links */}
+					<nav className="flex-1 space-y-2 px-4 py-6">
+						{navigation.map((item) => {
+							const isActive = pathname.startsWith(item.href);
+							const isSettingsSection =
+								item.name === "Settings" && pathname.startsWith("/settings");
+
+							return (
+								<div key={item.name} className="space-y-1">
+									<Link
+										href={item.href}
+										className={cn(
+											isActive
+												? "bg-gray-900 text-white shadow-md shadow-gray-200"
+												: "text-gray-500 hover:bg-gray-50 hover:text-gray-900",
+											"group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ease-in-out",
+										)}
+									>
+										<item.icon
 											className={cn(
 												isActive
-													? "bg-gray-100 text-gray-900"
-													: "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-												"group flex items-center px-2 py-2 text-sm font-medium rounded-md",
+													? "text-white"
+													: "text-gray-400 group-hover:text-gray-600",
+												"mr-3 flex-shrink-0 h-5 w-5 transition-colors",
+											)}
+											aria-hidden="true"
+										/>
+										{item.name}
+									</Link>
+
+									{/* Settings Subitems */}
+									{isSettingsSection && item.subItems && (
+										<div className="mt-2 ml-4 pl-4 border-l border-gray-100 space-y-0.5">
+											{item.subItems.map((subItem) => {
+												const isSubActive =
+													pathname === subItem.href ||
+													pathname.startsWith(`${subItem.href}/`);
+												return (
+													<Link
+														key={subItem.name}
+														href={subItem.href}
+														className={cn(
+															isSubActive
+																? "bg-gray-100 text-gray-900 font-semibold"
+																: "text-gray-500 hover:bg-gray-50 hover:text-gray-700",
+															"group flex items-center px-4 py-2 text-sm rounded-lg transition-colors",
+														)}
+													>
+														<subItem.icon
+															className={cn(
+																isSubActive
+																	? "text-gray-900"
+																	: "text-gray-400 group-hover:text-gray-600",
+																"mr-3 flex-shrink-0 h-4 w-4",
+															)}
+															aria-hidden="true"
+														/>
+														{t(`settings.navigation.${subItem.name}`)}
+													</Link>
+												);
+											})}
+
+											{/* Logout Button */}
+											<div className="pt-2 mt-2 border-t border-gray-100">
+												<button
+													type="button"
+													onClick={async () => {
+														if (confirm(t("settings.logout.confirm"))) {
+															await logout();
+														}
+													}}
+													className="group flex items-center w-full px-4 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+												>
+													<LogOut className="mr-3 flex-shrink-0 h-4 w-4" />
+													{t("settings.logout.title")}
+												</button>
+											</div>
+										</div>
+									)}
+								</div>
+							);
+						})}
+					</nav>
+				</div>
+			</div>
+
+			{/* Mobile Header & Navigation */}
+			<div className="md:hidden">
+				<div className="fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200 px-4 h-16 flex items-center justify-between">
+					<Link href="/" className="text-xl font-serif font-bold text-gray-900">
+						Note Neko
+					</Link>
+					<button
+						type="button"
+						onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+						className="p-2 text-gray-600"
+					>
+						{isMobileMenuOpen ? (
+							<X className="h-6 w-6" />
+						) : (
+							<Menu className="h-6 w-6" />
+						)}
+					</button>
+				</div>
+
+				{/* Mobile Menu Overlay */}
+				{isMobileMenuOpen && (
+					<div className="fixed inset-0 z-30 bg-white pt-20 px-4 pb-6 overflow-y-auto">
+						<nav className="space-y-2">
+							{navigation.map((item) => {
+								const isActive = pathname.startsWith(item.href);
+								return (
+									<div key={item.name} className="space-y-1">
+										<Link
+											href={item.href}
+											onClick={() => setIsMobileMenuOpen(false)}
+											className={cn(
+												isActive
+													? "bg-gray-900 text-white"
+													: "text-gray-600 hover:bg-gray-50",
+												"flex items-center px-4 py-3 text-base font-medium rounded-xl",
 											)}
 										>
 											<item.icon
 												className={cn(
-													isActive
-														? "text-gray-500"
-														: "text-gray-400 group-hover:text-gray-500",
-													"mr-3 flex-shrink-0 h-6 w-6",
+													isActive ? "text-white" : "text-gray-400",
+													"mr-4 h-6 w-6",
 												)}
-												aria-hidden="true"
 											/>
 											{item.name}
 										</Link>
 
-										{/* Settings Subitems */}
-										{isSettingsSection && item.subItems && (
-											<div className="mt-1 ml-9 space-y-1">
-												{item.subItems.map((subItem) => {
-													const isSubActive =
-														pathname === subItem.href ||
-														pathname.startsWith(`${subItem.href}/`);
-													return (
+										{item.name === "Settings" &&
+											pathname.startsWith("/settings") &&
+											item.subItems && (
+												<div className="ml-8 mt-2 space-y-2 border-l-2 border-gray-100 pl-4">
+													{item.subItems.map((subItem) => (
 														<Link
 															key={subItem.name}
 															href={subItem.href}
-															className={cn(
-																isSubActive
-																	? "bg-gray-100 text-gray-900"
-																	: "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-																"group flex items-center px-2 py-1.5 text-sm font-medium rounded-md",
-															)}
+															onClick={() => setIsMobileMenuOpen(false)}
+															className="flex items-center py-2 text-sm font-medium text-gray-600"
 														>
-															<subItem.icon
-																className={cn(
-																	isSubActive
-																		? "text-gray-500"
-																		: "text-gray-400 group-hover:text-gray-500",
-																	"mr-2 flex-shrink-0 h-4 w-4",
-																)}
-																aria-hidden="true"
-															/>
+															<subItem.icon className="mr-3 h-5 w-5 text-gray-400" />
 															{t(`settings.navigation.${subItem.name}`)}
 														</Link>
-													);
-												})}
-
-												{/* Logout Button */}
-												<div className="pt-2 mt-2 border-t border-gray-200">
+													))}
 													<button
 														type="button"
 														onClick={async () => {
@@ -195,201 +232,19 @@ export default function Navigation({ entries }: NavigationProps) {
 																await logout();
 															}
 														}}
-														className="group flex items-center w-full px-2 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-md transition-colors"
+														className="flex items-center w-full py-2 text-sm font-medium text-red-600"
 													>
-														<LogOut className="mr-2 flex-shrink-0 h-4 w-4" />
+														<LogOut className="mr-3 h-5 w-5" />
 														{t("settings.logout.title")}
 													</button>
 												</div>
-											</div>
-										)}
+											)}
 									</div>
 								);
 							})}
 						</nav>
-
-						{pathname.startsWith("/diary") && (
-							<div className="px-4 pb-4 space-y-4">
-								<div className="flex items-center justify-between">
-									<h3 className="text-sm font-medium text-gray-700">
-										{t("diary.itemsPerPage")}
-									</h3>
-									<select
-										value={pageSize}
-										onChange={(e) =>
-											updateFilters({ "page-size": e.target.value })
-										}
-										className="block w-24 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
-									>
-										<option value="5">5</option>
-										<option value="10">10</option>
-										<option value="20">20</option>
-										<option value="50">50</option>
-									</select>
-								</div>
-
-								{(startDate || endDate) && (
-									<div className="flex items-center justify-between text-sm text-gray-600">
-										<span>
-											{startDate && endDate
-												? `${startDate} - ${endDate}`
-												: startDate || endDate}
-										</span>
-										<button
-											type="button"
-											onClick={clearDateRange}
-											className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-											title={t("diary.clearDateRange")}
-										>
-											<X className="h-4 w-4" />
-										</button>
-									</div>
-								)}
-
-								{entries && (
-									<Calendar
-										entries={entries}
-										onDateRangeChange={handleDateRangeChange}
-									/>
-								)}
-							</div>
-						)}
 					</div>
-				</div>
-			</div>
-
-			{/* Mobile Navigation */}
-			<div className="md:hidden">
-				{/* Floating Action Button */}
-				{pathname === "/diary" && (
-					<button
-						type="button"
-						onClick={() => setIsMobileFiltersOpen(true)}
-						className="fixed bottom-20 right-4 z-20 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-colors"
-						title={t("diary.filters")}
-					>
-						<Settings className="h-6 w-6" />
-					</button>
 				)}
-
-				<div className="fixed inset-x-0 bottom-0 z-10 bg-white border-t border-gray-200">
-					<nav className="flex justify-around">
-						{navigation.map((item) => {
-							const isActive = pathname.startsWith(item.href);
-							return (
-								<Link
-									key={item.name}
-									href={item.href}
-									className={cn(
-										isActive
-											? "text-blue-600"
-											: "text-gray-500 hover:text-gray-900",
-										"flex flex-col items-center px-3 py-2 text-sm font-medium",
-									)}
-								>
-									<item.icon
-										className={cn(
-											isActive ? "text-blue-600" : "text-gray-400",
-											"h-6 w-6",
-										)}
-										aria-hidden="true"
-									/>
-									<span className="mt-1">{item.name}</span>
-								</Link>
-							);
-						})}
-					</nav>
-				</div>
-
-				{/* Bottom Sheet */}
-				<div
-					className={cn(
-						"fixed inset-0 bg-black transition-opacity duration-300",
-						isMobileFiltersOpen
-							? "bg-opacity-50 z-40"
-							: "bg-opacity-0 pointer-events-none",
-					)}
-					onClick={() => setIsMobileFiltersOpen(false)}
-					onKeyDown={(e) => {
-						if (e.key === "Enter" || e.key === " ") {
-							setIsMobileFiltersOpen(false);
-						}
-					}}
-					role="button"
-					tabIndex={0}
-				/>
-				<div
-					className={cn(
-						"fixed inset-x-0 bottom-0 z-50 bg-white rounded-t-2xl shadow-xl transition-transform duration-300 ease-in-out transform",
-						isMobileFiltersOpen ? "translate-y-0" : "translate-y-full",
-					)}
-				>
-					<div className="p-4">
-						<div className="flex items-center justify-between mb-4">
-							<h3 className="text-lg font-semibold text-gray-900">
-								{t("diary.filters")}
-							</h3>
-							<button
-								type="button"
-								onClick={() => setIsMobileFiltersOpen(false)}
-								className="p-2 text-gray-400 hover:text-gray-500"
-							>
-								<X className="h-6 w-6" />
-							</button>
-						</div>
-
-						<div className="space-y-4">
-							<div className="flex items-center justify-between">
-								<h4 className="text-sm font-medium text-gray-700">
-									{t("diary.itemsPerPage")}
-								</h4>
-								<select
-									value={pageSize}
-									onChange={(e) => {
-										updateFilters({ "page-size": e.target.value });
-										setIsMobileFiltersOpen(false);
-									}}
-									className="block w-24 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
-								>
-									<option value="5">5</option>
-									<option value="10">10</option>
-									<option value="20">20</option>
-									<option value="50">50</option>
-								</select>
-							</div>
-
-							{(startDate || endDate) && (
-								<div className="flex items-center justify-between text-sm text-gray-600">
-									<span>
-										{startDate && endDate
-											? `${startDate} - ${endDate}`
-											: startDate || endDate}
-									</span>
-									<button
-										type="button"
-										onClick={clearDateRange}
-										className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-										title={t("diary.clearDateRange")}
-									>
-										<X className="h-4 w-4" />
-									</button>
-								</div>
-							)}
-
-							<div className="mt-4">
-								<h4 className="text-sm font-medium text-gray-700 mb-2">
-									{t("diary.selectDateRange")}
-								</h4>
-								<Calendar
-									entries={entries}
-									onDateRangeChange={(start, end) => {
-										handleDateRangeChange(start, end);
-									}}
-								/>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 		</>
 	);
