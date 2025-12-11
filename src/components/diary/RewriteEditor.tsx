@@ -26,17 +26,13 @@ export default function RewriteEditor({
 
 	return (
 		<div className="space-y-2">
-			<div className="text-sm text-gray-600">
-				{t("diary.rewriteModeDescription")}
-			</div>
 			<textarea
 				ref={textareaRef}
 				value={content}
 				onChange={(e) => onChange(e.target.value)}
-				className="w-full min-h-[400px] p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+				className="w-full p-6 text-lg text-gray-700 bg-gray-50/50 border-0 rounded-xl focus:outline-none focus:ring-0 focus:bg-white transition-colors placeholder:text-gray-300 resize-none shadow-inner"
 				placeholder={t("diary.contentPlaceholder")}
 			/>
-			<div className="text-xs text-gray-500">{t("diary.rewriteModeHelp")}</div>
 		</div>
 	);
 }

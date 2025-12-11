@@ -356,7 +356,7 @@ export default function RefineEditor({
 		<div className="relative">
 			<div
 				ref={contentRef}
-				className="min-h-[400px] p-4 border border-gray-300 rounded-md bg-white prose max-w-none"
+				className="min-h-[300px] p-6 text-lg text-gray-700 bg-gray-50/50 border-0 rounded-xl transition-colors shadow-inner prose max-w-none prose-p:my-0 prose-headings:my-2 focus-within:bg-white outline-none"
 			>
 				{segments.map((segment, index) => {
 					if (segment.type === "text") {
