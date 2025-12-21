@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import { getDiaryEntry, getPeople } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
+import { getHistoricWeather } from "#lib/utils/weather";
 import DiaryEntryPageClient from "./components/DiaryEntryPageClient";
 
 interface DiaryEntryPageProps {
@@ -41,6 +42,11 @@ export default async function DiaryEntryPage({
 		notFound();
 	}
 
+	const location = entry.locations.length > 0 ? entry.locations[0] : null;
+	const weather = location
+		? await getHistoricWeather(location.lat, location.lng, new Date(entry.date))
+		: null;
+
 	const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY || "";
 
 	return (
@@ -50,6 +56,7 @@ export default async function DiaryEntryPage({
 				allPeople={allPeople}
 				googleMapsApiKey={googleMapsApiKey}
 				nextDay={nextDay}
+				weather={weather}
 			/>
 		</div>
 	);

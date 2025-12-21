@@ -1,17 +1,11 @@
 import { format } from "date-fns";
-import {
-	Calendar as CalendarIcon,
-	CloudSun,
-	MapPin,
-	Moon,
-	Pencil,
-	Sunrise,
-} from "lucide-react";
+import { Calendar as CalendarIcon, MapPin, Moon, Sunrise } from "lucide-react";
 import { getLocale } from "next-intl/server";
 import { DiaryContent } from "#components/DiaryContent";
 import { Link } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
+import { getHistoricWeather, getWeatherIcon } from "#lib/utils/weather";
 import DeleteButton from "./DeleteButton";
 import { DiaryLocations } from "./DiaryLocations";
 import { DiaryMentions } from "./DiaryMentions";
@@ -25,6 +19,13 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
 	const t = await getTranslations();
 	const locale = await getLocale();
 	const date = new Date(entry.date);
+
+	const location = entry.locations.length > 0 ? entry.locations[0] : null;
+	const weather = location
+		? await getHistoricWeather(location.lat, location.lng, date)
+		: null;
+
+	const WeatherIcon = getWeatherIcon(weather?.weatherCode ?? null);
 
 	return (
 		<div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
@@ -71,8 +72,12 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
 				<div className="flex gap-6 text-gray-400 py-4 md:py-0 select-none">
 					<div className="flex flex-col items-center gap-1">
 						<div className="flex items-center gap-2 text-gray-500">
-							<CloudSun size={18} />
-							<span className="font-semibold text-lg">--°C</span>
+							<WeatherIcon size={18} />
+							<span className="font-semibold text-lg">
+								{weather?.temperatureMax && weather?.temperatureMin
+									? `${weather.temperatureMin}°C / ${weather.temperatureMax}°C`
+									: "--°C"}
+							</span>
 						</div>
 						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
 							Weather
@@ -82,17 +87,23 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
 					<div className="flex flex-col items-center gap-1">
 						<div className="flex items-center gap-2 text-gray-500">
 							<Sunrise size={18} />
-							<span className="font-semibold text-lg">--:--</span>
+							<span className="font-semibold text-lg">
+								{weather?.sunrise && weather?.sunset
+									? `${weather.sunrise} - ${weather.sunset}`
+									: "--:--"}
+							</span>
 						</div>
 						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
-							Sunrise
+							Sun
 						</span>
 					</div>
 					<div className="w-px bg-gray-200 h-10 self-center" />
 					<div className="flex flex-col items-center gap-1">
 						<div className="flex items-center gap-2 text-gray-500">
 							<Moon size={18} />
-							<span className="font-semibold text-lg">--%</span>
+							<span className="font-semibold text-lg">
+								{weather ? `${Math.round(weather.moonPhase * 100)}%` : "--%"}
+							</span>
 						</div>
 						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
 							Moon

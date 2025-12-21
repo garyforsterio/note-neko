@@ -5,7 +5,6 @@ import { format } from "date-fns";
 import {
 	ArrowRight,
 	Calendar as CalendarIcon,
-	CloudSun,
 	MapPin,
 	Moon,
 	Pencil,
@@ -16,9 +15,9 @@ import { useState } from "react";
 import { DiaryContent } from "#components/DiaryContent";
 import { Link, useRouter } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
+import { type WeatherInfo, getWeatherIcon } from "#lib/utils/weather";
 import DeleteButton from "../../components/DeleteButton";
 import DiaryEditForm from "../../components/DiaryEditForm";
-import { DiaryLocations } from "../../components/DiaryLocations";
 import DiaryMap from "../../components/DiaryMap";
 import { DiaryMentions } from "../../components/DiaryMentions";
 import ShareButton from "../../components/ShareButton";
@@ -28,6 +27,7 @@ interface DiaryEntryPageClientProps {
 	allPeople: Person[];
 	googleMapsApiKey: string;
 	nextDay?: string;
+	weather?: WeatherInfo | null;
 }
 
 export default function DiaryEntryPageClient({
@@ -35,6 +35,7 @@ export default function DiaryEntryPageClient({
 	allPeople,
 	googleMapsApiKey,
 	nextDay,
+	weather,
 }: DiaryEntryPageClientProps) {
 	const t = useTranslations();
 	const locale = useLocale();
@@ -45,6 +46,8 @@ export default function DiaryEntryPageClient({
 	// Use optional chaining for safe access
 	const locationDisplayString =
 		entry.locations.length > 0 ? entry.locations[0]?.name : null;
+
+	const WeatherIcon = getWeatherIcon(weather?.weatherCode ?? null);
 
 	if (isEditing) {
 		return (
@@ -126,8 +129,12 @@ export default function DiaryEntryPageClient({
 						{/* Weather widgets placeholder */}
 						<div className="flex flex-col items-center gap-1">
 							<div className="flex items-center gap-2 text-gray-500">
-								<CloudSun size={18} />
-								<span className="font-semibold text-lg">--°C</span>
+								<WeatherIcon size={18} />
+								<span className="font-semibold text-lg">
+									{weather?.temperatureMax && weather?.temperatureMin
+										? `${weather.temperatureMin}°C / ${weather.temperatureMax}°C`
+										: "--°C"}
+								</span>
 							</div>
 							<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
 								Weather
@@ -137,17 +144,23 @@ export default function DiaryEntryPageClient({
 						<div className="flex flex-col items-center gap-1">
 							<div className="flex items-center gap-2 text-gray-500">
 								<Sunrise size={18} />
-								<span className="font-semibold text-lg">--:--</span>
+								<span className="font-semibold text-lg">
+									{weather?.sunrise && weather?.sunset
+										? `${weather.sunrise} - ${weather.sunset}`
+										: "--:--"}
+								</span>
 							</div>
 							<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
-								Sunrise
+								Sun
 							</span>
 						</div>
 						<div className="w-px bg-gray-200 h-10 self-center" />
 						<div className="flex flex-col items-center gap-1">
 							<div className="flex items-center gap-2 text-gray-500">
 								<Moon size={18} />
-								<span className="font-semibold text-lg">--%</span>
+								<span className="font-semibold text-lg">
+									{weather ? `${Math.round(weather.moonPhase * 100)}%` : "--%"}
+								</span>
 							</div>
 							<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
 								Moon
