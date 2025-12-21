@@ -46,10 +46,25 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
 					</div>
 
 					<div className="flex items-center gap-2 mt-3 text-sm h-6">
-						<MapPin size={14} className="text-gray-400" />
-						<span className="text-gray-600 font-medium">
-							{t("diary.unknownLocation")}
-						</span>
+						<MapPin
+							size={14}
+							className={
+								entry.locations.length > 0 ? "text-blue-500" : "text-gray-400"
+							}
+						/>
+						{entry.locations.length > 0 ? (
+							<div className="flex items-center gap-2">
+								<span className="text-gray-600 font-medium">
+									{entry.locations[0]?.name}
+									{entry.locations.length > 1 &&
+										` +${entry.locations.length - 1} more`}
+								</span>
+							</div>
+						) : (
+							<span className="text-gray-600 font-medium">
+								{t("diary.unknownLocation")}
+							</span>
+						)}
 					</div>
 				</div>
 
