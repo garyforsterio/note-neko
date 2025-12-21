@@ -4,16 +4,13 @@ import {
 	BookOpen,
 	CreditCard,
 	LogOut,
-	Menu,
 	Settings,
 	Share2,
 	Shield,
 	User,
 	Users,
-	X,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 import { logout } from "#actions/auth";
 import { Link, usePathname } from "#i18n/navigation";
 import { cn } from "#lib/utils";
@@ -61,7 +58,6 @@ const navigation = [
 export default function Navigation() {
 	const t = useTranslations();
 	const pathname = usePathname();
-	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
 	return (
 		<>
@@ -164,87 +160,33 @@ export default function Navigation() {
 				</div>
 			</div>
 
-			{/* Mobile Header & Navigation */}
-			<div className="md:hidden">
-				<div className="fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200 px-4 h-16 flex items-center justify-between">
-					<Link href="/" className="text-xl font-serif font-bold text-gray-900">
-						Note Neko
-					</Link>
-					<button
-						type="button"
-						onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-						className="p-2 text-gray-600"
-					>
-						{isMobileMenuOpen ? (
-							<X className="h-6 w-6" />
-						) : (
-							<Menu className="h-6 w-6" />
-						)}
-					</button>
+			{/* Mobile Bottom Navigation */}
+			<div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 pb-[env(safe-area-inset-bottom)]">
+				<div className="flex justify-around items-center h-16 px-2">
+					{navigation.map((item) => {
+						const isActive = pathname.startsWith(item.href);
+						return (
+							<Link
+								key={item.name}
+								href={item.href}
+								className={cn(
+									"flex flex-col items-center justify-center w-full h-full space-y-1 active:scale-95 transition-transform",
+									isActive
+										? "text-gray-900"
+										: "text-gray-400 hover:text-gray-600",
+								)}
+							>
+								<item.icon
+									className={cn(
+										"h-6 w-6 transition-colors",
+										isActive ? "text-gray-900" : "text-gray-400",
+									)}
+								/>
+								<span className="text-[10px] font-medium">{item.name}</span>
+							</Link>
+						);
+					})}
 				</div>
-
-				{/* Mobile Menu Overlay */}
-				{isMobileMenuOpen && (
-					<div className="fixed inset-0 z-30 bg-white pt-20 px-4 pb-6 overflow-y-auto">
-						<nav className="space-y-2">
-							{navigation.map((item) => {
-								const isActive = pathname.startsWith(item.href);
-								return (
-									<div key={item.name} className="space-y-1">
-										<Link
-											href={item.href}
-											onClick={() => setIsMobileMenuOpen(false)}
-											className={cn(
-												isActive
-													? "bg-gray-900 text-white"
-													: "text-gray-600 hover:bg-gray-50",
-												"flex items-center px-4 py-3 text-base font-medium rounded-xl",
-											)}
-										>
-											<item.icon
-												className={cn(
-													isActive ? "text-white" : "text-gray-400",
-													"mr-4 h-6 w-6",
-												)}
-											/>
-											{item.name}
-										</Link>
-
-										{item.name === "Settings" &&
-											pathname.startsWith("/settings") &&
-											item.subItems && (
-												<div className="ml-8 mt-2 space-y-2 border-l-2 border-gray-100 pl-4">
-													{item.subItems.map((subItem) => (
-														<Link
-															key={subItem.name}
-															href={subItem.href}
-															onClick={() => setIsMobileMenuOpen(false)}
-															className="flex items-center py-2 text-sm font-medium text-gray-600"
-														>
-															<subItem.icon className="mr-3 h-5 w-5 text-gray-400" />
-															{t(`settings.navigation.${subItem.name}`)}
-														</Link>
-													))}
-													<button
-														type="button"
-														onClick={async () => {
-															if (confirm(t("settings.logout.confirm"))) {
-																await logout();
-															}
-														}}
-														className="flex items-center w-full py-2 text-sm font-medium text-red-600"
-													>
-														<LogOut className="mr-3 h-5 w-5" />
-														{t("settings.logout.title")}
-													</button>
-												</div>
-											)}
-									</div>
-								);
-							})}
-						</nav>
-					</div>
-				)}
 			</div>
 		</>
 	);

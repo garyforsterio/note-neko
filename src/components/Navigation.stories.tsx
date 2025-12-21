@@ -13,10 +13,7 @@ const meta: Meta<typeof Navigation> = {
 export default meta;
 type Story = StoryObj<typeof Navigation>;
 
-export const WithoutEntries: Story = {
-	args: {
-		entries: Promise.resolve([]),
-	},
+export const Default: Story = {
 	parameters: {
 		viewport: {
 			defaultViewport: "desktop",
@@ -48,12 +45,14 @@ export const ActiveState: Story = {
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 
-		// Test active state of Diary link
+		// Test active state of Diary link (Mobile)
 		const diaryLink = await canvas.findByRole("link", { name: /diary/i });
-		await expect(diaryLink).toHaveClass("text-blue-600");
+		// In mobile view, active state is text-gray-900
+		await expect(diaryLink).toHaveClass("text-gray-900");
 
 		// Test inactive state of People link
 		const peopleLink = await canvas.findByRole("link", { name: /people/i });
-		await expect(peopleLink).not.toHaveClass("bg-gray-100");
+		// In mobile view, inactive state is text-gray-400
+		await expect(peopleLink).toHaveClass("text-gray-400");
 	},
 };
