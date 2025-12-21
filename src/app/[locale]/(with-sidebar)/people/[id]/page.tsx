@@ -3,6 +3,7 @@ import { Cake, Heart, StickyNote, User } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { PersonInterests } from "#components/PersonInterests";
+import { PersonNetworkGraph } from "#components/PersonNetworkGraph";
 import { PersonSummary } from "#components/PersonSummary";
 import { PersonSummarySkeleton } from "#components/PersonSummarySkeleton";
 import { getPerson } from "#lib/dal";
@@ -127,6 +128,12 @@ export default async function PersonPage({ params }: PersonPageProps) {
 			<Suspense fallback={<PersonSummarySkeleton />}>
 				<PersonSummary personId={person.id} />
 			</Suspense>
+
+			{/* Network Graph */}
+			<PersonNetworkGraph
+				currentPerson={{ id: person.id, name: person.name }}
+				mentions={person.mentions}
+			/>
 
 			{/* Mentions */}
 			{person.mentions.length > 0 && (
