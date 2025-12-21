@@ -1,14 +1,13 @@
 import { format } from "date-fns";
-import { getLocale } from "next-intl/server";
+import { Cake, Heart, StickyNote, User } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { DiaryContent } from "#components/DiaryContent";
 import { PersonInterests } from "#components/PersonInterests";
 import { PersonSummary } from "#components/PersonSummary";
 import { PersonSummarySkeleton } from "#components/PersonSummarySkeleton";
-import { Link } from "#i18n/navigation";
 import { getPerson } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
+import { DiaryEntry } from "../../diary/components/DiaryEntry";
 import DeleteButton from "../components/DeleteButton";
 import EditButton from "../components/EditButton";
 
@@ -34,7 +33,6 @@ export async function generateMetadata({ params }: PersonPageProps) {
 
 export default async function PersonPage({ params }: PersonPageProps) {
 	const t = await getTranslations();
-	const locale = await getLocale();
 	const person = await getPerson((await params).id);
 
 	if (!person) {
@@ -42,49 +40,85 @@ export default async function PersonPage({ params }: PersonPageProps) {
 	}
 
 	return (
-		<div className="container mx-auto px-4 py-8">
-			<div className="flex justify-between items-start mb-8">
-				<div>
-					<h1 className="text-4xl font-bold mb-2">{person.name}</h1>
-					<div className="text-gray-500">
-						{t("people.addedOn", {
-							date: format(person.createdAt, "MMMM d, yyyy"),
-						})}
+		<div className="container mx-auto px-4 py-8 space-y-8">
+			{/* Main Person Card */}
+			<div className="bg-white p-5 md:p-8 rounded-2xl shadow-sm border border-gray-100">
+				{/* Header Section */}
+				<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 border-b pb-6 border-gray-100">
+					<div>
+						<h1 className="text-4xl font-bold text-gray-900 tracking-tight">
+							{person.name}
+						</h1>
+						<div className="flex items-center gap-3 mt-2">
+							<span className="text-xl text-gray-500 font-medium">
+								{t("people.addedOn", {
+									date: format(person.createdAt, "MMMM d, yyyy"),
+								})}
+							</span>
+							<div className="p-2 bg-gray-50 rounded-full text-gray-400">
+								<User size={20} />
+							</div>
+						</div>
+					</div>
+
+					<div className="flex items-center gap-2">
+						<EditButton personId={person.id} />
+						<DeleteButton personId={person.id} personName={person.name} />
 					</div>
 				</div>
-				<div className="flex">
-					<DeleteButton personId={person.id} personName={person.name} />
-					<EditButton personId={person.id} />
+
+				{/* Details Grid */}
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+					{person.birthday && (
+						<div className="flex items-start gap-4">
+							<div className="p-3 bg-purple-50 text-purple-600 rounded-xl">
+								<Cake size={24} />
+							</div>
+							<div>
+								<h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">
+									{t("people.birthday")}
+								</h2>
+								<p className="text-lg text-gray-800 font-medium">
+									{format(person.birthday, "MMMM d, yyyy")}
+								</p>
+							</div>
+						</div>
+					)}
+
+					{person.howWeMet && (
+						<div className="flex items-start gap-4">
+							<div className="p-3 bg-pink-50 text-pink-600 rounded-xl">
+								<Heart size={24} />
+							</div>
+							<div>
+								<h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">
+									{t("people.howWeMet")}
+								</h2>
+								<p className="text-lg text-gray-800 font-medium">
+									{person.howWeMet}
+								</p>
+							</div>
+						</div>
+					)}
 				</div>
-			</div>
 
-			<div className="bg-white rounded-lg shadow-md p-6 mb-8">
-				{person.birthday && (
-					<div className="mb-4">
-						<h2 className="text-lg font-semibold mb-1">
-							{t("people.birthday")}
-						</h2>
-						<p className="text-gray-600">
-							{format(person.birthday, "MMMM d, yyyy")}
-						</p>
-					</div>
-				)}
+				{/* Interests */}
+				<div className="mb-8">
+					<PersonInterests currentInterests={person.interests} />
+				</div>
 
-				{person.howWeMet && (
-					<div className="mb-4">
-						<h2 className="text-lg font-semibold mb-1">
-							{t("people.howWeMet")}
-						</h2>
-						<p className="text-gray-600">{person.howWeMet}</p>
-					</div>
-				)}
-
-				<PersonInterests currentInterests={person.interests} />
-
+				{/* Notes */}
 				{person.notes && (
-					<div className="mb-4">
-						<h2 className="text-lg font-semibold mb-1">{t("people.notes")}</h2>
-						<p className="text-gray-600 whitespace-pre-wrap">{person.notes}</p>
+					<div className="mt-8 pt-8 border-t border-gray-100">
+						<div className="flex items-center gap-2 mb-4">
+							<StickyNote size={20} className="text-gray-400" />
+							<h2 className="text-lg font-semibold text-gray-900">
+								{t("people.notes")}
+							</h2>
+						</div>
+						<div className="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-wrap">
+							{person.notes}
+						</div>
 					</div>
 				)}
 			</div>
@@ -94,30 +128,18 @@ export default async function PersonPage({ params }: PersonPageProps) {
 				<PersonSummary personId={person.id} />
 			</Suspense>
 
+			{/* Mentions */}
 			{person.mentions.length > 0 && (
-				<div>
-					<h2 className="text-2xl font-bold mb-4">{t("people.mentionedIn")}</h2>
-					<div className="space-y-4">
-						{person.mentions.map(async (mention) => (
-							<div
+				<div className="space-y-6">
+					<h2 className="text-2xl font-bold text-gray-800 pl-2 border-l-4 border-blue-500">
+						{t("people.mentionedIn")}
+					</h2>
+					<div className="space-y-6">
+						{person.mentions.map((mention) => (
+							<DiaryEntry
 								key={mention.diaryEntry.id}
-								className="bg-white rounded-lg shadow-md p-6"
-							>
-								<div className="flex justify-between items-start mb-2">
-									<Link
-										href={`/diary/${mention.diaryEntry.id}`}
-										className="text-lg font-semibold hover:text-blue-600"
-									>
-										{format(mention.diaryEntry.date, "MMMM d, yyyy")}
-									</Link>
-								</div>
-								<DiaryContent
-									content={mention.diaryEntry.content}
-									people={mention.diaryEntry.mentions.map((m) => m.person)}
-									locations={mention.diaryEntry.locations}
-									locale={locale}
-								/>
-							</div>
+								entry={mention.diaryEntry}
+							/>
 						))}
 					</div>
 				</div>

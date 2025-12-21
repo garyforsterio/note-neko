@@ -125,10 +125,10 @@ export default function DiaryEntryPageClient({
 						</div>
 					</div>
 
-					<div className="flex justify-around items-center py-4 md:py-0 select-none w-full md:w-auto">
+					<div className="flex justify-around items-center py-4 md:py-0 select-none w-full md:w-auto text-gray-400 md:gap-6">
 						{/* Weather widgets placeholder */}
 						<div className="flex flex-col items-center gap-1">
-							<div className="flex flex-col items-center gap-0.5">
+							<div className="flex flex-col items-center gap-0.5 text-gray-500">
 								<WeatherIcon size={18} />
 								<span className="font-semibold text-sm md:text-lg whitespace-nowrap">
 									{weather?.temperatureMax && weather?.temperatureMin
@@ -142,7 +142,7 @@ export default function DiaryEntryPageClient({
 						</div>
 						<div className="hidden md:block w-px bg-gray-200 h-10 self-center" />
 						<div className="flex flex-col items-center gap-1">
-							<div className="flex flex-col items-center gap-0.5">
+							<div className="flex flex-col items-center gap-0.5 text-gray-500">
 								<Sunrise size={18} />
 								<span className="font-semibold text-sm md:text-lg whitespace-nowrap">
 									{weather?.sunrise && weather?.sunset
@@ -156,7 +156,7 @@ export default function DiaryEntryPageClient({
 						</div>
 						<div className="hidden md:block w-px bg-gray-200 h-10 self-center" />
 						<div className="flex flex-col items-center gap-1">
-							<div className="flex flex-col items-center gap-0.5">
+							<div className="flex flex-col items-center gap-0.5 text-gray-500">
 								<Moon size={18} />
 								<span className="font-semibold text-sm md:text-lg whitespace-nowrap">
 									{weather ? `${Math.round(weather.moonPhase * 100)}%` : "--%"}
