@@ -72,6 +72,8 @@ export default async function DiaryPage({ searchParams }: PageProps) {
 		nextMissingDate = stats.nextMissingDate;
 	}
 
+	const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY || "";
+
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<DiaryHeader
@@ -81,6 +83,7 @@ export default async function DiaryPage({ searchParams }: PageProps) {
 				allEntryIds={allEntryIds}
 				missingCount={missingCount}
 				nextMissingDate={nextMissingDate}
+				googleMapsApiKey={googleMapsApiKey}
 			/>
 
 			<div className="space-y-6 pt-4">

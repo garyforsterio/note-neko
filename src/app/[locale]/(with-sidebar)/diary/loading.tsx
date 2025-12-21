@@ -5,7 +5,7 @@ export default async function DiaryLoading() {
 	return (
 		<div className="container mx-auto px-4 py-8">
 			{/* Header */}
-			<DiaryHeader entries={[]} allEntryIds={[]} />
+			<DiaryHeader entries={[]} allEntryIds={[]} googleMapsApiKey="" />
 
 			{/* Entries */}
 			<div className="space-y-6">

@@ -16,6 +16,7 @@ import Calendar from "#components/Calendar";
 import { Link, usePathname, useRouter } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
 import { cn } from "#lib/utils";
+import DiaryMap from "./DiaryMap";
 import ShareAllButton from "./ShareAllButton";
 import { SortToggle } from "./SortToggle";
 
@@ -26,6 +27,7 @@ interface DiaryHeaderProps {
 	allEntryIds: { id: string; date: Date }[];
 	missingCount?: number;
 	nextMissingDate?: string;
+	googleMapsApiKey: string;
 }
 
 export function DiaryHeader({
@@ -35,6 +37,7 @@ export function DiaryHeader({
 	allEntryIds,
 	missingCount = 0,
 	nextMissingDate,
+	googleMapsApiKey,
 }: DiaryHeaderProps) {
 	const t = useTranslations();
 	const locale = useLocale();
@@ -121,6 +124,18 @@ export function DiaryHeader({
 
 	const pageSize = searchParams.get("page-size") || "10";
 
+	// Deduplicate locations based on placeId or lat/lng to prevent duplicate keys in map
+	const uniqueLocationsMap = new Map();
+	entries
+		.flatMap((entry) => entry.locations)
+		.forEach((loc) => {
+			const key = loc.placeId || `${loc.lat}-${loc.lng}`;
+			if (!uniqueLocationsMap.has(key)) {
+				uniqueLocationsMap.set(key, loc);
+			}
+		});
+	const allLocations = Array.from(uniqueLocationsMap.values());
+
 	return (
 		<div className="flex flex-col gap-6 mb-6">
 			{/* Top Row: Title & Primary Actions */}
@@ -148,6 +163,16 @@ export function DiaryHeader({
 					</Link>
 				</div>
 			</div>
+
+			{allLocations.length > 0 && googleMapsApiKey && (
+				<div className="h-[300px] w-full rounded-xl overflow-hidden border border-gray-100 shadow-sm">
+					<DiaryMap
+						apiKey={googleMapsApiKey}
+						locations={allLocations}
+						className="w-full h-full"
+					/>
+				</div>
+			)}
 
 			{/* Sticky Filter Bar */}
 			<div className="sticky top-0 z-30 -mx-4 px-4 py-3 bg-gray-50/95 backdrop-blur-md border-b border-gray-200/50 transition-all">

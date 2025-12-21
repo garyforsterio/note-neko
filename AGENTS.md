@@ -1,5 +1,8 @@
 # Repository Guidelines
 
+## Agent Operational Constraints
+- **Do NOT run git commands.** The user manages version control manually. Do not run `git status`, `git add`, `git commit`, or any other git operations.
+
 ## Project Structure & Module Organization
 Note Neko is a Next.js 15 App Router codebase; locale routes sit in `src/app/[locale]`. Shared server actions stay in `src/actions`, UI primitives in `src/components`, and stateful helpers in `src/contexts` + `src/hooks`. Cross-cutting utilities (Prisma, auth, i18n) live in `src/lib`, validation in `src/schema`, translations in `/messages`, and Prisma schema/migrations/seeds in `/prisma`. Static assets belong in `/public`, docs in `/docs`, and tests should live beside their targets (e.g., `src/lib/auth.test.ts`) while reusing `src/lib/test-setup.ts`.
 

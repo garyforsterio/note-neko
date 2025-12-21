@@ -23,6 +23,9 @@
 			"recommended": true,
 			"correctness": {
 				"noUnusedVariables": "error"
+			},
+			"complexity": {
+				"noForEach": "warn"
 			}
 		}
 	},
