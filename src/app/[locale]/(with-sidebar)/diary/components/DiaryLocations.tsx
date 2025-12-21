@@ -6,7 +6,7 @@ interface DiaryLocationsProps {
 	locations: DiaryEntryWithRelations["locations"];
 }
 
-export async function DiaryLocations({ locations }: DiaryLocationsProps) {
+export function DiaryLocations({ locations }: DiaryLocationsProps) {
 	if (locations.length === 0) return null;
 
 	return (

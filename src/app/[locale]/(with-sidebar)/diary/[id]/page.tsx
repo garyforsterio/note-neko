@@ -9,6 +9,9 @@ interface DiaryEntryPageProps {
 		id: string;
 		locale: string;
 	}>;
+	searchParams: Promise<{
+		nextDay?: string;
+	}>;
 }
 
 export async function generateMetadata({ params }: DiaryEntryPageProps) {
@@ -24,10 +27,14 @@ export async function generateMetadata({ params }: DiaryEntryPageProps) {
 	};
 }
 
-export default async function DiaryEntryPage({ params }: DiaryEntryPageProps) {
-	const [entry, allPeople] = await Promise.all([
+export default async function DiaryEntryPage({
+	params,
+	searchParams,
+}: DiaryEntryPageProps) {
+	const [entry, allPeople, { nextDay }] = await Promise.all([
 		getDiaryEntry((await params).id),
 		getPeople(),
+		searchParams,
 	]);
 
 	if (!entry) {
@@ -42,6 +49,7 @@ export default async function DiaryEntryPage({ params }: DiaryEntryPageProps) {
 				entry={entry}
 				allPeople={allPeople}
 				googleMapsApiKey={googleMapsApiKey}
+				nextDay={nextDay}
 			/>
 		</div>
 	);

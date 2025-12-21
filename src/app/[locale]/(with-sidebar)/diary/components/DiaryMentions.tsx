@@ -6,7 +6,7 @@ interface DiaryMentionsProps {
 	mentions: DiaryEntryWithRelations["mentions"];
 }
 
-export async function DiaryMentions({ mentions }: DiaryMentionsProps) {
+export function DiaryMentions({ mentions }: DiaryMentionsProps) {
 	if (mentions.length === 0) return null;
 
 	return (

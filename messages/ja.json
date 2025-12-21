@@ -73,6 +73,7 @@
 		"contentPlaceholder": "日記を書いてください...",
 		"date": "日付",
 		"noLocationsFound": "場所が見つかりません",
+		"noLocation": "場所なし",
 		"addLocation": "場所を追加",
 		"deleteEntry": "エントリーを削除",
 		"confirmDelete": "この日記エントリーを削除してもよろしいですか？この操作は元に戻せません。",

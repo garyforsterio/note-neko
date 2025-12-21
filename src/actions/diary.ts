@@ -212,7 +212,7 @@ export async function createDiaryEntryAction(
 	// Redirect to edit page to allow user to validate extractions
 	// This is outside the try-catch because redirect() throws an error to signal the redirect
 	redirect({
-		href: `/diary/${entryId}/edit${nextDayParam}`,
+		href: `/diary/${entryId}${nextDayParam}`,
 		locale,
 	});
 }
