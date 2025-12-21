@@ -248,7 +248,16 @@
 		},
 		"suggestedInterests": "Suggested Interests",
 		"suggestedInterestsNote": "Dashed borders indicate AI suggestions based on your interactions",
-		"suggestedInterest": "This is a suggested interest based on AI analysis"
+		"suggestedInterest": "This is a suggested interest based on AI analysis",
+		"network": {
+			"title": "Connections",
+			"description": "People who appear together in diary entries"
+		},
+		"globalNetwork": {
+			"title": "Network Map",
+			"description": "Connections represent people appearing in the same diary entries.",
+			"loading": "Computing layout..."
+		}
 	},
 	"error": {
 		"title": "Something went wrong!",

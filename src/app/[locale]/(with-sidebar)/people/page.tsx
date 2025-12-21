@@ -1,3 +1,4 @@
+import { GlobalNetworkGraph } from "#components/GlobalNetworkGraph";
 import { getPeople } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
 import PageHeader from "./components/PageHeader";
@@ -24,6 +25,8 @@ export default async function PeoplePage(props: Props) {
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<PageHeader />
+
+			{people.length > 0 && !query && <GlobalNetworkGraph people={people} />}
 
 			{people.length === 0 ? (
 				<div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">

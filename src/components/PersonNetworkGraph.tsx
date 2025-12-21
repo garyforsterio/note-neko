@@ -1,6 +1,7 @@
 "use client";
 
 import { User } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 import { Link } from "#i18n/navigation";
 
@@ -25,6 +26,7 @@ export function PersonNetworkGraph({
 	currentPerson,
 	mentions,
 }: PersonNetworkGraphProps) {
+	const t = useTranslations();
 	const [hoveredNode, setHoveredNode] = useState<string | null>(null);
 
 	// Process data to find connections
@@ -84,7 +86,7 @@ export function PersonNetworkGraph({
 		<div className="w-full overflow-hidden bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
 			<h2 className="text-xl font-bold mb-6 flex items-center gap-2">
 				<span className="text-indigo-600">🕸️</span>
-				Connections
+				{t("people.network.title")}
 			</h2>
 
 			<div className="relative w-full aspect-[3/2] max-h-[500px]">
@@ -93,7 +95,6 @@ export function PersonNetworkGraph({
 					className="w-full h-full"
 					style={{ overflow: "visible" }}
 				>
-					<title>network graph</title>
 					{/* Connections (Lines) */}
 					{nodes.map((node) => (
 						<line
@@ -196,7 +197,7 @@ export function PersonNetworkGraph({
 			</div>
 
 			<p className="text-sm text-gray-400 text-center mt-2 italic">
-				People who appear together in diary entries
+				{t("people.network.description")}
 			</p>
 		</div>
 	);

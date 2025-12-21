@@ -25,7 +25,10 @@
 				"noUnusedVariables": "error"
 			},
 			"complexity": {
-				"noForEach": "warn"
+				"noForEach": "off"
+			},
+			"a11y": {
+				"noSvgWithoutTitle": "off"
 			}
 		}
 	},

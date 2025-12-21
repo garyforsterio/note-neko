@@ -251,7 +251,16 @@
 		},
 		"suggestedInterests": "提案された興味",
 		"suggestedInterestsNote": "破線の枠はあなたのやり取りに基づくAIの提案を示します",
-		"suggestedInterest": "これはAI分析に基づく提案された興味です"
+		"suggestedInterest": "これはAI分析に基づく提案された興味です",
+		"network": {
+			"title": "つながり",
+			"description": "日記で一緒に登場する人々"
+		},
+		"globalNetwork": {
+			"title": "ネットワークマップ",
+			"description": "日記で一緒に登場する人々のつながりを表しています。",
+			"loading": "レイアウトを計算中..."
+		}
 	},
 	"error": {
 		"title": "エラーが発生しました",
