@@ -96,7 +96,7 @@ export async function extractEntitiesFromText(
 
 		// Use OpenAI to extract entities
 		const completion = await openai.chat.completions.create({
-			model: "x-ai/grok-4.1-fast",
+			model: "google/gemini-3-flash-preview",
 			messages: [
 				{
 					role: "system",

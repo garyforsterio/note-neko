@@ -106,7 +106,7 @@ ${index + 1}. Date: ${entry.date.toDateString()}
 
 		// Generate AI summary
 		const completion = await openai.chat.completions.create({
-			model: "x-ai/grok-4.1-fast",
+			model: "google/gemini-3-flash-preview",
 			messages: [
 				{
 					role: "system",
