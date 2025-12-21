@@ -28,7 +28,7 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
 	const WeatherIcon = getWeatherIcon(weather?.weatherCode ?? null);
 
 	return (
-		<div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+		<div className="bg-white p-5 md:p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
 			{/* Header Section */}
 			<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 border-b pb-6 border-gray-100">
 				<div>
@@ -69,43 +69,43 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
 					</div>
 				</div>
 
-				<div className="flex gap-6 text-gray-400 py-4 md:py-0 select-none">
+				<div className="flex justify-around text-gray-400 items-center py-4 md:py-0 select-none w-full md:w-auto md:gap-6">
 					<div className="flex flex-col items-center gap-1">
-						<div className="flex items-center gap-2 text-gray-500">
+						<div className="flex flex-col items-center gap-0.5 text-gray-500">
 							<WeatherIcon size={18} />
-							<span className="font-semibold text-lg">
+							<span className="font-semibold text-sm md:text-lg whitespace-nowrap">
 								{weather?.temperatureMax && weather?.temperatureMin
 									? `${weather.temperatureMin}°C / ${weather.temperatureMax}°C`
 									: "--°C"}
 							</span>
 						</div>
-						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
+						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
 							Weather
 						</span>
 					</div>
-					<div className="w-px bg-gray-200 h-10 self-center" />
+					<div className="hidden md:block w-px bg-gray-200 h-10 self-center" />
 					<div className="flex flex-col items-center gap-1">
-						<div className="flex items-center gap-2 text-gray-500">
+						<div className="flex flex-col items-center gap-0.5 text-gray-500">
 							<Sunrise size={18} />
-							<span className="font-semibold text-lg">
+							<span className="font-semibold text-sm md:text-lg whitespace-nowrap">
 								{weather?.sunrise && weather?.sunset
 									? `${weather.sunrise} - ${weather.sunset}`
 									: "--:--"}
 							</span>
 						</div>
-						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
+						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
 							Sun
 						</span>
 					</div>
-					<div className="w-px bg-gray-200 h-10 self-center" />
+					<div className="hidden md:block w-px bg-gray-200 h-10 self-center" />
 					<div className="flex flex-col items-center gap-1">
-						<div className="flex items-center gap-2 text-gray-500">
+						<div className="flex flex-col items-center gap-0.5 text-gray-500">
 							<Moon size={18} />
-							<span className="font-semibold text-lg">
+							<span className="font-semibold text-sm md:text-lg whitespace-nowrap">
 								{weather ? `${Math.round(weather.moonPhase * 100)}%` : "--%"}
 							</span>
 						</div>
-						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
+						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
 							Moon
 						</span>
 					</div>

@@ -13,6 +13,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Calendar from "#components/Calendar";
+import { Skeleton } from "#components/ui/skeleton";
 import { Link, usePathname, useRouter } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
 import { cn } from "#lib/utils";
@@ -28,6 +29,7 @@ interface DiaryHeaderProps {
 	missingCount?: number;
 	nextMissingDate?: string;
 	googleMapsApiKey: string;
+	isLoading?: boolean;
 }
 
 export function DiaryHeader({
@@ -38,6 +40,7 @@ export function DiaryHeader({
 	missingCount = 0,
 	nextMissingDate,
 	googleMapsApiKey,
+	isLoading = false,
 }: DiaryHeaderProps) {
 	const t = useTranslations();
 	const locale = useLocale();
@@ -150,9 +153,11 @@ export function DiaryHeader({
 				</div>
 
 				<div className="flex items-center gap-3 w-full md:w-auto">
-					<div className="flex items-center gap-1 bg-white border border-gray-200 rounded-full p-1 shadow-sm mr-2">
-						<ShareAllButton entries={entries} locale={locale} />
-					</div>
+					{entries.length > 0 && (
+						<div className="flex items-center gap-1 bg-white border border-gray-200 rounded-full p-1 shadow-sm mr-2">
+							<ShareAllButton entries={entries} locale={locale} />
+						</div>
+					)}
 
 					<Link
 						href="/diary/new"
@@ -164,13 +169,17 @@ export function DiaryHeader({
 				</div>
 			</div>
 
-			{allLocations.length > 0 && googleMapsApiKey && (
+			{(isLoading || (allLocations.length > 0 && googleMapsApiKey)) && (
 				<div className="h-[300px] w-full rounded-xl overflow-hidden border border-gray-100 shadow-sm">
-					<DiaryMap
-						apiKey={googleMapsApiKey}
-						locations={allLocations}
-						className="w-full h-full"
-					/>
+					{isLoading ? (
+						<Skeleton className="w-full h-full" />
+					) : (
+						<DiaryMap
+							apiKey={googleMapsApiKey}
+							locations={allLocations}
+							className="w-full h-full"
+						/>
+					)}
 				</div>
 			)}
 
