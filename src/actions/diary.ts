@@ -301,6 +301,7 @@ export async function updateDiaryEntryAction(
 							personId,
 							context,
 							submission.value.content,
+							submission.value.date,
 						);
 					}),
 				);

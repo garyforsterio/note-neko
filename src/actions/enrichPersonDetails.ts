@@ -20,7 +20,12 @@ const enrichmentSchema = z.object({
 		.string()
 		.nullable()
 		.describe("Updated story of how we met if found/updated"),
-	notes: z.string().nullable().describe("Updated general notes"),
+	notes: z
+		.string()
+		.nullable()
+		.describe(
+			"Strategic relationship notes: preferences, history, and actionable details for future interactions. NOT a summary of events.",
+		),
 });
 
 /**
@@ -30,6 +35,7 @@ export async function enrichPersonDetails(
 	personId: string,
 	context: string,
 	diaryContent: string,
+	diaryDate: Date,
 ): Promise<void> {
 	await requireAuth();
 
@@ -55,12 +61,14 @@ export async function enrichPersonDetails(
 3. **Diary Content**: The diary entry where this interaction took place (for background).
 
 ### INSTRUCTIONS ###
-- Analyze the "New Context" and "Diary Content" for new facts about the person (interests, birthday, how we met, background info).
+- **PERSPECTIVE CHECK**: The diary entry is written by the user ("I"). The person you are profiling is the SUBJECT. Do NOT attribute facts about "I" to the Subject. Reference the Subject by their name or "he/she/they".
+- **ABSOLUTE DATES**: Convert ALL relative time references (e.g., "last summer", "2 years ago", "yesterday") into ABSOLUTE dates (e.g., "July 2023", "2022", "Jan 12, 2024") based on the provided "Diary Entry Date". Never leave a relative date in the notes.
+- Analyze the "New Context" and "Diary Content" for new facts about the Subject (interests, birthday, how we met, background info).
 - MERGE this new info with the "Existing Profile".
 - **Interests**: ADD new interests to the existing list. Remove duplicates. Keep existing interests unless explicitly contradicted.
 - **Birthday**: Update ONLY if the new info provides a more specific date.
 - **How We Met**: Update ONLY if the new info clarifies or adds detail to the origin story.
-- **Notes**: MERGE new conversational context into existing notes. Keep it concise but comprehensive.
+- **Notes**: EXTRACT RELATIONSHIP INTELLIGENCE. Do NOT summarize the events or "what happened". Focus solely on **future-useful insights**: preferences, specific dislikes, communication style, values, family details/names, or personal struggles. Ask: "What information will help the User connect better with this Subject next time?"
 - **Summary**: Generate or update a brief bio/summary based on all data.
 
 ### OUTPUT FORMAT (JSON) ###
@@ -86,6 +94,7 @@ Notes: ${person.notes || "None"}
 ${context}
 
 ### DIARY ENTRY CONTENT ###
+Date: ${diaryDate.toISOString().split("T")[0]}
 ${diaryContent}
 `;
 
