@@ -2,15 +2,10 @@
 
 import { getLocale } from "next-intl/server";
 import { headers } from "next/headers";
-import OpenAI from "openai";
 import { z } from "zod";
 import { requireAuth } from "#lib/auth";
 import { getSimplePeopleList } from "#lib/dal";
-
-const openai = new OpenAI({
-	baseURL: "https://openrouter.ai/api/v1",
-	apiKey: process.env.OPENROUTER_API_KEY,
-});
+import { generateJSON } from "#lib/llm";
 
 // Schema for extracted entities
 const matchedPersonSchema = z.object({
@@ -71,10 +66,6 @@ export async function extractEntitiesFromText(
 ): Promise<EntityExtractionResult> {
 	await requireAuth();
 
-	if (!process.env.OPENROUTER_API_KEY) {
-		throw new Error("OpenRouter API key not configured");
-	}
-
 	if (!text.trim()) {
 		return { people: [], locations: [] };
 	}
@@ -94,13 +85,7 @@ export async function extractEntitiesFromText(
 						.join("\n")}`
 				: "";
 
-		// Use OpenAI to extract entities
-		const completion = await openai.chat.completions.create({
-			model: "google/gemini-3-flash-preview",
-			messages: [
-				{
-					role: "system",
-					content: `YOU ARE AN EXPERT AI ANALYST FOR DIARY ENTRIES. YOUR TASK IS TO EXTRACT PEOPLE AND LOCATIONS WITH HIGH PRECISION, FOCUSING ONLY ON REAL-WORLD INTERACTIONS AND VISITS.
+		const systemPrompt = `YOU ARE AN EXPERT AI ANALYST FOR DIARY ENTRIES. YOUR TASK IS TO EXTRACT PEOPLE AND LOCATIONS WITH HIGH PRECISION, FOCUSING ONLY ON REAL-WORLD INTERACTIONS AND VISITS.
 
 ### STRICT FILTERING RULES (CRITICAL) ###
 
@@ -139,33 +124,15 @@ export async function extractEntitiesFromText(
 3. **locations**:
    - Specific visited places.
    - Fields: "name", "confidence".
+${peopleContext}`;
 
-### OUTPUT FORMAT (JSON) ###
-{
-  "matchedPeople": [{ "name": "John Smith", "mentionedAs": "John", "confidence": 0.9 }],
-  "newPeople": [{ "name": "Bob", "confidence": 0.85 }],
-  "locations": [{ "name": "Central Park", "confidence": 0.9 }]
-}
-${peopleContext}`,
-				},
-				{
-					role: "user",
-					content: text,
-				},
-			],
-			response_format: { type: "json_object" },
-			temperature: 0.1,
-		});
+		const validated = await generateJSON(
+			text,
+			entityExtractionSchema,
+			systemPrompt,
+		);
 
-		const content = completion.choices[0]?.message?.content;
-		if (!content) {
-			throw new Error("No response from OpenAI");
-		}
-
-		const parsed = JSON.parse(content);
-		console.log("AI extracted entities:", parsed);
-
-		const validated = entityExtractionSchema.parse(parsed);
+		console.log("AI extracted entities:", validated);
 
 		// Process matched people (AI already identified them as existing)
 		const matchedPeople: ExtractedPerson[] = validated.matchedPeople.map(

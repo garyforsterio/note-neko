@@ -1,15 +1,10 @@
 "use server";
 
 import { getLocale } from "next-intl/server";
-import OpenAI from "openai";
 import { z } from "zod";
 import { requireAuth } from "#lib/auth";
 import { getPerson } from "#lib/dal";
-
-const openai = new OpenAI({
-	baseURL: "https://openrouter.ai/api/v1",
-	apiKey: process.env.OPENROUTER_API_KEY,
-});
+import { generateJSON } from "#lib/llm";
 
 const personSummarySchema = z.object({
 	summary: z.string(),
@@ -34,10 +29,6 @@ export async function generatePersonSummary(
 	personId: string,
 ): Promise<PersonSummary> {
 	await requireAuth();
-
-	if (!process.env.OPENROUTER_API_KEY) {
-		throw new Error("OpenRouter API key not configured");
-	}
 
 	const person = await getPerson(personId);
 	if (!person) {
@@ -104,13 +95,7 @@ ${index + 1}. Date: ${entry.date.toDateString()}
 
 		const fullContext = profileContext + diaryContext;
 
-		// Generate AI summary
-		const completion = await openai.chat.completions.create({
-			model: "google/gemini-3-flash-preview",
-			messages: [
-				{
-					role: "system",
-					content: `YOU ARE A RELATIONSHIP INSIGHTS ASSISTANT. YOUR ROLE IS TO ANALYZE A USER'S DIARY ENTRIES ABOUT SOMEONE THEY KNOW AND PROVIDE PERSONALIZED SUGGESTIONS TO STRENGTHEN THEIR RELATIONSHIP.
+		const systemPrompt = `YOU ARE A RELATIONSHIP INSIGHTS ASSISTANT. YOUR ROLE IS TO ANALYZE A USER'S DIARY ENTRIES ABOUT SOMEONE THEY KNOW AND PROVIDE PERSONALIZED SUGGESTIONS TO STRENGTHEN THEIR RELATIONSHIP.
 
 ###CONTEXT###
 
@@ -205,32 +190,15 @@ RETURN A JSON OBJECT WITH THIS EXACT FORMAT:
   "activitySuggestions": ["Visit a local bookstore together", "Attend an author reading event"],
   "suggestedInterests": ["Creative writing", "Literary podcasts"],
   "relationshipTips": ["Ask for her book recommendations regularly", "Share interesting literary articles you find"]
-}`,
-				},
-				{
-					role: "user",
-					content: fullContext,
-				},
-			],
-			response_format: { type: "json_object" },
-			temperature: 0.3,
-		});
+}`;
 
-		const content = completion.choices[0]?.message?.content;
-		if (!content) {
-			throw new Error("No response from OpenAI");
-		}
+		const validated = await generateJSON(
+			fullContext,
+			personSummarySchema,
+			systemPrompt,
+		);
 
-		const parsed = JSON.parse(content);
-		console.log("AI generated person summary:", {
-			personId,
-			hasProfileData,
-			hasDiaryData,
-			summaryLength: parsed.summary?.length || 0,
-			keyInsightsCount: parsed.keyInsights?.length || 0,
-		});
-
-		const validated = personSummarySchema.parse(parsed);
+		console.log("AI generated person summary available");
 
 		return {
 			summary: validated.summary,

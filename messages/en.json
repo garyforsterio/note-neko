@@ -156,6 +156,12 @@
 		"locationRecommendation": "It is recommended to enable browser location access.",
 		"defaultLocationTip": "Alternatively, you can set a default location in settings.",
 		"enableBrowserLocation": "Enable Browser Location",
+		"insights": {
+			"title": "Person Insights",
+			"aiPowered": "Ai Powered",
+			"description": "Add notes about your interactions. AI will analyze this to automatically update their profiles.",
+			"placeholder": "What did you talk about? Did you learn anything new about them?"
+		},
 		"noWeatherLocation": "Weather information not available for this location."
 	},
 	"home": {

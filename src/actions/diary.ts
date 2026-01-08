@@ -5,6 +5,7 @@ import type { Prisma } from "@prisma/client";
 import * as Sentry from "@sentry/nextjs";
 import { getLocale } from "next-intl/server";
 import { z } from "zod";
+import { enrichPersonDetails } from "#actions/enrichPersonDetails";
 import { extractEntitiesFromText } from "#actions/extractEntities";
 import { redirect } from "#i18n/navigation";
 import { requireAuth } from "#lib/auth";
@@ -212,7 +213,7 @@ export async function createDiaryEntryAction(
 	// Redirect to edit page to allow user to validate extractions
 	// This is outside the try-catch because redirect() throws an error to signal the redirect
 	redirect({
-		href: `/diary/${entryId}${nextDayParam}`,
+		href: `/diary/${entryId}${nextDayParam}${nextDayParam ? "&" : "?"}mode=edit`,
 		locale,
 	});
 }
@@ -273,9 +274,42 @@ export async function updateDiaryEntryAction(
 		});
 
 		// Return success
-		return submission.reply({
+		const successReply = submission.reply({
 			formErrors: [],
 		});
+
+		// Handle person enrichment asynchronously (but await here to ensure it's done before redirect/refresh)
+		// Handle person enrichment asynchronously (but await here to ensure it's done before redirect/refresh)
+		const personContexts: Record<string, string> = {};
+		for (const [key, value] of formData.entries()) {
+			if (
+				key.startsWith("person-context-") &&
+				typeof value === "string" &&
+				value.trim()
+			) {
+				const personId = key.replace("person-context-", "");
+				personContexts[personId] = value.trim();
+			}
+		}
+
+		if (Object.keys(personContexts).length > 0) {
+			try {
+				// Use top level import to avoid dynamic import issues
+				await Promise.all(
+					Object.entries(personContexts).map(([personId, context]) => {
+						return enrichPersonDetails(
+							personId,
+							context,
+							submission.value.content,
+						);
+					}),
+				);
+			} catch (e) {
+				console.error("Error processing person contexts", e);
+			}
+		}
+
+		return successReply;
 	} catch (error) {
 		Sentry.captureException(error);
 		return submission.reply({

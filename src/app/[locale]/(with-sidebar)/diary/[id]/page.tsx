@@ -12,6 +12,7 @@ interface DiaryEntryPageProps {
 	}>;
 	searchParams: Promise<{
 		nextDay?: string;
+		mode?: "edit";
 	}>;
 }
 
@@ -32,7 +33,7 @@ export default async function DiaryEntryPage({
 	params,
 	searchParams,
 }: DiaryEntryPageProps) {
-	const [entry, allPeople, { nextDay }] = await Promise.all([
+	const [entry, allPeople, { nextDay, mode }] = await Promise.all([
 		getDiaryEntry((await params).id),
 		getPeople(),
 		searchParams,
@@ -57,6 +58,7 @@ export default async function DiaryEntryPage({
 				googleMapsApiKey={googleMapsApiKey}
 				nextDay={nextDay}
 				weather={weather}
+				mode={mode}
 			/>
 		</div>
 	);

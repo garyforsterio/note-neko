@@ -28,6 +28,7 @@ interface DiaryEntryPageClientProps {
 	googleMapsApiKey: string;
 	nextDay?: string;
 	weather?: WeatherInfo | null;
+	mode?: "edit";
 }
 
 export default function DiaryEntryPageClient({
@@ -36,11 +37,12 @@ export default function DiaryEntryPageClient({
 	googleMapsApiKey,
 	nextDay,
 	weather,
+	mode,
 }: DiaryEntryPageClientProps) {
 	const t = useTranslations();
 	const locale = useLocale();
 	const router = useRouter();
-	const [isEditing, setIsEditing] = useState(false);
+	const [isEditing, setIsEditing] = useState(mode === "edit");
 
 	const date = new Date(entry.date);
 	// Use optional chaining for safe access
@@ -86,129 +88,141 @@ export default function DiaryEntryPageClient({
 					</Link>
 				</div>
 			)}
-			<div className="bg-white p-5 md:p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow max-w-4xl mx-auto">
-				{/* Header Section */}
-				<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 border-b pb-6 border-gray-100">
-					<div>
-						<h2 className="text-4xl font-bold text-gray-900 tracking-tight">
-							{format(date, "EEEE")}
-						</h2>
-						<div className="flex items-center gap-3 mt-2 relative">
-							<span className="text-xl text-gray-500 font-medium">
-								{format(date, "d MMMM yyyy")}
-							</span>
-							<div className="p-2 bg-gray-50 rounded-full text-gray-400">
-								<CalendarIcon size={20} />
-							</div>
-						</div>
-
-						<div className="flex items-center gap-2 mt-3 text-sm h-6">
-							<MapPin
-								size={14}
-								className={
-									entry.locations.length > 0 ? "text-blue-500" : "text-gray-400"
-								}
-							/>
-							{locationDisplayString ? (
-								<div className="flex items-center gap-2">
-									<span className="text-gray-600 font-medium">
-										{locationDisplayString}
-										{entry.locations.length > 1 &&
-											` +${entry.locations.length - 1} more`}
-									</span>
-								</div>
-							) : (
-								<span className="text-gray-600 font-medium">
-									{t("diary.unknownLocation")}
-								</span>
-							)}
-						</div>
-					</div>
-
-					<div className="flex justify-around items-center py-4 md:py-0 select-none w-full md:w-auto text-gray-400 md:gap-6">
-						{/* Weather widgets placeholder */}
-						<div className="flex flex-col items-center gap-1">
-							<div className="flex flex-col items-center gap-0.5 text-gray-500">
-								<WeatherIcon size={18} />
-								<span className="font-semibold text-sm md:text-lg whitespace-nowrap">
-									{weather?.temperatureMax && weather?.temperatureMin
-										? `${weather.temperatureMin}°C / ${weather.temperatureMax}°C`
-										: "--°C"}
-								</span>
-							</div>
-							<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
-								Weather
-							</span>
-						</div>
-						<div className="hidden md:block w-px bg-gray-200 h-10 self-center" />
-						<div className="flex flex-col items-center gap-1">
-							<div className="flex flex-col items-center gap-0.5 text-gray-500">
-								<Sunrise size={18} />
-								<span className="font-semibold text-sm md:text-lg whitespace-nowrap">
-									{weather?.sunrise && weather?.sunset
-										? `${weather.sunrise} - ${weather.sunset}`
-										: "--:--"}
-								</span>
-							</div>
-							<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
-								Sun
-							</span>
-						</div>
-						<div className="hidden md:block w-px bg-gray-200 h-10 self-center" />
-						<div className="flex flex-col items-center gap-1">
-							<div className="flex flex-col items-center gap-0.5 text-gray-500">
-								<Moon size={18} />
-								<span className="font-semibold text-sm md:text-lg whitespace-nowrap">
-									{weather ? `${Math.round(weather.moonPhase * 100)}%` : "--%"}
-								</span>
-							</div>
-							<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
-								Moon
-							</span>
-						</div>
-					</div>
-				</div>
-
-				{/* Content Section */}
-				<div className="prose max-w-none text-lg text-gray-700 leading-relaxed mb-8">
-					<DiaryContent
-						content={entry.content}
-						people={entry.mentions.map((m) => m.person)}
-						locations={entry.locations}
-						locale={locale}
-					/>
-				</div>
-
-				{/* Map Section for View Mode */}
+			<div className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow max-w-4xl mx-auto overflow-hidden">
+				{/* Map Section - Media Header Style */}
 				{entry.locations.length > 0 && googleMapsApiKey && (
-					<div className="h-[300px] w-full mb-8 rounded-xl overflow-hidden border border-gray-100 shadow-sm">
+					<div className="h-[250px] w-full relative group">
 						<DiaryMap
 							apiKey={googleMapsApiKey}
 							locations={entry.locations}
 							className="w-full h-full"
 						/>
+						{/* Overlay gradient for better text checking if needed, or just decoration */}
+						<div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent pointer-events-none" />
+
+						{/* Overlay to indicate this is the location context */}
+						<div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-sm text-xs font-medium text-gray-600 border border-gray-100/50 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+							<MapPin size={12} className="text-blue-500" />
+							<span>{t("diary.entryLocation")}</span>
+						</div>
 					</div>
 				)}
 
-				{/* Footer/Actions Section */}
-				<div className="flex flex-col sm:flex-row justify-between items-end sm:items-center gap-4 border-t pt-6 border-gray-100">
-					<div className="flex flex-col gap-3 w-full sm:w-auto">
-						<DiaryMentions mentions={entry.mentions} />
-						{/* DiaryLocations redundant with map but kept for list view if needed */}
-						{/* <DiaryLocations locations={entry.locations} /> */}
+				<div className="p-5 md:p-8">
+					{/* Header Section */}
+					<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 border-b pb-6 border-gray-100">
+						<div>
+							<h2 className="text-4xl font-bold text-gray-900 tracking-tight">
+								{format(date, "EEEE")}
+							</h2>
+							<div className="flex items-center gap-3 mt-2 relative">
+								<span className="text-xl text-gray-500 font-medium">
+									{format(date, "d MMMM yyyy")}
+								</span>
+								<div className="p-2 bg-gray-50 rounded-full text-gray-400">
+									<CalendarIcon size={20} />
+								</div>
+							</div>
+
+							<div className="flex items-center gap-2 mt-3 text-sm h-6">
+								<MapPin
+									size={14}
+									className={
+										entry.locations.length > 0
+											? "text-blue-500"
+											: "text-gray-400"
+									}
+								/>
+								{locationDisplayString ? (
+									<div className="flex items-center gap-2">
+										<span className="text-gray-600 font-medium">
+											{locationDisplayString}
+											{entry.locations.length > 1 &&
+												` +${entry.locations.length - 1} more`}
+										</span>
+									</div>
+								) : (
+									<span className="text-gray-600 font-medium">
+										{t("diary.unknownLocation")}
+									</span>
+								)}
+							</div>
+						</div>
+
+						<div className="flex justify-around items-center py-4 md:py-0 select-none w-full md:w-auto text-gray-400 md:gap-6">
+							{/* Weather widgets placeholder */}
+							<div className="flex flex-col items-center gap-1">
+								<div className="flex flex-col items-center gap-0.5 text-gray-500">
+									<WeatherIcon size={18} />
+									<span className="font-semibold text-sm md:text-lg whitespace-nowrap">
+										{weather?.temperatureMax && weather?.temperatureMin
+											? `${weather.temperatureMin}°C / ${weather.temperatureMax}°C`
+											: "--°C"}
+									</span>
+								</div>
+								<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
+									Weather
+								</span>
+							</div>
+							<div className="hidden md:block w-px bg-gray-200 h-10 self-center" />
+							<div className="flex flex-col items-center gap-1">
+								<div className="flex flex-col items-center gap-0.5 text-gray-500">
+									<Sunrise size={18} />
+									<span className="font-semibold text-sm md:text-lg whitespace-nowrap">
+										{weather?.sunrise && weather?.sunset
+											? `${weather.sunrise} - ${weather.sunset}`
+											: "--:--"}
+									</span>
+								</div>
+								<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
+									Sun
+								</span>
+							</div>
+							<div className="hidden md:block w-px bg-gray-200 h-10 self-center" />
+							<div className="flex flex-col items-center gap-1">
+								<div className="flex flex-col items-center gap-0.5 text-gray-500">
+									<Moon size={18} />
+									<span className="font-semibold text-sm md:text-lg whitespace-nowrap">
+										{weather
+											? `${Math.round(weather.moonPhase * 100)}%`
+											: "--%"}
+									</span>
+								</div>
+								<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
+									Moon
+								</span>
+							</div>
+						</div>
 					</div>
 
-					<div className="flex items-center gap-1 shrink-0">
-						<button
-							type="button"
-							onClick={() => setIsEditing(true)}
-							className="p-2 text-gray-500 hover:text-blue-600 transition-colors cursor-pointer"
-							title={t("common.edit")}
-						>
-							<Pencil className="h-4 w-4" />
-						</button>
-						<ShareButton entry={entry} locale={locale} />
-						<DeleteButton id={entry.id} />
+					{/* Content Section */}
+					<div className="prose max-w-none text-lg text-gray-700 leading-relaxed mb-8">
+						<DiaryContent
+							content={entry.content}
+							people={entry.mentions.map((m) => m.person)}
+							locations={entry.locations}
+							locale={locale}
+						/>
+					</div>
+
+					{/* Footer/Actions Section */}
+					<div className="flex flex-col sm:flex-row justify-between items-end sm:items-center gap-4 border-t pt-6 border-gray-100">
+						<div className="flex flex-col gap-3 w-full sm:w-auto">
+							<DiaryMentions mentions={entry.mentions} />
+						</div>
+
+						<div className="flex items-center gap-1 shrink-0">
+							<button
+								type="button"
+								onClick={() => setIsEditing(true)}
+								className="p-2 text-gray-500 hover:text-blue-600 transition-colors cursor-pointer"
+								title={t("common.edit")}
+							>
+								<Pencil className="h-4 w-4" />
+							</button>
+							<ShareButton entry={entry} locale={locale} />
+							<DeleteButton id={entry.id} />
+						</div>
 					</div>
 				</div>
 			</div>

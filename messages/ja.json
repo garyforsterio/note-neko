@@ -148,6 +148,12 @@
 		"aiProcessingNote": "AIが日記のエントリーを処理し、人物や場所を抽出します。",
 		"locationRecommendation": "ブラウザの位置情報アクセスを有効にすることをお勧めします。",
 		"defaultLocationTip": "または、設定でデフォルトの場所を設定することもできます。",
+		"insights": {
+			"title": "人物インサイト",
+			"aiPowered": "AI活用",
+			"description": "やり取りについてメモを追加してください。AIがこれを分析し、プロフィールを自動的に更新します。",
+			"placeholder": "どんな話をしましたか？新しい発見はありましたか？"
+		},
 		"noWeatherLocation": "この場所の天気情報は利用できません。"
 	},
 	"common": {

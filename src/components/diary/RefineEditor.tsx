@@ -213,10 +213,30 @@ export default function RefineEditor({
 			const newContent = content.replace(segment.value, replacementText);
 			onChange(newContent);
 
-			// Note: Entity removal from arrays is handled automatically by the server action
-			// based on what's actually referenced in the content
+			// Check if we need to remove from the entities list (if no longer referenced)
+			if (onEntitiesChange && segment.entity) {
+				const isPerson = "userId" in segment.entity;
+				const idStr = isPerson
+					? `[person:${(segment.entity as Person).id}]`
+					: `[location:${(segment.entity as DiaryLocation).placeId}]`;
+
+				// Check if the entity is still mentioned elsewhere in the *new* content
+				if (!newContent.includes(idStr)) {
+					if (isPerson) {
+						const newPeople = people.filter(
+							(p) => p.id !== (segment.entity as Person).id,
+						);
+						onEntitiesChange(newPeople, locations);
+					} else {
+						const newLocations = locations.filter(
+							(l) => l.placeId !== (segment.entity as DiaryLocation).placeId,
+						);
+						onEntitiesChange(people, newLocations);
+					}
+				}
+			}
 		},
-		[content, onChange],
+		[content, onChange, onEntitiesChange, people, locations],
 	);
 
 	// Add or replace entity reference
