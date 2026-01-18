@@ -24,6 +24,7 @@
 		"prisma:migrate-deploy": "dotenv -e .env.production prisma migrate deploy",
 		"prisma:seed": "dotenv -e .env.development prisma db seed",
 		"prisma:generate-dmmf": "tsx prisma/generate-dmmf.ts",
+		"db:backup": "dotenv -e .env.production -- bash scripts/backup-db.sh",
 		"storybook": "storybook dev -p 6006",
 		"build-storybook": "storybook build"
 	},
