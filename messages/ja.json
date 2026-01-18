@@ -262,6 +262,18 @@
 			"title": "つながり",
 			"description": "日記で一緒に登場する人々"
 		},
+		"contactDetails": "連絡先詳細",
+		"relationships": "関係",
+		"noRelationships": "関係はまだ追加されていません",
+		"entryConversations": "このエントリーでの会話",
+		"suggestions": {
+			"title": "提案",
+			"updateField": "{field}を更新",
+			"addRelationship": "関係を追加",
+			"newSuggestion": "新しい提案",
+			"accept": "承認",
+			"reject": "拒否"
+		},
 		"globalNetwork": {
 			"title": "ネットワークマップ",
 			"description": "日記で一緒に登場する人々のつながりを表しています。",

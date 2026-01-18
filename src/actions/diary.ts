@@ -5,11 +5,11 @@ import type { Prisma } from "@prisma/client";
 import * as Sentry from "@sentry/nextjs";
 import { getLocale } from "next-intl/server";
 import { z } from "zod";
-import { enrichPersonDetails } from "#actions/enrichPersonDetails";
 import { extractEntitiesFromText } from "#actions/extractEntities";
 import { redirect } from "#i18n/navigation";
 import { requireAuth } from "#lib/auth";
 import {
+	createConversation,
 	createDiaryEntry,
 	createPerson,
 	deleteDiaryEntry,
@@ -281,6 +281,8 @@ export async function updateDiaryEntryAction(
 		// Handle person enrichment asynchronously (but await here to ensure it's done before redirect/refresh)
 		// Handle person enrichment asynchronously (but await here to ensure it's done before redirect/refresh)
 		const personContexts: Record<string, string> = {};
+		const updateEntryId = submission.value.id;
+
 		for (const [key, value] of formData.entries()) {
 			if (
 				key.startsWith("person-context-") &&
@@ -294,19 +296,17 @@ export async function updateDiaryEntryAction(
 
 		if (Object.keys(personContexts).length > 0) {
 			try {
-				// Use top level import to avoid dynamic import issues
 				await Promise.all(
 					Object.entries(personContexts).map(([personId, context]) => {
-						return enrichPersonDetails(
+						return createConversation({
+							diaryEntryId: updateEntryId, // ID is guaranteed here by validation above
 							personId,
-							context,
-							submission.value.content,
-							submission.value.date,
-						);
+							content: context,
+						});
 					}),
 				);
 			} catch (e) {
-				console.error("Error processing person contexts", e);
+				console.error("Error creating conversations", e);
 			}
 		}
 

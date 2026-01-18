@@ -38,7 +38,13 @@ export async function createPersonAction(
 
 		await createPerson({
 			name: submission.value.name,
+			namePhonetic: submission.value.namePhonetic || null,
 			nickname: submission.value.nickname || null,
+			nationality: submission.value.nationality || null,
+			occupation: submission.value.occupation || null,
+			email: submission.value.email || null,
+			phoneNumber: submission.value.phoneNumber || null,
+			website: submission.value.website || null,
 			birthday,
 			howWeMet: submission.value.howWeMet || null,
 			interests,
@@ -90,7 +96,13 @@ export async function updatePersonAction(
 
 		await updatePerson(submission.value.id, {
 			name: submission.value.name,
+			namePhonetic: submission.value.namePhonetic || null,
 			nickname: submission.value.nickname || null,
+			nationality: submission.value.nationality || null,
+			occupation: submission.value.occupation || null,
+			email: submission.value.email || null,
+			phoneNumber: submission.value.phoneNumber || null,
+			website: submission.value.website || null,
 			birthday,
 			howWeMet: submission.value.howWeMet || null,
 			interests,
@@ -143,7 +155,14 @@ export async function createPersonWithoutRedirectAction(name: string): Promise<{
 	try {
 		const person = await createPerson({
 			name,
+			namePhonetic: null,
 			nickname: null,
+			nationality: null,
+			occupation: null,
+			email: null,
+			phoneNumber: null,
+			address: null,
+			website: null,
 			birthday: null,
 			howWeMet: null,
 			interests: [],

@@ -26,27 +26,115 @@ model User {
   people        Person[]
   diaryEntries  DiaryEntry[]
   
-  // Default Location
   defaultLocationPlaceId String?
   defaultLocationName    String?
   defaultLocationLat     Float?
   defaultLocationLng     Float?
+
+  conversations Conversation[]
+  suggestions   Suggestion[]
+  relationships Relationship[]
 }
 
 model Person {
   id          String        @id @default(cuid())
   name        String
+  namePhonetic String?
   nickname    String?
   birthday    DateTime?
+  nationality String?
+  occupation  String?
   howWeMet    String?
   interests   String[]
   notes       String?
+  email       String?
+  phoneNumber String?
+  address     String?
+  website     String?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   mentions    DiaryMention[]
+  conversations Conversation[]
+  suggestions Suggestion[]
+  relatedSuggestions Suggestion[] @relation("RelatedSuggestions")
+  
+  // Relationships
+  relationshipsAsFrom Relationship[] @relation("FromPerson")
+  relationshipsAsTo   Relationship[] @relation("ToPerson")
+
   user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
 
+  @@index([userId])
+}
+
+model Conversation {
+  id           String      @id @default(cuid())
+  content      String
+  
+  diaryEntry   DiaryEntry  @relation(fields: [diaryEntryId], references: [id], onDelete: Cascade)
+  diaryEntryId String
+  
+  person       Person      @relation(fields: [personId], references: [id], onDelete: Cascade)
+  personId     String
+  
+  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  
+  processedAt  DateTime?   // Null if not yet used for suggestions
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([diaryEntryId])
+  @@index([personId])
+  @@index([userId])
+}
+
+model Suggestion {
+  id        String   @id @default(cuid())
+  type      String   // "UPDATE_FIELD", "ADD_RELATIONSHIP", etc.
+  targetField String?  // "occupation", "interests", etc.
+  value       String?  // The suggested value
+  reason      String?  // Why this suggestion is being made
+  
+  // For relationship suggestions
+  relatedPerson    Person?  @relation("RelatedSuggestions", fields: [relatedPersonId], references: [id], onDelete: Cascade)
+  relatedPersonId  String?
+  relationshipType String?  // "friend", "spouse", etc.
+  status    String   @default("PENDING") // "PENDING", "ACCEPTED", "REJECTED"
+  
+  person    Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  personId  String
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([personId])
+  @@index([userId])
+  @@index([status])
+}
+
+model Relationship {
+  id           String   @id @default(cuid())
+  type         String   // "partner", "colleague", "friend", etc.
+  
+  fromPerson   Person   @relation("FromPerson", fields: [fromPersonId], references: [id], onDelete: Cascade)
+  fromPersonId String
+  
+  toPerson     Person   @relation("ToPerson", fields: [toPersonId], references: [id], onDelete: Cascade)
+  toPersonId   String
+  
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([fromPersonId])
+  @@index([toPersonId])
   @@index([userId])
 }
 
@@ -58,6 +146,7 @@ model DiaryEntry {
   updatedAt   DateTime  @updatedAt
   mentions    DiaryMention[]
   locations   DiaryLocation[]
+  conversations Conversation[]
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
 

@@ -259,6 +259,18 @@
 			"title": "Connections",
 			"description": "People who appear together in diary entries"
 		},
+		"contactDetails": "Contact Details",
+		"relationships": "Relationships",
+		"noRelationships": "No relationships added yet",
+		"entryConversations": "Conversations in this entry",
+		"suggestions": {
+			"title": "Suggestions",
+			"updateField": "Update {field}",
+			"addRelationship": "Add relationship",
+			"newSuggestion": "New Suggestion",
+			"accept": "Accept",
+			"reject": "Reject"
+		},
 		"globalNetwork": {
 			"title": "Network Map",
 			"description": "Connections represent people appearing in the same diary entries.",

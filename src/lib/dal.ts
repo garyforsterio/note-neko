@@ -19,6 +19,15 @@ type PersonWithMentions = Prisma.PersonGetPayload<{
 				};
 			};
 		};
+		conversations: {
+			include: { diaryEntry: true };
+		};
+		relationshipsAsFrom: {
+			include: { toPerson: true };
+		};
+		relationshipsAsTo: {
+			include: { fromPerson: true };
+		};
 	};
 }>;
 
@@ -72,7 +81,7 @@ async function getPeopleCached(userId: string, query?: string) {
 export const getPeople = cache(
 	async (query?: string): Promise<PersonWithMentions[]> => {
 		const { userId } = await requireAuth();
-		return getPeopleCached(userId, query);
+		return getPeopleCached(userId, query) as unknown as PersonWithMentions[];
 	},
 );
 
@@ -93,6 +102,18 @@ async function getPersonCached(userId: string, id: string) {
 						},
 					},
 				},
+			},
+			conversations: {
+				orderBy: { createdAt: "desc" },
+				include: {
+					diaryEntry: true,
+				},
+			},
+			relationshipsAsFrom: {
+				include: { toPerson: true },
+			},
+			relationshipsAsTo: {
+				include: { fromPerson: true },
 			},
 		},
 	});
@@ -392,5 +413,26 @@ export async function getSimplePeopleList() {
 	return db.person.findMany({
 		where: { userId },
 		select: { id: true, name: true, nickname: true },
+	});
+}
+
+// Conversation related functions
+export async function createConversation({
+	diaryEntryId,
+	personId,
+	content,
+}: {
+	diaryEntryId: string;
+	personId: string;
+	content: string;
+}) {
+	const { userId } = await requireAuth();
+	return db.conversation.create({
+		data: {
+			content,
+			diaryEntryId,
+			personId,
+			userId,
+		},
 	});
 }
