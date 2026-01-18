@@ -125,7 +125,10 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
 			{/* Footer/Actions Section */}
 			<div className="flex flex-col sm:flex-row justify-between items-end sm:items-center gap-4 border-t pt-6 border-gray-100">
 				<div className="flex flex-col gap-3 w-full sm:w-auto">
-					<DiaryMentions mentions={entry.mentions} />
+					<DiaryMentions
+						mentions={entry.mentions}
+						conversations={entry.conversations}
+					/>
 					<DiaryLocations locations={entry.locations} />
 				</div>
 

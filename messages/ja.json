@@ -71,6 +71,8 @@
 		"locations": "場所",
 		"searchLocation": "場所を検索...",
 		"contentPlaceholder": "日記を書いてください...",
+		"conversation": "会話",
+		"closeExpandedView": "拡大表示を閉じる",
 		"date": "日付",
 		"noLocationsFound": "場所が見つかりません",
 		"noLocation": "場所なし",
@@ -157,6 +159,7 @@
 		"noWeatherLocation": "この場所の天気情報は利用できません。"
 	},
 	"common": {
+		"close": "閉じる",
 		"cancel": "キャンセル",
 		"create": "作成",
 		"save": "保存",

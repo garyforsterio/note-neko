@@ -88,10 +88,10 @@ export default function DiaryEntryPageClient({
 					</Link>
 				</div>
 			)}
-			<div className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow max-w-4xl mx-auto overflow-hidden">
+			<div className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow max-w-4xl mx-auto">
 				{/* Map Section - Media Header Style */}
 				{entry.locations.length > 0 && googleMapsApiKey && (
-					<div className="h-[250px] w-full relative group">
+					<div className="h-[250px] w-full relative group rounded-t-2xl overflow-hidden">
 						<DiaryMap
 							apiKey={googleMapsApiKey}
 							locations={entry.locations}
@@ -208,7 +208,10 @@ export default function DiaryEntryPageClient({
 					{/* Footer/Actions Section */}
 					<div className="flex flex-col sm:flex-row justify-between items-end sm:items-center gap-4 border-t pt-6 border-gray-100">
 						<div className="flex flex-col gap-3 w-full sm:w-auto">
-							<DiaryMentions mentions={entry.mentions} />
+							<DiaryMentions
+								mentions={entry.mentions}
+								conversations={entry.conversations}
+							/>
 						</div>
 
 						<div className="flex items-center gap-1 shrink-0">

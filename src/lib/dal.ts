@@ -3,34 +3,6 @@ import { cache } from "react";
 import { requireAuth } from "#lib/auth";
 import { db } from "#lib/db";
 
-type PersonWithMentions = Prisma.PersonGetPayload<{
-	include: {
-		mentions: {
-			include: {
-				diaryEntry: {
-					include: {
-						mentions: {
-							include: {
-								person: true;
-							};
-						};
-						locations: true;
-					};
-				};
-			};
-		};
-		conversations: {
-			include: { diaryEntry: true };
-		};
-		relationshipsAsFrom: {
-			include: { toPerson: true };
-		};
-		relationshipsAsTo: {
-			include: { fromPerson: true };
-		};
-	};
-}>;
-
 export type DiaryEntryWithRelations = Prisma.DiaryEntryGetPayload<{
 	include: {
 		mentions: {
@@ -39,6 +11,7 @@ export type DiaryEntryWithRelations = Prisma.DiaryEntryGetPayload<{
 			};
 		};
 		locations: true;
+		conversations: true;
 	};
 }>;
 
@@ -70,6 +43,7 @@ async function getPeopleCached(userId: string, query?: string) {
 								},
 							},
 							locations: true,
+							conversations: true,
 						},
 					},
 				},
@@ -78,10 +52,14 @@ async function getPeopleCached(userId: string, query?: string) {
 	});
 }
 
+export type PersonWithMentions = Awaited<
+	ReturnType<typeof getPeopleCached>
+>[number];
+
 export const getPeople = cache(
 	async (query?: string): Promise<PersonWithMentions[]> => {
 		const { userId } = await requireAuth();
-		return getPeopleCached(userId, query) as unknown as PersonWithMentions[];
+		return getPeopleCached(userId, query);
 	},
 );
 
@@ -99,6 +77,7 @@ async function getPersonCached(userId: string, id: string) {
 								},
 							},
 							locations: true,
+							conversations: true,
 						},
 					},
 				},
@@ -119,8 +98,10 @@ async function getPersonCached(userId: string, id: string) {
 	});
 }
 
+export type PersonDetail = Awaited<ReturnType<typeof getPersonCached>>;
+
 export const getPerson = cache(
-	async (id: string): Promise<PersonWithMentions | null> => {
+	async (id: string): Promise<PersonDetail | null> => {
 		const { userId } = await requireAuth();
 		return getPersonCached(userId, id);
 	},
@@ -212,6 +193,7 @@ async function getDiaryEntriesCached(
 					},
 				},
 				locations: true,
+				conversations: true,
 			},
 		}),
 		db.diaryEntry.count({ where }),
@@ -242,6 +224,7 @@ async function getDiaryEntryCached(userId: string, id: string) {
 				},
 			},
 			locations: true,
+			conversations: true,
 		},
 	});
 }

@@ -128,12 +128,12 @@ export default function DiaryEditForm({
 			{/* Unified Card Container (Form) */}
 			<form
 				ref={formRef}
-				className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+				className="bg-white rounded-2xl shadow-sm border border-gray-100"
 				onSubmit={(e) => e.preventDefault()} // Prevent default submission, handled by handleSave
 			>
 				{/* Map - Media Header Style */}
 				{locations.length > 0 && googleMapsApiKey && (
-					<div className="h-[250px] w-full relative group">
+					<div className="h-[250px] w-full relative group rounded-t-2xl overflow-hidden">
 						<DiaryMap
 							apiKey={googleMapsApiKey}
 							locations={locations}
@@ -367,7 +367,11 @@ export default function DiaryEditForm({
 
 										<textarea
 											name={`person-context-${person.id}`}
-											defaultValue=""
+											defaultValue={
+												entry.conversations?.find(
+													(c) => c.personId === person.id,
+												)?.content || ""
+											}
 											placeholder={t("diary.insights.placeholder")}
 											rows={3}
 											className="w-full p-0 text-sm text-gray-700 bg-transparent border-0 focus:ring-0 focus:outline-none resize-none placeholder:text-gray-300"
