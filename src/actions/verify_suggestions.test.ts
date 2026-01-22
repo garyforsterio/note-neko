@@ -1,6 +1,18 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { db } from "#lib/db";
-import { generatePersonSuggestions, resolveSuggestion } from "./suggestions";
+
+// Skip integration tests if DATABASE_URL is not set
+const skipIntegrationTests = !process.env.DATABASE_URL;
+
+// Dynamic import to avoid PrismaClient initialization errors when DATABASE_URL is not set
+const { db } = skipIntegrationTests
+	? { db: null as never }
+	: await import("#lib/db");
+const { generatePersonSuggestions, resolveSuggestion } = skipIntegrationTests
+	? {
+			generatePersonSuggestions: null as never,
+			resolveSuggestion: null as never,
+		}
+	: await import("./suggestions");
 
 const TEST_USER_ID = `test-user-${Date.now()}`;
 
@@ -28,7 +40,7 @@ vi.mock("#lib/llm", () => ({
 	}),
 }));
 
-describe("Suggestions Logic", () => {
+describe.skipIf(skipIntegrationTests)("Suggestions Logic", () => {
 	const userId = TEST_USER_ID;
 	const userEmail = `test-${Date.now()}@example.com`;
 	let personAId: string;

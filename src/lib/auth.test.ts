@@ -83,14 +83,13 @@ describe("auth.ts", () => {
 			const mockSetProtectedHeader = vi.fn().mockReturnThis();
 			const mockSetExpirationTime = vi.fn().mockReturnThis();
 
-			mockSignJWT.mockImplementation(
-				() =>
-					({
-						setProtectedHeader: mockSetProtectedHeader,
-						setExpirationTime: mockSetExpirationTime,
-						sign: mockSign,
-					}) as unknown as SignJWT,
-			);
+			mockSignJWT.mockImplementation(function (this: unknown) {
+				return {
+					setProtectedHeader: mockSetProtectedHeader,
+					setExpirationTime: mockSetExpirationTime,
+					sign: mockSign,
+				} as unknown as SignJWT;
+			});
 
 			// Mock database create
 			vi.mocked(db.refreshToken.create).mockResolvedValue({
@@ -170,14 +169,13 @@ describe("auth.ts", () => {
 			const mockSetProtectedHeader = vi.fn().mockReturnThis();
 			const mockSetExpirationTime = vi.fn().mockReturnThis();
 
-			mockSignJWT.mockImplementation(
-				() =>
-					({
-						setProtectedHeader: mockSetProtectedHeader,
-						setExpirationTime: mockSetExpirationTime,
-						sign: mockSign,
-					}) as unknown as SignJWT,
-			);
+			mockSignJWT.mockImplementation(function (this: unknown) {
+				return {
+					setProtectedHeader: mockSetProtectedHeader,
+					setExpirationTime: mockSetExpirationTime,
+					sign: mockSign,
+				} as unknown as SignJWT;
+			});
 
 			mockJwtVerify.mockResolvedValue({
 				payload: { userId: "user-123" },
