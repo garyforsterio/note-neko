@@ -13,6 +13,7 @@ const nextConfig = {
 	// Enable once next/root-params ships https://github.com/amannn/next-intl/issues/1493#issuecomment-3435882292
 	cacheComponents: false,
 	reactCompiler: true,
+	serverExternalPackages: ["require-in-the-middle", "import-in-the-middle"],
 };
 
 const withNextIntl = createNextIntlPlugin();
