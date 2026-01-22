@@ -1,31 +1,25 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
-  seed     = "tsx prisma/seed.ts"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  importFileExtension    = "ts"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
-  id            String        @id @default(cuid())
-  email         String        @unique
-  passwordHash  String
-  resetToken    String?
+  id               String         @id @default(cuid())
+  email            String         @unique
+  passwordHash     String
+  resetToken       String?
   resetTokenExpiry DateTime?
-  refreshTokens RefreshToken[]
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  people        Person[]
-  diaryEntries  DiaryEntry[]
-  
+  refreshTokens    RefreshToken[]
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  people           Person[]
+  diaryEntries     DiaryEntry[]
+
   defaultLocationPlaceId String?
   defaultLocationName    String?
   defaultLocationLat     Float?
@@ -37,53 +31,53 @@ model User {
 }
 
 model Person {
-  id          String        @id @default(cuid())
-  name        String
-  namePhonetic String?
-  nickname    String?
-  birthday    DateTime?
-  nationality String?
-  occupation  String?
-  howWeMet    String?
-  interests   String[]
-  notes       String?
-  email       String?
-  phoneNumber String?
-  address     String?
-  website     String?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  mentions    DiaryMention[]
-  conversations Conversation[]
-  suggestions Suggestion[]
-  relatedSuggestions Suggestion[] @relation("RelatedSuggestions")
-  
+  id                 String         @id @default(cuid())
+  name               String
+  namePhonetic       String?
+  nickname           String?
+  birthday           DateTime?
+  nationality        String?
+  occupation         String?
+  howWeMet           String?
+  interests          String[]
+  notes              String?
+  email              String?
+  phoneNumber        String?
+  address            String?
+  website            String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  mentions           DiaryMention[]
+  conversations      Conversation[]
+  suggestions        Suggestion[]
+  relatedSuggestions Suggestion[]   @relation("RelatedSuggestions")
+
   // Relationships
   relationshipsAsFrom Relationship[] @relation("FromPerson")
   relationshipsAsTo   Relationship[] @relation("ToPerson")
 
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 
   @@index([userId])
 }
 
 model Conversation {
-  id           String      @id @default(cuid())
-  content      String
-  
-  diaryEntry   DiaryEntry  @relation(fields: [diaryEntryId], references: [id], onDelete: Cascade)
+  id      String @id @default(cuid())
+  content String
+
+  diaryEntry   DiaryEntry @relation(fields: [diaryEntryId], references: [id], onDelete: Cascade)
   diaryEntryId String
-  
-  person       Person      @relation(fields: [personId], references: [id], onDelete: Cascade)
-  personId     String
-  
-  user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String
-  
-  processedAt  DateTime?   // Null if not yet used for suggestions
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+
+  person   Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+  personId String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  processedAt DateTime? // Null if not yet used for suggestions
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@index([diaryEntryId])
   @@index([personId])
@@ -91,23 +85,23 @@ model Conversation {
 }
 
 model Suggestion {
-  id        String   @id @default(cuid())
-  type      String   // "UPDATE_FIELD", "ADD_RELATIONSHIP", etc.
-  targetField String?  // "occupation", "interests", etc.
-  value       String?  // The suggested value
-  reason      String?  // Why this suggestion is being made
-  
+  id          String  @id @default(cuid())
+  type        String // "UPDATE_FIELD", "ADD_RELATIONSHIP", etc.
+  targetField String? // "occupation", "interests", etc.
+  value       String? // The suggested value
+  reason      String? // Why this suggestion is being made
+
   // For relationship suggestions
-  relatedPerson    Person?  @relation("RelatedSuggestions", fields: [relatedPersonId], references: [id], onDelete: Cascade)
+  relatedPerson    Person? @relation("RelatedSuggestions", fields: [relatedPersonId], references: [id], onDelete: Cascade)
   relatedPersonId  String?
-  relationshipType String?  // "friend", "spouse", etc.
-  status    String   @default("PENDING") // "PENDING", "ACCEPTED", "REJECTED"
-  
-  person    Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
-  personId  String
-  
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
+  relationshipType String? // "friend", "spouse", etc.
+  status           String  @default("PENDING") // "PENDING", "ACCEPTED", "REJECTED"
+
+  person   Person @relation(fields: [personId], references: [id], onDelete: Cascade)
+  personId String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -118,20 +112,20 @@ model Suggestion {
 }
 
 model Relationship {
-  id           String   @id @default(cuid())
-  type         String   // "partner", "colleague", "friend", etc.
-  
-  fromPerson   Person   @relation("FromPerson", fields: [fromPersonId], references: [id], onDelete: Cascade)
-  fromPersonId String
-  
-  toPerson     Person   @relation("ToPerson", fields: [toPersonId], references: [id], onDelete: Cascade)
-  toPersonId   String
-  
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String
+  id   String @id @default(cuid())
+  type String // "partner", "colleague", "friend", etc.
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  fromPerson   Person @relation("FromPerson", fields: [fromPersonId], references: [id], onDelete: Cascade)
+  fromPersonId String
+
+  toPerson   Person @relation("ToPerson", fields: [toPersonId], references: [id], onDelete: Cascade)
+  toPersonId String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([fromPersonId])
   @@index([toPersonId])
@@ -139,41 +133,41 @@ model Relationship {
 }
 
 model DiaryEntry {
-  id          String    @id @default(cuid())
-  content     String
-  date        DateTime  @default(now())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  mentions    DiaryMention[]
-  locations   DiaryLocation[]
+  id            String          @id @default(cuid())
+  content       String
+  date          DateTime        @default(now())
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  mentions      DiaryMention[]
+  locations     DiaryLocation[]
   conversations Conversation[]
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String
 
   @@index([userId])
 }
 
 model DiaryMention {
-  id            String      @id @default(cuid())
-  person        Person      @relation(fields: [personId], references: [id], onDelete: Cascade)
-  personId      String
-  diaryEntry    DiaryEntry  @relation(fields: [diaryEntryId], references: [id], onDelete: Cascade)
-  diaryEntryId  String
-  createdAt     DateTime    @default(now())
+  id           String     @id @default(cuid())
+  person       Person     @relation(fields: [personId], references: [id], onDelete: Cascade)
+  personId     String
+  diaryEntry   DiaryEntry @relation(fields: [diaryEntryId], references: [id], onDelete: Cascade)
+  diaryEntryId String
+  createdAt    DateTime   @default(now())
 
   @@unique([personId, diaryEntryId])
 }
 
 model DiaryLocation {
-  id           String      @id @default(cuid())
+  id           String     @id @default(cuid())
   name         String
-  placeId      String      
+  placeId      String
   lat          Float
   lng          Float
-  diaryEntry   DiaryEntry  @relation(fields: [diaryEntryId], references: [id], onDelete: Cascade)
+  diaryEntry   DiaryEntry @relation(fields: [diaryEntryId], references: [id], onDelete: Cascade)
   diaryEntryId String
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 
   @@index([diaryEntryId])
 }

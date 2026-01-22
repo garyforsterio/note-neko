@@ -44,6 +44,5 @@ next-env.d.ts
 
 *storybook.log
 
-/prisma/dev.db
-/prisma/dmmf.json
+/src/generated/
 storybook-static

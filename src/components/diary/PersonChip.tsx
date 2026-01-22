@@ -1,7 +1,7 @@
 "use client";
 
-import type { Person } from "@prisma/client";
 import { User, X } from "lucide-react";
+import type { Person } from "#generated/prisma";
 
 interface PersonChipProps {
 	person: Person;

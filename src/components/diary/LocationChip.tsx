@@ -1,7 +1,7 @@
 "use client";
 
-import type { Prisma } from "@prisma/client";
 import { MapPin, X } from "lucide-react";
+import type { Prisma } from "#generated/prisma";
 
 type DiaryLocation = Prisma.DiaryLocationCreateWithoutDiaryEntryInput;
 

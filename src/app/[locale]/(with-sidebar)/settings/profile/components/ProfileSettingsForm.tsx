@@ -1,6 +1,5 @@
 "use client";
 
-import type { Prisma } from "@prisma/client";
 import { Loader2, MapPin, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
@@ -8,6 +7,7 @@ import { useFormStatus } from "react-dom";
 import type { LocationResult } from "#actions/locations";
 import { updateDefaultLocationAction } from "#actions/profile";
 import EntityPicker from "#components/diary/EntityPicker";
+import type { Prisma } from "#generated/prisma";
 import { useToast } from "#hooks/use-toast";
 
 interface ProfileSettingsFormProps {

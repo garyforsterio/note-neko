@@ -1,6 +1,5 @@
 "use client";
 
-import type { Person } from "@prisma/client";
 import { format } from "date-fns";
 import {
 	ArrowRight,
@@ -13,6 +12,7 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { DiaryContent } from "#components/DiaryContent";
+import type { Person } from "#generated/prisma";
 import { Link, useRouter } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
 import { type WeatherInfo, getWeatherIcon } from "#lib/utils/weather";

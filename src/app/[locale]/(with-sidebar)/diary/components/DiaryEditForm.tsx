@@ -1,6 +1,5 @@
 "use client";
 
-import type { Person, Prisma } from "@prisma/client";
 import { format } from "date-fns";
 import {
 	ArrowRight,
@@ -20,6 +19,7 @@ import { DayPicker } from "react-day-picker";
 import { updateDiaryEntryAction } from "#actions/diary";
 import RefineEditor from "#components/diary/RefineEditor";
 import RewriteEditor from "#components/diary/RewriteEditor";
+import type { Person, Prisma } from "#generated/prisma";
 import { useToast } from "#hooks/use-toast";
 import { Link, useRouter } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";

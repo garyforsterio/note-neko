@@ -1,7 +1,9 @@
-import { PrismaClient } from "@prisma/client";
 import { hash } from "bcryptjs";
+import { PrismaClient } from "../src/generated/prisma/client.js";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+	accelerateUrl: process.env.DATABASE_URL,
+});
 
 async function main() {
 	// Create a test user

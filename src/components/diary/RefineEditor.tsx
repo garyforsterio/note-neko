@@ -1,8 +1,8 @@
 "use client";
 
-import type { Person, Prisma } from "@prisma/client";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { Person, Prisma } from "#generated/prisma";
 import EntityPicker from "./EntityPicker";
 import LocationChip from "./LocationChip";
 import PersonChip from "./PersonChip";

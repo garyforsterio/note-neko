@@ -1,9 +1,9 @@
 "use client";
 
-import type { Conversation } from "@prisma/client";
 import { MessageCircle, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import type { Conversation } from "#generated/prisma";
 import { Link } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
 

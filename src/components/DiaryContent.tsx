@@ -1,5 +1,5 @@
-import type { Person, Prisma } from "@prisma/client";
 import Markdown from "react-markdown";
+import type { Person, Prisma } from "#generated/prisma";
 
 import { getGoogleMapsUrl } from "#lib/utils/maps";
 

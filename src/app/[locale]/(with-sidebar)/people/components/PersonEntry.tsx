@@ -1,9 +1,9 @@
 "use client";
 
-import type { Person } from "@prisma/client";
 import { format } from "date-fns";
 import { Calendar } from "lucide-react";
 import { useTranslations } from "next-intl";
+import type { Person } from "#generated/prisma";
 import { Link } from "#i18n/navigation";
 import DeleteButton from "./DeleteButton";
 import EditButton from "./EditButton";

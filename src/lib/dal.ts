@@ -1,5 +1,5 @@
-import type { Prisma } from "@prisma/client";
 import { cache } from "react";
+import type { Prisma } from "#generated/prisma";
 import { requireAuth } from "#lib/auth";
 import { db } from "#lib/db";
 

@@ -1,11 +1,11 @@
 "use server";
 
 import { parseWithZod } from "@conform-to/zod";
-import type { Prisma } from "@prisma/client";
 import * as Sentry from "@sentry/nextjs";
 import { getLocale } from "next-intl/server";
 import { z } from "zod";
 import { extractEntitiesFromText } from "#actions/extractEntities";
+import type { Prisma } from "#generated/prisma";
 import { redirect } from "#i18n/navigation";
 import { requireAuth } from "#lib/auth";
 import {

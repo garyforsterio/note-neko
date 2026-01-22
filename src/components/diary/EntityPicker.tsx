@@ -1,10 +1,10 @@
 "use client";
 
-import type { Person, Prisma } from "@prisma/client";
 import { MapPin, Search, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { type LocationResult, searchLocationsAction } from "#actions/locations";
+import type { Person, Prisma } from "#generated/prisma";
 
 type DiaryLocation = Prisma.DiaryLocationCreateWithoutDiaryEntryInput;
 

@@ -1,7 +1,7 @@
 "use client";
 
-import type { Person } from "@prisma/client";
 import { useTranslations } from "next-intl";
+import type { Person } from "#generated/prisma";
 import PersonEntry from "./PersonEntry";
 
 interface PersonListProps {
