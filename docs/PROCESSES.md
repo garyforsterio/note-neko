@@ -327,6 +327,28 @@ pg_dump DATABASE_URL > backup.sql
 psql DATABASE_URL < backup.sql
 ```
 
+## CI/CD Workflows
+
+### GitHub Actions
+
+#### CI Workflow (`.github/workflows/on-push.yml`)
+Runs on every push to any branch:
+- Linting with Biome
+- TypeScript type checking
+- Unit tests with Vitest
+
+#### Database Migration Workflow (`.github/workflows/migrate-prod.yml`)
+Runs automatically when migration files are committed to `main`:
+- Triggers on changes to `prisma/migrations/**`
+- Runs `prisma migrate deploy` against production database
+- Requires `DATABASE_URL` secret in the `production` GitHub environment
+
+### Required GitHub Secrets
+Configure these in your repository's Settings → Secrets and variables → Actions:
+
+**Production environment:**
+- `DATABASE_URL` - Production PostgreSQL connection string
+
 ## Deployment Process
 
 ### Pre-deployment Checklist
@@ -358,8 +380,10 @@ git push origin main
 ```
 
 #### 3. Post-deployment
+Database migrations are automatically applied via GitHub Actions when migration files are committed to the `main` branch. See `.github/workflows/migrate-prod.yml`.
+
 ```bash
-# Run migrations
+# Manual migration (if needed)
 pnpm prisma:migrate-deploy
 
 # Verify deployment
