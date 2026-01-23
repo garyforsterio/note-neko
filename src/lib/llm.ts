@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
-import { type ZodSchema, z } from "zod";
+import type { ZodSchema } from "zod";
 
 /**
  * Get a configured OpenAI client instance

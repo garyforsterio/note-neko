@@ -107,6 +107,7 @@ export function DiaryContent({
 					return <code className="bg-gray-100 p-1 rounded">{children}</code>;
 				},
 				img: ({ src, alt }) => {
+					// biome-ignore lint/performance/noImgElement: External markdown images can't use next/image
 					return <img src={src} alt={alt} className="w-full" />;
 				},
 				pre: ({ children }) => {

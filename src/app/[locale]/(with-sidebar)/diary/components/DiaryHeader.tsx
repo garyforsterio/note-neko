@@ -4,13 +4,12 @@ import { format } from "date-fns";
 import {
 	Calendar as CalendarIcon,
 	ChevronDown,
-	Filter,
 	History,
 	Plus,
 	X,
 } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Calendar from "#components/Calendar";
 import { Skeleton } from "#components/ui/skeleton";
@@ -213,8 +212,8 @@ export function DiaryHeader({
 												: t("diary.selectDateRange")}
 								</span>
 								{(startDate || endDate) && (
-									<div
-										// biome-ignore lint/a11y/useSemanticElements: inside button
+									// biome-ignore lint/a11y/useSemanticElements: clear button nested inside parent button
+									<span
 										role="button"
 										tabIndex={0}
 										onClick={clearDateRange}
@@ -223,10 +222,10 @@ export function DiaryHeader({
 												clearDateRange(e as unknown as React.MouseEvent);
 											}
 										}}
-										className="ml-1 p-0.5 hover:bg-blue-200 rounded-full cursor-pointer"
+										className="ml-1 p-0.5 hover:bg-blue-200 rounded-full cursor-pointer inline-flex"
 									>
 										<X size={14} />
-									</div>
+									</span>
 								)}
 							</button>
 

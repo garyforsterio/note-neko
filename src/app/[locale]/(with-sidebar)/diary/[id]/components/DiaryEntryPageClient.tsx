@@ -15,7 +15,7 @@ import { DiaryContent } from "#components/DiaryContent";
 import type { Person } from "#generated/prisma";
 import { Link, useRouter } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
-import { type WeatherInfo, getWeatherIcon } from "#lib/utils/weather";
+import { getWeatherIcon, type WeatherInfo } from "#lib/utils/weather";
 import DeleteButton from "../../components/DeleteButton";
 import DiaryEditForm from "../../components/DiaryEditForm";
 import DiaryMap from "../../components/DiaryMap";

@@ -1,7 +1,6 @@
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import { getDiaryEntry, getPeople } from "#lib/dal";
-import { getTranslations } from "#lib/i18n/server";
 import { getHistoricWeather } from "#lib/utils/weather";
 import DiaryEntryPageClient from "./components/DiaryEntryPageClient";
 

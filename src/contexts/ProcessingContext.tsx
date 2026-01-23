@@ -91,7 +91,9 @@ function processingReducer(
 
 export function ProcessingProvider({
 	children,
-}: { children: React.ReactNode }) {
+}: {
+	children: React.ReactNode;
+}) {
 	const [state, dispatch] = useReducer(processingReducer, { jobs: [] });
 
 	const startProcessing = (id: string, content: string) => {

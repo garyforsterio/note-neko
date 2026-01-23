@@ -1,8 +1,8 @@
 "use client";
 
 import { format } from "date-fns";
-import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import {
 	type DateRange,

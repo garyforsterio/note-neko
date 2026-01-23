@@ -2,19 +2,6 @@
 
 import { getFormProps, getTextareaProps, useForm } from "@conform-to/react";
 import { getZodConstraint, parseWithZod } from "@conform-to/zod";
-import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
-import { createDiaryEntryAction } from "#actions/diary";
-import { useRouter } from "#i18n/navigation";
-import { Link } from "#i18n/navigation";
-
-import { useActionState } from "react";
-import type { LocationResult } from "#actions/locations";
-import ErrorMessage from "#components/ErrorMessage";
-import { useUserLocation } from "#hooks/useUserLocation";
-import { getNextDayString } from "#lib/utils/diary";
-import { diaryEntrySchema } from "#schema/diary";
-
 import { format, parseISO } from "date-fns";
 import {
 	Calendar as CalendarIcon,
@@ -24,7 +11,16 @@ import {
 	Moon,
 	Sunrise,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useActionState, useRef, useState } from "react";
 import { DayPicker } from "react-day-picker";
+import { createDiaryEntryAction } from "#actions/diary";
+import type { LocationResult } from "#actions/locations";
+import ErrorMessage from "#components/ErrorMessage";
+import { useUserLocation } from "#hooks/useUserLocation";
+import { Link, useRouter } from "#i18n/navigation";
+import { getNextDayString } from "#lib/utils/diary";
+import { diaryEntrySchema } from "#schema/diary";
 import "react-day-picker/style.css";
 
 function getLocalDateString(date: Date) {
@@ -158,6 +154,8 @@ export default function DiaryForm({
 											setIsCalendarOpen(false);
 										}
 									}}
+									role="presentation"
+									aria-hidden="true"
 								/>
 								<div className="absolute top-full left-0 mt-4 z-50 bg-white border border-gray-100 rounded-xl shadow-2xl p-4 animate-in fade-in zoom-in-95 duration-200">
 									<DayPicker

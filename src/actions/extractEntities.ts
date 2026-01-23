@@ -1,7 +1,7 @@
 "use server";
 
-import { getLocale } from "next-intl/server";
 import { headers } from "next/headers";
+import { getLocale } from "next-intl/server";
 import { z } from "zod";
 import { requireAuth } from "#lib/auth";
 import { getSimplePeopleList } from "#lib/dal";

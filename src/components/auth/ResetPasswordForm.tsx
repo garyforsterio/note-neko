@@ -8,6 +8,7 @@ import { resetPassword } from "#actions/auth";
 import ErrorMessage from "#components/ErrorMessage";
 import { Link } from "#i18n/navigation";
 import { resetPasswordSchema } from "#schema/auth";
+
 interface ResetPasswordFormProps {
 	token: string;
 }

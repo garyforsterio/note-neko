@@ -1,8 +1,8 @@
 "use client";
 
 import {
-	APIProvider,
 	AdvancedMarker,
+	APIProvider,
 	Map as GoogleMap,
 	Pin,
 	useMap,

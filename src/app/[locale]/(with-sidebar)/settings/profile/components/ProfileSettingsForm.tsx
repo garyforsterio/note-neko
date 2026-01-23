@@ -2,7 +2,7 @@
 
 import { Loader2, MapPin, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useFormStatus } from "react-dom";
 import type { LocationResult } from "#actions/locations";
 import { updateDefaultLocationAction } from "#actions/profile";

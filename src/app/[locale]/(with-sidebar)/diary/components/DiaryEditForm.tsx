@@ -12,8 +12,8 @@ import {
 	Sunrise,
 	User,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useRef, useState, useTransition } from "react";
 import { DayPicker } from "react-day-picker";
 import { updateDiaryEntryAction } from "#actions/diary";
@@ -180,6 +180,8 @@ export default function DiaryEditForm({
 													setIsCalendarOpen(false);
 												}
 											}}
+											role="presentation"
+											aria-hidden="true"
 										/>
 										<div className="absolute top-full left-0 mt-4 z-50 bg-white border border-gray-100 rounded-xl shadow-2xl p-4 animate-in fade-in zoom-in-95 duration-200">
 											<DayPicker

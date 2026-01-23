@@ -5,11 +5,9 @@ import {
 	Globe,
 	Heart,
 	Mail,
-	MapPin,
 	Phone,
 	Smile,
 	StickyNote,
-	User,
 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";

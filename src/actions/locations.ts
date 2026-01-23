@@ -1,7 +1,7 @@
 "use server";
 
-import { getLocale } from "next-intl/server";
 import { headers } from "next/headers";
+import { getLocale } from "next-intl/server";
 import { requireAuth } from "#lib/auth";
 
 export interface LocationResult {

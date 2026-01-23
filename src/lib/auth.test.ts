@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/nextjs";
-import { SignJWT, jwtVerify } from "jose";
+import { jwtVerify, SignJWT } from "jose";
 import { cookies } from "next/headers";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { redirect } from "#i18n/navigation";

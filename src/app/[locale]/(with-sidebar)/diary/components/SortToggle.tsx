@@ -1,8 +1,9 @@
 "use client";
 
 import { ArrowDown, ArrowUp } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "#i18n/navigation";
 
 export function SortToggle() {
 	const t = useTranslations();

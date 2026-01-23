@@ -1,9 +1,10 @@
 "use client";
 
 import { Search } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "#i18n/navigation";
 
 export default function PeopleSearch() {
 	const t = useTranslations();

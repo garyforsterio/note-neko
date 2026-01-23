@@ -121,9 +121,8 @@ export function DiaryMentions({
 					onKeyDown={(e) => {
 						if (e.key === "Escape") setExpandedPersonId(null);
 					}}
-					role="button"
-					tabIndex={0}
-					aria-label={t("diary.closeExpandedView")}
+					role="presentation"
+					aria-hidden="true"
 				/>
 			)}
 		</div>

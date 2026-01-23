@@ -139,6 +139,7 @@ export function PersonNetworkGraph({
 
 						return (
 							<Link key={node.id} href={`/people/${node.id}`}>
+								{/* biome-ignore lint/a11y/noStaticElementInteractions: SVG group for hover effects inside Link */}
 								<g
 									onMouseEnter={() => setHoveredNode(node.id)}
 									onMouseLeave={() => setHoveredNode(null)}
