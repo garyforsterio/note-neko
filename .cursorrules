@@ -15,11 +15,12 @@ For detailed information about the codebase, refer to these documentation files:
 ## Quick Reference
 
 ### Tech Stack
+
 - **Framework**: Next.js 15 with App Router and React 19
 - **Database**: PostgreSQL with Prisma ORM (Accelerate for edge)
 - **Styling**: Tailwind CSS 4
 - **Forms**: @conform-to with Zod validation
-- **Testing**: Vitest, Storybook
+- **Testing**: Vitest
 - **Auth**: JWT with refresh tokens
 - **Package Manager**: pnpm (required)
 
@@ -32,7 +33,6 @@ pnpm test             # Run tests
 pnpm lint             # Lint with Biome
 pnpm format           # Format with Biome
 pnpm typecheck        # TypeScript checking
-pnpm storybook        # Start Storybook
 ```
 
 ### Database Commands
@@ -49,12 +49,14 @@ pnpm prisma:seed          # Seed database
 ### Component Development
 
 #### Server Components (Default)
+
 - No `'use client'` directive
 - Use `getTranslations` from `next-intl/server`
 - Can fetch data directly
 - Located in `src/app/` and `src/components/`
 
 #### Client Components
+
 - Must have `'use client'` directive
 - Use `useTranslations` from `next-intl`
 - Handle interactivity and forms
@@ -133,13 +135,8 @@ export function Form() {
 
 ## Testing Requirements
 
-### Storybook Stories
-- Create `.stories.tsx` for each component
-- Include Empty and WithData states
-- Mock auth with `requireAuth.mockResolvedValue`
-- Use play functions for interaction testing
-
 ### Unit Tests
+
 - Use Vitest for testing
 - Mock database operations
 - Test success and error states
@@ -147,13 +144,16 @@ export function Form() {
 ## Code Quality
 
 ### Before Committing
+
 1. Format: `pnpm format`
 2. Lint: `pnpm lint`
 3. Type check: `pnpm typecheck`
 4. Test: `pnpm test`
 
 ### Commit Messages
+
 Follow conventional commits:
+
 - `feat:` - New feature
 - `fix:` - Bug fix
 - `docs:` - Documentation
@@ -164,22 +164,26 @@ Follow conventional commits:
 ## Important Patterns
 
 ### Authentication
+
 - All routes under `(with-sidebar)` require auth
 - Use `requireAuth()` in server actions
 - JWT stored in httpOnly cookies
 
 ### Internationalization
+
 - Server: `getTranslations()` from `next-intl/server`
 - Client: `useTranslations()` from `next-intl`
 - Locales: `en`, `ja`
 
 ### URL Parameters
+
 - Use hyphen-case (kebab-case) for query params
 - Example: `sort-order`, `page-size`
 
 ## Environment Variables
 
 Required in `.env.local`:
+
 - `DATABASE_URL` - PostgreSQL connection
 - `JWT_SECRET` - JWT signing secret
 - `OPENROUTER_API_KEY` - AI API key
@@ -190,6 +194,7 @@ Required in `.env.local`:
 ## Documentation Updates
 
 When making changes, update relevant docs:
+
 - Architecture changes → `docs/ARCHITECTURE.md`
 - Database changes → `docs/DATABASE.md`
 - API changes → `docs/API.md`

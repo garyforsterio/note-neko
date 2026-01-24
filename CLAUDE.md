@@ -21,11 +21,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `pnpm prisma:migrate-deploy` - Deploy migrations to production
 - `pnpm prisma:seed` - Seed database with test data
 
-### Development Tools
-
-- `pnpm storybook` - Start Storybook for component development
-- `pnpm build-storybook` - Build Storybook
-
 ## Architecture Overview
 
 For detailed architecture, database schema, API documentation, component patterns, and development processes, see the following documentation files:
@@ -41,6 +36,7 @@ For detailed architecture, database schema, API documentation, component pattern
 **Tech Stack**: Next.js 15, React 19, PostgreSQL, Prisma ORM, Tailwind CSS 4, pnpm
 
 **Key Principles**:
+
 - Default to Server Components
 - Use Server Actions for mutations
 - Cached data access layer
@@ -48,9 +44,9 @@ For detailed architecture, database schema, API documentation, component pattern
 
 ### Import Mapping
 
-- `#lib/db` - Database client (mocked in Storybook)
-- `#lib/auth` - Authentication utilities (mocked in Storybook)
-- `#lib/i18n/server` - Server-side i18n (mocked in Storybook)
+- `#lib/db` - Database client
+- `#lib/auth` - Authentication utilities
+- `#lib/i18n/server` - Server-side i18n
 - `#*` - General src imports
 
 ### Environment Variables
@@ -92,6 +88,7 @@ Required environment variables:
 **CRITICAL: Documentation updates are MANDATORY for ALL code changes**
 
 When making any changes to the codebase you MUST:
+
 - Update relevant documentation files to reflect current design, architecture, and processes
 - Keep documentation succinct and well-organized
 - NEVER complete a task without checking if documentation needs updates

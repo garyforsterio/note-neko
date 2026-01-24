@@ -5,6 +5,7 @@
 ### Component Types
 
 #### Server Components (Default)
+
 - Fetch data directly in component
 - No `'use client'` directive
 - Can use async/await
@@ -12,6 +13,7 @@
 - Used for: Pages, layouts, data display
 
 #### Client Components
+
 - Interactive components
 - Require `'use client'` directive
 - Can use hooks and browser APIs
@@ -20,6 +22,7 @@
 ### Component Patterns
 
 #### Server Component Pattern
+
 ```typescript
 // src/app/[locale]/(with-sidebar)/people/page.tsx
 export default async function PeoplePage() {
@@ -36,6 +39,7 @@ export default async function PeoplePage() {
 ```
 
 #### Client Component with Server Action
+
 ```typescript
 // src/components/diary/DiaryForm.tsx
 'use client';
@@ -58,6 +62,7 @@ export function DiaryForm() {
 ## Component Guidelines
 
 ### File Organization
+
 ```
 components/
 ├── ui/           # Base UI components (buttons, inputs)
@@ -67,17 +72,19 @@ components/
 ```
 
 ### Naming Conventions
+
 - PascalCase for component files
 - Descriptive names (e.g., `DiaryEntryCard` not `Card`)
 - Group related components in directories
 
 ### Import Patterns
+
 ```typescript
 // Absolute imports for lib
 import { requireAuth } from '#lib/auth';
 
 // Relative imports for local components
-import { ProfileSettingsForm } from "./components/ProfileSettingsForm"
+import { ProfileSettingsForm } from './components/ProfileSettingsForm';
 
 // Server components
 import { getTranslations } from 'next-intl/server';
@@ -87,6 +94,7 @@ import { useTranslations } from 'next-intl';
 ```
 
 ### Styling Patterns
+
 ```typescript
 // Using Tailwind classes
 <div className="flex flex-col gap-4 p-6">
@@ -105,6 +113,7 @@ import { useTranslations } from 'next-intl';
 ### Data Fetching Patterns
 
 #### Server Component Data Fetching
+
 ```typescript
 export default async function Page() {
   const data = await getData(); // Direct fetch
@@ -113,6 +122,7 @@ export default async function Page() {
 ```
 
 #### Client Component with Server Action
+
 ```typescript
 'use client';
 export function Form() {
@@ -128,31 +138,8 @@ export function Form() {
 
 ### Testing Components
 
-#### Storybook Stories
-```typescript
-// Component.stories.tsx
-export default {
-  title: 'Diary/DiaryCard',
-  component: DiaryCard,
-};
-
-export const Default: Story = {
-  args: {
-    entry: mockDiaryEntry,
-  },
-};
-
-export const WithMentions: Story = {
-  args: {
-    entry: {
-      ...mockDiaryEntry,
-      mentions: [mockPerson],
-    },
-  },
-};
-```
-
 #### Unit Tests
+
 ```typescript
 // Component.test.tsx
 import { render, screen } from '@testing-library/react';
@@ -166,6 +153,7 @@ test('renders diary entry', () => {
 ## Accessibility Guidelines
 
 ### ARIA Attributes
+
 ```typescript
 <button
   aria-label="Delete entry"
@@ -178,6 +166,7 @@ test('renders diary entry', () => {
 ```
 
 ### External Links Security
+
 **CRITICAL: All external links MUST include `rel="noopener noreferrer"`** for security:
 
 ```typescript
@@ -197,17 +186,20 @@ test('renders diary entry', () => {
 ```
 
 **Why this is required:**
+
 - `noopener` prevents the external site from accessing `window.opener`
 - `noreferrer` prevents sending the referrer header to the external site
 - Protects against reverse tabnabbing attacks and privacy leaks
 
 ### Keyboard Navigation
+
 - All interactive elements keyboard accessible
 - Proper focus management
 - Escape key closes modals
 - Tab order follows visual flow
 
 ### Screen Reader Support
+
 - Semantic HTML elements
 - Proper heading hierarchy
 - Alt text for images
@@ -216,6 +208,7 @@ test('renders diary entry', () => {
 ## Performance Optimization
 
 ### Code Splitting
+
 ```typescript
 // Dynamic imports for heavy components
 const HeavyComponent = dynamic(() => import('./HeavyComponent'), {
@@ -224,6 +217,7 @@ const HeavyComponent = dynamic(() => import('./HeavyComponent'), {
 ```
 
 ### Image Optimization
+
 ```typescript
 import Image from 'next/image';
 
@@ -237,16 +231,11 @@ import Image from 'next/image';
 ```
 
 ### Memoization
+
 ```typescript
 // For expensive computations
-const expensiveValue = useMemo(
-  () => computeExpensive(data),
-  [data]
-);
+const expensiveValue = useMemo(() => computeExpensive(data), [data]);
 
 // For stable callbacks
-const handleClick = useCallback(
-  () => doSomething(id),
-  [id]
-);
+const handleClick = useCallback(() => doSomething(id), [id]);
 ```

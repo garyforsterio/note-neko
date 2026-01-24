@@ -39,22 +39,26 @@ External Services:
 ## Core Design Principles
 
 ### 1. Server-First Architecture
+
 - Default to Server Components for all new components
 - Client Components only when interactivity is required
 - Server-side rendering for optimal performance and SEO
 - **NEVER use API route handlers** - use Server Actions exclusively
 
 ### 2. Type Safety
+
 - TypeScript strict mode enabled throughout
 - Zod schemas for runtime validation
 - Prisma for type-safe database operations
 
 ### 3. Performance Optimization
+
 - Prisma Accelerate for edge optimization
 - Progressive enhancement patterns
 - Optimistic UI updates where appropriate
 
 ### 4. Security
+
 - JWT-based authentication with refresh tokens
 - HttpOnly cookies for token storage
 - Server-side validation for all user inputs
@@ -118,6 +122,7 @@ src/
 ## Data Flow Patterns
 
 ### Server Components Data Fetching
+
 ```typescript
 // Page component (Server Component)
 export default async function DiaryPage() {
@@ -127,6 +132,7 @@ export default async function DiaryPage() {
 ```
 
 ### Server Actions Pattern
+
 ```typescript
 // Server action in src/actions/diary.ts
 export async function createDiaryEntryAction(formData: FormData) {
@@ -148,6 +154,7 @@ export async function createDiaryEntryAction(formData: FormData) {
 ```
 
 ### Client Component with Server Action
+
 ```typescript
 // Client component using server action
 'use client';
@@ -177,6 +184,7 @@ export function DiaryForm() {
 ### Cache Invalidation
 
 Cache tags are revalidated after mutations:
+
 ```typescript
 updateTag('diaries'); // After diary creation
 updateTag(`diary:${id}`); // After diary update
@@ -195,6 +203,7 @@ updateTag(`diary:${id}`); // After diary update
 ### Protected Routes
 
 All routes under `(with-sidebar)` require authentication:
+
 - `/diary/*` - Diary management
 - `/people/*` - People management
 
@@ -216,10 +225,12 @@ All routes under `(with-sidebar)` require authentication:
 ## Internationalization
 
 ### Supported Locales
+
 - English (en)
 - Japanese (ja)
 
 ### Implementation
+
 - Server Components: `getTranslations()` from `next-intl/server`
 - Client Components: `useTranslations()` hook
 - URL-based locale routing: `/en/diary`, `/ja/diary`
@@ -229,12 +240,11 @@ All routes under `(with-sidebar)` require authentication:
 ### Test Types
 
 1. **Unit Tests** - Vitest for business logic
-2. **Component Tests** - Storybook stories with play functions
-3. **Integration Tests** - API route testing
-4. **E2E Tests** - Playwright (if configured)
+2. **Integration Tests** - API route testing
+3. **E2E Tests** - Playwright (if configured)
 
 ### Mocking Strategy
-- Database mocked in Storybook via import mapping
+
 - Authentication mocked with `requireAuth.mockResolvedValue()`
 - Server functions mocked in test environment
 
@@ -250,6 +260,7 @@ All routes under `(with-sidebar)` require authentication:
 6. **Prefetching** - Link component prefetches routes
 
 ### Bundle Size Management
+
 - Dynamic imports for heavy components
 - Tree-shaking with modern bundling
 - Minimal client-side JavaScript
@@ -257,17 +268,20 @@ All routes under `(with-sidebar)` require authentication:
 ## Security Measures
 
 ### Input Validation
+
 - Zod schemas for all user inputs
 - Server-side validation in actions
 - SQL injection prevention via Prisma
 
 ### Authentication Security
+
 - bcrypt for password hashing
 - JWT with short expiry (1 hour)
 - Refresh tokens for extended sessions
 - HttpOnly cookies prevent XSS attacks
 
 ### Data Protection
+
 - User isolation via database queries
 - Row-level security through application logic
 - Sensitive data never exposed to client
@@ -275,6 +289,7 @@ All routes under `(with-sidebar)` require authentication:
 ## Deployment Architecture
 
 ### Production Environment
+
 - **Hosting**: Vercel platform
 - **Database**: PostgreSQL (via Prisma Accelerate)
 - **CDN**: Vercel Edge Network
@@ -282,6 +297,7 @@ All routes under `(with-sidebar)` require authentication:
 - **Analytics**: Vercel Analytics & Speed Insights
 
 ### Environment Variables
+
 - Managed via Vercel dashboard
 - Separate configs for dev/staging/production
 - Secrets never committed to repository

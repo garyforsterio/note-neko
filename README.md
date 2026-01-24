@@ -7,7 +7,6 @@ A personal life tracking application built with Next.js 15, featuring a daily di
 ## Features
 
 - **Daily Diary**
-
   - Write and manage daily entries with markdown support
   - Preview markdown content in real-time
   - Mention people in diary entries using @ symbol
@@ -15,7 +14,6 @@ A personal life tracking application built with Next.js 15, featuring a daily di
   - Track locations for each diary entry
 
 - **People Profiles**
-
   - Create and manage profiles for people you know
   - Track birthdays, how you met, interests, and additional notes
   - View all diary entries where a person is mentioned
@@ -36,7 +34,6 @@ A personal life tracking application built with Next.js 15, featuring a daily di
 - Tailwind CSS 4
 - MDX for markdown support
 - Vitest + Playwright for testing
-- Storybook 8 for component development
 - Next-intl for internationalization
 
 ## Getting Started
@@ -74,12 +71,6 @@ A personal life tracking application built with Next.js 15, featuring a daily di
 
   ```bash
   pnpm test
-  ```
-
-- Start Storybook:
-
-  ```bash
-  pnpm storybook
   ```
 
 - Type checking:
