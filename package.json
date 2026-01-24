@@ -85,7 +85,7 @@
 		"lefthook": "^1.11.14",
 		"playwright": "^1.52.0",
 		"postcss": "^8.4.35",
-		"prisma": "^7.2.0",
+		"prisma": "~7.2.0",
 		"tailwindcss": "^4.1.6",
 		"tsx": "^4.19.4",
 		"typescript": "^5",
