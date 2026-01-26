@@ -82,7 +82,7 @@
 		"autoprefixer": "^10.4.17",
 		"babel-plugin-react-compiler": "19.1.0-rc.2",
 		"dotenv-cli": "^7.4.1",
-		"lefthook": "^1.11.14",
+		"lefthook": "^2.0.15",
 		"playwright": "^1.52.0",
 		"postcss": "^8.4.35",
 		"prisma": "~7.2.0",
