@@ -15,10 +15,14 @@ updates:
         update-types:
           - "minor"
           - "patch"
+        exclude-patterns:
+          - "prisma"
       production-dependencies:
         dependency-type: "production"
         update-types:
           - "patch"
+        exclude-patterns:
+          - "@prisma/*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
