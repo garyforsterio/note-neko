@@ -39,7 +39,7 @@ export async function generateJSON<T>(
 			temperature: 0.1,
 		});
 
-		const content = completion.choices[0]?.message?.content;
+		const content = completion?.choices[0]?.message?.content;
 
 		if (!content) {
 			throw new Error("No response content from LLM");
