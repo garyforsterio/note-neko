@@ -19,10 +19,10 @@ gcloud container clusters get-credentials $CLUSTER_NAME \
     --region $REGION \
     --project $PROJECT_ID
 
-echo "🔐 Step 3: Syncing Secrets from .env.production..."
-# Refresh the secret so it always matches your latest .env.production
+echo "🔐 Step 3: Syncing Secrets from .env..."
+# Refresh the secret so it always matches your latest .env
 kubectl delete secret nextjs-secrets --ignore-not-found
-kubectl create secret generic nextjs-secrets --from-env-file=.env.production
+kubectl create secret generic nextjs-secrets --from-env-file=.env
 
 echo "📦 Step 4: Applying Kustomize manifests..."
 kubectl apply -k k8s/overlays/prod
