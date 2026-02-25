@@ -73,7 +73,7 @@
 		"logout": "Log out"
 	},
 	"diary": {
-		"contentPlaceholder": "What happened today? Capture your thoughts, feelings, and the moments that mattered...",
+		"contentPlaceholder": "Describe your day: what you did, people you met, places you visited...",
 		"conversation": "Conversation",
 		"closeExpandedView": "Close expanded view",
 		"date": "Date",
