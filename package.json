@@ -24,7 +24,15 @@
 		"prisma:migrate-dev": "dotenv -e .env.development prisma migrate dev",
 		"prisma:migrate-deploy": "dotenv -e .env.production prisma migrate deploy",
 		"prisma:seed": "dotenv -e .env.development prisma db seed",
-		"db:backup": "dotenv -e .env.production -- bash scripts/backup-db.sh"
+		"db:backup": "dotenv -e .env.production -- bash scripts/backup-db.sh",
+		"tf:fmt": "terraform fmt -recursive",
+		"tf:validate:persistent": "cd terraform/persistent && terraform validate",
+		"tf:validate:ephemeral": "cd terraform/ephemeral && terraform validate",
+		"tf:validate": "npm run tf:validate:persistent && npm run tf:validate:ephemeral",
+		"tf:lint:persistent": "cd terraform/persistent && tflint",
+		"tf:lint:ephemeral": "cd terraform/ephemeral && tflint",
+		"tf:lint": "npm run tf:lint:persistent && npm run tf:lint:ephemeral",
+		"tf:check": "npm run tf:fmt && npm run tf:validate && npm run tf:lint"
 	},
 	"imports": {
 		"#lib/db": "./src/lib/db.ts",

@@ -20,6 +20,20 @@ jobs:
         with:
           node-version: 22
           cache: 'pnpm'
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: latest
+
+      - name: Initialize Terraform Directories
+        # We use -backend=false so Terraform doesn't try to authenticate 
+        # with GCP or look for remote state just to validate the code.
+        run: |
+          cd terraform/persistent && terraform init -backend=false
+          cd ../terraform/ephemeral && terraform init -backend=false
       - name: Install dependencies
         run: pnpm install
       - name: Install Playwright Dependencies
@@ -32,3 +46,6 @@ jobs:
 
       - name: Run unit tests
         run: pnpm test
+
+      - name: Run Infrastructure Checks
+        run: pnpm run tf:check
