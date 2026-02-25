@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: nextjs-service
   annotations:
+    cloud.google.com/backend-config: '{"ports": {"http": "nextjs-backend-config"}}'
     cloud.google.com/neg: '{"ingress": true}'
 spec:
   type: ClusterIP
@@ -11,3 +12,5 @@ spec:
   ports:
   - port: 80
     targetPort: 3000
+    protocol: TCP
+    name: http 
