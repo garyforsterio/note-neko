@@ -1,6 +1,7 @@
 "use client";
 
 import { Moon, Sunrise } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { getWeatherIcon, type WeatherInfo } from "#lib/utils/weather";
 
 interface WeatherWidgetProps {
@@ -12,6 +13,7 @@ export function WeatherWidget({
 	weather,
 	showLabels = true,
 }: WeatherWidgetProps) {
+	const t = useTranslations("diary");
 	const WeatherIcon = getWeatherIcon(weather?.weatherCode ?? null);
 
 	return (
@@ -28,7 +30,7 @@ export function WeatherWidget({
 				</div>
 				{showLabels && (
 					<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
-						Weather
+						{t("weatherLabel")}
 					</span>
 				)}
 			</div>
@@ -45,7 +47,7 @@ export function WeatherWidget({
 				</div>
 				{showLabels && (
 					<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
-						Sun
+						{t("sunLabel")}
 					</span>
 				)}
 			</div>
@@ -60,7 +62,7 @@ export function WeatherWidget({
 				</div>
 				{showLabels && (
 					<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
-						Moon
+						{t("moonLabel")}
 					</span>
 				)}
 			</div>
