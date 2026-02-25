@@ -1,348 +1,351 @@
 {
-	"auth": {
-		"login": {
-			"title": "アカウントにサインイン",
-			"email": "メールアドレス",
-			"password": "パスワード",
-			"submit": "サインイン",
-			"submitting": "サインイン中...",
-			"forgotPassword": "パスワードをお忘れですか？",
-			"noAccount": "アカウントをお持ちでないですか？",
-			"registered": "アカウントが作成されました。サインインしてください。",
-			"reset": "パスワードがリセットされました。サインインしてください。",
-			"error": {
-				"required": "認証情報を確認して再度お試しください。",
-				"invalidCredentials": "メールアドレスまたはパスワードが無効です。"
-			}
-		},
-		"signup": {
-			"title": "アカウントを作成",
-			"email": "メールアドレス",
-			"password": "パスワード",
-			"confirmPassword": "パスワードの確認",
-			"submit": "サインアップ",
-			"submitting": "アカウント作成中...",
-			"hasAccount": "すでにアカウントをお持ちですか？",
-			"error": {
-				"required": "情報を確認して再度お試しください。",
-				"passwordMismatch": "パスワードが一致しません。",
-				"emailExists": "このメールアドレスはすでに使用されています。"
-			}
-		},
-		"forgotPassword": {
-			"title": "パスワードをリセット",
-			"email": "メールアドレス",
-			"submit": "リセットリンクを送信",
-			"submitting": "リセットリンクを送信中...",
-			"backToLogin": "ログインに戻る",
-			"success": "そのメールアドレスでアカウントが存在する場合、パスワードリセットリンクを送信しました。メールを確認してください。",
-			"error": {
-				"required": "メールアドレスを確認して再度お試しください。"
-			}
-		},
-		"resetPassword": {
-			"title": "新しいパスワードを設定",
-			"password": "新しいパスワード",
-			"confirmPassword": "新しいパスワードの確認",
-			"submit": "パスワードをリセット",
-			"submitting": "パスワードをリセット中...",
-			"backToLogin": "ログインに戻る",
-			"error": {
-				"required": "情報を確認して再度お試しください。",
-				"passwordMismatch": "パスワードが一致しません。",
-				"invalidToken": "無効または期限切れのリセットトークンです。"
-			}
-		}
-	},
-	"calendar": {
-		"previousMonth": "前月",
-		"nextMonth": "次月",
-		"dragToSelect": "日付範囲を選択するにはクリックしてドラッグしてください",
-		"clickToSelectRange": "最初に開始日をクリックし、次に終了日をクリックして範囲を選択してください"
-	},
-	"diary": {
-		"title": "日記",
-		"newEntry": "新規作成",
-		"noEntries": "日記がまだありません",
-		"writtenOn": "{date}に書きました",
-		"refineEntryTitle": "エントリーを調整",
-		"mentions": "言及された人",
-		"mention": "言及",
-		"locations": "場所",
-		"searchLocation": "場所を検索...",
-		"contentPlaceholder": "あなたの一日を記録してください：何をしたか、誰に会ったか、どこに行ったか...",
-		"conversation": "会話",
-		"closeExpandedView": "拡大表示を閉じる",
-		"date": "日付",
-		"noLocationsFound": "場所が見つかりません",
-		"noLocation": "場所なし",
-		"addLocation": "場所を追加",
-		"deleteEntry": "エントリーを削除",
-		"confirmDelete": "この日記エントリーを削除してもよろしいですか？この操作は元に戻せません。",
-		"startDate": "開始日",
-		"endDate": "終了日",
-		"itemsPerPage": "1ページあたりの項目数",
-		"applyFilters": "フィルターを適用",
-		"pageInfo": "{page}ページ / {totalPages}ページ中",
-		"clearDateRange": "日付範囲をクリア",
-		"filters": "フィルター",
-		"selectDateRange": "日付範囲を選択",
-		"latestFirst": "新しい順",
-		"earliestFirst": "古い順",
-		"sortLatestFirst": "新しいエントリーから古いエントリーの順で表示",
-		"sortEarliestFirst": "古いエントリーから新しいエントリーの順で表示",
-		"content": "内容",
-		"processing": "日記エントリーを処理中...",
-		"processingDescription": "AIを使用してテキスト内の人物と場所を識別しています",
-		"entryUpdated": "エントリーが更新されました！",
-		"addAnotherEntry": "別のエントリーを追加",
-		"processingFailed": "処理に失敗しました",
-		"savingEntry": "日記エントリーを作成中...",
-		"analyzing": "分析中...",
-		"analyzingEntry": "日記エントリーを分析中",
-		"analyzingDescription": "AIがテキスト内で言及された人物と場所を識別しています",
-		"shareEntry": "エントリーを共有",
-		"catchUp": "未記入の日記を記入",
-		"catchUpMessage": "{count}日分の日記を記入",
-		"catchUpTitle": "お疲れ様です！次の日記も書きますか？",
-		"catchUpDescription": "{date}の日記を書いて、継続記録を伸ばしましょう。",
-		"editMode": "編集モード",
-		"nextDayEntry": "次の日の日記を書く",
-		"refineMode": "調整",
-		"rewriteMode": "書き換え",
-		"editor": "エディター",
-		"preview": "プレビュー",
-		"showPreview": "プレビューを表示",
-		"hidePreview": "プレビューを非表示",
-		"markAsPerson": "人物としてマーク",
-		"markAsLocation": "場所としてマーク",
-		"searchPeople": "人物を検索...",
-		"searchLocations": "場所を検索...",
-		"refineModeHelp": "テキストを選択して人物や場所をマークしたり、既存のチップをクリックして編集します。",
-		"rewriteModeHelp": "名前が一致する場合リンクは保持されます。一致しない名前はプレーンテキストになります。",
-		"saved": "保存しました",
-		"entrySaved": "日記エントリーが正常に保存されました。",
-		"shareNotSupported": "このデバイスでは共有機能がサポートされていません",
-		"shareError": "共有中にエラーが発生しました",
-		"formatting": {
-			"bold": "太字",
-			"italic": "斜体",
-			"underline": "下線",
-			"addPerson": "人を追加",
-			"addLocation": "場所を追加"
-		},
-		"shareAllEntries": "すべて共有",
-		"copyEntry": "コピー",
-		"locationPermission": "より正確な場所の提案のために位置情報へのアクセスを有効にしてください",
-		"unknownLocation": "場所不明",
-		"enableLocation": "位置情報を有効にする",
-		"entryLocation": "このエントリーの場所",
-		"searchLocationPlaceholder": "このエントリーの場所を検索...",
-		"currentBrowserLocation": "現在のブラウザの位置情報",
-		"defaultLocation": "デフォルトの場所: {locationName}",
-		"usingLocation": "使用中: {location}",
-		"noLocationProvided": "位置情報がありません。",
-		"noDefaultLocationSet": "デフォルトの場所が設定されていません。",
-		"setDefaultLocationInSettings": "設定でデフォルトの場所を設定してください。",
-		"noLocationSelected": "場所が選択されていません。",
-		"enableBrowserLocation": "ブラウザの位置情報を有効にする",
-		"clearManualLocation": "手動で選択した場所をクリア",
-		"aiProcessingNote": "AIが日記のエントリーを処理し、人物や場所を抽出します。",
-		"locationRecommendation": "ブラウザの位置情報アクセスを有効にすることをお勧めします。",
-		"defaultLocationTip": "または、設定でデフォルトの場所を設定することもできます。",
-		"insights": {
-			"title": "人物インサイト",
-			"aiPowered": "AI活用",
-			"description": "やり取りについてメモを追加してください。AIがこれを分析し、プロフィールを自動的に更新します。",
-			"placeholder": "どんな話をしましたか？新しい発見はありましたか？"
-		},
-		"noWeatherLocation": "この場所の天気情報は利用できません。"
-	},
-	"common": {
-		"close": "閉じる",
-		"cancel": "キャンセル",
-		"create": "作成",
-		"save": "保存",
-		"saving": "保存中",
-		"back": "戻る",
-		"edit": "編集",
-		"loading": "読み込み中...",
-		"noResults": "結果が見つかりません",
-		"logout": "ログアウト"
-	},
-	"home": {
-		"hero": {
-			"title": "Note Neko",
-			"subtitle": "シンプルなメモアプリで、あなたの力を引き出します。",
-			"cta": "メモを始める",
-			"heroImageAlt": "Note Neko ヒーロー画像"
-		},
-		"features": {
-			"dailyDiary": {
-				"title": "日記機能",
-				"description": "クリーンで直感的なインターフェースで、日々の活動や交流を記録。進捗を追跡し、経験の包括的な記録を維持します。"
-			},
-			"peopleProfiles": {
-				"title": "人物プロフィール",
-				"description": "交流から詳細な人物像を自動生成。将来の出会いや関係構築のための貴重な参照となる包括的なプロフィールを構築します。"
-			},
-			"people": {
-				"title": "人物",
-				"description": "人間関係や思い出を管理します。"
-			},
-			"locationHistory": {
-				"title": "場所の履歴",
-				"description": "様々な場所への訪問を記録・整理。将来の参照のために、会場、活動、経験を追跡します。"
-			}
-		},
-		"testimonials": {
-			"title": "ユーザーの声",
-			"sarah": {
-				"name": "サラ「名前を忘れる」チェン",
-				"title": "プロフェッショナル・ピープル・プレイザー",
-				"quote": "名前を自信を持って忘れられるようになりました！",
-				"avatarAlt": "サラのアバター"
-			},
-			"michael": {
-				"name": "マイケル「迷子の達人」ロドリゲス",
-				"title": "方向音痴認定",
-				"quote": "ついに、深夜の考えを批判しない日記ができました！",
-				"avatarAlt": "マイケルのアバター"
-			},
-			"emma": {
-				"name": "エマ「金魚脳」トンプソン",
-				"title": "記憶力向上愛好家",
-				"quote": "ついに金魚より賢くなれました！",
-				"avatarAlt": "エマのアバター"
-			}
-		},
-		"footer": {
-			"createdBy": "作成者",
-			"githubAlt": "GitHub"
-		}
-	},
-	"people": {
-		"addedOn": "{date}に追加",
-		"addPerson": "新しい人",
-		"birthday": "誕生日",
-		"cancel": "キャンセル",
-		"confirmDelete": "{name}を本当に削除しますか？",
-		"deleteProfile": "プロフィールを削除",
-		"editProfile": "プロフィールを編集",
-		"howWeMet": "出会いのきっかけ",
-		"interests": "興味・趣味",
-		"interestsPlaceholder": "趣味など",
-		"mentionedIn": "言及された場所",
-		"name": "名前",
-		"newPerson": "新しい人",
-		"nickname": "ニックネーム",
-		"noPeople": "まだ人が追加されていません",
-		"notes": "メモ",
-		"searchPlaceholder": "人を検索...",
-		"save": "保存",
-		"saving": "保存中",
-		"title": "人々",
-		"update": "更新",
-		"mention": "誰かを言及",
-		"createNew": "{name}を追加",
-		"creating": "{name}を作成中...",
-		"aiSummary": {
-			"title": "関係性構築",
-			"loading": "関係性の洞察を生成中...",
-			"error": "関係性の洞察の生成に失敗しました。後でもう一度お試しください。",
-			"noData": "関係性の提案を生成するのに十分な情報がありません。",
-			"conversationTopics": "次の会話トピック",
-			"activitySuggestions": "アクティビティのアイデア",
-			"relationshipTips": "関係性のヒント",
-			"suggestedInterests": "可能性のある興味",
-			"suggestedInterestsNote": "破線の枠はあなたのやり取りに基づくAIの提案を示します",
-			"attribution": "より深い関係を築くためにAIが生成"
-		},
-		"suggestedInterests": "提案された興味",
-		"suggestedInterestsNote": "破線の枠はあなたのやり取りに基づくAIの提案を示します",
-		"suggestedInterest": "これはAI分析に基づく提案された興味です",
-		"network": {
-			"title": "つながり",
-			"description": "日記で一緒に登場する人々"
-		},
-		"contactDetails": "連絡先詳細",
-		"relationships": "関係",
-		"noRelationships": "関係はまだ追加されていません",
-		"entryConversations": "このエントリーでの会話",
-		"suggestions": {
-			"title": "提案",
-			"updateField": "{field}を更新",
-			"addRelationship": "関係を追加",
-			"newSuggestion": "新しい提案",
-			"accept": "承認",
-			"reject": "拒否"
-		},
-		"globalNetwork": {
-			"title": "ネットワークマップ",
-			"description": "日記で一緒に登場する人々のつながりを表しています。",
-			"loading": "レイアウトを計算中..."
-		}
-	},
-	"error": {
-		"title": "エラーが発生しました",
-		"tryAgain": "再試行",
-		"generic": "予期しないエラーが発生しました。もう一度お試しください。",
-		"createFailed": "作成に失敗しました。もう一度お試しください。",
-		"updateFailed": "更新に失敗しました。もう一度お試しください。",
-		"deleteFailed": "削除に失敗しました。もう一度お試しください。",
-		"location": {
-			"title": "位置情報の問題",
-			"unsupported": "お使いのブラウザは位置情報をサポートしていません",
-			"permissionDenied": "位置情報の利用が許可されていません",
-			"unavailable": "位置情報を取得できませんでした",
-			"timeout": "位置情報の取得がタイムアウトしました",
-			"unknown": "不明なエラーが発生しました"
-		}
-	},
-	"settings": {
-		"title": "設定",
-		"welcome": {
-			"title": "設定へようこそ",
-			"description": "アカウントの設定、ソーシャル接続、プライバシー設定を管理します。"
-		},
-		"navigation": {
-			"profile": "プロフィール",
-			"social": "ソーシャルアカウント",
-			"privacy": "プライバシー",
-			"account": "アカウント"
-		},
-		"sections": {
-			"profile": {
-				"title": "プロフィール設定",
-				"description": "個人情報と設定を更新します。"
-			},
-			"social": {
-				"title": "ソーシャルメディアアカウント",
-				"description": "ソーシャルメディア連携を接続・管理します。"
-			},
-			"privacy": {
-				"title": "プライバシー設定",
-				"description": "データプライバシーと共有設定を制御します。"
-			},
-			"account": {
-				"title": "アカウント管理",
-				"description": "アカウント設定とサブスクリプションを管理します。"
-			}
-		},
-		"logout": {
-			"title": "サインアウト",
-			"confirm": "サインアウトしてもよろしいですか？"
-		},
-		"profile": {
-			"defaultLocationLabel": "日記エントリーのデフォルトの場所",
-			"defaultLocationDescription": "日記エントリー作成時にブラウザの位置情報が利用できない場合、この場所が使用されます。",
-			"searchLocationPlaceholder": "デフォルトの場所を検索...",
-			"saveChanges": "変更を保存",
-			"saveSuccess": "成功！",
-			"defaultLocationSaved": "デフォルトの場所が正常に保存されました。",
-			"saveError": "エラー！",
-			"invalidLocationData": "無効な位置情報データです。",
-			"failedToSaveDefaultLocation": "デフォルトの場所の保存に失敗しました。"
-		}
-	}
+  "auth": {
+    "login": {
+      "title": "アカウントにサインイン",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "submit": "サインイン",
+      "submitting": "サインイン中...",
+      "forgotPassword": "パスワードをお忘れですか？",
+      "noAccount": "アカウントをお持ちでないですか？",
+      "registered": "アカウントが作成されました。サインインしてください。",
+      "reset": "パスワードがリセットされました。サインインしてください。",
+      "error": {
+        "required": "認証情報を確認して再度お試しください。",
+        "invalidCredentials": "メールアドレスまたはパスワードが無効です。"
+      }
+    },
+    "signup": {
+      "title": "アカウントを作成",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "confirmPassword": "パスワードの確認",
+      "submit": "サインアップ",
+      "submitting": "アカウント作成中...",
+      "hasAccount": "すでにアカウントをお持ちですか？",
+      "error": {
+        "required": "情報を確認して再度お試しください。",
+        "passwordMismatch": "パスワードが一致しません。",
+        "emailExists": "このメールアドレスはすでに使用されています。"
+      }
+    },
+    "forgotPassword": {
+      "title": "パスワードをリセット",
+      "email": "メールアドレス",
+      "submit": "リセットリンクを送信",
+      "submitting": "リセットリンクを送信中...",
+      "backToLogin": "ログインに戻る",
+      "success": "そのメールアドレスでアカウントが存在する場合、パスワードリセットリンクを送信しました。メールを確認してください。",
+      "error": {
+        "required": "メールアドレスを確認して再度お試しください。"
+      }
+    },
+    "resetPassword": {
+      "title": "新しいパスワードを設定",
+      "password": "新しいパスワード",
+      "confirmPassword": "新しいパスワードの確認",
+      "submit": "パスワードをリセット",
+      "submitting": "パスワードをリセット中...",
+      "backToLogin": "ログインに戻る",
+      "error": {
+        "required": "情報を確認して再度お試しください。",
+        "passwordMismatch": "パスワードが一致しません。",
+        "invalidToken": "無効または期限切れのリセットトークンです。"
+      }
+    }
+  },
+  "calendar": {
+    "previousMonth": "前月",
+    "nextMonth": "次月",
+    "dragToSelect": "日付範囲を選択するにはクリックしてドラッグしてください",
+    "clickToSelectRange": "最初に開始日をクリックし、次に終了日をクリックして範囲を選択してください"
+  },
+  "diary": {
+    "title": "日記",
+    "newEntry": "新規作成",
+    "noEntries": "日記がまだありません",
+    "writtenOn": "{date}に書きました",
+    "refineEntryTitle": "エントリーを調整",
+    "mentions": "言及された人",
+    "mention": "言及",
+    "locations": "場所",
+    "searchLocation": "場所を検索...",
+    "contentPlaceholder": "あなたの一日を記録してください：何をしたか、誰に会ったか、どこに行ったか...",
+    "conversation": "会話",
+    "closeExpandedView": "拡大表示を閉じる",
+    "date": "日付",
+    "noLocationsFound": "場所が見つかりません",
+    "noLocation": "場所なし",
+    "addLocation": "場所を追加",
+    "deleteEntry": "エントリーを削除",
+    "confirmDelete": "この日記エントリーを削除してもよろしいですか？この操作は元に戻せません。",
+    "startDate": "開始日",
+    "endDate": "終了日",
+    "itemsPerPage": "1ページあたりの項目数",
+    "applyFilters": "フィルターを適用",
+    "pageInfo": "{page}ページ / {totalPages}ページ中",
+    "clearDateRange": "日付範囲をクリア",
+    "filters": "フィルター",
+    "selectDateRange": "日付範囲を選択",
+    "latestFirst": "新しい順",
+    "earliestFirst": "古い順",
+    "sortLatestFirst": "新しいエントリーから古いエントリーの順で表示",
+    "sortEarliestFirst": "古いエントリーから新しいエントリーの順で表示",
+    "content": "内容",
+    "processing": "日記エントリーを処理中...",
+    "processingDescription": "AIを使用してテキスト内の人物と場所を識別しています",
+    "entryUpdated": "エントリーが更新されました！",
+    "addAnotherEntry": "別のエントリーを追加",
+    "processingFailed": "処理に失敗しました",
+    "savingEntry": "日記エントリーを作成中...",
+    "analyzing": "分析中...",
+    "analyzingEntry": "日記エントリーを分析中",
+    "analyzingDescription": "AIがテキスト内で言及された人物と場所を識別しています",
+    "shareEntry": "エントリーを共有",
+    "catchUp": "未記入の日記を記入",
+    "catchUpMessage": "{count}日分の日記を記入",
+    "catchUpTitle": "お疲れ様です！次の日記も書きますか？",
+    "catchUpDescription": "{date}の日記を書いて、継続記録を伸ばしましょう。",
+    "editMode": "編集モード",
+    "nextDayEntry": "次の日の日記を書く",
+    "refineMode": "調整",
+    "rewriteMode": "書き換え",
+    "editor": "エディター",
+    "preview": "プレビュー",
+    "showPreview": "プレビューを表示",
+    "hidePreview": "プレビューを非表示",
+    "markAsPerson": "人物としてマーク",
+    "markAsLocation": "場所としてマーク",
+    "searchPeople": "人物を検索...",
+    "searchLocations": "場所を検索...",
+    "refineModeHelp": "テキストを選択して人物や場所をマークしたり、既存のチップをクリックして編集します。",
+    "rewriteModeHelp": "名前が一致する場合リンクは保持されます。一致しない名前はプレーンテキストになります。",
+    "saved": "保存しました",
+    "entrySaved": "日記エントリーが正常に保存されました。",
+    "shareNotSupported": "このデバイスでは共有機能がサポートされていません",
+    "shareError": "共有中にエラーが発生しました",
+    "formatting": {
+      "bold": "太字",
+      "italic": "斜体",
+      "underline": "下線",
+      "addPerson": "人を追加",
+      "addLocation": "場所を追加"
+    },
+    "shareAllEntries": "すべて共有",
+    "copyEntry": "コピー",
+    "locationPermission": "より正確な場所の提案のために位置情報へのアクセスを有効にしてください",
+    "unknownLocation": "場所不明",
+    "enableLocation": "位置情報を有効にする",
+    "entryLocation": "このエントリーの場所",
+    "searchLocationPlaceholder": "このエントリーの場所を検索...",
+    "currentBrowserLocation": "現在のブラウザの位置情報",
+    "defaultLocation": "デフォルトの場所: {locationName}",
+    "usingLocation": "使用中: {location}",
+    "noLocationProvided": "位置情報がありません。",
+    "noDefaultLocationSet": "デフォルトの場所が設定されていません。",
+    "setDefaultLocationInSettings": "設定でデフォルトの場所を設定してください。",
+    "noLocationSelected": "場所が選択されていません。",
+    "enableBrowserLocation": "ブラウザの位置情報を有効にする",
+    "clearManualLocation": "手動で選択した場所をクリア",
+    "aiProcessingNote": "AIが日記のエントリーを処理し、人物や場所を抽出します。",
+    "locationRecommendation": "ブラウザの位置情報アクセスを有効にすることをお勧めします。",
+    "defaultLocationTip": "または、設定でデフォルトの場所を設定することもできます。",
+    "insights": {
+      "title": "人物インサイト",
+      "aiPowered": "AI活用",
+      "description": "やり取りについてメモを追加してください。AIがこれを分析し、プロフィールを自動的に更新します。",
+      "placeholder": "どんな話をしましたか？新しい発見はありましたか？"
+    },
+    "noWeatherLocation": "この場所の天気情報は利用できません。",
+    "weatherLabel": "天気",
+    "sunLabel": "太陽",
+    "moonLabel": "月"
+  },
+  "common": {
+    "close": "閉じる",
+    "cancel": "キャンセル",
+    "create": "作成",
+    "save": "保存",
+    "saving": "保存中",
+    "back": "戻る",
+    "edit": "編集",
+    "loading": "読み込み中...",
+    "noResults": "結果が見つかりません",
+    "logout": "ログアウト"
+  },
+  "home": {
+    "hero": {
+      "title": "Note Neko",
+      "subtitle": "シンプルなメモアプリで、あなたの力を引き出します。",
+      "cta": "メモを始める",
+      "heroImageAlt": "Note Neko ヒーロー画像"
+    },
+    "features": {
+      "dailyDiary": {
+        "title": "日記機能",
+        "description": "クリーンで直感的なインターフェースで、日々の活動や交流を記録。進捗を追跡し、経験の包括的な記録を維持します。"
+      },
+      "peopleProfiles": {
+        "title": "人物プロフィール",
+        "description": "交流から詳細な人物像を自動生成。将来の出会いや関係構築のための貴重な参照となる包括的なプロフィールを構築します。"
+      },
+      "people": {
+        "title": "人物",
+        "description": "人間関係や思い出を管理します。"
+      },
+      "locationHistory": {
+        "title": "場所の履歴",
+        "description": "様々な場所への訪問を記録・整理。将来の参照のために、会場、活動、経験を追跡します。"
+      }
+    },
+    "testimonials": {
+      "title": "ユーザーの声",
+      "sarah": {
+        "name": "サラ「名前を忘れる」チェン",
+        "title": "プロフェッショナル・ピープル・プレイザー",
+        "quote": "名前を自信を持って忘れられるようになりました！",
+        "avatarAlt": "サラのアバター"
+      },
+      "michael": {
+        "name": "マイケル「迷子の達人」ロドリゲス",
+        "title": "方向音痴認定",
+        "quote": "ついに、深夜の考えを批判しない日記ができました！",
+        "avatarAlt": "マイケルのアバター"
+      },
+      "emma": {
+        "name": "エマ「金魚脳」トンプソン",
+        "title": "記憶力向上愛好家",
+        "quote": "ついに金魚より賢くなれました！",
+        "avatarAlt": "エマのアバター"
+      }
+    },
+    "footer": {
+      "createdBy": "作成者",
+      "githubAlt": "GitHub"
+    }
+  },
+  "people": {
+    "addedOn": "{date}に追加",
+    "addPerson": "新しい人",
+    "birthday": "誕生日",
+    "cancel": "キャンセル",
+    "confirmDelete": "{name}を本当に削除しますか？",
+    "deleteProfile": "プロフィールを削除",
+    "editProfile": "プロフィールを編集",
+    "howWeMet": "出会いのきっかけ",
+    "interests": "興味・趣味",
+    "interestsPlaceholder": "趣味など",
+    "mentionedIn": "言及された場所",
+    "name": "名前",
+    "newPerson": "新しい人",
+    "nickname": "ニックネーム",
+    "noPeople": "まだ人が追加されていません",
+    "notes": "メモ",
+    "searchPlaceholder": "人を検索...",
+    "save": "保存",
+    "saving": "保存中",
+    "title": "人々",
+    "update": "更新",
+    "mention": "誰かを言及",
+    "createNew": "{name}を追加",
+    "creating": "{name}を作成中...",
+    "aiSummary": {
+      "title": "関係性構築",
+      "loading": "関係性の洞察を生成中...",
+      "error": "関係性の洞察の生成に失敗しました。後でもう一度お試しください。",
+      "noData": "関係性の提案を生成するのに十分な情報がありません。",
+      "conversationTopics": "次の会話トピック",
+      "activitySuggestions": "アクティビティのアイデア",
+      "relationshipTips": "関係性のヒント",
+      "suggestedInterests": "可能性のある興味",
+      "suggestedInterestsNote": "破線の枠はあなたのやり取りに基づくAIの提案を示します",
+      "attribution": "より深い関係を築くためにAIが生成"
+    },
+    "suggestedInterests": "提案された興味",
+    "suggestedInterestsNote": "破線の枠はあなたのやり取りに基づくAIの提案を示します",
+    "suggestedInterest": "これはAI分析に基づく提案された興味です",
+    "network": {
+      "title": "つながり",
+      "description": "日記で一緒に登場する人々"
+    },
+    "contactDetails": "連絡先詳細",
+    "relationships": "関係",
+    "noRelationships": "関係はまだ追加されていません",
+    "entryConversations": "このエントリーでの会話",
+    "suggestions": {
+      "title": "提案",
+      "updateField": "{field}を更新",
+      "addRelationship": "関係を追加",
+      "newSuggestion": "新しい提案",
+      "accept": "承認",
+      "reject": "拒否"
+    },
+    "globalNetwork": {
+      "title": "ネットワークマップ",
+      "description": "日記で一緒に登場する人々のつながりを表しています。",
+      "loading": "レイアウトを計算中..."
+    }
+  },
+  "error": {
+    "title": "エラーが発生しました",
+    "tryAgain": "再試行",
+    "generic": "予期しないエラーが発生しました。もう一度お試しください。",
+    "createFailed": "作成に失敗しました。もう一度お試しください。",
+    "updateFailed": "更新に失敗しました。もう一度お試しください。",
+    "deleteFailed": "削除に失敗しました。もう一度お試しください。",
+    "location": {
+      "title": "位置情報の問題",
+      "unsupported": "お使いのブラウザは位置情報をサポートしていません",
+      "permissionDenied": "位置情報の利用が許可されていません",
+      "unavailable": "位置情報を取得できませんでした",
+      "timeout": "位置情報の取得がタイムアウトしました",
+      "unknown": "不明なエラーが発生しました"
+    }
+  },
+  "settings": {
+    "title": "設定",
+    "welcome": {
+      "title": "設定へようこそ",
+      "description": "アカウントの設定、ソーシャル接続、プライバシー設定を管理します。"
+    },
+    "navigation": {
+      "profile": "プロフィール",
+      "social": "ソーシャルアカウント",
+      "privacy": "プライバシー",
+      "account": "アカウント"
+    },
+    "sections": {
+      "profile": {
+        "title": "プロフィール設定",
+        "description": "個人情報と設定を更新します。"
+      },
+      "social": {
+        "title": "ソーシャルメディアアカウント",
+        "description": "ソーシャルメディア連携を接続・管理します。"
+      },
+      "privacy": {
+        "title": "プライバシー設定",
+        "description": "データプライバシーと共有設定を制御します。"
+      },
+      "account": {
+        "title": "アカウント管理",
+        "description": "アカウント設定とサブスクリプションを管理します。"
+      }
+    },
+    "logout": {
+      "title": "サインアウト",
+      "confirm": "サインアウトしてもよろしいですか？"
+    },
+    "profile": {
+      "defaultLocationLabel": "日記エントリーのデフォルトの場所",
+      "defaultLocationDescription": "日記エントリー作成時にブラウザの位置情報が利用できない場合、この場所が使用されます。",
+      "searchLocationPlaceholder": "デフォルトの場所を検索...",
+      "saveChanges": "変更を保存",
+      "saveSuccess": "成功！",
+      "defaultLocationSaved": "デフォルトの場所が正常に保存されました。",
+      "saveError": "エラー！",
+      "invalidLocationData": "無効な位置情報データです。",
+      "failedToSaveDefaultLocation": "デフォルトの場所の保存に失敗しました。"
+    }
+  }
 }
