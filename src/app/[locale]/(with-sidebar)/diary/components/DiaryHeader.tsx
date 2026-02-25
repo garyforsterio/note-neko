@@ -146,9 +146,6 @@ export function DiaryHeader({
 					<h1 className="text-4xl font-extrabold text-gray-900 tracking-tight font-serif">
 						{t("diary.title")}
 					</h1>
-					<p className="text-gray-500 mt-1">
-						{t("home.features.dailyDiary.description").split(".")[0]}
-					</p>
 				</div>
 
 				<div className="flex items-center gap-3 w-full md:w-auto">

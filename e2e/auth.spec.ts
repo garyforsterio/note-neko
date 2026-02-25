@@ -43,10 +43,6 @@ test.describe("Authentication", () => {
 		// Verify we are inside the app
 		// We can check for "Diary" in navigation or header
 		await expect(page).toHaveURL(/.*diary/);
-		await expect(
-			page.getByText(
-				"Capture your thoughts, feelings, and the moments that matter",
-			),
-		).toBeVisible();
+		await expect(page.getByRole("heading", { name: "Diary" })).toBeVisible();
 	});
 });
