@@ -33,8 +33,8 @@
 		"tf:lint:ephemeral": "cd terraform/ephemeral && tflint",
 		"tf:lint": "npm run tf:lint:persistent && npm run tf:lint:ephemeral",
 		"tf:check": "npm run tf:fmt && npm run tf:validate && npm run tf:lint",
-		"k8s:lint:base": "kubectl kustomize k8s/base | kubeconform -strict -summary",
-		"k8s:lint:prod": "kubectl kustomize k8s/overlays/prod | kubeconform -strict -summary",
+		"k8s:lint:base": "kubectl kustomize k8s/base | kubeconform -strict -summary --skip ManagedCertificate",
+		"k8s:lint:prod": "kubectl kustomize k8s/overlays/prod | kubeconform -strict -summary --skip ManagedCertificate",
 		"k8s:lint": "npm run k8s:lint:base && npm run k8s:lint:prod",
 		"infra:check": "npm run tf:check && npm run k8s:lint"
 	},

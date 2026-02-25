@@ -13,7 +13,7 @@ resource "google_compute_subnetwork" "subnet" {
 resource "google_container_cluster" "primary" {
   name     = "nextjs-autopilot-cluster"
   location = "asia-northeast1"
-  
+
   network    = google_compute_network.vpc.name
   subnetwork = google_compute_subnetwork.subnet.name
 
