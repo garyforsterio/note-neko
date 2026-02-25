@@ -80,7 +80,7 @@ jobs:
       - name: Initialize Terraform Directories
         run: |
           cd terraform/persistent && terraform init -backend=false
-          cd ../terraform/ephemeral && terraform init -backend=false
+          cd ../../terraform/ephemeral && terraform init -backend=false
 
       - name: Run Infrastructure & K8s Checks
         run: pnpm run infra:check
