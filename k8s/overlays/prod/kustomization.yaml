@@ -1,0 +1,9 @@
+resources:
+  - ../../base
+  - certificate.yaml
+  - ingress.yaml
+
+images:
+  - name: nextjs-app:latest 
+    newName: asia-northeast1-docker.pkg.dev/life-tracker-459800/nextjs-repo/note-neko
+    newTag: latest
