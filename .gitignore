@@ -46,3 +46,12 @@ test-results
 *.tsbuildinfo
 
 /src/generated/
+
+# Transpiled JavaScript files (source is TypeScript)
+**/*.js
+**/*.jsx
+# Allow specific config files that are source code
+!commitlint.config.js
+!next.config.mjs
+!postcss.config.mjs
+!tailwind.config.mjs
