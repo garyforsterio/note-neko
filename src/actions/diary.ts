@@ -350,11 +350,7 @@ export async function deleteDiaryEntryAction(
  * Fetch weather data for a given location and date.
  * This server action allows client components to fetch weather data.
  */
-export async function getWeatherAction(
-	lat: number,
-	lng: number,
-	date: Date,
-) {
+export async function getWeatherAction(lat: number, lng: number, date: Date) {
 	try {
 		return await getHistoricWeather(lat, lng, date);
 	} catch (error) {
