@@ -3,24 +3,19 @@
 import { getFormProps, getTextareaProps, useForm } from "@conform-to/react";
 import { getZodConstraint, parseWithZod } from "@conform-to/zod";
 import { format, parseISO } from "date-fns";
-import {
-	Calendar as CalendarIcon,
-	CloudSun,
-	LoaderCircle,
-	MapPin,
-	Moon,
-	Sunrise,
-} from "lucide-react";
+import { Calendar as CalendarIcon, LoaderCircle, MapPin } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useActionState, useRef, useState } from "react";
+import { useActionState, useEffect, useMemo, useRef, useState } from "react";
 import { DayPicker } from "react-day-picker";
-import { createDiaryEntryAction } from "#actions/diary";
+import { createDiaryEntryAction, getWeatherAction } from "#actions/diary";
 import type { LocationResult } from "#actions/locations";
 import ErrorMessage from "#components/ErrorMessage";
 import { useUserLocation } from "#hooks/useUserLocation";
 import { Link, useRouter } from "#i18n/navigation";
 import { getNextDayString } from "#lib/utils/diary";
+import type { WeatherInfo } from "#lib/utils/weather";
 import { diaryEntrySchema } from "#schema/diary";
+import { WeatherWidget } from "./WeatherWidget";
 import "react-day-picker/style.css";
 
 function getLocalDateString(date: Date) {
@@ -46,34 +41,39 @@ export default function DiaryForm({
 		initialDate ? parseISO(initialDate) : new Date(),
 	);
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+	const [weather, setWeather] = useState<WeatherInfo | null>(null);
 
 	const { location: browserGeolocation, requestLocation } = useUserLocation();
 
-	let locationToSubmit: {
-		latitude: number;
-		longitude: number;
-		placeId?: string;
-		name?: string;
-	} | null = null;
-	let locationDisplayString: string | null = null;
+	const locationToSubmit = useMemo(() => {
+		if (browserGeolocation) {
+			return {
+				latitude: browserGeolocation.latitude,
+				longitude: browserGeolocation.longitude,
+			};
+		}
+		if (initialDefaultLocation) {
+			return {
+				latitude: initialDefaultLocation.lat,
+				longitude: initialDefaultLocation.lng,
+				placeId: initialDefaultLocation.placeId,
+				name: initialDefaultLocation.name,
+			};
+		}
+		return null;
+	}, [browserGeolocation, initialDefaultLocation]);
 
-	if (browserGeolocation) {
-		locationToSubmit = {
-			latitude: browserGeolocation.latitude,
-			longitude: browserGeolocation.longitude,
-		};
-		locationDisplayString = t("diary.currentBrowserLocation");
-	} else if (initialDefaultLocation) {
-		locationToSubmit = {
-			latitude: initialDefaultLocation.lat,
-			longitude: initialDefaultLocation.lng,
-			placeId: initialDefaultLocation.placeId,
-			name: initialDefaultLocation.name,
-		};
-		locationDisplayString = t("diary.defaultLocation", {
-			locationName: initialDefaultLocation.name,
-		});
-	}
+	const locationDisplayString = useMemo(() => {
+		if (browserGeolocation) {
+			return t("diary.currentBrowserLocation");
+		}
+		if (initialDefaultLocation) {
+			return t("diary.defaultLocation", {
+				locationName: initialDefaultLocation.name,
+			});
+		}
+		return null;
+	}, [browserGeolocation, initialDefaultLocation, t]);
 
 	const [lastResult, action, isPending] = useActionState(
 		createDiaryEntryAction,
@@ -94,6 +94,24 @@ export default function DiaryForm({
 	});
 
 	const nextDayStr = initialDate ? getNextDayString(initialDate) : undefined;
+
+	// Fetch weather data when date or location changes
+	useEffect(() => {
+		const fetchWeather = async () => {
+			if (locationToSubmit) {
+				const weatherData = await getWeatherAction(
+					locationToSubmit.latitude,
+					locationToSubmit.longitude,
+					selectedDate,
+				);
+				setWeather(weatherData);
+			} else {
+				setWeather(null);
+			}
+		};
+
+		fetchWeather();
+	}, [selectedDate, locationToSubmit]);
 
 	const handleDateSelect = (date: Date | undefined) => {
 		if (date) {
@@ -231,37 +249,7 @@ export default function DiaryForm({
 					</div>
 				</div>
 
-				<div className="flex gap-6 text-gray-400 py-4 md:py-0 select-none">
-					<div className="flex flex-col items-center gap-1">
-						<div className="flex items-center gap-2 text-gray-500">
-							<CloudSun size={18} />
-							<span className="font-semibold text-lg">--°C</span>
-						</div>
-						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
-							Weather
-						</span>
-					</div>
-					<div className="w-px bg-gray-200 h-10 self-center" />
-					<div className="flex flex-col items-center gap-1">
-						<div className="flex items-center gap-2 text-gray-500">
-							<Sunrise size={18} />
-							<span className="font-semibold text-lg">--:--</span>
-						</div>
-						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
-							Sunrise
-						</span>
-					</div>
-					<div className="w-px bg-gray-200 h-10 self-center" />
-					<div className="flex flex-col items-center gap-1">
-						<div className="flex items-center gap-2 text-gray-500">
-							<Moon size={18} />
-							<span className="font-semibold text-lg">--%</span>
-						</div>
-						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
-							Moon
-						</span>
-					</div>
-				</div>
+				<WeatherWidget weather={weather} />
 			</div>
 
 			<div>

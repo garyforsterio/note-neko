@@ -5,9 +5,7 @@ import {
 	ArrowRight,
 	Calendar as CalendarIcon,
 	MapPin,
-	Moon,
 	Pencil,
-	Sunrise,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
@@ -15,12 +13,13 @@ import { DiaryContent } from "#components/DiaryContent";
 import type { Person } from "#generated/prisma";
 import { Link, useRouter } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
-import { getWeatherIcon, type WeatherInfo } from "#lib/utils/weather";
+import type { WeatherInfo } from "#lib/utils/weather";
 import DeleteButton from "../../components/DeleteButton";
 import DiaryEditForm from "../../components/DiaryEditForm";
 import DiaryMap from "../../components/DiaryMap";
 import { DiaryMentions } from "../../components/DiaryMentions";
 import ShareButton from "../../components/ShareButton";
+import { WeatherWidget } from "../../components/WeatherWidget";
 
 interface DiaryEntryPageClientProps {
 	entry: DiaryEntryWithRelations;
@@ -48,8 +47,6 @@ export default function DiaryEntryPageClient({
 	// Use optional chaining for safe access
 	const locationDisplayString =
 		entry.locations.length > 0 ? entry.locations[0]?.name : null;
-
-	const WeatherIcon = getWeatherIcon(weather?.weatherCode ?? null);
 
 	if (isEditing) {
 		return (
@@ -149,50 +146,7 @@ export default function DiaryEntryPageClient({
 							</div>
 						</div>
 
-						<div className="flex justify-around items-center py-4 md:py-0 select-none w-full md:w-auto text-gray-400 md:gap-6">
-							{/* Weather widgets placeholder */}
-							<div className="flex flex-col items-center gap-1">
-								<div className="flex flex-col items-center gap-0.5 text-gray-500">
-									<WeatherIcon size={18} />
-									<span className="font-semibold text-sm md:text-lg whitespace-nowrap">
-										{weather?.temperatureMax && weather?.temperatureMin
-											? `${weather.temperatureMin}°C / ${weather.temperatureMax}°C`
-											: "--°C"}
-									</span>
-								</div>
-								<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
-									Weather
-								</span>
-							</div>
-							<div className="hidden md:block w-px bg-gray-200 h-10 self-center" />
-							<div className="flex flex-col items-center gap-1">
-								<div className="flex flex-col items-center gap-0.5 text-gray-500">
-									<Sunrise size={18} />
-									<span className="font-semibold text-sm md:text-lg whitespace-nowrap">
-										{weather?.sunrise && weather?.sunset
-											? `${weather.sunrise} - ${weather.sunset}`
-											: "--:--"}
-									</span>
-								</div>
-								<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
-									Sun
-								</span>
-							</div>
-							<div className="hidden md:block w-px bg-gray-200 h-10 self-center" />
-							<div className="flex flex-col items-center gap-1">
-								<div className="flex flex-col items-center gap-0.5 text-gray-500">
-									<Moon size={18} />
-									<span className="font-semibold text-sm md:text-lg whitespace-nowrap">
-										{weather
-											? `${Math.round(weather.moonPhase * 100)}%`
-											: "--%"}
-									</span>
-								</div>
-								<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
-									Moon
-								</span>
-							</div>
-						</div>
+						<WeatherWidget weather={weather} />
 					</div>
 
 					{/* Content Section */}

@@ -17,6 +17,7 @@ import {
 } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
 import { getDateString, getNextDayString } from "#lib/utils/diary";
+import { getHistoricWeather } from "#lib/utils/weather";
 import { deleteDiaryEntrySchema, diaryEntrySchema } from "#schema/diary";
 
 /**
@@ -343,4 +344,21 @@ export async function deleteDiaryEntryAction(
 
 	const locale = await getLocale();
 	redirect({ href: "/diary", locale });
+}
+
+/**
+ * Fetch weather data for a given location and date.
+ * This server action allows client components to fetch weather data.
+ */
+export async function getWeatherAction(
+	lat: number,
+	lng: number,
+	date: Date,
+) {
+	try {
+		return await getHistoricWeather(lat, lng, date);
+	} catch (error) {
+		Sentry.captureException(error);
+		return null;
+	}
 }
