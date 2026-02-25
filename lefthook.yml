@@ -8,6 +8,13 @@ pre-commit:
     type-check:
       glob: '*.{ts,tsx}'
       run: pnpm typecheck
+    terraform-check:
+      glob: 'terraform/**/*.tf'
+      run: pnpm run tf:check
+    k8s-check:
+      glob: 'k8s/**/*.yaml'
+      run: pnpm run k8s:lint
+
 commit-msg:
   commands:
     lint-commit-msg:

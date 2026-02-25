@@ -14,6 +14,7 @@ const nextConfig = {
 	cacheComponents: false,
 	reactCompiler: true,
 	serverExternalPackages: ["require-in-the-middle", "import-in-the-middle"],
+	output: "standalone",
 };
 
 const withNextIntl = createNextIntlPlugin();
