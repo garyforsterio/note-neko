@@ -2,11 +2,11 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 import { PrismaClient } from "#generated/prisma";
 
-let connectionString = process.env.POSTGRES_PRISMA_URL;
+let connectionString = process.env.POSTGRES_URL_NON_POOLING;
 
-if (process.env.NODE_ENV !== "production" && connectionString) {
+if (connectionString) {
 	// The `pg` package enforces strict SSL verification if `sslmode=require` is present in the URL,
-	// which causes "self-signed certificate in certificate chain" errors with Supabase in local dev.
+	// which causes "self-signed certificate in certificate chain" errors with Supabase's connection pooler.
 	// We strip it here so our custom `ssl` config below is respected.
 	connectionString = connectionString
 		.replace("?sslmode=require&", "?")
@@ -16,14 +16,10 @@ if (process.env.NODE_ENV !== "production" && connectionString) {
 
 const pool = new Pool({
 	connectionString,
-	// Bypass self-signed cert errors often seen with Supabase's connection pooler in Node.js dev environments
-	ssl:
-		process.env.NODE_ENV === "production"
-			? true
-			: { rejectUnauthorized: false },
+	// Bypass self-signed cert errors required for Supabase's connection pooler in Node.js
+	ssl: { rejectUnauthorized: false },
 });
 const adapter = new PrismaPg(pool);
-
 const createPrismaClient = () =>
 	new PrismaClient({
 		adapter,

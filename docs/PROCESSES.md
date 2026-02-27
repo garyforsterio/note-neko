@@ -331,7 +331,7 @@ Runs automatically when migration files are committed to `main`:
 
 - Triggers on changes to `prisma/migrations/**`
 - Runs `prisma migrate deploy` against production database
-- Requires `POSTGRES_PRISMA_URL` and `POSTGRES_URL_NON_POOLING` secrets in the `production` GitHub environment
+- Requires `POSTGRES_URL_NON_POOLING` secret in the `production` GitHub environment
 
 ### Required GitHub Secrets
 
@@ -339,7 +339,7 @@ Configure these in your repository's Settings → Secrets and variables → Acti
 
 **Production environment:**
 
-- `POSTGRES_PRISMA_URL` - Production PostgreSQL connection string
+- `POSTGRES_URL_NON_POOLING` - Production PostgreSQL connection string
 
 ## Deployment Process
 

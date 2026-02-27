@@ -53,7 +53,6 @@ For detailed architecture, database schema, API documentation, component pattern
 
 Required environment variables:
 
-- `POSTGRES_PRISMA_URL` - PostgreSQL connection string (Supabase transaction pooler)
 - `POSTGRES_URL_NON_POOLING` - PostgreSQL connection string (Supabase direct session)
 - `JWT_SECRET` - Secret for JWT signing
 - `OPENROUTER_API_KEY` - OpenAI API key for AI entity extraction from diary text
