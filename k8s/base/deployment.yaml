@@ -29,11 +29,11 @@ spec:
             successThreshold: 1
             failureThreshold: 3
           env:
-            - name: DATABASE_URL
+            - name: POSTGRES_URL_NON_POOLING
               valueFrom:
                 secretKeyRef:
                   name: nextjs-secrets
-                  key: DATABASE_URL
+                  key: POSTGRES_URL_NON_POOLING
             - name: OPENROUTER_API_KEY
               valueFrom:
                 secretKeyRef:
