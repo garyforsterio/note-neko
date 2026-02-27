@@ -52,18 +52,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      # We still need pnpm to run the package.json scripts
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977
-      
-      - name: Use Node.js 22
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          cache: 'pnpm'
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v4
 
@@ -77,10 +65,25 @@ jobs:
           curl -sL https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz | tar -xz
           sudo mv kubeconform /usr/local/bin/
 
-      - name: Initialize Terraform Directories
+      - name: Initialize Terraform
         run: |
-          cd terraform/persistent && terraform init -backend=false
-          cd ../../terraform/ephemeral && terraform init -backend=false
+          terraform -chdir=terraform/persistent init -backend=false
+          terraform -chdir=terraform/ephemeral init -backend=false
 
-      - name: Run Infrastructure & K8s Checks
-        run: pnpm run infra:check
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Validate
+        run: |
+          terraform -chdir=terraform/persistent validate
+          terraform -chdir=terraform/ephemeral validate
+
+      - name: TFLint
+        run: |
+          tflint --chdir=terraform/persistent
+          tflint --chdir=terraform/ephemeral
+
+      - name: Kubernetes Manifest Validation
+        run: |
+          kubectl kustomize k8s/base | kubeconform -strict -summary --skip 'ManagedCertificate,BackendConfig'
+          kubectl kustomize k8s/overlays/prod | kubeconform -strict -summary --skip 'ManagedCertificate,BackendConfig'
