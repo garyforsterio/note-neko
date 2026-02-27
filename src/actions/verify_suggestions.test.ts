@@ -1,9 +1,9 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-// Skip integration tests if DATABASE_URL is not set
-const skipIntegrationTests = !process.env.DATABASE_URL;
+// Skip integration tests if POSTGRES_PRISMA_URL is not set
+const skipIntegrationTests = !process.env.POSTGRES_PRISMA_URL;
 
-// Dynamic import to avoid PrismaClient initialization errors when DATABASE_URL is not set
+// Dynamic import to avoid PrismaClient initialization errors when POSTGRES_PRISMA_URL is not set
 const { db } = skipIntegrationTests
 	? { db: null as never }
 	: await import("#lib/db");
