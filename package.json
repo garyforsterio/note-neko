@@ -72,7 +72,7 @@
 		"next": "16.1.6",
 		"next-intl": "^4.4.0",
 		"nodemailer": "^8.0.1",
-		"openai": "^6.16.0",
+		"openai": "^6.25.0",
 		"react": "19.2.4",
 		"react-day-picker": "^9.9.0",
 		"react-dom": "19.2.4",
