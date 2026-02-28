@@ -33,6 +33,7 @@ export function LoginForm() {
 	});
 
 	const registered = searchParams.get("registered") === "true";
+	const reset = searchParams.get("reset") === "true";
 
 	return (
 		<form className="mt-8 space-y-6" {...getFormProps(form)} action={action}>
@@ -42,6 +43,11 @@ export function LoginForm() {
 					<div className="text-sm text-green-700">
 						{t("auth.login.registered")}
 					</div>
+				</div>
+			)}
+			{reset && (
+				<div className="rounded-md bg-green-50 p-4">
+					<div className="text-sm text-green-700">{t("auth.login.reset")}</div>
 				</div>
 			)}
 			<div className="rounded-md shadow-sm -space-y-px">
