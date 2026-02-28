@@ -40,11 +40,11 @@ test.describe("Diary", () => {
 
 		// "New Entry" button
 		await page.getByRole("link", { name: "New Entry" }).click();
+		await page.waitForURL(/.*diary\/new/);
 
 		// Fill the entry
 		const entryContent = `Today was a good day. ID: ${Date.now()}`;
-		// Use placeholder or specific role if label is missing or generic
-		await page.getByPlaceholder(/What happened/i).fill(entryContent);
+		await page.getByPlaceholder(/Describe your day/i).fill(entryContent);
 
 		// Save
 		await page.getByRole("button", { name: "Create" }).click();
