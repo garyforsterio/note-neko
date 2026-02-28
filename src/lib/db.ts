@@ -16,8 +16,6 @@ if (connectionString) {
 
 const pool = new Pool({
 	connectionString,
-	// Limit max connections to prevent exhausting Supabase Session Mode pool size (especially in dev)
-	max: 5,
 	// Bypass self-signed cert errors required for Supabase's connection pooler in Node.js
 	ssl: { rejectUnauthorized: false },
 });
