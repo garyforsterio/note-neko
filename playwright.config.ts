@@ -32,10 +32,19 @@ export default defineConfig({
 	/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
 	use: {
 		/* Base URL to use in actions like `await page.goto('/')`. */
-		baseURL: "http://localhost:3000",
+		baseURL: process.env.BASE_URL || "http://localhost:3000",
 
 		/* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
 		trace: "on-first-retry",
+
+		/* Bypass Vercel deployment protection when running against preview deployments */
+		...(process.env.VERCEL_AUTOMATION_BYPASS_SECRET && {
+			extraHTTPHeaders: {
+				"x-vercel-protection-bypass":
+					process.env.VERCEL_AUTOMATION_BYPASS_SECRET,
+				"x-vercel-set-bypass-cookie": "true",
+			},
+		}),
 	},
 
 	/* Configure projects for major browsers */
@@ -46,10 +55,12 @@ export default defineConfig({
 		},
 	],
 
-	/* Run your local dev server before starting the tests */
-	webServer: {
-		command: "pnpm dev",
-		url: "http://localhost:3000",
-		reuseExistingServer: !process.env.CI,
-	},
+	/* Run your local dev server before starting the tests (skipped when BASE_URL is set) */
+	webServer: process.env.BASE_URL
+		? undefined
+		: {
+				command: "pnpm dev",
+				url: "http://localhost:3000",
+				reuseExistingServer: !process.env.CI,
+			},
 });

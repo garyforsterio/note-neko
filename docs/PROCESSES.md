@@ -324,6 +324,16 @@ Runs on every push to any branch:
 - Linting with Biome
 - TypeScript type checking
 - Unit tests with Vitest
+- Infrastructure validation (Terraform, Kubernetes)
+
+#### E2E Workflow (`.github/workflows/e2e.yml`)
+
+Runs automatically after a successful Vercel Preview deployment:
+
+- Triggered by `deployment_status` event (Preview environment only)
+- Runs Playwright E2E tests against the Vercel preview URL
+- Uses `VERCEL_AUTOMATION_BYPASS_SECRET` to bypass deployment protection
+- Uploads Playwright HTML report as artifact (14-day retention)
 
 #### Database Migration Workflow (`.github/workflows/migrate-prod.yml`)
 
@@ -336,6 +346,10 @@ Runs automatically when migration files are committed to `main`:
 ### Required GitHub Secrets
 
 Configure these in your repository's Settings → Secrets and variables → Actions:
+
+**Repository secrets:**
+
+- `VERCEL_AUTOMATION_BYPASS_SECRET` - Vercel Protection Bypass for Automation secret (generated in Vercel project settings under Deployment Protection)
 
 **Production environment:**
 

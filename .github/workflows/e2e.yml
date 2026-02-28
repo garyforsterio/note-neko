@@ -1,0 +1,45 @@
+name: E2E Tests
+
+on: deployment_status
+
+jobs:
+  e2e:
+    name: E2E Tests (Playwright)
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      github.event.deployment_status.environment == 'Preview'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install chromium --with-deps
+
+      - name: Run E2E tests
+        run: pnpm test:e2e
+        env:
+          BASE_URL: ${{ github.event.deployment_status.target_url }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
