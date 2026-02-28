@@ -153,7 +153,7 @@ export default function Navigation() {
 													className="group flex items-center w-full px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
 												>
 													<Bug className="mr-3 flex-shrink-0 h-4 w-4 text-gray-400 group-hover:text-gray-600" />
-													Report a Bug
+													{t("common.reportBug")}
 												</button>
 												<button
 													type="button"
