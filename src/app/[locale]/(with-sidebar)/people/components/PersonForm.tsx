@@ -74,8 +74,7 @@ export default function PersonForm({ person }: PersonFormProps) {
 					htmlFor={fields.name.id}
 					className="block text-sm font-medium text-gray-700 mb-1"
 				>
-					{/* biome-ignore lint/style/noJsxLiterals: required field indicator */}
-					{t("people.name")} *
+					{t("people.nameRequired")}
 				</label>
 				{person && <input {...getInputProps(fields.id, { type: "hidden" })} />}
 				<input

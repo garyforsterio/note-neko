@@ -189,8 +189,10 @@ export function PersonNetworkGraph({
 											isHovered ? "opacity-100" : "opacity-0"
 										}`}
 									>
-										{/* biome-ignore lint/style/noJsxLiterals: punctuation around dynamic content */}
-										{node.name} ({node.count})
+										{t("people.network.nodeLabel", {
+											name: node.name,
+											count: node.count,
+										})}
 									</text>
 								</g>
 							</Link>

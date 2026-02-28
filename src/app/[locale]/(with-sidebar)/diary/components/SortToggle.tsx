@@ -31,8 +31,7 @@ export function SortToggle() {
 			}
 		>
 			<span className="text-xs uppercase tracking-wide opacity-70">
-				{/* biome-ignore lint/style/noJsxLiterals: punctuation */}
-				{t("diary.date")}:
+				{t("diary.dateLabel")}
 			</span>
 			{currentSort === "desc" ? (
 				<>

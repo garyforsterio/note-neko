@@ -243,8 +243,7 @@ export default function DiaryForm({
 								href="/settings/profile"
 								className="text-gray-400 hover:text-gray-600 text-xs ml-2"
 							>
-								{/* biome-ignore lint/style/noJsxLiterals: punctuation wrapping translated text */}
-								({t("settings.navigation.profile")})
+								{t("settings.navigation.profileParenthesized")}
 							</Link>
 						)}
 					</div>
