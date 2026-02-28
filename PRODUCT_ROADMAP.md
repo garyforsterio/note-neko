@@ -16,13 +16,13 @@ This document outlines the prioritized tasks for launching Note Neko, focusing o
 - **Launch Blocker:** Yes
 - **Priority:** High
 
-### Task 1.2: Global Error Page & Fallbacks (Reliability)
+### ✅ Task 1.2: Global Error Page & Fallbacks (Reliability)
 - **Description:** Create a user-friendly global error page (`global-error.tsx`) to gracefully handle unhandled exceptions in production, rather than showing a generic crash screen.
 - **Agent Instructions:** Update/create `src/app/global-error.tsx` and `src/app/[locale]/error.tsx` using the existing UI components. Ensure the error pages offer a way to navigate back home and ideally log the error boundary crash to Sentry (already configured).
 - **Launch Blocker:** Yes
 - **Priority:** High
 
-### Task 1.3: Bug Reporting & Feedback Mechanism (User Trust)
+### ✅ Task 1.3: Bug Reporting & Feedback Mechanism (User Trust)
 - **Description:** Give early users a simple way to report bugs, suggest features, or ask for help directly from the app shell.
 - **Agent Instructions:** 
   1. Create a "Report Bug / Feedback" button in the sidebar or user dropdown.
@@ -60,7 +60,7 @@ This document outlines the prioritized tasks for launching Note Neko, focusing o
 - **Launch Blocker:** Yes
 - **Priority:** High
 
-### Task 1.8: Open Source Licensing & Repository Protection (Legal/Marketing)
+### ✅ Task 1.8: Open Source Licensing & Repository Protection (Legal/Marketing)
 - **Description:** Since the repository is public, it must have a license to protect your ability to monetize and prevent competitors from cloning and selling it.
 - **Agent Instructions:** 
   1. Create a `LICENSE` file in the root directory. Recommend **AGPL-3.0** (requires anyone who modifies and hosts the code to also open-source their changes) or a **BSL** (Business Source License) to explicitly prevent commercial competition.
