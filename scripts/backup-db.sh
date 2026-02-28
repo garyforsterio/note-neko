@@ -2,7 +2,7 @@
 set -e
 
 # This script backs up the PostgreSQL database using pg_dump.
-# It expects POSTGRES_URL_NON_POOLING to be set in the environment.
+# It expects DIRECT_URL to be set in the environment.
 
 # Ensure backups directory exists in the root
 mkdir -p backups
@@ -20,7 +20,7 @@ if ! command -v pg_dump &> /dev/null; then
 fi
 
 # Use pg_dump to backup
-# The POSTGRES_URL_NON_POOLING environment variable is used to connect
-pg_dump "${POSTGRES_URL_NON_POOLING}" > "${FILENAME}"
+# The DIRECT_URL environment variable is used to connect
+pg_dump "${DIRECT_URL}" > "${FILENAME}"
 
 echo "Backup completed successfully."
