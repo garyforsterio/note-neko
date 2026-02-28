@@ -1,348 +1,349 @@
 {
-  "auth": {
-    "login": {
-      "title": "Sign in to your account",
-      "email": "Email address",
-      "password": "Password",
-      "submit": "Sign in",
-      "submitting": "Signing in...",
-      "forgotPassword": "Forgot your password?",
-      "noAccount": "Don't have an account?",
-      "registered": "Your account has been created. Please sign in.",
-      "reset": "Your password has been reset. Please sign in.",
-      "error": {
-        "required": "Please check your credentials and try again.",
-        "invalidCredentials": "Invalid email or password."
-      }
-    },
-    "signup": {
-      "title": "Create your account",
-      "email": "Email address",
-      "password": "Password",
-      "confirmPassword": "Confirm password",
-      "submit": "Sign up",
-      "submitting": "Creating account...",
-      "hasAccount": "Already have an account?",
-      "error": {
-        "required": "Please check your information and try again.",
-        "passwordMismatch": "Passwords do not match.",
-        "emailExists": "An account with this email already exists."
-      }
-    },
-    "forgotPassword": {
-      "title": "Reset your password",
-      "email": "Email address",
-      "submit": "Send reset link",
-      "submitting": "Sending reset link...",
-      "backToLogin": "Back to login",
-      "success": "If an account exists with that email, we've sent a password reset link. Please check your email.",
-      "error": {
-        "required": "Please check your email and try again."
-      }
-    },
-    "resetPassword": {
-      "title": "Set new password",
-      "password": "New password",
-      "confirmPassword": "Confirm new password",
-      "submit": "Reset password",
-      "submitting": "Resetting password...",
-      "backToLogin": "Back to login",
-      "error": {
-        "required": "Please check your information and try again.",
-        "passwordMismatch": "Passwords do not match.",
-        "invalidToken": "Invalid or expired reset token."
-      }
-    }
-  },
-  "calendar": {
-    "nextMonth": "Next month",
-    "previousMonth": "Previous month",
-    "dragToSelect": "Click and drag to select a date range",
-    "clickToSelectRange": "Click a date to start selection, then click another date to complete the range"
-  },
-  "common": {
-    "close": "Close",
-    "cancel": "Cancel",
-    "create": "Create",
-    "save": "Save",
-    "saving": "Saving",
-    "back": "Back",
-    "edit": "Edit",
-    "loading": "Loading...",
-    "noResults": "No results found",
-    "logout": "Log out"
-  },
-  "diary": {
-    "contentPlaceholder": "Describe your day: what you did, people you met, places you visited...",
-    "conversation": "Conversation",
-    "closeExpandedView": "Close expanded view",
-    "date": "Date",
-    "refineEntryTitle": "Refine Entry",
-    "locations": "Locations",
-    "mentions": "Mentions",
-    "mention": "Mention",
-    "newEntry": "New Entry",
-    "noEntries": "No diary entries yet",
-    "searchLocation": "Search for a location...",
-    "title": "Diary",
-    "writtenOn": "Written on {date}",
-    "noLocationsFound": "No locations found",
-    "noLocation": "No location",
-    "addLocation": "Add location",
-    "deleteEntry": "Delete entry",
-    "confirmDelete": "Are you sure you want to delete this diary entry? This action cannot be undone.",
-    "startDate": "Start Date",
-    "endDate": "End Date",
-    "itemsPerPage": "Items per page",
-    "applyFilters": "Apply Filters",
-    "pageInfo": "Page {page} of {totalPages}",
-    "clearDateRange": "Clear date range",
-    "filters": "Filters",
-    "selectDateRange": "Select date range",
-    "latestFirst": "Newest to Oldest",
-    "earliestFirst": "Oldest to Newest",
-    "sortLatestFirst": "Sort entries from newest to oldest",
-    "sortEarliestFirst": "Sort entries from oldest to newest",
-    "content": "Content",
-    "processing": "Processing your diary entry...",
-    "processingDescription": "Using AI to identify people and places in your text",
-    "entryUpdated": "Entry updated!",
-    "addAnotherEntry": "Add Another Entry",
-    "processingFailed": "Processing failed",
-    "savingEntry": "Creating your diary entry...",
-    "analyzing": "Analyzing...",
-    "analyzingEntry": "Analyzing your diary entry",
-    "analyzingDescription": "AI is identifying people and places mentioned in your text",
-    "shareEntry": "Share entry",
-    "catchUp": "Catch up",
-    "catchUpMessage": "Catch up ({count} days)",
-    "catchUpTitle": "Great job! Ready for the next one?",
-    "catchUpDescription": "Continue your streak by writing the entry for {date}.",
-    "editMode": "Edit Mode",
-    "nextDayEntry": "Write entry for next day",
-    "refineMode": "Refine",
-    "rewriteMode": "Rewrite",
-    "editor": "Editor",
-    "preview": "Preview",
-    "showPreview": "Show Preview",
-    "hidePreview": "Hide Preview",
-    "markAsPerson": "Mark as Person",
-    "markAsLocation": "Mark as Location",
-    "searchPeople": "Search people...",
-    "searchLocations": "Search locations...",
-    "refineModeHelp": "Highlight text to mark people or locations, or click existing chips to edit.",
-    "rewriteModeHelp": "Update the text. People and locations linked are shown in raw form, do not change them",
-    "saved": "Saved",
-    "entrySaved": "Your diary entry has been saved successfully.",
-    "shareNotSupported": "Sharing is not supported on your device",
-    "shareError": "Unable to share, please check browser settings and try again",
-    "formatting": {
-      "bold": "Bold",
-      "italic": "Italic",
-      "underline": "Underline",
-      "addPerson": "Add Person",
-      "addLocation": "Add Location"
-    },
-    "shareAllEntries": "Share all",
-    "copyEntry": "Copy",
-    "locationPermission": "Enable location access for better place suggestions",
-    "unknownLocation": "Unknown Location",
-    "enableLocation": "Enable location",
-    "entryLocation": "Location for this Entry",
-    "currentBrowserLocation": "Current Browser Location",
-    "defaultLocation": "Your Default Location: {locationName}",
-    "usingLocation": "Using: {location}",
-    "noLocationProvided": "No location data available. ",
-    "noDefaultLocationSet": "No default location set.",
-    "setDefaultLocationInSettings": "Set a default location in settings.",
-    "aiProcessingNote": "AI will process the diary entry to extract people and locations.",
-    "locationRecommendation": "It is recommended to enable browser location access.",
-    "defaultLocationTip": "Alternatively, you can set a default location in settings.",
-    "enableBrowserLocation": "Enable Browser Location",
-    "insights": {
-      "title": "Person Insights",
-      "aiPowered": "Ai Powered",
-      "description": "Add notes about your interactions. AI will analyze this to automatically update their profiles.",
-      "placeholder": "What did you talk about? Did you learn anything new about them?"
-    },
-    "noWeatherLocation": "Weather information not available for this location.",
-    "weatherLabel": "Weather",
-    "sunLabel": "Sun",
-    "moonLabel": "Moon"
-  },
-  "home": {
-    "hero": {
-      "title": "Note Neko",
-      "subtitle": "Simple note taking app to empower you.",
-      "cta": "Start Taking Notes",
-      "heroImageAlt": "Note Neko Hero"
-    },
-    "features": {
-      "dailyDiary": {
-        "title": "Daily Diary",
-        "description": "Capture your thoughts, feelings, and the moments that matter."
-      },
-      "peopleProfiles": {
-        "title": "People Profiles",
-        "description": "Automatically generate detailed personas from your interactions. Build comprehensive profiles that serve as valuable references for future encounters and relationship building."
-      },
-      "people": {
-        "title": "People",
-        "description": "Manage your relationships and memories."
-      },
-      "locationHistory": {
-        "title": "Location History",
-        "description": "Document and organize your visits to different places. Keep track of venues, activities, and experiences for future reference."
-      }
-    },
-    "testimonials": {
-      "title": "What Our Users Say",
-      "sarah": {
-        "name": "Sarah \"Forgot-Your-Name\" Chen",
-        "title": "Professional People Pleaser",
-        "quote": "Now I can forget names with confidence!",
-        "avatarAlt": "Sarah's avatar"
-      },
-      "michael": {
-        "name": "Michael \"Lost & Found\" Rodriguez",
-        "title": "Certified Directionally Challenged",
-        "quote": "Finally, a diary that doesn't judge my 3 AM thoughts!",
-        "avatarAlt": "Michael's avatar"
-      },
-      "emma": {
-        "name": "Emma \"Goldfish Brain\" Thompson",
-        "title": "Memory Enthusiast",
-        "quote": "Finally smarter than my goldfish!",
-        "avatarAlt": "Emma's avatar"
-      }
-    },
-    "footer": {
-      "createdBy": "Created by",
-      "githubAlt": "GitHub"
-    }
-  },
-  "people": {
-    "addedOn": "Added on {date}",
-    "addPerson": "New Person",
-    "birthday": "Birthday",
-    "cancel": "Cancel",
-    "confirmDelete": "Really delete {name}?",
-    "deleteProfile": "Delete profile",
-    "editProfile": "Edit profile",
-    "howWeMet": "How we met",
-    "interests": "Interests",
-    "interestsPlaceholder": "What they like etc",
-    "mentionedIn": "Mentioned in",
-    "name": "Name",
-    "newPerson": "New Person",
-    "nickname": "Nickname",
-    "noPeople": "No people added yet",
-    "notes": "Notes",
-    "searchPlaceholder": "Search people...",
-    "save": "Save",
-    "saving": "Saving",
-    "title": "People",
-    "update": "Update",
-    "mention": "Mention someone",
-    "createNew": "Add {name}",
-    "creating": "Creating {name}...",
-    "aiSummary": {
-      "title": "Relationship Building",
-      "loading": "Generating relationship insights...",
-      "error": "Failed to generate relationship insights. Please try again later.",
-      "noData": "Not enough information to generate relationship suggestions.",
-      "conversationTopics": "Next Conversation Topics",
-      "activitySuggestions": "Activity Ideas",
-      "relationshipTips": "Relationship Tips",
-      "suggestedInterests": "Possible Interests",
-      "suggestedInterestsNote": "Dashed borders indicate AI suggestions based on your interactions",
-      "attribution": "Generated by AI to help you build deeper relationships"
-    },
-    "suggestedInterests": "Suggested Interests",
-    "suggestedInterestsNote": "Dashed borders indicate AI suggestions based on your interactions",
-    "suggestedInterest": "This is a suggested interest based on AI analysis",
-    "network": {
-      "title": "Connections",
-      "description": "People who appear together in diary entries"
-    },
-    "contactDetails": "Contact Details",
-    "relationships": "Relationships",
-    "noRelationships": "No relationships added yet",
-    "entryConversations": "Conversations in this entry",
-    "suggestions": {
-      "title": "Suggestions",
-      "updateField": "Update {field}",
-      "addRelationship": "Add relationship",
-      "newSuggestion": "New Suggestion",
-      "accept": "Accept",
-      "reject": "Reject"
-    },
-    "globalNetwork": {
-      "title": "Network Map",
-      "description": "Connections represent people appearing in the same diary entries.",
-      "loading": "Computing layout..."
-    }
-  },
-  "error": {
-    "title": "Something went wrong!",
-    "tryAgain": "Try again",
-    "generic": "An unexpected error occurred. Please try again.",
-    "createFailed": "Failed to create. Please try again.",
-    "updateFailed": "Failed to update. Please try again.",
-    "deleteFailed": "Failed to delete. Please try again.",
-    "location": {
-      "title": "Location Error",
-      "unsupported": "Geolocation is not supported by your browser",
-      "permissionDenied": "Location permission denied",
-      "unavailable": "Location information unavailable",
-      "timeout": "Location request timed out",
-      "unknown": "An unknown error occurred"
-    }
-  },
-  "settings": {
-    "title": "Settings",
-    "welcome": {
-      "title": "Welcome to Settings",
-      "description": "Manage your account preferences, social connections, and privacy settings."
-    },
-    "navigation": {
-      "profile": "Profile",
-      "social": "Social Accounts",
-      "privacy": "Privacy",
-      "account": "Account"
-    },
-    "sections": {
-      "profile": {
-        "title": "Profile Settings",
-        "description": "Update your personal information and preferences."
-      },
-      "social": {
-        "title": "Social Media Accounts",
-        "description": "Connect and manage your social media integrations."
-      },
-      "privacy": {
-        "title": "Privacy Settings",
-        "description": "Control your data privacy and sharing preferences."
-      },
-      "account": {
-        "title": "Account Management",
-        "description": "Manage your account settings and subscription."
-      }
-    },
-    "logout": {
-      "title": "Sign Out",
-      "confirm": "Are you sure you want to sign out?"
-    },
-    "profile": {
-      "defaultLocationLabel": "Default Diary Entry Location",
-      "defaultLocationDescription": "This location will be used if your browser location is unavailable when creating a diary entry.",
-      "searchLocationPlaceholder": "Search for a default location...",
-      "saveChanges": "Save Changes",
-      "saveSuccess": "Success!",
-      "defaultLocationSaved": "Default location saved successfully.",
-      "saveError": "Error!",
-      "invalidLocationData": "Invalid location data provided.",
-      "failedToSaveDefaultLocation": "Failed to save default location."
-    }
-  }
+	"auth": {
+		"login": {
+			"title": "Sign in to your account",
+			"email": "Email address",
+			"password": "Password",
+			"submit": "Sign in",
+			"submitting": "Signing in...",
+			"forgotPassword": "Forgot your password?",
+			"noAccount": "Don't have an account?",
+			"registered": "Your account has been created. Please sign in.",
+			"reset": "Your password has been reset. Please sign in.",
+			"error": {
+				"required": "Please check your credentials and try again.",
+				"invalidCredentials": "Invalid email or password."
+			}
+		},
+		"signup": {
+			"title": "Create your account",
+			"email": "Email address",
+			"password": "Password",
+			"confirmPassword": "Confirm password",
+			"submit": "Sign up",
+			"submitting": "Creating account...",
+			"hasAccount": "Already have an account?",
+			"error": {
+				"required": "Please check your information and try again.",
+				"passwordMismatch": "Passwords do not match.",
+				"emailExists": "An account with this email already exists."
+			}
+		},
+		"forgotPassword": {
+			"title": "Reset your password",
+			"email": "Email address",
+			"submit": "Send reset link",
+			"submitting": "Sending reset link...",
+			"backToLogin": "Back to login",
+			"success": "If an account exists with that email, we've sent a password reset link. Please check your email.",
+			"error": {
+				"required": "Please check your email and try again."
+			}
+		},
+		"resetPassword": {
+			"title": "Set new password",
+			"password": "New password",
+			"confirmPassword": "Confirm new password",
+			"submit": "Reset password",
+			"submitting": "Resetting password...",
+			"backToLogin": "Back to login",
+			"error": {
+				"required": "Please check your information and try again.",
+				"passwordMismatch": "Passwords do not match.",
+				"invalidToken": "Invalid or expired reset token."
+			}
+		}
+	},
+	"calendar": {
+		"nextMonth": "Next month",
+		"previousMonth": "Previous month",
+		"dragToSelect": "Click and drag to select a date range",
+		"clickToSelectRange": "Click a date to start selection, then click another date to complete the range"
+	},
+	"common": {
+		"close": "Close",
+		"cancel": "Cancel",
+		"create": "Create",
+		"save": "Save",
+		"saving": "Saving",
+		"back": "Back",
+		"edit": "Edit",
+		"loading": "Loading...",
+		"noResults": "No results found",
+		"logout": "Log out",
+		"reportBug": "Report a Bug"
+	},
+	"diary": {
+		"contentPlaceholder": "Describe your day: what you did, people you met, places you visited...",
+		"conversation": "Conversation",
+		"closeExpandedView": "Close expanded view",
+		"date": "Date",
+		"refineEntryTitle": "Refine Entry",
+		"locations": "Locations",
+		"mentions": "Mentions",
+		"mention": "Mention",
+		"newEntry": "New Entry",
+		"noEntries": "No diary entries yet",
+		"searchLocation": "Search for a location...",
+		"title": "Diary",
+		"writtenOn": "Written on {date}",
+		"noLocationsFound": "No locations found",
+		"noLocation": "No location",
+		"addLocation": "Add location",
+		"deleteEntry": "Delete entry",
+		"confirmDelete": "Are you sure you want to delete this diary entry? This action cannot be undone.",
+		"startDate": "Start Date",
+		"endDate": "End Date",
+		"itemsPerPage": "Items per page",
+		"applyFilters": "Apply Filters",
+		"pageInfo": "Page {page} of {totalPages}",
+		"clearDateRange": "Clear date range",
+		"filters": "Filters",
+		"selectDateRange": "Select date range",
+		"latestFirst": "Newest to Oldest",
+		"earliestFirst": "Oldest to Newest",
+		"sortLatestFirst": "Sort entries from newest to oldest",
+		"sortEarliestFirst": "Sort entries from oldest to newest",
+		"content": "Content",
+		"processing": "Processing your diary entry...",
+		"processingDescription": "Using AI to identify people and places in your text",
+		"entryUpdated": "Entry updated!",
+		"addAnotherEntry": "Add Another Entry",
+		"processingFailed": "Processing failed",
+		"savingEntry": "Creating your diary entry...",
+		"analyzing": "Analyzing...",
+		"analyzingEntry": "Analyzing your diary entry",
+		"analyzingDescription": "AI is identifying people and places mentioned in your text",
+		"shareEntry": "Share entry",
+		"catchUp": "Catch up",
+		"catchUpMessage": "Catch up ({count} days)",
+		"catchUpTitle": "Great job! Ready for the next one?",
+		"catchUpDescription": "Continue your streak by writing the entry for {date}.",
+		"editMode": "Edit Mode",
+		"nextDayEntry": "Write entry for next day",
+		"refineMode": "Refine",
+		"rewriteMode": "Rewrite",
+		"editor": "Editor",
+		"preview": "Preview",
+		"showPreview": "Show Preview",
+		"hidePreview": "Hide Preview",
+		"markAsPerson": "Mark as Person",
+		"markAsLocation": "Mark as Location",
+		"searchPeople": "Search people...",
+		"searchLocations": "Search locations...",
+		"refineModeHelp": "Highlight text to mark people or locations, or click existing chips to edit.",
+		"rewriteModeHelp": "Update the text. People and locations linked are shown in raw form, do not change them",
+		"saved": "Saved",
+		"entrySaved": "Your diary entry has been saved successfully.",
+		"shareNotSupported": "Sharing is not supported on your device",
+		"shareError": "Unable to share, please check browser settings and try again",
+		"formatting": {
+			"bold": "Bold",
+			"italic": "Italic",
+			"underline": "Underline",
+			"addPerson": "Add Person",
+			"addLocation": "Add Location"
+		},
+		"shareAllEntries": "Share all",
+		"copyEntry": "Copy",
+		"locationPermission": "Enable location access for better place suggestions",
+		"unknownLocation": "Unknown Location",
+		"enableLocation": "Enable location",
+		"entryLocation": "Location for this Entry",
+		"currentBrowserLocation": "Current Browser Location",
+		"defaultLocation": "Your Default Location: {locationName}",
+		"usingLocation": "Using: {location}",
+		"noLocationProvided": "No location data available. ",
+		"noDefaultLocationSet": "No default location set.",
+		"setDefaultLocationInSettings": "Set a default location in settings.",
+		"aiProcessingNote": "AI will process the diary entry to extract people and locations.",
+		"locationRecommendation": "It is recommended to enable browser location access.",
+		"defaultLocationTip": "Alternatively, you can set a default location in settings.",
+		"enableBrowserLocation": "Enable Browser Location",
+		"insights": {
+			"title": "Person Insights",
+			"aiPowered": "Ai Powered",
+			"description": "Add notes about your interactions. AI will analyze this to automatically update their profiles.",
+			"placeholder": "What did you talk about? Did you learn anything new about them?"
+		},
+		"noWeatherLocation": "Weather information not available for this location.",
+		"weatherLabel": "Weather",
+		"sunLabel": "Sun",
+		"moonLabel": "Moon"
+	},
+	"home": {
+		"hero": {
+			"title": "Note Neko",
+			"subtitle": "Simple note taking app to empower you.",
+			"cta": "Start Taking Notes",
+			"heroImageAlt": "Note Neko Hero"
+		},
+		"features": {
+			"dailyDiary": {
+				"title": "Daily Diary",
+				"description": "Capture your thoughts, feelings, and the moments that matter."
+			},
+			"peopleProfiles": {
+				"title": "People Profiles",
+				"description": "Automatically generate detailed personas from your interactions. Build comprehensive profiles that serve as valuable references for future encounters and relationship building."
+			},
+			"people": {
+				"title": "People",
+				"description": "Manage your relationships and memories."
+			},
+			"locationHistory": {
+				"title": "Location History",
+				"description": "Document and organize your visits to different places. Keep track of venues, activities, and experiences for future reference."
+			}
+		},
+		"testimonials": {
+			"title": "What Our Users Say",
+			"sarah": {
+				"name": "Sarah \"Forgot-Your-Name\" Chen",
+				"title": "Professional People Pleaser",
+				"quote": "Now I can forget names with confidence!",
+				"avatarAlt": "Sarah's avatar"
+			},
+			"michael": {
+				"name": "Michael \"Lost & Found\" Rodriguez",
+				"title": "Certified Directionally Challenged",
+				"quote": "Finally, a diary that doesn't judge my 3 AM thoughts!",
+				"avatarAlt": "Michael's avatar"
+			},
+			"emma": {
+				"name": "Emma \"Goldfish Brain\" Thompson",
+				"title": "Memory Enthusiast",
+				"quote": "Finally smarter than my goldfish!",
+				"avatarAlt": "Emma's avatar"
+			}
+		},
+		"footer": {
+			"createdBy": "Created by",
+			"githubAlt": "GitHub"
+		}
+	},
+	"people": {
+		"addedOn": "Added on {date}",
+		"addPerson": "New Person",
+		"birthday": "Birthday",
+		"cancel": "Cancel",
+		"confirmDelete": "Really delete {name}?",
+		"deleteProfile": "Delete profile",
+		"editProfile": "Edit profile",
+		"howWeMet": "How we met",
+		"interests": "Interests",
+		"interestsPlaceholder": "What they like etc",
+		"mentionedIn": "Mentioned in",
+		"name": "Name",
+		"newPerson": "New Person",
+		"nickname": "Nickname",
+		"noPeople": "No people added yet",
+		"notes": "Notes",
+		"searchPlaceholder": "Search people...",
+		"save": "Save",
+		"saving": "Saving",
+		"title": "People",
+		"update": "Update",
+		"mention": "Mention someone",
+		"createNew": "Add {name}",
+		"creating": "Creating {name}...",
+		"aiSummary": {
+			"title": "Relationship Building",
+			"loading": "Generating relationship insights...",
+			"error": "Failed to generate relationship insights. Please try again later.",
+			"noData": "Not enough information to generate relationship suggestions.",
+			"conversationTopics": "Next Conversation Topics",
+			"activitySuggestions": "Activity Ideas",
+			"relationshipTips": "Relationship Tips",
+			"suggestedInterests": "Possible Interests",
+			"suggestedInterestsNote": "Dashed borders indicate AI suggestions based on your interactions",
+			"attribution": "Generated by AI to help you build deeper relationships"
+		},
+		"suggestedInterests": "Suggested Interests",
+		"suggestedInterestsNote": "Dashed borders indicate AI suggestions based on your interactions",
+		"suggestedInterest": "This is a suggested interest based on AI analysis",
+		"network": {
+			"title": "Connections",
+			"description": "People who appear together in diary entries"
+		},
+		"contactDetails": "Contact Details",
+		"relationships": "Relationships",
+		"noRelationships": "No relationships added yet",
+		"entryConversations": "Conversations in this entry",
+		"suggestions": {
+			"title": "Suggestions",
+			"updateField": "Update {field}",
+			"addRelationship": "Add relationship",
+			"newSuggestion": "New Suggestion",
+			"accept": "Accept",
+			"reject": "Reject"
+		},
+		"globalNetwork": {
+			"title": "Network Map",
+			"description": "Connections represent people appearing in the same diary entries.",
+			"loading": "Computing layout..."
+		}
+	},
+	"error": {
+		"title": "Something went wrong!",
+		"tryAgain": "Try again",
+		"generic": "An unexpected error occurred. Please try again.",
+		"createFailed": "Failed to create. Please try again.",
+		"updateFailed": "Failed to update. Please try again.",
+		"deleteFailed": "Failed to delete. Please try again.",
+		"location": {
+			"title": "Location Error",
+			"unsupported": "Geolocation is not supported by your browser",
+			"permissionDenied": "Location permission denied",
+			"unavailable": "Location information unavailable",
+			"timeout": "Location request timed out",
+			"unknown": "An unknown error occurred"
+		}
+	},
+	"settings": {
+		"title": "Settings",
+		"welcome": {
+			"title": "Welcome to Settings",
+			"description": "Manage your account preferences, social connections, and privacy settings."
+		},
+		"navigation": {
+			"profile": "Profile",
+			"social": "Social Accounts",
+			"privacy": "Privacy",
+			"account": "Account"
+		},
+		"sections": {
+			"profile": {
+				"title": "Profile Settings",
+				"description": "Update your personal information and preferences."
+			},
+			"social": {
+				"title": "Social Media Accounts",
+				"description": "Connect and manage your social media integrations."
+			},
+			"privacy": {
+				"title": "Privacy Settings",
+				"description": "Control your data privacy and sharing preferences."
+			},
+			"account": {
+				"title": "Account Management",
+				"description": "Manage your account settings and subscription."
+			}
+		},
+		"logout": {
+			"title": "Sign Out",
+			"confirm": "Are you sure you want to sign out?"
+		},
+		"profile": {
+			"defaultLocationLabel": "Default Diary Entry Location",
+			"defaultLocationDescription": "This location will be used if your browser location is unavailable when creating a diary entry.",
+			"searchLocationPlaceholder": "Search for a default location...",
+			"saveChanges": "Save Changes",
+			"saveSuccess": "Success!",
+			"defaultLocationSaved": "Default location saved successfully.",
+			"saveError": "Error!",
+			"invalidLocationData": "Invalid location data provided.",
+			"failedToSaveDefaultLocation": "Failed to save default location."
+		}
+	}
 }

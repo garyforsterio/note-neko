@@ -1,7 +1,9 @@
 "use client";
 
+import * as Sentry from "@sentry/nextjs";
 import {
 	BookOpen,
+	Bug,
 	CreditCard,
 	LogOut,
 	Settings,
@@ -136,8 +138,23 @@ export default function Navigation() {
 												);
 											})}
 
-											{/* Logout Button */}
-											<div className="pt-2 mt-2 border-t border-gray-100">
+											{/* Logout and Feedback Buttons */}
+											<div className="pt-2 mt-2 border-t border-gray-100 space-y-1">
+												<button
+													type="button"
+													onClick={async () => {
+														const feedback = Sentry.getFeedback();
+														if (feedback) {
+															const form = await feedback.createForm();
+															form.appendToDom();
+															form.open();
+														}
+													}}
+													className="group flex items-center w-full px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
+												>
+													<Bug className="mr-3 flex-shrink-0 h-4 w-4 text-gray-400 group-hover:text-gray-600" />
+													{t("common.reportBug")}
+												</button>
 												<button
 													type="button"
 													onClick={async () => {
