@@ -113,3 +113,13 @@ The application uses PostgreSQL with the following main models:
 - Node.js >= 22
 - pnpm >= 8.15.2
 - Docker (for local PostgreSQL)
+
+## License
+
+Note Neko is open-source under the **GNU Affero General Public License v3.0 (AGPL-3.0)**. 
+
+This means you are free to inspect the code, verify how your data is handled, and self-host the application for your own personal use. However, if you modify and publicly host this software as a commercial service, you must also make your modified source code available under the same license.
+
+### 🌟 Hosted Version
+Don't want to deal with managing Docker containers, databases, and API keys? 
+**[Sign up for Note Neko Cloud (Coming Soon)](#)** for a seamless, secure, and fully managed experience.
