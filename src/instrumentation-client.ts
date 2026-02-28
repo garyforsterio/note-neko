@@ -13,7 +13,6 @@ Sentry.init({
 		Sentry.feedbackIntegration({
 			colorScheme: "system",
 			autoInject: false,
-			idElements: ["#sentry-feedback-button"],
 		}),
 	],
 
