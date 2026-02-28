@@ -1,6 +1,6 @@
 declare namespace NodeJS {
 	interface ProcessEnv {
-		POSTGRES_URL_NON_POOLING: string;
+		DATABASE_URL: string;
 		JWT_SECRET: string;
 		OPENROUTER_API_KEY: string;
 		GOOGLE_MAPS_API_KEY: string;

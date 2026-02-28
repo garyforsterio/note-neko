@@ -1,12 +1,9 @@
-import { PrismaPg } from "@prisma/adapter-pg";
 import { hash } from "bcryptjs";
 import { PrismaClient } from "../src/generated/prisma/client.js";
 
-const adapter = new PrismaPg({
-	connectionString: process.env.POSTGRES_URL_NON_POOLING,
+const prisma = new PrismaClient({
+	accelerateUrl: process.env.DATABASE_URL,
 });
-
-const prisma = new PrismaClient({ adapter });
 
 async function main() {
 	// Create a test user

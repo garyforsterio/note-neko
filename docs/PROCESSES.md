@@ -307,10 +307,10 @@ pnpm prisma:generate
 
 ```bash
 # Export data (example)
-pg_dump POSTGRES_URL_NON_POOLING > backup.sql
+pg_dump DATABASE_URL > backup.sql
 
 # Import data
-psql POSTGRES_URL_NON_POOLING < backup.sql
+psql DATABASE_URL < backup.sql
 ```
 
 ## CI/CD Workflows
@@ -331,7 +331,7 @@ Runs automatically when migration files are committed to `main`:
 
 - Triggers on changes to `prisma/migrations/**`
 - Runs `prisma migrate deploy` against production database
-- Requires `POSTGRES_URL_NON_POOLING` secret in the `production` GitHub environment
+- Requires `DATABASE_URL` secret in the `production` GitHub environment
 
 ### Required GitHub Secrets
 
@@ -339,7 +339,7 @@ Configure these in your repository's Settings → Secrets and variables → Acti
 
 **Production environment:**
 
-- `POSTGRES_URL_NON_POOLING` - Production PostgreSQL connection string
+- `DATABASE_URL` - Production PostgreSQL connection string
 
 ## Deployment Process
 
