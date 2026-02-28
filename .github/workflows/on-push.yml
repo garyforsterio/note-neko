@@ -10,6 +10,8 @@ jobs:
     name: Frontend (Lint, Typecheck, Test)
     runs-on: ubuntu-latest
     environment: development
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -30,8 +32,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Install Playwright Dependencies
-        run: pnpm exec playwright install chromium --with-deps
+      - name: Generate Prisma client
+        run: pnpm prisma:generate
 
       - name: Run lint (Biome)
         run: pnpm biome check ./src
