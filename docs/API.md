@@ -23,6 +23,26 @@ Note Neko uses Server Actions for ALL data mutations and complex operations. **A
 
 Server actions are located in `src/actions/` and use the `'use server'` directive.
 
+## Password Reset Flow
+
+1. User submits email via `/auth/forgot-password` form
+2. `requestPasswordReset()` server action generates a UUID reset token
+3. Token stored on User record with 1-hour expiry (`resetToken`, `resetTokenExpiry`)
+4. Password reset email sent via Resend with a locale-aware HTML template
+5. Email contains a link to `/auth/reset-password?token=<token>`
+6. User submits new password via `resetPassword()` server action
+7. Token validated against database; password updated and token cleared
+8. User redirected to login page
+
+Email sending failures are caught and logged — the action still returns success to avoid revealing user existence.
+
+### Email Infrastructure
+
+- **Provider**: Resend (`RESEND_API_KEY`)
+- **Utility**: `src/lib/email.ts` — `sendEmail()` function
+- **Templates**: `src/lib/email-templates/` — inline-styled HTML with plain text fallback
+- **i18n**: Templates include built-in translations (en, ja) selected by locale
+
 ## Rate Limiting
 
 Currently no rate limiting implemented. Consider adding for:

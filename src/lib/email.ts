@@ -1,14 +1,6 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-const transporter = nodemailer.createTransport({
-	host: process.env.SMTP_HOST,
-	port: Number(process.env.SMTP_PORT),
-	secure: process.env.SMTP_SECURE === "true",
-	auth: {
-		user: process.env.SMTP_USER,
-		pass: process.env.SMTP_PASSWORD,
-	},
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 interface EmailOptions {
 	to: string;
@@ -18,13 +10,17 @@ interface EmailOptions {
 }
 
 export async function sendEmail({ to, subject, text, html }: EmailOptions) {
-	const info = await transporter.sendMail({
-		from: process.env.SMTP_FROM,
+	const { data, error } = await resend.emails.send({
+		from: "Note Neko <noreply@note-neko.com>",
 		to,
 		subject,
 		text,
 		html,
 	});
 
-	return info;
+	if (error) {
+		throw new Error(`Failed to send email: ${error.message}`);
+	}
+
+	return data;
 }

@@ -57,6 +57,8 @@ Required environment variables:
 - `JWT_SECRET` - Secret for JWT signing
 - `OPENROUTER_API_KEY` - OpenAI API key for AI entity extraction from diary text
 - `GOOGLE_MAPS_API_KEY` - Google Maps API key for server-side location geocoding (must not have referer restrictions)
+- `RESEND_API_KEY` - Resend API key for transactional email (password reset)
+- `NEXT_PUBLIC_APP_URL` - Public base URL of the app (e.g., `https://note-neko.com`)
 - `SENTRY_AUTH_TOKEN` - Sentry authentication token
 - `VERCEL_OIDC_TOKEN` - Vercel deployment token
 
@@ -103,6 +105,7 @@ When making any changes to the codebase you MUST:
 ### External Integrations
 
 - Google Places API for location autocomplete in diary entries
+- Resend for transactional email (password reset)
 - Dicebear avatars for user profile images
 - Sentry for error tracking and monitoring
 - Vercel Analytics and Speed Insights
