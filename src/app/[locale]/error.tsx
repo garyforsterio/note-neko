@@ -40,10 +40,7 @@ export default function RootError({
 				<h2 className="text-2xl font-bold text-gray-900 mb-2">
 					{t("error.title")}
 				</h2>
-				<p className="text-gray-500 mb-8">
-					We've logged this issue and will look into it. Please try again or
-					return to the dashboard.
-				</p>
+				<p className="text-gray-500 mb-8">{t("error.description")}</p>
 				<div className="flex flex-col sm:flex-row gap-3 justify-center">
 					<button
 						type="button"
@@ -56,7 +53,7 @@ export default function RootError({
 						href="/"
 						className="px-6 py-2.5 text-gray-600 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors cursor-pointer font-medium"
 					>
-						Go Home
+						{t("error.goHome")}
 					</Link>
 				</div>
 			</div>

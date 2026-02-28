@@ -245,30 +245,33 @@ export default function DiaryEditForm({
 							<div className="flex flex-col items-center gap-1">
 								<div className="flex items-center gap-2 text-gray-500">
 									<CloudSun size={18} />
+									{/* biome-ignore lint/style/noJsxLiterals: format placeholder */}
 									<span className="font-semibold text-lg">--°C</span>
 								</div>
 								<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
-									Weather
+									{t("diary.weatherLabel")}
 								</span>
 							</div>
 							<div className="w-px bg-gray-200 h-10 self-center" />
 							<div className="flex flex-col items-center gap-1">
 								<div className="flex items-center gap-2 text-gray-500">
 									<Sunrise size={18} />
+									{/* biome-ignore lint/style/noJsxLiterals: format placeholder */}
 									<span className="font-semibold text-lg">--:--</span>
 								</div>
 								<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
-									Sunrise
+									{t("diary.sunLabel")}
 								</span>
 							</div>
 							<div className="w-px bg-gray-200 h-10 self-center" />
 							<div className="flex flex-col items-center gap-1">
 								<div className="flex items-center gap-2 text-gray-500">
 									<Moon size={18} />
+									{/* biome-ignore lint/style/noJsxLiterals: format placeholder */}
 									<span className="font-semibold text-lg">--%</span>
 								</div>
 								<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400">
-									Moon
+									{t("diary.moonLabel")}
 								</span>
 							</div>
 						</div>

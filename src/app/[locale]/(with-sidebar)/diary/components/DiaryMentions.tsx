@@ -89,6 +89,7 @@ export function DiaryMentions({
 												className="text-indigo-400 hover:text-indigo-600 cursor-pointer"
 											>
 												<span className="sr-only">{t("common.close")}</span>
+												{/* biome-ignore lint/style/noJsxLiterals: HTML entity */}
 												&times;
 											</button>
 										</div>

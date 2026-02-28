@@ -19,17 +19,17 @@ import { cn } from "#lib/utils";
 
 const navigation = [
 	{
-		name: "Diary",
+		nameKey: "diary.title" as const,
 		href: "/diary",
 		icon: BookOpen,
 	},
 	{
-		name: "People",
+		nameKey: "people.title" as const,
 		href: "/people",
 		icon: Users,
 	},
 	{
-		name: "Settings",
+		nameKey: "settings.title" as const,
 		href: "/settings",
 		icon: Settings,
 		subItems: [
@@ -72,7 +72,7 @@ export default function Navigation() {
 							href="/"
 							className="text-2xl font-serif font-bold text-gray-900 tracking-tight"
 						>
-							Note Neko
+							{t("home.hero.title")}
 						</Link>
 					</div>
 
@@ -81,10 +81,11 @@ export default function Navigation() {
 						{navigation.map((item) => {
 							const isActive = pathname.startsWith(item.href);
 							const isSettingsSection =
-								item.name === "Settings" && pathname.startsWith("/settings");
+								item.nameKey === "settings.title" &&
+								pathname.startsWith("/settings");
 
 							return (
-								<div key={item.name} className="space-y-1">
+								<div key={item.nameKey} className="space-y-1">
 									<Link
 										href={item.href}
 										className={cn(
@@ -103,7 +104,7 @@ export default function Navigation() {
 											)}
 											aria-hidden="true"
 										/>
-										{item.name}
+										{t(item.nameKey)}
 									</Link>
 
 									{/* Settings Subitems */}
@@ -184,7 +185,7 @@ export default function Navigation() {
 						const isActive = pathname.startsWith(item.href);
 						return (
 							<Link
-								key={item.name}
+								key={item.nameKey}
 								href={item.href}
 								className={cn(
 									"flex flex-col items-center justify-center w-full h-full space-y-1 active:scale-95 transition-transform",
@@ -199,7 +200,9 @@ export default function Navigation() {
 										isActive ? "text-gray-900" : "text-gray-400",
 									)}
 								/>
-								<span className="text-[10px] font-medium">{item.name}</span>
+								<span className="text-[10px] font-medium">
+									{t(item.nameKey)}
+								</span>
 							</Link>
 						);
 					})}

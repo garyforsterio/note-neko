@@ -77,6 +77,7 @@ export default async function PersonPage({ params }: PersonPageProps) {
 							</h1>
 							{person.namePhonetic && (
 								<p className="text-lg text-gray-500 font-medium">
+									{/* biome-ignore lint/style/noJsxLiterals: phonetic delimiters */}
 									/{person.namePhonetic}/
 								</p>
 							)}
@@ -104,7 +105,7 @@ export default async function PersonPage({ params }: PersonPageProps) {
 								</div>
 								<div>
 									<p className="text-xs text-gray-400 uppercase font-semibold">
-										Birthday
+										{t("people.birthday")}
 									</p>
 									<p className="font-medium">
 										{format(person.birthday, "MMMM d, yyyy")}
@@ -119,7 +120,7 @@ export default async function PersonPage({ params }: PersonPageProps) {
 								</div>
 								<div>
 									<p className="text-xs text-gray-400 uppercase font-semibold">
-										Nationality
+										{t("people.nationality")}
 									</p>
 									<p className="font-medium">{person.nationality}</p>
 								</div>
@@ -132,7 +133,7 @@ export default async function PersonPage({ params }: PersonPageProps) {
 								</div>
 								<div>
 									<p className="text-xs text-gray-400 uppercase font-semibold">
-										Occupation
+										{t("people.occupation")}
 									</p>
 									<p className="font-medium">{person.occupation}</p>
 								</div>
@@ -307,7 +308,8 @@ export default async function PersonPage({ params }: PersonPageProps) {
 													key={c.id}
 													className="bg-blue-50 p-4 rounded-lg text-gray-700 italic"
 												>
-													"{c.content}"
+													{/* biome-ignore lint/style/noJsxLiterals: quotation marks around dynamic content */}
+													&ldquo;{c.content}&rdquo;
 												</div>
 											))}
 										</div>

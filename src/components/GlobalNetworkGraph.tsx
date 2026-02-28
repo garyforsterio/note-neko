@@ -198,6 +198,7 @@ export function GlobalNetworkGraph({ people }: GlobalNetworkGraphProps) {
 	return (
 		<div className="w-full overflow-hidden bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
 			<h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+				{/* biome-ignore lint/style/noJsxLiterals: decorative emoji */}
 				<span className="text-indigo-600">🕸️</span>
 				{t("people.globalNetwork.title")}
 			</h2>

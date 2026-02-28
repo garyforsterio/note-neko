@@ -29,7 +29,7 @@ export default async function SocialSettingsPage() {
 					</p>
 
 					<div className="text-center py-8 text-gray-500">
-						<p>Social settings coming soon...</p>
+						<p>{t("comingSoon")}</p>
 					</div>
 				</div>
 			</div>

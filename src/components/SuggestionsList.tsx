@@ -58,16 +58,20 @@ export function SuggestionsList({
 									<span>
 										{t("updateField", {
 											field: suggestion.targetField || "Unknown",
-										})}
-										:{" "}
+										})}{" "}
 										<span className="text-indigo-600">{suggestion.value}</span>
 									</span>
 								) : suggestion.type === "ADD_RELATIONSHIP" ? (
 									<span>
-										{t("addRelationship")}:{" "}
+										{t("addRelationship")}{" "}
 										<strong>{suggestion.relatedPerson?.name}</strong>
 										{suggestion.relationshipType && (
-											<span> ({suggestion.relationshipType})</span>
+											<span>
+												{" "}
+												{t("relationshipDetail", {
+													type: suggestion.relationshipType,
+												})}
+											</span>
 										)}
 									</span>
 								) : (

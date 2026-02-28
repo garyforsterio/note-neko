@@ -74,6 +74,7 @@
 		"conversation": "会話",
 		"closeExpandedView": "拡大表示を閉じる",
 		"date": "日付",
+		"dateLabel": "日付：",
 		"noLocationsFound": "場所が見つかりません",
 		"noLocation": "場所なし",
 		"addLocation": "場所を追加",
@@ -81,7 +82,7 @@
 		"confirmDelete": "この日記エントリーを削除してもよろしいですか？この操作は元に戻せません。",
 		"startDate": "開始日",
 		"endDate": "終了日",
-		"itemsPerPage": "1ページあたりの項目数",
+		"itemsPerPage": "{count} 件/ページ",
 		"applyFilters": "フィルターを適用",
 		"pageInfo": "{page}ページ / {totalPages}ページ中",
 		"clearDateRange": "日付範囲をクリア",
@@ -222,6 +223,7 @@
 		},
 		"footer": {
 			"createdBy": "作成者",
+			"authorName": "Gary Forster",
 			"githubAlt": "GitHub"
 		}
 	},
@@ -238,10 +240,13 @@
 		"interestsPlaceholder": "趣味など",
 		"mentionedIn": "言及された場所",
 		"name": "名前",
+		"nameRequired": "名前 *",
 		"newPerson": "新しい人",
+		"nationality": "国籍",
 		"nickname": "ニックネーム",
 		"noPeople": "まだ人が追加されていません",
 		"notes": "メモ",
+		"occupation": "職業",
 		"searchPlaceholder": "人を検索...",
 		"save": "保存",
 		"saving": "保存中",
@@ -267,7 +272,8 @@
 		"suggestedInterest": "これはAI分析に基づく提案された興味です",
 		"network": {
 			"title": "つながり",
-			"description": "日記で一緒に登場する人々"
+			"description": "日記で一緒に登場する人々",
+			"nodeLabel": "{name}（{count}）"
 		},
 		"contactDetails": "連絡先詳細",
 		"relationships": "関係",
@@ -275,8 +281,9 @@
 		"entryConversations": "このエントリーでの会話",
 		"suggestions": {
 			"title": "提案",
-			"updateField": "{field}を更新",
-			"addRelationship": "関係を追加",
+			"updateField": "{field}を更新：",
+			"addRelationship": "関係を追加：",
+			"relationshipDetail": "（{type}）",
 			"newSuggestion": "新しい提案",
 			"accept": "承認",
 			"reject": "拒否"
@@ -289,7 +296,9 @@
 	},
 	"error": {
 		"title": "エラーが発生しました",
+		"description": "この問題を記録しました。もう一度お試しいただくか、ダッシュボードにお戻りください。",
 		"tryAgain": "再試行",
+		"goHome": "ホームに戻る",
 		"generic": "予期しないエラーが発生しました。もう一度お試しください。",
 		"createFailed": "作成に失敗しました。もう一度お試しください。",
 		"updateFailed": "更新に失敗しました。もう一度お試しください。",
@@ -311,6 +320,7 @@
 		},
 		"navigation": {
 			"profile": "プロフィール",
+			"profileParenthesized": "（プロフィール）",
 			"social": "ソーシャルアカウント",
 			"privacy": "プライバシー",
 			"account": "アカウント"
@@ -333,6 +343,7 @@
 				"description": "アカウント設定とサブスクリプションを管理します。"
 			}
 		},
+		"comingSoon": "近日公開...",
 		"logout": {
 			"title": "サインアウト",
 			"confirm": "サインアウトしてもよろしいですか？"

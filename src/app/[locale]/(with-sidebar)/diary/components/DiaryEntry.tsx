@@ -80,7 +80,7 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
 							</span>
 						</div>
 						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
-							Weather
+							{t("diary.weatherLabel")}
 						</span>
 					</div>
 					<div className="hidden md:block w-px bg-gray-200 h-10 self-center" />
@@ -94,7 +94,7 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
 							</span>
 						</div>
 						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
-							Sun
+							{t("diary.sunLabel")}
 						</span>
 					</div>
 					<div className="hidden md:block w-px bg-gray-200 h-10 self-center" />
@@ -106,7 +106,7 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
 							</span>
 						</div>
 						<span className="text-[10px] uppercase tracking-wider font-medium text-gray-400 hidden md:block">
-							Moon
+							{t("diary.moonLabel")}
 						</span>
 					</div>
 				</div>
