@@ -37,9 +37,11 @@ export default function GlobalError({
 							</svg>
 						</div>
 						<h2 className="text-2xl font-bold text-gray-900 mb-2">
+							{/* biome-ignore lint/style/noJsxLiterals: no i18n access outside [locale] */}
 							A critical error occurred
 						</h2>
 						<p className="text-gray-500 mb-8">
+							{/* biome-ignore lint/style/noJsxLiterals: no i18n access outside [locale] */}
 							We've been notified and are looking into it. Please try reloading
 							the page.
 						</p>
@@ -49,12 +51,14 @@ export default function GlobalError({
 								onClick={() => reset()}
 								className="px-6 py-2.5 bg-gray-900 text-white rounded-full hover:bg-black transition-all shadow-md hover:shadow-lg cursor-pointer font-medium"
 							>
+								{/* biome-ignore lint/style/noJsxLiterals: no i18n access outside [locale] */}
 								Try again
 							</button>
 							<a
 								href="/"
 								className="px-6 py-2.5 text-gray-600 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors cursor-pointer font-medium inline-block"
 							>
+								{/* biome-ignore lint/style/noJsxLiterals: no i18n access outside [locale] */}
 								Go Home
 							</a>
 						</div>

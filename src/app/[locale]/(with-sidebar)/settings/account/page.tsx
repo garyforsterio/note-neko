@@ -29,7 +29,7 @@ export default async function AccountSettingsPage() {
 					</p>
 
 					<div className="text-center py-8 text-gray-500">
-						<p>Account settings coming soon...</p>
+						<p>{t("comingSoon")}</p>
 					</div>
 				</div>
 			</div>

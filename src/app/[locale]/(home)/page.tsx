@@ -174,7 +174,7 @@ export default async function Home() {
 							href="https://garyforster.io"
 							className="text-gray-600 hover:text-gray-900 transition-colors"
 						>
-							Gary Forster
+							{t("footer.authorName")}
 						</a>
 					</p>
 				</div>

@@ -29,7 +29,7 @@ export default async function PrivacySettingsPage() {
 					</p>
 
 					<div className="text-center py-8 text-gray-500">
-						<p>Privacy settings coming soon...</p>
+						<p>{t("comingSoon")}</p>
 					</div>
 				</div>
 			</div>

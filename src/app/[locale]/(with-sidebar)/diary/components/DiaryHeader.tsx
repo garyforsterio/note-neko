@@ -264,9 +264,13 @@ export function DiaryHeader({
 								onChange={(e) => updateFilters({ "page-size": e.target.value })}
 								className="appearance-none bg-white border border-gray-200 text-gray-700 text-sm rounded-lg pl-3 pr-8 py-2 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 shadow-sm cursor-pointer"
 							>
+								{/* biome-ignore lint/style/noJsxLiterals: numeric values */}
 								<option value="5">5 {t("diary.itemsPerPage")}</option>
+								{/* biome-ignore lint/style/noJsxLiterals: numeric values */}
 								<option value="10">10 {t("diary.itemsPerPage")}</option>
+								{/* biome-ignore lint/style/noJsxLiterals: numeric values */}
 								<option value="20">20 {t("diary.itemsPerPage")}</option>
+								{/* biome-ignore lint/style/noJsxLiterals: numeric values */}
 								<option value="50">50 {t("diary.itemsPerPage")}</option>
 							</select>
 							<ChevronDown

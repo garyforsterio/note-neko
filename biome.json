@@ -29,6 +29,7 @@
 				"noSvgWithoutTitle": "off"
 			},
 			"style": {
+				"noJsxLiterals": "error",
 				"noRestrictedImports": {
 					"level": "error",
 					"options": {

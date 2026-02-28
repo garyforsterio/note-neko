@@ -219,6 +219,7 @@
 		},
 		"footer": {
 			"createdBy": "Created by",
+			"authorName": "Gary Forster",
 			"githubAlt": "GitHub"
 		}
 	},
@@ -236,9 +237,11 @@
 		"mentionedIn": "Mentioned in",
 		"name": "Name",
 		"newPerson": "New Person",
+		"nationality": "Nationality",
 		"nickname": "Nickname",
 		"noPeople": "No people added yet",
 		"notes": "Notes",
+		"occupation": "Occupation",
 		"searchPlaceholder": "Search people...",
 		"save": "Save",
 		"saving": "Saving",
@@ -286,7 +289,9 @@
 	},
 	"error": {
 		"title": "Something went wrong!",
+		"description": "We've logged this issue and will look into it. Please try again or return to the dashboard.",
 		"tryAgain": "Try again",
+		"goHome": "Go Home",
 		"generic": "An unexpected error occurred. Please try again.",
 		"createFailed": "Failed to create. Please try again.",
 		"updateFailed": "Failed to update. Please try again.",
@@ -330,6 +335,7 @@
 				"description": "Manage your account settings and subscription."
 			}
 		},
+		"comingSoon": "Coming soon...",
 		"logout": {
 			"title": "Sign Out",
 			"confirm": "Are you sure you want to sign out?"

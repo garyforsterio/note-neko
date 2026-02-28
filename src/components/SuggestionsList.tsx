@@ -59,14 +59,16 @@ export function SuggestionsList({
 										{t("updateField", {
 											field: suggestion.targetField || "Unknown",
 										})}
-										:{" "}
+										{/* biome-ignore lint/style/noJsxLiterals: punctuation */}:{" "}
 										<span className="text-indigo-600">{suggestion.value}</span>
 									</span>
 								) : suggestion.type === "ADD_RELATIONSHIP" ? (
 									<span>
+										{/* biome-ignore lint/style/noJsxLiterals: punctuation */}
 										{t("addRelationship")}:{" "}
 										<strong>{suggestion.relatedPerson?.name}</strong>
 										{suggestion.relationshipType && (
+											// biome-ignore lint/style/noJsxLiterals: punctuation around dynamic content
 											<span> ({suggestion.relationshipType})</span>
 										)}
 									</span>

@@ -222,6 +222,7 @@
 		},
 		"footer": {
 			"createdBy": "作成者",
+			"authorName": "Gary Forster",
 			"githubAlt": "GitHub"
 		}
 	},
@@ -239,9 +240,11 @@
 		"mentionedIn": "言及された場所",
 		"name": "名前",
 		"newPerson": "新しい人",
+		"nationality": "国籍",
 		"nickname": "ニックネーム",
 		"noPeople": "まだ人が追加されていません",
 		"notes": "メモ",
+		"occupation": "職業",
 		"searchPlaceholder": "人を検索...",
 		"save": "保存",
 		"saving": "保存中",
@@ -289,7 +292,9 @@
 	},
 	"error": {
 		"title": "エラーが発生しました",
+		"description": "この問題を記録しました。もう一度お試しいただくか、ダッシュボードにお戻りください。",
 		"tryAgain": "再試行",
+		"goHome": "ホームに戻る",
 		"generic": "予期しないエラーが発生しました。もう一度お試しください。",
 		"createFailed": "作成に失敗しました。もう一度お試しください。",
 		"updateFailed": "更新に失敗しました。もう一度お試しください。",
@@ -333,6 +338,7 @@
 				"description": "アカウント設定とサブスクリプションを管理します。"
 			}
 		},
+		"comingSoon": "近日公開...",
 		"logout": {
 			"title": "サインアウト",
 			"confirm": "サインアウトしてもよろしいですか？"

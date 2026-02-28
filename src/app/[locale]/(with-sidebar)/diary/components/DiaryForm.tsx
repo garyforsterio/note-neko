@@ -225,7 +225,7 @@ export default function DiaryForm({
 									target="_blank"
 									className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-500 px-2 py-0.5 rounded-full transition-colors cursor-pointer"
 								>
-									Edit
+									{t("common.edit")}
 								</Link>
 							</div>
 						) : (
@@ -243,6 +243,7 @@ export default function DiaryForm({
 								href="/settings/profile"
 								className="text-gray-400 hover:text-gray-600 text-xs ml-2"
 							>
+								{/* biome-ignore lint/style/noJsxLiterals: punctuation wrapping translated text */}
 								({t("settings.navigation.profile")})
 							</Link>
 						)}

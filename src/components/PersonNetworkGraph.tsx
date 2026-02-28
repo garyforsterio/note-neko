@@ -85,6 +85,7 @@ export function PersonNetworkGraph({
 	return (
 		<div className="w-full overflow-hidden bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
 			<h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+				{/* biome-ignore lint/style/noJsxLiterals: decorative emoji */}
 				<span className="text-indigo-600">🕸️</span>
 				{t("people.network.title")}
 			</h2>
@@ -188,6 +189,7 @@ export function PersonNetworkGraph({
 											isHovered ? "opacity-100" : "opacity-0"
 										}`}
 									>
+										{/* biome-ignore lint/style/noJsxLiterals: punctuation around dynamic content */}
 										{node.name} ({node.count})
 									</text>
 								</g>

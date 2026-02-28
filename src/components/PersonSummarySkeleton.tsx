@@ -7,6 +7,7 @@ export async function PersonSummarySkeleton() {
 	return (
 		<div className="bg-white rounded-lg shadow-md p-6 mb-8">
 			<h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+				{/* biome-ignore lint/style/noJsxLiterals: decorative emoji */}
 				<span className="text-purple-600">🤖</span>
 				{t("people.aiSummary.title")}
 			</h2>
@@ -33,6 +34,7 @@ export async function PersonSummarySkeleton() {
 				<div className="space-y-2">
 					{[...Array(4)].map((_) => (
 						<div key={crypto.randomUUID()} className="flex items-start gap-2">
+							{/* biome-ignore lint/style/noJsxLiterals: decorative bullet */}
 							<span className="text-purple-500 mt-1">•</span>
 							<Skeleton className="h-4 w-full" />
 						</div>
