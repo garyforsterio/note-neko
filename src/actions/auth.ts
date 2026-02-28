@@ -6,6 +6,8 @@ import { getLocale } from "next-intl/server";
 import { redirect } from "#i18n/navigation";
 import { createUserSession, deleteUserSession } from "#lib/auth";
 import { db } from "#lib/db";
+import { sendEmail } from "#lib/email";
+import { passwordResetEmail } from "#lib/email-templates/password-reset";
 import { getTranslations } from "#lib/i18n/server";
 import {
 	forgotPasswordSchema,
@@ -96,7 +98,6 @@ export async function requestPasswordReset(
 	_lastResult: unknown,
 	formData: FormData,
 ) {
-	// const t = await getTranslations();
 	const submission = parseWithZod(formData, { schema: forgotPasswordSchema });
 	if (submission.status !== "success") {
 		return submission.reply();
@@ -121,7 +122,20 @@ export async function requestPasswordReset(
 		},
 	});
 
-	// const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password?token=${resetToken}`;
+	const locale = await getLocale();
+	const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/auth/reset-password?token=${resetToken}`;
+	const email = passwordResetEmail({ resetUrl, locale });
+
+	try {
+		await sendEmail({
+			to: user.email,
+			subject: email.subject,
+			html: email.html,
+			text: email.text,
+		});
+	} catch (error) {
+		console.error("Failed to send password reset email:", error);
+	}
 
 	return submission.reply();
 }

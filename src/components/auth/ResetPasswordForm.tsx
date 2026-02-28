@@ -42,6 +42,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
 			{...getFormProps(form)}
 			action={formAction}
 		>
+			<input {...getInputProps(fields.token, { type: "hidden" })} />
 			<ErrorMessage errors={form.errors} />
 			<div className="rounded-md shadow-sm -space-y-px">
 				<div>

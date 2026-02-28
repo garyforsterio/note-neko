@@ -21,7 +21,7 @@ Note Neko is a personal relationship management system built as a modern web app
 │  ├──────────────────────────────────────────────────┤  │
 │  │      Data Access Layer (Cached Operations)       │  │
 │  ├──────────────────────────────────────────────────┤  │
-│  │           Prisma ORM (with Accelerate)           │  │
+│  │       Email (Resend) / Prisma ORM                │  │
 │  └──────────────────────────────────────────────────┘  │
 └────────────────────┬────────────────────────────────────┘
                      │
@@ -32,6 +32,7 @@ Note Neko is a personal relationship management system built as a modern web app
 External Services:
 - OpenRouter API (AI entity extraction)
 - Google Maps API (location geocoding)
+- Resend (transactional email)
 - Sentry (error tracking)
 - Vercel (hosting & analytics)
 ```
