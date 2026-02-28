@@ -2,14 +2,23 @@ name: E2E Tests
 
 on: deployment_status
 
+concurrency:
+  group: e2e-${{ github.event.deployment.id }}
+  cancel-in-progress: true
+
 jobs:
   e2e:
     name: E2E Tests (Playwright)
     runs-on: ubuntu-latest
-    if: >-
-      github.event.deployment_status.state == 'success' &&
-      github.event.deployment_status.environment == 'Preview'
     steps:
+      - name: Check deployment status
+        if: >-
+          github.event.deployment_status.state != 'success' ||
+          github.event.deployment_status.environment != 'Preview'
+        run: |
+          echo "Skipping: deployment status is '${{ github.event.deployment_status.state }}' for environment '${{ github.event.deployment_status.environment }}'"
+          exit 1
+
       - name: Checkout code
         uses: actions/checkout@v6
 
