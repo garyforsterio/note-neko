@@ -35,6 +35,7 @@ test.describe("People", () => {
 
 		// Add Person
 		await page.getByRole("link", { name: "New Person" }).click();
+		await page.waitForURL(/.*people\/new/);
 
 		const personName = `Alice ${Date.now()}`;
 		await page.getByLabel("Name *").fill(personName);
