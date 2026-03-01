@@ -239,3 +239,25 @@ const expensiveValue = useMemo(() => computeExpensive(data), [data]);
 // For stable callbacks
 const handleClick = useCallback(() => doSomething(id), [id]);
 ```
+
+## Feature Components
+
+### NotificationList
+
+Server component that displays unreviewed diary entries on the `/notifications` page.
+
+- Fetches unreviewed entries via `getUnreviewedDiaryEntries()` DAL function
+- Renders a list of diary entries that have not yet been reviewed (`reviewed === false`)
+- Links each entry to its edit page for review
+
+### DiaryEditForm (Notification Enhancements)
+
+When editing an unreviewed entry (`entry.reviewed === false`):
+
+- Displays a purple guidance banner prompting the user to review AI-extracted entities
+- Submit button text changes to "Mark as Reviewed" instead of "Update"
+- Saving the entry sets `reviewed: true` via the `updateDiaryEntryAction`
+
+### Navigation Notification Badge
+
+A bell icon is added to the main navigation bar displaying the count of unreviewed diary entries. The count is fetched via `getUnreviewedDiaryCount()` DAL function.

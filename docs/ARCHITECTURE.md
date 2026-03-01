@@ -80,7 +80,8 @@ src/
 │       ├── (home)/      # Public home page
 │       ├── (with-sidebar)/ # Authenticated app layout
 │       │   ├── diary/   # Diary entries pages
-│       │   └── people/  # People management pages
+│       │   ├── people/  # People management pages
+│       │   └── notifications/ # Unreviewed diary entries
 │       └── auth/        # Authentication pages
 │
 ├── components/          # Reusable React components
@@ -207,6 +208,7 @@ All routes under `(with-sidebar)` require authentication:
 
 - `/diary/*` - Diary management
 - `/people/*` - People management
+- `/notifications` - Unreviewed diary entries
 
 ## AI Integration
 

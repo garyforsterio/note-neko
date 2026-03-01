@@ -11,7 +11,7 @@ interface EmailOptions {
 
 export async function sendEmail({ to, subject, text, html }: EmailOptions) {
 	const { data, error } = await resend.emails.send({
-		from: "Note Neko <noreply@note-neko.com>",
+		from: "Note Neko <noreply@noteneko.com>",
 		to,
 		subject,
 		text,

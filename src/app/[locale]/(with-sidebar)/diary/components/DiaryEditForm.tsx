@@ -123,8 +123,25 @@ export default function DiaryEditForm({
 	const locationDisplayString =
 		locations.length > 0 ? locations[0]?.name : null;
 
+	const isUnreviewed = !entry.reviewed;
+
 	return (
 		<div className="space-y-6 max-w-4xl mx-auto">
+			{/* AI Review Guidance Banner */}
+			{isUnreviewed && (
+				<div className="bg-purple-50 border border-purple-100 rounded-2xl p-5 flex items-start gap-4">
+					<Sparkles className="w-5 h-5 text-purple-500 mt-0.5 flex-shrink-0" />
+					<div>
+						<h3 className="font-semibold text-purple-900 text-sm">
+							{t("diary.reviewGuidance.title")}
+						</h3>
+						<p className="text-sm text-purple-700 mt-1">
+							{t("diary.reviewGuidance.description")}
+						</p>
+					</div>
+				</div>
+			)}
+
 			{/* Unified Card Container (Form) */}
 			<form
 				ref={formRef}
@@ -415,7 +432,11 @@ export default function DiaryEditForm({
 						{isPending && (
 							<LoaderCircle className="animate-spin h-4 w-4 text-white" />
 						)}
-						{isPending ? t("common.saving") : t("common.save")}
+						{isPending
+							? t("common.updating")
+							: isUnreviewed
+								? t("diary.markAsReviewed")
+								: t("common.update")}
 					</button>
 					{nextDayParam && (
 						<button

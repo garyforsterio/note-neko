@@ -66,6 +66,8 @@
 		"create": "Create",
 		"save": "Save",
 		"saving": "Saving",
+		"update": "Update",
+		"updating": "Updating",
 		"back": "Back",
 		"edit": "Edit",
 		"loading": "Loading...",
@@ -170,7 +172,18 @@
 		"noWeatherLocation": "Weather information not available for this location.",
 		"weatherLabel": "Weather",
 		"sunLabel": "Sun",
-		"moonLabel": "Moon"
+		"moonLabel": "Moon",
+		"reviewGuidance": {
+			"title": "AI Processing Complete",
+			"description": "Review the extracted people and places below, then click Mark as Reviewed to confirm."
+		},
+		"markAsReviewed": "Mark as Reviewed"
+	},
+	"notifications": {
+		"title": "Notifications",
+		"noNotifications": "You're all caught up!",
+		"reviewNeeded": "Review Needed",
+		"reviewDescription": "These diary entries have been processed by AI. Review the extracted people and places to confirm they are correct."
 	},
 	"home": {
 		"hero": {

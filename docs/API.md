@@ -23,6 +23,10 @@ Note Neko uses Server Actions for ALL data mutations and complex operations. **A
 
 Server actions are located in `src/actions/` and use the `'use server'` directive.
 
+### updateDiaryEntryAction
+
+Updates an existing diary entry. When saving, the action passes `reviewed: true` to mark the entry as reviewed by the user. This is used in conjunction with the notification workflow where AI-extracted entities are validated during review.
+
 ## Password Reset Flow
 
 1. User submits email via `/auth/forgot-password` form
@@ -42,6 +46,16 @@ Email sending failures are caught and logged — the action still returns succes
 - **Utility**: `src/lib/email.ts` — `sendEmail()` function
 - **Templates**: `src/lib/email-templates/` — inline-styled HTML with plain text fallback
 - **i18n**: Templates include built-in translations (en, ja) selected by locale
+
+## Data Access Layer (DAL)
+
+Cached data access functions in `src/lib/dal.ts`.
+
+### Notification-Related Functions
+
+- **`getUnreviewedDiaryCount()`** - Returns the count of diary entries where `reviewed === false` for the authenticated user. Used by the navigation badge.
+- **`getUnreviewedDiaryEntries()`** - Returns all unreviewed diary entries for the authenticated user. Used by the `/notifications` page.
+- **`updateDiaryEntry()`** - Accepts an optional `reviewed` boolean parameter to mark entries as reviewed.
 
 ## Rate Limiting
 

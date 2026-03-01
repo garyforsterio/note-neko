@@ -83,6 +83,7 @@ Stores user's diary entries with support for rich content.
 | date | DateTime | Default: now() | Entry date (user-editable) |
 | userId | String | FK, Required | Author user ID |
 | createdAt | DateTime | Default: now() | Record creation timestamp |
+| reviewed | Boolean | Default: false | Whether entry has been reviewed by user |
 | updatedAt | DateTime | Auto-update | Last modification timestamp |
 
 **Indexes:**

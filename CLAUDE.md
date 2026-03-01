@@ -58,7 +58,7 @@ Required environment variables:
 - `OPENROUTER_API_KEY` - OpenAI API key for AI entity extraction from diary text
 - `GOOGLE_MAPS_API_KEY` - Google Maps API key for server-side location geocoding (must not have referer restrictions)
 - `RESEND_API_KEY` - Resend API key for transactional email (password reset)
-- `NEXT_PUBLIC_APP_URL` - Public base URL of the app (e.g., `https://note-neko.com`)
+- `NEXT_PUBLIC_APP_URL` - Public base URL of the app (e.g., `https://noteneko.com`)
 - `SENTRY_AUTH_TOKEN` - Sentry authentication token
 - `VERCEL_OIDC_TOKEN` - Vercel deployment token
 

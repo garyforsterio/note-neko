@@ -2,6 +2,7 @@
 
 import * as Sentry from "@sentry/nextjs";
 import {
+	Bell,
 	BookOpen,
 	Bug,
 	CreditCard,
@@ -27,6 +28,11 @@ const navigation = [
 		nameKey: "people.title" as const,
 		href: "/people",
 		icon: Users,
+	},
+	{
+		nameKey: "notifications.title" as const,
+		href: "/notifications",
+		icon: Bell,
 	},
 	{
 		nameKey: "settings.title" as const,
@@ -57,7 +63,11 @@ const navigation = [
 	},
 ];
 
-export default function Navigation() {
+interface NavigationProps {
+	notificationCount?: number;
+}
+
+export default function Navigation({ notificationCount = 0 }: NavigationProps) {
 	const t = useTranslations();
 	const pathname = usePathname();
 
@@ -83,6 +93,8 @@ export default function Navigation() {
 							const isSettingsSection =
 								item.nameKey === "settings.title" &&
 								pathname.startsWith("/settings");
+							const showBadge =
+								item.nameKey === "notifications.title" && notificationCount > 0;
 
 							return (
 								<div key={item.nameKey} className="space-y-1">
@@ -105,6 +117,11 @@ export default function Navigation() {
 											aria-hidden="true"
 										/>
 										{t(item.nameKey)}
+										{showBadge && (
+											<span className="ml-auto bg-red-500 text-white text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1.5">
+												{notificationCount}
+											</span>
+										)}
 									</Link>
 
 									{/* Settings Subitems */}
@@ -183,6 +200,8 @@ export default function Navigation() {
 				<div className="flex justify-around items-center h-16 px-2">
 					{navigation.map((item) => {
 						const isActive = pathname.startsWith(item.href);
+						const showBadge =
+							item.nameKey === "notifications.title" && notificationCount > 0;
 						return (
 							<Link
 								key={item.nameKey}
@@ -194,12 +213,19 @@ export default function Navigation() {
 										: "text-gray-400 hover:text-gray-600",
 								)}
 							>
-								<item.icon
-									className={cn(
-										"h-6 w-6 transition-colors",
-										isActive ? "text-gray-900" : "text-gray-400",
+								<div className="relative">
+									<item.icon
+										className={cn(
+											"h-6 w-6 transition-colors",
+											isActive ? "text-gray-900" : "text-gray-400",
+										)}
+									/>
+									{showBadge && (
+										<span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold rounded-full min-w-[16px] h-4 flex items-center justify-center px-1">
+											{notificationCount}
+										</span>
 									)}
-								/>
+								</div>
 								<span className="text-[10px] font-medium">
 									{t(item.nameKey)}
 								</span>
