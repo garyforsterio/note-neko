@@ -234,7 +234,9 @@
 		"footer": {
 			"createdBy": "Created by",
 			"authorName": "Gary Forster",
-			"githubAlt": "GitHub"
+			"githubAlt": "GitHub",
+			"privacy": "Privacy Policy",
+			"terms": "Terms of Service"
 		}
 	},
 	"people": {
@@ -321,6 +323,149 @@
 			"timeout": "Location request timed out",
 			"unknown": "An unknown error occurred"
 		}
+	},
+	"privacy": {
+		"title": "Privacy Policy",
+		"lastUpdated": "Last updated: March 1, 2026",
+		"intro": "Note Neko (\"we\", \"our\", or \"us\") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your personal information when you use our service.",
+		"dataCollection": {
+			"title": "Information We Collect",
+			"accountInfo": {
+				"title": "Account Information",
+				"description": "When you create an account, we collect your email address and a securely hashed password. We never store your password in plain text."
+			},
+			"diaryContent": {
+				"title": "Diary Content",
+				"description": "We store the diary entries you write, including text content, dates, and any locations you associate with entries."
+			},
+			"extractedData": {
+				"title": "AI-Extracted Data",
+				"description": "When you submit a diary entry, our AI processes the text to automatically extract mentions of people and places. This extracted data (names, locations, relationships) is stored in your account."
+			},
+			"locationData": {
+				"title": "Location Data",
+				"description": "If you enable browser location or set a default location, we store geographic coordinates to associate with your diary entries. Location data is used solely for your personal diary records."
+			}
+		},
+		"thirdParty": {
+			"title": "Third-Party Services",
+			"description": "We use the following third-party services to provide our functionality:",
+			"openrouter": {
+				"title": "OpenRouter (AI Processing)",
+				"description": "Your diary entry text is sent to AI language models via OpenRouter to extract people and places mentioned in your entries. We do not send your email, password, or any other account information. OpenRouter's processing is subject to their privacy policy."
+			},
+			"googleMaps": {
+				"title": "Google Maps (Location Services)",
+				"description": "When you search for locations, your search queries are sent to Google Maps API for geocoding. No diary content or personal information is shared with Google."
+			},
+			"sentry": {
+				"title": "Sentry (Error Monitoring)",
+				"description": "We use Sentry to track application errors and improve reliability. Error reports may contain technical information about your browser and session but do not include diary content."
+			},
+			"vercel": {
+				"title": "Vercel (Hosting & Analytics)",
+				"description": "Our application is hosted on Vercel. We use Vercel Analytics and Speed Insights to monitor performance. These tools collect anonymous usage data and do not track individual users."
+			}
+		},
+		"noTraining": {
+			"title": "Your Data Is Not Used for AI Training",
+			"description": "We want to be explicit: your diary entries, personal information, and any data you provide to Note Neko are never used to train AI models. Your data is processed solely to provide you with the service features you use."
+		},
+		"dataOwnership": {
+			"title": "Data Ownership & Portability",
+			"description": "You own all the content you create in Note Neko. Your diary entries, people profiles, and location data belong to you. We plan to provide a data export feature so you can download all your data at any time."
+		},
+		"dataSecurity": {
+			"title": "Data Security",
+			"description": "We take reasonable measures to protect your data, including secure password hashing, HTTPS encryption for all data in transit, and database-level encryption at rest. Access to production databases is strictly limited."
+		},
+		"cookies": {
+			"title": "Cookies",
+			"description": "We use essential cookies for authentication (keeping you logged in) and session management. We do not use tracking cookies or third-party advertising cookies."
+		},
+		"retention": {
+			"title": "Data Retention",
+			"description": "We retain your data for as long as your account is active. If you delete your account, all associated data will be permanently removed from our systems."
+		},
+		"children": {
+			"title": "Children's Privacy",
+			"description": "Note Neko is not intended for use by children under the age of 13. We do not knowingly collect personal information from children under 13."
+		},
+		"changes": {
+			"title": "Changes to This Policy",
+			"description": "We may update this Privacy Policy from time to time. We will notify registered users of any material changes via email or an in-app notification."
+		},
+		"contact": {
+			"title": "Contact Us",
+			"description": "If you have questions about this Privacy Policy or your data, please contact us at:",
+			"email": "noteneko@luonic.com"
+		},
+		"backLink": "\u2190 Note Neko"
+	},
+	"terms": {
+		"title": "Terms of Service",
+		"lastUpdated": "Last updated: March 1, 2026",
+		"intro": "Please read these Terms of Service (\"Terms\") carefully before using Note Neko. By accessing or using our service, you agree to be bound by these Terms.",
+		"serviceDescription": {
+			"title": "Service Description",
+			"description": "Note Neko is a personal diary and relationship management application. It allows you to write diary entries, which are processed by AI to automatically extract and organize mentions of people and places you interact with."
+		},
+		"accounts": {
+			"title": "User Accounts",
+			"description": "You must create an account to use Note Neko. You are responsible for maintaining the security of your account credentials. You must provide accurate information when creating your account and must not share your login credentials with others."
+		},
+		"userContent": {
+			"title": "User Content",
+			"ownership": "You retain full ownership of all content you create in Note Neko, including diary entries, people profiles, and any other data you input.",
+			"license": "By using our service, you grant us a limited license to store, process, and display your content solely for the purpose of providing the service to you. We will not share, sell, or use your content for any other purpose.",
+			"responsibility": "You are solely responsible for the content you create. You agree not to use the service to store illegal, harmful, or infringing content."
+		},
+		"aiProcessing": {
+			"title": "AI Processing",
+			"description": "Note Neko uses AI language models to process your diary entries and extract information about people and places. By using this feature, you acknowledge that:",
+			"items": {
+				"sent": "Your diary text is sent to third-party AI providers (via OpenRouter) for processing.",
+				"accuracy": "AI-generated extractions may not always be accurate. You should review and correct any AI-extracted information.",
+				"noTraining": "Your data is not used to train AI models."
+			}
+		},
+		"acceptable": {
+			"title": "Acceptable Use",
+			"description": "You agree not to:",
+			"items": {
+				"unauthorized": "Attempt to gain unauthorized access to other users' data or our systems.",
+				"interfere": "Interfere with or disrupt the service or its infrastructure.",
+				"abuse": "Use the service for any illegal purpose or to violate any laws.",
+				"scrape": "Scrape, crawl, or use automated means to access the service without our permission.",
+				"reverse": "Reverse-engineer, decompile, or attempt to extract the source code of the service, except where permitted by applicable open-source licenses."
+			}
+		},
+		"availability": {
+			"title": "Service Availability",
+			"description": "We strive to keep Note Neko available at all times, but we do not guarantee uninterrupted access. The service may be temporarily unavailable due to maintenance, updates, or circumstances beyond our control."
+		},
+		"liability": {
+			"title": "Limitation of Liability",
+			"description": "Note Neko is provided \"as is\" without warranties of any kind. To the fullest extent permitted by law, we shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of data, arising from your use of the service."
+		},
+		"termination": {
+			"title": "Termination",
+			"description": "We may suspend or terminate your account if you violate these Terms. You may delete your account at any time. Upon termination, your data will be permanently deleted from our systems."
+		},
+		"changesToTerms": {
+			"title": "Changes to These Terms",
+			"description": "We may update these Terms from time to time. We will notify registered users of any material changes. Your continued use of the service after changes are posted constitutes your acceptance of the revised Terms."
+		},
+		"governingLaw": {
+			"title": "Governing Law",
+			"description": "These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which the service operator resides, without regard to conflict of law provisions."
+		},
+		"contact": {
+			"title": "Contact Us",
+			"description": "If you have questions about these Terms, please contact us at:",
+			"email": "noteneko@luonic.com"
+		},
+		"backLink": "\u2190 Note Neko"
 	},
 	"settings": {
 		"title": "Settings",

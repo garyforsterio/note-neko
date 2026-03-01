@@ -167,8 +167,22 @@ export default async function Home() {
 
 			{/* Footer */}
 			<footer className="bg-gray-50 border-t border-gray-100 py-6">
-				<div className="max-w-7xl mx-auto px-4 flex justify-end text-gray-500 text-sm">
-					<p className="pr-4">
+				<div className="max-w-7xl mx-auto px-4 flex justify-between items-center text-gray-500 text-sm">
+					<div className="flex gap-4">
+						<Link
+							href="/privacy"
+							className="text-gray-500 hover:text-gray-900 transition-colors"
+						>
+							{t("footer.privacy")}
+						</Link>
+						<Link
+							href="/terms"
+							className="text-gray-500 hover:text-gray-900 transition-colors"
+						>
+							{t("footer.terms")}
+						</Link>
+					</div>
+					<p>
 						{t("footer.createdBy")}{" "}
 						<a
 							href="https://garyforster.io"
