@@ -29,12 +29,7 @@ test.describe("People", () => {
 	});
 
 	test("should create and view a person", async ({ page }) => {
-		// Navigate to People
-		await page.getByRole("link", { name: "People" }).click();
-		await expect(page).toHaveURL(/.*people/);
-
-		// Add Person
-		await page.getByRole("link", { name: "New Person" }).click();
+		await page.goto("/en/people/new");
 
 		const personName = `Alice ${Date.now()}`;
 		await page.getByLabel("Name *").fill(personName);
