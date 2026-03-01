@@ -281,6 +281,23 @@ When editing an unreviewed entry (`entry.reviewed === false`):
 - Submit button text changes to "Mark as Reviewed" instead of "Update"
 - Saving the entry sets `reviewed: true` via the `updateDiaryEntryAction`
 
+### UpgradeDialog
+
+Client component (`src/components/UpgradeDialog.tsx`) using Radix Dialog. Shown when a user tries to create a diary entry with 0 AI credits remaining. Offers:
+- **Upgrade to Pro** — calls `createCheckoutSessionAction()` and redirects to Stripe Checkout
+- **Save without AI** — submits the form normally (server action skips AI extraction)
+- **Cancel** — closes the dialog to continue editing
+
+### CreditsBanner
+
+Server component (`src/components/CreditsBanner.tsx`) that displays an amber warning banner when `creditsRemaining <= 5`. Shows remaining credit count and an "Upgrade" link for free users. Returns null when credits are sufficient.
+
+### AccountActions
+
+Client component (`src/app/[locale]/(with-sidebar)/settings/account/components/AccountActions.tsx`) rendering action buttons on the account settings page:
+- "Upgrade to Pro" button for free users
+- "Manage Subscription" button for users with a Stripe customer ID
+
 ### Navigation Notification Badge
 
 A bell icon is added to the main navigation bar displaying the count of unreviewed diary entries. The count is fetched via `getUnreviewedDiaryCount()` DAL function.

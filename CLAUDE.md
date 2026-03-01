@@ -59,6 +59,10 @@ Required environment variables:
 - `GOOGLE_MAPS_API_KEY` - Google Maps API key for server-side location geocoding (must not have referer restrictions)
 - `RESEND_API_KEY` - Resend API key for transactional email (password reset)
 - `NEXT_PUBLIC_APP_URL` - Public base URL of the app (e.g., `https://noteneko.com`)
+- `STRIPE_SECRET_KEY` - Stripe secret API key
+- `STRIPE_WEBHOOK_SECRET` - Stripe webhook signing secret
+- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - Stripe publishable key (client-side)
+- `STRIPE_PRICE_ID` - Stripe Price ID for Pro subscription
 - `SENTRY_AUTH_TOKEN` - Sentry authentication token
 - `VERCEL_OIDC_TOKEN` - Vercel deployment token
 

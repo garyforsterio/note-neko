@@ -33,6 +33,7 @@ External Services:
 - OpenRouter API (AI entity extraction)
 - Google Maps API (location geocoding)
 - Resend (transactional email)
+- Stripe (subscription billing & payments)
 - Sentry (error tracking)
 - Vercel (hosting & analytics)
 ```
@@ -45,6 +46,7 @@ External Services:
 - Client Components only when interactivity is required
 - Server-side rendering for optimal performance and SEO
 - **NEVER use API route handlers** - use Server Actions exclusively
+  - **Exception**: Stripe webhook endpoint (`/api/stripe/webhook`) — required for inbound Stripe event processing
 
 ### 2. Type Safety
 
@@ -224,6 +226,23 @@ All routes under `(with-sidebar)` require authentication:
 8. **Content Enhancement** → Adds `[person:id]` and `[location:placeId]` tags
 9. **Database Update** → Updates entry with processed content and entities
 10. **Redirect to Edit** → User redirected to edit page for validation
+
+## Credit System & Billing
+
+### AI Credit Model
+
+AI entity extraction on diary entries is gated by a monthly credit system:
+- **Free plan**: 10 credits/month
+- **Pro plan** (Stripe subscription): 300 credits/month
+
+Credits reset lazily — the counter resets on the first action after `creditResetDate` has passed. Diary creation always works; only AI extraction consumes a credit.
+
+### Stripe Integration
+
+- **Checkout**: `createCheckoutSessionAction` creates a Stripe Checkout session for Pro subscription
+- **Portal**: `createPortalSessionAction` opens Stripe Customer Portal for subscription management
+- **Webhook**: `/api/stripe/webhook` handles `checkout.session.completed`, `customer.subscription.updated`, and `customer.subscription.deleted` events
+- **Client**: Singleton `getStripeClient()` in `src/lib/stripe.ts`
 
 ## Internationalization
 

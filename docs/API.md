@@ -55,12 +55,35 @@ Processes (or reprocesses) a single diary entry with AI entity extraction. Calls
 
 Returns an array of `{ id: string }` for all unprocessed diary entries belonging to the authenticated user. Used by the bulk processing UI on the settings data page.
 
+## Billing Server Actions
+
+### `createCheckoutSessionAction()`
+Creates a Stripe Checkout session for Pro subscription. Gets or creates a Stripe customer, then returns a `{ url }` for redirect to Stripe Checkout.
+
+### `createPortalSessionAction()`
+Creates a Stripe Customer Portal session for managing subscriptions. Returns `{ url }` for redirect. Requires an existing `stripeCustomerId`.
+
+## Stripe Webhook
+
+**Exception to the "no API routes" rule** — webhooks are inbound from Stripe, not form submissions.
+
+**Route**: `POST /api/stripe/webhook`
+
+Handles events:
+- `checkout.session.completed` — sets `subscriptionStatus: "active"`, stores `stripeSubscriptionId`
+- `customer.subscription.updated` — maps Stripe status to app status field
+- `customer.subscription.deleted` — resets to `"free"`, clears `stripeSubscriptionId`
+
+Uses `request.text()` for raw body + `stripe.webhooks.constructEvent()` for signature verification.
+
 ## Data Access Layer (DAL)
 
 Cached data access functions in `src/lib/dal.ts`.
 
 ### Notification-Related Functions
 
+- **`getUserBillingInfo()`** - Returns the authenticated user's subscription status, Stripe IDs, credit usage, and reset date. Cached via React `cache()`.
+- **`checkAndUseAiCredit()`** - Mutative function that lazily resets the monthly counter, checks remaining credits, and atomically increments `aiCreditsUsed`. Returns `{ success, creditsRemaining, creditLimit }`.
 - **`getUnreviewedDiaryCount()`** - Returns the count of diary entries where `reviewed === false` for the authenticated user. Used by the navigation badge.
 - **`getUnreviewedDiaryEntries()`** - Returns all unreviewed diary entries for the authenticated user. Used by the `/notifications` page.
 - **`updateDiaryEntry()`** - Accepts an optional `reviewed` boolean parameter to mark entries as reviewed.

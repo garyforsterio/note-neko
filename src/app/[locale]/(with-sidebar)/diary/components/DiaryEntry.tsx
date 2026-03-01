@@ -3,7 +3,9 @@ import { Calendar as CalendarIcon, MapPin, Moon, Sunrise } from "lucide-react";
 import { getLocale } from "next-intl/server";
 import { DiaryContent } from "#components/DiaryContent";
 import { Link } from "#i18n/navigation";
+import { getCreditsRemaining } from "#lib/credits";
 import type { DiaryEntryWithRelations } from "#lib/dal";
+import { getUserBillingInfo } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
 import { getHistoricWeather, getWeatherIcon } from "#lib/utils/weather";
 import { DiaryActions } from "./DiaryActions";
@@ -17,6 +19,10 @@ interface DiaryEntryProps {
 export async function DiaryEntry({ entry }: DiaryEntryProps) {
 	const t = await getTranslations();
 	const locale = await getLocale();
+	const billing = await getUserBillingInfo();
+	const creditsRemaining = billing
+		? getCreditsRemaining(billing.subscriptionStatus, billing.aiCreditsUsed)
+		: 0;
 	const date = new Date(entry.date);
 
 	const location = entry.locations.length > 0 ? entry.locations[0] : null;
@@ -134,6 +140,7 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
 				<DiaryActions
 					entry={entry}
 					locale={locale}
+					creditsRemaining={creditsRemaining}
 					editHref={`/diary/${entry.id}?mode=edit`}
 				/>
 			</div>

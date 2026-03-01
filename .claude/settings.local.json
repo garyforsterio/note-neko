@@ -20,7 +20,8 @@
 			"Bash(gh pr:*)",
 			"Bash(git checkout:*)",
 			"Bash(gh run:*)",
-			"Bash(cat:*)"
+			"Bash(cat:*)",
+			"Bash(pnpm prisma:generate:*)"
 		],
 		"deny": []
 	},

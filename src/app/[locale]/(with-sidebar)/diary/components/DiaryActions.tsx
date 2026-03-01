@@ -2,8 +2,9 @@
 
 import { Pencil, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { processDiaryEntryAction } from "#actions/diary";
+import UpgradeDialog from "#components/UpgradeDialog";
 import { Link } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
 import DeleteButton from "./DeleteButton";
@@ -12,6 +13,7 @@ import ShareButton from "./ShareButton";
 interface DiaryActionsBaseProps {
 	entry: DiaryEntryWithRelations;
 	locale: string;
+	creditsRemaining?: number;
 }
 
 type DiaryActionsProps = DiaryActionsBaseProps &
@@ -20,53 +22,72 @@ type DiaryActionsProps = DiaryActionsBaseProps &
 		| { editHref: string; onEdit?: never }
 	);
 
-export function DiaryActions({ entry, locale, ...props }: DiaryActionsProps) {
+export function DiaryActions({
+	entry,
+	locale,
+	creditsRemaining = 0,
+	...props
+}: DiaryActionsProps) {
 	const t = useTranslations();
 	const [isProcessing, startProcessing] = useTransition();
+	const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
 
 	const editAction = "onEdit" in props ? props.onEdit : undefined;
 	const editHref = "editHref" in props ? props.editHref : undefined;
 
 	const handleProcess = () => {
+		if (creditsRemaining <= 0) {
+			setShowUpgradeDialog(true);
+			return;
+		}
 		startProcessing(async () => {
 			await processDiaryEntryAction(entry.id);
 		});
 	};
 
 	return (
-		<div className="flex items-center gap-1 shrink-0">
-			{editAction ? (
+		<>
+			<div className="flex items-center gap-1 shrink-0">
+				{editAction ? (
+					<button
+						type="button"
+						onClick={editAction}
+						className="p-2 text-gray-500 hover:text-blue-600 transition-colors cursor-pointer"
+						title={t("common.edit")}
+					>
+						<Pencil className="h-4 w-4" />
+					</button>
+				) : (
+					<Link
+						href={editHref ?? "#"}
+						className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
+						title={t("common.edit")}
+						aria-label={t("common.edit")}
+					>
+						<Pencil className="h-4 w-4" />
+					</Link>
+				)}
 				<button
 					type="button"
-					onClick={editAction}
-					className="p-2 text-gray-500 hover:text-blue-600 transition-colors cursor-pointer"
-					title={t("common.edit")}
+					onClick={handleProcess}
+					disabled={isProcessing}
+					className="p-2 text-gray-500 hover:text-amber-600 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+					title={
+						entry.processed ? t("diary.reprocess") : t("diary.processWithAI")
+					}
 				>
-					<Pencil className="h-4 w-4" />
+					<Sparkles
+						className={`h-4 w-4 ${isProcessing ? "animate-spin" : ""}`}
+					/>
 				</button>
-			) : (
-				<Link
-					href={editHref ?? "#"}
-					className="p-2 text-gray-500 hover:text-blue-600 transition-colors"
-					title={t("common.edit")}
-					aria-label={t("common.edit")}
-				>
-					<Pencil className="h-4 w-4" />
-				</Link>
-			)}
-			<button
-				type="button"
-				onClick={handleProcess}
-				disabled={isProcessing}
-				className="p-2 text-gray-500 hover:text-amber-600 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-				title={
-					entry.processed ? t("diary.reprocess") : t("diary.processWithAI")
-				}
-			>
-				<Sparkles className={`h-4 w-4 ${isProcessing ? "animate-spin" : ""}`} />
-			</button>
-			<ShareButton entry={entry} locale={locale} />
-			<DeleteButton id={entry.id} />
-		</div>
+				<ShareButton entry={entry} locale={locale} />
+				<DeleteButton id={entry.id} />
+			</div>
+
+			<UpgradeDialog
+				open={showUpgradeDialog}
+				onOpenChange={setShowUpgradeDialog}
+			/>
+		</>
 	);
 }

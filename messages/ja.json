@@ -518,6 +518,27 @@
 		},
 		"backLink": "\u2190 Note Neko"
 	},
+	"credits": {
+		"noCreditsRemaining": "今月のAIクレジットがありません",
+		"creditsRemaining": "AIクレジット残り{count}回",
+		"creditsUsed": "{total}クレジット中{used}使用済み",
+		"lowCreditsWarning": "今月のAIクレジットが残り{count}回です",
+		"upgradeForMore": "アップグレードして増やす",
+		"resetsOn": "クレジットリセット日: {date}",
+		"freePlan": "無料",
+		"proPlan": "Pro",
+		"currentPlan": "現在のプラン",
+		"upgrade": "アップグレード",
+		"upgradeTitle": "AIクレジットがありません",
+		"upgradeDescription": "今月のAIクレジットをすべて使い切りました。Proにアップグレードして月300クレジットを取得するか、AI処理なしでエントリーを保存してください。",
+		"upgradeButton": "Proにアップグレード",
+		"managePlan": "サブスクリプション管理",
+		"canceledNotice": "サブスクリプションはキャンセルされました。請求期間の終了時に無料プランに戻ります。",
+		"pastDueNotice": "お支払いが遅延しています。Pro機能を引き続きご利用いただくには、お支払い方法を更新してください。",
+		"saveWithoutAi": "AIなしで保存",
+		"freeDescription": "月10回のAIクレジット",
+		"proDescription": "月300回のAIクレジット"
+	},
 	"settings": {
 		"title": "設定",
 		"welcome": {
@@ -547,7 +568,7 @@
 			},
 			"account": {
 				"title": "アカウント管理",
-				"description": "アカウント設定とサブスクリプションを管理します。"
+				"description": "アカウント設定、サブスクリプション、AIクレジットを管理します。"
 			},
 			"data": {
 				"title": "データ管理",

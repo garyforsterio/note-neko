@@ -35,7 +35,8 @@
 		"k8s:lint:base": "kubectl kustomize k8s/base | kubeconform -strict -summary --skip 'ManagedCertificate,BackendConfig'",
 		"k8s:lint:prod": "kubectl kustomize k8s/overlays/prod | kubeconform -strict -summary --skip 'ManagedCertificate,BackendConfig'",
 		"k8s:lint": "npm run k8s:lint:base && npm run k8s:lint:prod",
-		"infra:check": "npm run tf:check && npm run k8s:lint"
+		"infra:check": "npm run tf:check && npm run k8s:lint",
+		"stripe:webhook": "stripe listen --forward-to localhost:3000/api/stripe/webhook"
 	},
 	"imports": {
 		"#lib/db": "./src/lib/db.ts",
@@ -77,6 +78,7 @@
 		"react-markdown": "^10.1.0",
 		"require-in-the-middle": "8.0.1",
 		"resend": "^6.9.3",
+		"stripe": "^20.4.0",
 		"tailwind-merge": "^3.3.0",
 		"zod": "^3.24.4"
 	},
