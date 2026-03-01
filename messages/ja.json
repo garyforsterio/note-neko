@@ -329,7 +329,7 @@
 	},
 	"privacy": {
 		"title": "プライバシーポリシー",
-		"lastUpdated": "最終更新日：2025年3月1日",
+		"lastUpdated": "最終更新日：2026年3月1日",
 		"intro": "Note Neko（以下「当社」）は、お客様のプライバシー保護に努めています。本プライバシーポリシーでは、当社サービスをご利用いただく際に、お客様の個人情報をどのように収集、使用、保護するかについて説明します。",
 		"dataCollection": {
 			"title": "収集する情報",
@@ -401,13 +401,13 @@
 		"contact": {
 			"title": "お問い合わせ",
 			"description": "本プライバシーポリシーまたはお客様のデータに関するご質問は、以下までお問い合わせください：",
-			"email": "privacy@noteneko.com"
+			"email": "noteneko@luonic.com"
 		},
 		"backLink": "\u2190 Note Neko"
 	},
 	"terms": {
 		"title": "利用規約",
-		"lastUpdated": "最終更新日：2025年3月1日",
+		"lastUpdated": "最終更新日：2026年3月1日",
 		"intro": "Note Nekoをご利用になる前に、本利用規約（以下「本規約」）をよくお読みください。当社のサービスにアクセスまたは使用することにより、本規約に拘束されることに同意したものとみなされます。",
 		"serviceDescription": {
 			"title": "サービスの説明",
@@ -466,7 +466,7 @@
 		"contact": {
 			"title": "お問い合わせ",
 			"description": "本規約に関するご質問は、以下までお問い合わせください：",
-			"email": "support@noteneko.com"
+			"email": "noteneko@luonic.com"
 		},
 		"backLink": "\u2190 Note Neko"
 	},
