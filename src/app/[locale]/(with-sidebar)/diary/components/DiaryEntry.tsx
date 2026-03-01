@@ -6,10 +6,9 @@ import { Link } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
 import { getHistoricWeather, getWeatherIcon } from "#lib/utils/weather";
-import DeleteButton from "./DeleteButton";
+import { DiaryActions } from "./DiaryActions";
 import { DiaryLocations } from "./DiaryLocations";
 import { DiaryMentions } from "./DiaryMentions";
-import ShareButton from "./ShareButton";
 
 interface DiaryEntryProps {
 	entry: DiaryEntryWithRelations;
@@ -132,10 +131,11 @@ export async function DiaryEntry({ entry }: DiaryEntryProps) {
 					<DiaryLocations locations={entry.locations} />
 				</div>
 
-				<div className="flex items-center gap-1 shrink-0">
-					<ShareButton entry={entry} locale={locale} />
-					<DeleteButton id={entry.id} />
-				</div>
+				<DiaryActions
+					entry={entry}
+					locale={locale}
+					editHref={`/diary/${entry.id}?mode=edit`}
+				/>
 			</div>
 		</div>
 	);
