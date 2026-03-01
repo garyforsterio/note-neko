@@ -28,6 +28,12 @@ model User {
   conversations Conversation[]
   suggestions   Suggestion[]
   relationships Relationship[]
+
+  stripeCustomerId     String?   @unique
+  stripeSubscriptionId String?
+  subscriptionStatus   String    @default("free") // "free" | "active" | "canceled" | "past_due"
+  aiCreditsUsed        Int       @default(0)
+  creditResetDate      DateTime  @default(now())
 }
 
 model Person {

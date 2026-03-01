@@ -1,3 +1,4 @@
+import { getCreditsRemaining } from "#lib/credits";
 import { getUserProfile } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
 import DiaryForm from "../components/DiaryForm";
@@ -36,11 +37,16 @@ export default async function NewDiaryEntryPage({ searchParams }: PageProps) {
 		};
 	}
 
+	const creditsRemaining = user
+		? getCreditsRemaining(user.subscriptionStatus, user.aiCreditsUsed)
+		: 0;
+
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<DiaryForm
 				initialDefaultLocation={initialDefaultLocation}
 				initialDate={date}
+				creditsRemaining={creditsRemaining}
 			/>
 		</div>
 	);

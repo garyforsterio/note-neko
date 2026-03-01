@@ -1,6 +1,12 @@
 import { cache } from "react";
 import type { Prisma } from "#generated/prisma";
 import { requireAuth } from "#lib/auth";
+import {
+	getCreditLimit,
+	getCreditsRemaining,
+	getNextResetDate,
+	shouldResetCredits,
+} from "#lib/credits";
 import { db } from "#lib/db";
 
 export type DiaryEntryWithRelations = Prisma.DiaryEntryGetPayload<{
@@ -407,6 +413,9 @@ export const getUserProfile = cache(async () => {
 			defaultLocationName: true,
 			defaultLocationLat: true,
 			defaultLocationLng: true,
+			subscriptionStatus: true,
+			aiCreditsUsed: true,
+			creditResetDate: true,
 		},
 	});
 });
@@ -436,6 +445,71 @@ export async function getSimplePeopleList() {
 		where: { userId },
 		select: { id: true, name: true, nickname: true },
 	});
+}
+
+// Billing related functions
+export const getUserBillingInfo = cache(async () => {
+	const { userId } = await requireAuth();
+	return db.user.findUnique({
+		where: { id: userId },
+		select: {
+			subscriptionStatus: true,
+			stripeCustomerId: true,
+			stripeSubscriptionId: true,
+			aiCreditsUsed: true,
+			creditResetDate: true,
+		},
+	});
+});
+
+export async function checkAndUseAiCredit(): Promise<{
+	success: boolean;
+	creditsRemaining: number;
+	creditLimit: number;
+}> {
+	const { userId } = await requireAuth();
+
+	const user = await db.user.findUniqueOrThrow({
+		where: { id: userId },
+		select: {
+			subscriptionStatus: true,
+			aiCreditsUsed: true,
+			creditResetDate: true,
+		},
+	});
+
+	let { aiCreditsUsed } = user;
+
+	// Lazy monthly reset
+	if (shouldResetCredits(user.creditResetDate)) {
+		aiCreditsUsed = 0;
+		await db.user.update({
+			where: { id: userId },
+			data: {
+				aiCreditsUsed: 0,
+				creditResetDate: getNextResetDate(user.creditResetDate),
+			},
+		});
+	}
+
+	const remaining = getCreditsRemaining(user.subscriptionStatus, aiCreditsUsed);
+	const creditLimit = getCreditLimit(user.subscriptionStatus);
+
+	if (remaining <= 0) {
+		return { success: false, creditsRemaining: 0, creditLimit };
+	}
+
+	// Atomically increment
+	await db.user.update({
+		where: { id: userId },
+		data: { aiCreditsUsed: { increment: 1 } },
+	});
+
+	return {
+		success: true,
+		creditsRemaining: remaining - 1,
+		creditLimit,
+	};
 }
 
 // Conversation related functions

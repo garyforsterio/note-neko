@@ -10,6 +10,7 @@ import { DayPicker } from "react-day-picker";
 import { createDiaryEntryAction, getWeatherAction } from "#actions/diary";
 import type { LocationResult } from "#actions/locations";
 import ErrorMessage from "#components/ErrorMessage";
+import UpgradeDialog from "#components/UpgradeDialog";
 import { useToast } from "#hooks/use-toast";
 import { useAutosave } from "#hooks/useAutosave";
 import { useUserLocation } from "#hooks/useUserLocation";
@@ -29,11 +30,13 @@ function getLocalDateString(date: Date) {
 interface DiaryFormProps {
 	initialDefaultLocation: LocationResult | null;
 	initialDate?: string;
+	creditsRemaining?: number;
 }
 
 export default function DiaryForm({
 	initialDefaultLocation,
 	initialDate,
+	creditsRemaining = 0,
 }: DiaryFormProps) {
 	const t = useTranslations();
 	const router = useRouter();
@@ -46,6 +49,8 @@ export default function DiaryForm({
 	);
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 	const [weather, setWeather] = useState<WeatherInfo | null>(null);
+	const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
+	const formRef = useRef<HTMLFormElement>(null);
 
 	const { restoredDraft, clearDraft } = useAutosave("diary-draft-new", {
 		content,
@@ -151,11 +156,25 @@ export default function DiaryForm({
 		}
 	};
 
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		if (creditsRemaining <= 0) {
+			e.preventDefault();
+			setShowUpgradeDialog(true);
+		}
+	};
+
+	const handleSaveWithoutAi = () => {
+		// Submit the form normally - server action will skip AI processing when credits are 0
+		formRef.current?.requestSubmit();
+	};
+
 	return (
 		<form
+			ref={formRef}
 			className="space-y-6 max-w-4xl mx-auto"
 			{...getFormProps(form)}
 			action={action}
+			onSubmit={handleSubmit}
 		>
 			<ErrorMessage errors={form.errors} />
 			{nextDayStr && <input type="hidden" name="nextDay" value={nextDayStr} />}
@@ -324,6 +343,12 @@ export default function DiaryForm({
 					{isPending ? t("diary.analyzing") : t("common.create")}
 				</button>
 			</div>
+
+			<UpgradeDialog
+				open={showUpgradeDialog}
+				onOpenChange={setShowUpgradeDialog}
+				onSaveWithoutAi={handleSaveWithoutAi}
+			/>
 		</form>
 	);
 }

@@ -45,6 +45,12 @@ Primary user account table storing authentication and profile information.
 | createdAt | DateTime | Default: now() | Account creation timestamp |
 | updatedAt | DateTime | Auto-update | Last modification timestamp |
 
+| stripeCustomerId | String? | Unique, Nullable | Stripe customer ID |
+| stripeSubscriptionId | String? | Nullable | Stripe subscription ID |
+| subscriptionStatus | String | Default: "free" | Subscription status: "free", "active", "canceled", "past_due" |
+| aiCreditsUsed | Int | Default: 0 | AI credits consumed in current billing period |
+| creditResetDate | DateTime | Default: now() | Next date when credits reset (lazy monthly reset) |
+
 **Relations:**
 - Has many `Person` records
 - Has many `DiaryEntry` records
