@@ -248,6 +248,21 @@ export const getAllDiaryIds = cache(async () => {
 	return getAllDiaryIdsCached(userId);
 });
 
+export const getUnreviewedDiaryCount = cache(async (): Promise<number> => {
+	const { userId } = await requireAuth();
+	return db.diaryEntry.count({
+		where: { userId, reviewed: false },
+	});
+});
+
+export const getUnreviewedDiaryEntries = cache(async () => {
+	const { userId } = await requireAuth();
+	return db.diaryEntry.findMany({
+		where: { userId, reviewed: false },
+		orderBy: { date: "desc" },
+	});
+});
+
 export async function createDiaryEntry({
 	content,
 	date,
@@ -299,11 +314,13 @@ export async function updateDiaryEntry(
 		date,
 		mentions,
 		locations,
+		reviewed,
 	}: {
 		content: string;
 		date: Date;
 		mentions: string[];
 		locations: Prisma.DiaryLocationCreateWithoutDiaryEntryInput[];
+		reviewed?: boolean;
 	},
 ) {
 	const { userId } = await requireAuth();
@@ -321,6 +338,7 @@ export async function updateDiaryEntry(
 		data: {
 			content,
 			date,
+			...(reviewed !== undefined && { reviewed }),
 			userId: userId,
 			mentions: {
 				create: mentions.map((personId) => ({

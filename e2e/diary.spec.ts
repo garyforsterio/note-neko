@@ -6,10 +6,10 @@ import { expect, test } from "@playwright/test";
 // or just chain the actions. Ideally, we save storage state.
 
 test.describe("Diary", () => {
-	test.beforeEach(async ({ page }) => {
+	test.beforeEach(async ({ page }, testInfo) => {
 		// Quick login helper
 		// In a real app, use global setup to save storage state
-		const email = `test_diary_${Date.now()}@example.com`;
+		const email = `test_diary_${testInfo.testId}_${Date.now()}@example.com`;
 		const password = "Password123!";
 
 		await page.goto("/en/auth/signup");
@@ -34,13 +34,50 @@ test.describe("Diary", () => {
 		await expect(page).toHaveURL(/.*diary/);
 	});
 
+	test("should show notification for unreviewed diary entry", async ({
+		page,
+	}) => {
+		// 1. Create a diary entry (triggers AI processing)
+		await page.goto("/en/diary");
+		await page.getByRole("link", { name: "New Entry" }).click();
+
+		const entryContent = `Met with Alice at the park. ID: ${Date.now()}`;
+		await page.getByPlaceholder(/Describe your day/i).fill(entryContent);
+		await page.getByRole("button", { name: "Create" }).click();
+
+		// 2. Wait for redirect to edit page
+		await expect(page).toHaveURL(/.*\/diary\/[a-zA-Z0-9]+\?.*mode=edit/);
+
+		// 3. Navigate to notifications
+		await page.goto("/en/notifications");
+
+		// 4. Assert notification card is visible (shows "Review Needed" header and content preview)
+		await expect(page.getByText("Review Needed")).toBeVisible();
+		await expect(page.getByText(/Met with Alice/)).toBeVisible();
+
+		// 5. Click notification to navigate to edit page
+		await page.getByText(/Met with Alice/).click();
+		await expect(page).toHaveURL(/.*\/diary\/[a-zA-Z0-9]+\?mode=edit/);
+
+		// 6. Click "Mark as Reviewed"
+		await page.getByRole("button", { name: "Mark as Reviewed" }).click();
+
+		// Wait for save to complete (toast appears, edit form switches to view mode)
+		await expect(page.getByText("Saved", { exact: true })).toBeVisible();
+
+		// 7. Navigate back to notifications
+		await page.goto("/en/notifications");
+
+		// 8. Assert empty state
+		await expect(page.getByText("You're all caught up!")).toBeVisible();
+	});
+
 	test("should create, view, and delete a diary entry", async ({ page }) => {
 		// 1. Create Entry
 		await page.goto("/en/diary");
 
 		// "New Entry" button
 		await page.getByRole("link", { name: "New Entry" }).click();
-		await page.waitForURL(/.*diary\/new/);
 
 		// Fill the entry
 		const entryContent = `Today was a good day. ID: ${Date.now()}`;

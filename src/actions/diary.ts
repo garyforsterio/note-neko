@@ -272,6 +272,7 @@ export async function updateDiaryEntryAction(
 			date: submission.value.date,
 			mentions: finalPeopleIds,
 			locations: finalLocations,
+			reviewed: true,
 		});
 
 		// Return success

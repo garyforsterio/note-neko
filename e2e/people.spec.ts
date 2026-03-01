@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("People", () => {
-	test.beforeEach(async ({ page }) => {
+	test.beforeEach(async ({ page }, testInfo) => {
 		// Quick login helper
-		const email = `test_people_${Date.now()}@example.com`;
+		const email = `test_people_${testInfo.testId}_${Date.now()}@example.com`;
 		const password = "Password123!";
 
 		await page.goto("/en/auth/signup");
@@ -35,7 +35,6 @@ test.describe("People", () => {
 
 		// Add Person
 		await page.getByRole("link", { name: "New Person" }).click();
-		await page.waitForURL(/.*people\/new/);
 
 		const personName = `Alice ${Date.now()}`;
 		await page.getByLabel("Name *").fill(personName);

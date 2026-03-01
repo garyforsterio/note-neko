@@ -96,6 +96,7 @@ async function main() {
 						: ""
 				}`,
 				date,
+				reviewed: true,
 				userId: user.id,
 				mentions: {
 					create: mentions.map((person) => ({
