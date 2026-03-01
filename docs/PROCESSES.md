@@ -510,6 +510,24 @@ pnpm prisma:generate
 pnpm prisma:migrate-dev --reset
 ```
 
+#### Conform.js + Custom onSubmit
+
+When a form uses both `getFormProps(form)` and a custom `onSubmit` handler (e.g., for credit checks), the custom handler **must** delegate to `form.onSubmit(e)` for the actual submission path. Without this, Conform's blur-triggered validation intents (`shouldValidate: "onBlur"`) leak into the form data and the server action receives `intent.type === "validate"` instead of a submission intent. This causes `parseWithZod` to return `submission.status !== "success"`, silently skipping the action logic.
+
+```typescript
+// ❌ Bad: Overrides Conform's onSubmit entirely
+const handleSubmit = (e) => {
+  if (noCredits) { e.preventDefault(); return; }
+  // Falls through to native submit — Conform intent is lost
+};
+
+// ✅ Good: Delegates to Conform after custom checks
+const handleSubmit = (e) => {
+  if (noCredits) { e.preventDefault(); return; }
+  form.onSubmit(e); // Sets proper submission intent
+};
+```
+
 #### Build Failures
 
 ```bash

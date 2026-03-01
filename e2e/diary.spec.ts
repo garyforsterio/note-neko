@@ -5,7 +5,7 @@ import { expect, test } from "@playwright/test";
 // To keep it simple without complex setup, we will do a fresh login in "beforeEach"
 // or just chain the actions. Ideally, we save storage state.
 
-test.skip("Diary", () => {
+test.describe("Diary", () => {
 	test.beforeEach(async ({ page }, testInfo) => {
 		// Quick login helper
 		// In a real app, use global setup to save storage state

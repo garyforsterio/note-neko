@@ -159,14 +159,16 @@ export default function DiaryForm({
 	const skipCreditCheckRef = useRef(false);
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		if (skipCreditCheckRef.current) {
-			skipCreditCheckRef.current = false;
-			return;
-		}
-		if (creditsRemaining <= 0) {
+		if (!skipCreditCheckRef.current && creditsRemaining <= 0) {
 			e.preventDefault();
 			setShowUpgradeDialog(true);
+			return;
 		}
+		skipCreditCheckRef.current = false;
+		// Delegate to Conform's onSubmit to set the proper submission intent.
+		// Without this, blur-triggered validation intents leak into the form
+		// submission and the server action treats it as a validate request.
+		form.onSubmit(e);
 	};
 
 	const handleSaveWithoutAi = () => {
