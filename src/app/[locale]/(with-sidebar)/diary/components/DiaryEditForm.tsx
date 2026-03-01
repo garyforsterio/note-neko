@@ -22,7 +22,6 @@ import RewriteEditor from "#components/diary/RewriteEditor";
 import type { Person, Prisma } from "#generated/prisma";
 import { useToast } from "#hooks/use-toast";
 import { useAutosave } from "#hooks/useAutosave";
-import { useLeaveConfirm } from "#hooks/useLeaveConfirm";
 import { Link, useRouter } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
 import "react-day-picker/style.css";
@@ -93,11 +92,6 @@ export default function DiaryEditForm({
 			}
 		}
 	}, [restoredDraft, entry.content, entry.date, toast, t]);
-
-	const isDirty =
-		content !== entry.content ||
-		selectedDate.getTime() !== new Date(entry.date).getTime();
-	useLeaveConfirm(isDirty, t("diary.unsavedChanges"));
 
 	const nextDayParam = searchParams.get("nextDay");
 

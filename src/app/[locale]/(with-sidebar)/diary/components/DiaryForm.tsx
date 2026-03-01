@@ -12,7 +12,6 @@ import type { LocationResult } from "#actions/locations";
 import ErrorMessage from "#components/ErrorMessage";
 import { useToast } from "#hooks/use-toast";
 import { useAutosave } from "#hooks/useAutosave";
-import { useLeaveConfirm } from "#hooks/useLeaveConfirm";
 import { useUserLocation } from "#hooks/useUserLocation";
 import { Link, useRouter } from "#i18n/navigation";
 import { getNextDayString } from "#lib/utils/diary";
@@ -67,9 +66,6 @@ export default function DiaryForm({
 			}
 		}
 	}, [restoredDraft, toast, t]);
-
-	const isDirty = content.length > 0;
-	useLeaveConfirm(isDirty, t("diary.unsavedChanges"));
 
 	const { location: browserGeolocation, requestLocation } = useUserLocation();
 

@@ -182,8 +182,7 @@
 		"reprocess": "Reprocess",
 		"processSuccess": "Entry processed successfully",
 		"draftRestored": "Draft restored",
-		"draftRestoredDescription": "Your previous draft has been restored.",
-		"unsavedChanges": "You have unsaved changes. Are you sure you want to leave?"
+		"draftRestoredDescription": "Your previous draft has been restored."
 	},
 	"notifications": {
 		"title": "Notifications",
