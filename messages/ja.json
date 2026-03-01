@@ -168,7 +168,10 @@
 		"markAsReviewed": "確認済みにする",
 		"processWithAI": "AIで処理",
 		"reprocess": "再処理",
-		"processSuccess": "エントリーが正常に処理されました"
+		"processSuccess": "エントリーが正常に処理されました",
+		"draftRestored": "下書きを復元しました",
+		"draftRestoredDescription": "前回の下書きが復元されました。",
+		"unsavedChanges": "保存されていない変更があります。このページを離れてもよろしいですか？"
 	},
 	"notifications": {
 		"title": "通知",

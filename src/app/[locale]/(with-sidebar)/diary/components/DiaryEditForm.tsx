@@ -14,13 +14,15 @@ import {
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { DayPicker } from "react-day-picker";
 import { updateDiaryEntryAction } from "#actions/diary";
 import RefineEditor from "#components/diary/RefineEditor";
 import RewriteEditor from "#components/diary/RewriteEditor";
 import type { Person, Prisma } from "#generated/prisma";
 import { useToast } from "#hooks/use-toast";
+import { useAutosave } from "#hooks/useAutosave";
+import { useLeaveConfirm } from "#hooks/useLeaveConfirm";
 import { Link, useRouter } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
 import "react-day-picker/style.css";
@@ -66,6 +68,37 @@ export default function DiaryEditForm({
 		})),
 	);
 
+	const { restoredDraft, clearDraft } = useAutosave(`diary-draft-${entry.id}`, {
+		content,
+		date: selectedDate.toISOString(),
+	});
+
+	// Restore draft on mount
+	const hasRestoredDraftRef = useRef(false);
+	useEffect(() => {
+		if (restoredDraft && !hasRestoredDraftRef.current) {
+			hasRestoredDraftRef.current = true;
+			if (
+				restoredDraft.content !== entry.content ||
+				restoredDraft.date !== new Date(entry.date).toISOString()
+			) {
+				setContent(restoredDraft.content);
+				if (restoredDraft.date) {
+					setSelectedDate(new Date(restoredDraft.date));
+				}
+				toast({
+					title: t("diary.draftRestored"),
+					description: t("diary.draftRestoredDescription"),
+				});
+			}
+		}
+	}, [restoredDraft, entry.content, entry.date, toast, t]);
+
+	const isDirty =
+		content !== entry.content ||
+		selectedDate.getTime() !== new Date(entry.date).getTime();
+	useLeaveConfirm(isDirty, t("diary.unsavedChanges"));
+
 	const nextDayParam = searchParams.get("nextDay");
 
 	const handleDateSelect = (date: Date | undefined) => {
@@ -96,6 +129,7 @@ export default function DiaryEditForm({
 						description: result.error?.content?.[0] || t("error.generic"),
 					});
 				} else {
+					clearDraft();
 					toast({
 						title: t("diary.saved"),
 						description: t("diary.entrySaved"),

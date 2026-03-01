@@ -240,6 +240,51 @@ const expensiveValue = useMemo(() => computeExpensive(data), [data]);
 const handleClick = useCallback(() => doSomething(id), [id]);
 ```
 
+## Form Protection Hooks
+
+### `useLeaveConfirm(isDirty, message?)`
+
+**File:** `src/hooks/useLeaveConfirm.ts`
+
+Prevents accidental navigation away from forms with unsaved changes:
+
+- **`beforeunload`**: Triggers native browser dialog on tab close/refresh
+- **`history.pushState` override**: Intercepts Next.js App Router SPA navigation with `window.confirm()`
+- **`popstate`**: Intercepts back/forward button navigation
+
+```typescript
+const isDirty = content.length > 0;
+useLeaveConfirm(isDirty, t("diary.unsavedChanges"));
+```
+
+### `useAutosave<T>(key, data, options?)`
+
+**File:** `src/hooks/useAutosave.ts`
+
+Debounced localStorage persistence for form drafts:
+
+```typescript
+const { restoredDraft, lastSaved, clearDraft } = useAutosave(
+  "diary-draft-new",
+  { content, date },
+  { debounceMs: 1000 }
+);
+```
+
+- Saves `{ data, savedAt }` to localStorage with configurable debounce
+- Returns `restoredDraft` once on mount for restoration
+- `clearDraft()` removes the stored draft (call on successful submit)
+- Handles SSR and quota errors gracefully
+
+### Integration Pattern
+
+Both hooks are used in `DiaryForm` (create) and `DiaryEditForm` (edit):
+
+1. Track content state locally for dirty detection and autosave
+2. Restore draft on mount with toast notification
+3. Guard navigation with `useLeaveConfirm`
+4. Clear draft on successful submission
+
 ## Feature Components
 
 ### NotificationList

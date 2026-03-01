@@ -10,6 +10,9 @@ import { DayPicker } from "react-day-picker";
 import { createDiaryEntryAction, getWeatherAction } from "#actions/diary";
 import type { LocationResult } from "#actions/locations";
 import ErrorMessage from "#components/ErrorMessage";
+import { useToast } from "#hooks/use-toast";
+import { useAutosave } from "#hooks/useAutosave";
+import { useLeaveConfirm } from "#hooks/useLeaveConfirm";
 import { useUserLocation } from "#hooks/useUserLocation";
 import { Link, useRouter } from "#i18n/navigation";
 import { getNextDayString } from "#lib/utils/diary";
@@ -35,13 +38,38 @@ export default function DiaryForm({
 }: DiaryFormProps) {
 	const t = useTranslations();
 	const router = useRouter();
+	const { toast } = useToast();
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
+	const [content, setContent] = useState("");
 
 	const [selectedDate, setSelectedDate] = useState<Date>(
 		initialDate ? parseISO(initialDate) : new Date(),
 	);
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 	const [weather, setWeather] = useState<WeatherInfo | null>(null);
+
+	const { restoredDraft, clearDraft } = useAutosave("diary-draft-new", {
+		content,
+		date: format(selectedDate, "yyyy-MM-dd"),
+	});
+
+	// Restore draft on mount
+	const hasRestoredDraftRef = useRef(false);
+	useEffect(() => {
+		if (restoredDraft && !hasRestoredDraftRef.current) {
+			hasRestoredDraftRef.current = true;
+			if (restoredDraft.content) {
+				setContent(restoredDraft.content);
+				toast({
+					title: t("diary.draftRestored"),
+					description: t("diary.draftRestoredDescription"),
+				});
+			}
+		}
+	}, [restoredDraft, toast, t]);
+
+	const isDirty = content.length > 0;
+	useLeaveConfirm(isDirty, t("diary.unsavedChanges"));
 
 	const { location: browserGeolocation, requestLocation } = useUserLocation();
 
@@ -92,6 +120,13 @@ export default function DiaryForm({
 			date: initialDate || getLocalDateString(new Date()),
 		},
 	});
+
+	// Clear draft when form submission starts (action redirects on success)
+	useEffect(() => {
+		if (isPending) {
+			clearDraft();
+		}
+	}, [isPending, clearDraft]);
 
 	const nextDayStr = initialDate ? getNextDayString(initialDate) : undefined;
 
@@ -259,6 +294,8 @@ export default function DiaryForm({
 				<textarea
 					{...getTextareaProps(fields.content)}
 					ref={textareaRef}
+					value={content}
+					onChange={(e) => setContent(e.target.value)}
 					rows={12}
 					// biome-ignore lint/a11y/noAutofocus: only field
 					autoFocus
