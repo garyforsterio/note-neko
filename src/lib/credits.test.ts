@@ -7,8 +7,8 @@ import {
 } from "./credits";
 
 describe("getCreditLimit", () => {
-	it("returns 31 for free users", () => {
-		expect(getCreditLimit("free")).toBe(31);
+	it("returns 10 for free users", () => {
+		expect(getCreditLimit("free")).toBe(10);
 	});
 
 	it("returns 300 for active subscribers", () => {
@@ -16,24 +16,24 @@ describe("getCreditLimit", () => {
 	});
 
 	it("returns free limit for unknown statuses", () => {
-		expect(getCreditLimit("canceled")).toBe(31);
-		expect(getCreditLimit("past_due")).toBe(31);
-		expect(getCreditLimit("unknown")).toBe(31);
+		expect(getCreditLimit("canceled")).toBe(10);
+		expect(getCreditLimit("past_due")).toBe(10);
+		expect(getCreditLimit("unknown")).toBe(10);
 	});
 });
 
 describe("getCreditsRemaining", () => {
 	it("returns full credits when none used", () => {
-		expect(getCreditsRemaining("free", 0)).toBe(31);
+		expect(getCreditsRemaining("free", 0)).toBe(10);
 	});
 
 	it("returns remaining credits correctly", () => {
-		expect(getCreditsRemaining("free", 10)).toBe(21);
+		expect(getCreditsRemaining("free", 5)).toBe(5);
 		expect(getCreditsRemaining("active", 100)).toBe(200);
 	});
 
 	it("returns 0 when all credits used", () => {
-		expect(getCreditsRemaining("free", 31)).toBe(0);
+		expect(getCreditsRemaining("free", 10)).toBe(0);
 		expect(getCreditsRemaining("active", 300)).toBe(0);
 	});
 
@@ -49,7 +49,7 @@ describe("shouldResetCredits", () => {
 	});
 
 	it("returns false when reset date is in the future", () => {
-		const futureDate = new Date("2099-12-31");
+		const futureDate = new Date("2099-12-10");
 		expect(shouldResetCredits(futureDate)).toBe(false);
 	});
 

@@ -493,7 +493,7 @@
 		"canceledNotice": "サブスクリプションはキャンセルされました。請求期間の終了時に無料プランに戻ります。",
 		"pastDueNotice": "お支払いが遅延しています。Pro機能を引き続きご利用いただくには、お支払い方法を更新してください。",
 		"saveWithoutAi": "AIなしで保存",
-		"freeDescription": "月31回のAIクレジット",
+		"freeDescription": "月10回のAIクレジット",
 		"proDescription": "月300回のAIクレジット"
 	},
 	"settings": {

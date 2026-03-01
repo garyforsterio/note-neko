@@ -1,4 +1,4 @@
-const FREE_CREDIT_LIMIT = 31;
+const FREE_CREDIT_LIMIT = 10;
 const PRO_CREDIT_LIMIT = 300;
 
 export const CREDIT_LIMITS = {

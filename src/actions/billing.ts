@@ -1,5 +1,6 @@
 "use server";
 
+import { getLocale } from "next-intl/server";
 import { requireAuth } from "#lib/auth";
 import { db } from "#lib/db";
 import { getStripeClient } from "#lib/stripe";
@@ -30,12 +31,14 @@ export async function createCheckoutSessionAction(): Promise<{
 		});
 	}
 
+	const locale = await getLocale();
+
 	const session = await stripe.checkout.sessions.create({
 		customer: customerId,
 		mode: "subscription",
 		line_items: [{ price: process.env.STRIPE_PRICE_ID, quantity: 1 }],
-		success_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings/account?session_id={CHECKOUT_SESSION_ID}`,
-		cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings/account`,
+		success_url: `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/settings/account?session_id={CHECKOUT_SESSION_ID}`,
+		cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/settings/account`,
 	});
 
 	return { url: session.url };
@@ -57,9 +60,11 @@ export async function createPortalSessionAction(): Promise<{
 
 	const stripe = getStripeClient();
 
+	const locale = await getLocale();
+
 	const session = await stripe.billingPortal.sessions.create({
 		customer: user.stripeCustomerId,
-		return_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings/account`,
+		return_url: `${process.env.NEXT_PUBLIC_APP_URL}/${locale}/settings/account`,
 	});
 
 	return { url: session.url };

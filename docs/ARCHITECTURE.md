@@ -232,7 +232,7 @@ All routes under `(with-sidebar)` require authentication:
 ### AI Credit Model
 
 AI entity extraction on diary entries is gated by a monthly credit system:
-- **Free plan**: 31 credits/month
+- **Free plan**: 10 credits/month
 - **Pro plan** (Stripe subscription): 300 credits/month
 
 Credits reset lazily — the counter resets on the first action after `creditResetDate` has passed. Diary creation always works; only AI extraction consumes a credit.

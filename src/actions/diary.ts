@@ -16,6 +16,7 @@ import {
 	createPerson,
 	deleteDiaryEntry,
 	getDiaryEntry,
+	refundAiCredit,
 	updateDiaryEntry,
 } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
@@ -249,13 +250,18 @@ export async function createDiaryEntryAction(
 		}
 
 		// Process entry with AI to extract entities and replace text with references
-		await processEntryWithAI(
-			entryId,
-			submission.value.content,
-			submission.value.date,
-			userLatForBias,
-			userLngForBias,
-		);
+		try {
+			await processEntryWithAI(
+				entryId,
+				submission.value.content,
+				submission.value.date,
+				userLatForBias,
+				userLngForBias,
+			);
+		} catch (aiError) {
+			await refundAiCredit();
+			Sentry.captureException(aiError);
+		}
 	} catch (error) {
 		Sentry.captureException(error);
 		return submission.reply({
@@ -416,24 +422,35 @@ export async function processDiaryEntryAction(
 	await requireAuth();
 
 	try {
+		const creditResult = await checkAndUseAiCredit();
+		if (!creditResult.success) {
+			return { success: false, error: "No AI credits remaining" };
+		}
+
 		const entry = await getDiaryEntry(entryId);
 		if (!entry) {
+			await refundAiCredit();
 			return { success: false, error: "Entry not found" };
 		}
 
-		await processEntryWithAI(
-			entryId,
-			entry.content,
-			new Date(entry.date),
-			undefined,
-			undefined,
-			entry.locations.map((loc) => ({
-				name: loc.name,
-				placeId: loc.placeId,
-				lat: loc.lat,
-				lng: loc.lng,
-			})),
-		);
+		try {
+			await processEntryWithAI(
+				entryId,
+				entry.content,
+				new Date(entry.date),
+				undefined,
+				undefined,
+				entry.locations.map((loc) => ({
+					name: loc.name,
+					placeId: loc.placeId,
+					lat: loc.lat,
+					lng: loc.lng,
+				})),
+			);
+		} catch (aiError) {
+			await refundAiCredit();
+			throw aiError;
+		}
 
 		revalidatePath(`/diary/${entryId}`);
 	} catch (error) {

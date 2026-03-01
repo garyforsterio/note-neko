@@ -490,7 +490,7 @@
 		"canceledNotice": "Your subscription has been canceled. You'll return to the Free plan at the end of the billing period.",
 		"pastDueNotice": "Your payment is past due. Please update your payment method to continue using Pro features.",
 		"saveWithoutAi": "Save without AI",
-		"freeDescription": "31 AI credits per month",
+		"freeDescription": "10 AI credits per month",
 		"proDescription": "300 AI credits per month"
 	},
 	"settings": {

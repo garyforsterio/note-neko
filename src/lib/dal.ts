@@ -512,6 +512,14 @@ export async function checkAndUseAiCredit(): Promise<{
 	};
 }
 
+export async function refundAiCredit(): Promise<void> {
+	const { userId } = await requireAuth();
+	await db.user.update({
+		where: { id: userId },
+		data: { aiCreditsUsed: { decrement: 1 } },
+	});
+}
+
 // Conversation related functions
 export async function createConversation({
 	diaryEntryId,
