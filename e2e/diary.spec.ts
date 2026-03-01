@@ -53,10 +53,12 @@ test.describe("Diary", () => {
 
 		// 4. Assert notification card is visible (shows "Review Needed" header and content preview)
 		await expect(page.getByText("Review Needed")).toBeVisible();
-		await expect(page.getByText(/Met with Alice/)).toBeVisible();
+		// Content preview may have entity references stripped (AI replaces names with [person:id])
+		// so match on text that won't be replaced by AI processing
+		await expect(page.getByText(/at the park/)).toBeVisible();
 
 		// 5. Click notification to navigate to edit page
-		await page.getByText(/Met with Alice/).click();
+		await page.getByText(/at the park/).click();
 		await expect(page).toHaveURL(/.*\/diary\/[a-zA-Z0-9]+\?mode=edit/);
 
 		// 6. Click "Mark as Reviewed"
