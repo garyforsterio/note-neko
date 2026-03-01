@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "#i18n/navigation";
 
+import DemoAnimation from "./DemoAnimation";
 import Emma from "./emma.svg";
 import GithubIcon from "./github.svg";
 import HeroImage from "./hero-image.png";
@@ -13,7 +14,7 @@ export default async function Home() {
 
 	return (
 		<div className="min-h-screen">
-			{/* Hero Section with Parallax */}
+			{/* Hero Section */}
 			<div className="relative h-[60vh] overflow-hidden">
 				<div className="absolute inset-0">
 					<div className="fixed top-0 left-0 w-full h-[60vh] -z-10">
@@ -47,42 +48,231 @@ export default async function Home() {
 							{t("hero.title")}
 						</h1>
 						<p className="text-xl text-gray-100 mb-8">{t("hero.subtitle")}</p>
-						<Link
-							href="/auth/signup"
-							className="inline-block bg-white text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-						>
-							{t("hero.cta")}
-						</Link>
+						<div className="flex flex-col sm:flex-row gap-4 justify-center">
+							<Link
+								href="/auth/signup"
+								className="inline-block bg-white text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+							>
+								{t("hero.cta")}
+							</Link>
+							<a
+								href="https://github.com/garyforsterio/life-tracker"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="inline-flex items-center gap-2 border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition-colors"
+							>
+								<Image
+									src={GithubIcon}
+									alt=""
+									className="h-5 w-5"
+									aria-hidden="true"
+								/>
+								{t("hero.githubCta")}
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{/* Animated Demo Section */}
+			<div className="bg-gray-50 py-16 md:py-24">
+				<div className="max-w-5xl mx-auto px-4">
+					<div className="text-center mb-12">
+						<h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+							{t("demo.title")}
+						</h2>
+						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
+							{t("demo.subtitle")}
+						</p>
+					</div>
+					<div className="relative">
+						<DemoAnimation />
+					</div>
+				</div>
+			</div>
+
+			{/* App Walkthrough GIFs Section */}
+			<div className="bg-white py-16 md:py-24 border-b border-gray-100">
+				<div className="max-w-5xl mx-auto px-4">
+					<div className="text-center mb-16">
+						<h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+							{t("walkthrough.title")}
+						</h2>
+						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
+							{t("walkthrough.subtitle")}
+						</p>
+					</div>
+					<div className="space-y-20">
+						{/* GIF 1: Diary overview + writing an entry */}
+						<div className="md:flex md:items-center md:gap-12">
+							<div className="md:w-3/5 mb-6 md:mb-0">
+								<div className="rounded-xl overflow-hidden shadow-lg border border-gray-200 aspect-video bg-gray-100 flex items-center justify-center">
+									{/* Replace with: <img src="/walkthrough-diary.gif" alt={t("walkthrough.diaryAlt")} className="w-full h-full object-cover" /> */}
+									<span className="text-gray-400 text-sm">
+										{t("walkthrough.diaryPlaceholder")}
+									</span>
+								</div>
+							</div>
+							<div className="md:w-2/5">
+								<div className="text-sm font-semibold text-indigo-600 uppercase tracking-wide mb-2">
+									{t("walkthrough.diaryStep")}
+								</div>
+								<h3 className="text-2xl font-bold text-gray-900 mb-3">
+									{t("walkthrough.diaryCaption")}
+								</h3>
+								<p className="text-gray-600">
+									{t("walkthrough.diaryDescription")}
+								</p>
+							</div>
+						</div>
+
+						{/* GIF 2: AI extraction + matched people/locations */}
+						<div className="md:flex md:flex-row-reverse md:items-center md:gap-12">
+							<div className="md:w-3/5 mb-6 md:mb-0">
+								<div className="rounded-xl overflow-hidden shadow-lg border border-gray-200 aspect-video bg-gray-100 flex items-center justify-center">
+									{/* Replace with: <img src="/walkthrough-extraction.gif" alt={t("walkthrough.extractionAlt")} className="w-full h-full object-cover" /> */}
+									<span className="text-gray-400 text-sm">
+										{t("walkthrough.extractionPlaceholder")}
+									</span>
+								</div>
+							</div>
+							<div className="md:w-2/5">
+								<div className="text-sm font-semibold text-indigo-600 uppercase tracking-wide mb-2">
+									{t("walkthrough.extractionStep")}
+								</div>
+								<h3 className="text-2xl font-bold text-gray-900 mb-3">
+									{t("walkthrough.extractionCaption")}
+								</h3>
+								<p className="text-gray-600">
+									{t("walkthrough.extractionDescription")}
+								</p>
+							</div>
+						</div>
+
+						{/* GIF 3: Person profile + suggestions */}
+						<div className="md:flex md:items-center md:gap-12">
+							<div className="md:w-3/5 mb-6 md:mb-0">
+								<div className="rounded-xl overflow-hidden shadow-lg border border-gray-200 aspect-video bg-gray-100 flex items-center justify-center">
+									{/* Replace with: <img src="/walkthrough-profile.gif" alt={t("walkthrough.profileAlt")} className="w-full h-full object-cover" /> */}
+									<span className="text-gray-400 text-sm">
+										{t("walkthrough.profilePlaceholder")}
+									</span>
+								</div>
+							</div>
+							<div className="md:w-2/5">
+								<div className="text-sm font-semibold text-indigo-600 uppercase tracking-wide mb-2">
+									{t("walkthrough.profileStep")}
+								</div>
+								<h3 className="text-2xl font-bold text-gray-900 mb-3">
+									{t("walkthrough.profileCaption")}
+								</h3>
+								<p className="text-gray-600">
+									{t("walkthrough.profileDescription")}
+								</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 
 			{/* Features Section */}
-			<div className="max-w-7xl mx-auto px-4 py-16 bg-gray-50">
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-					<div className="bg-white p-8 rounded-lg shadow-sm">
-						<h3 className="text-2xl font-semibold mb-4">
-							{t("features.dailyDiary.title")}
-						</h3>
-						<p className="text-gray-600">
-							{t("features.dailyDiary.description")}
+			<div className="bg-white py-16 md:py-24">
+				<div className="max-w-7xl mx-auto px-4">
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+						<div className="bg-gray-50 p-8 rounded-xl">
+							<div className="text-4xl mb-4" aria-hidden="true">
+								{"\uD83D\uDCD6"}
+							</div>
+							<h3 className="text-2xl font-semibold mb-4">
+								{t("features.diary.title")}
+							</h3>
+							<p className="text-gray-600">{t("features.diary.description")}</p>
+						</div>
+						<div className="bg-gray-50 p-8 rounded-xl">
+							<div className="text-4xl mb-4" aria-hidden="true">
+								{"\uD83E\uDD1D"}
+							</div>
+							<h3 className="text-2xl font-semibold mb-4">
+								{t("features.people.title")}
+							</h3>
+							<p className="text-gray-600">
+								{t("features.people.description")}
+							</p>
+						</div>
+						<div className="bg-gray-50 p-8 rounded-xl">
+							<div className="text-4xl mb-4" aria-hidden="true">
+								{"\uD83D\uDCCD"}
+							</div>
+							<h3 className="text-2xl font-semibold mb-4">
+								{t("features.places.title")}
+							</h3>
+							<p className="text-gray-600">
+								{t("features.places.description")}
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{/* Open Source & Privacy Section */}
+			<div className="bg-gray-900 text-white py-16 md:py-24">
+				<div className="max-w-7xl mx-auto px-4">
+					<div className="text-center mb-12">
+						<h2 className="text-3xl md:text-4xl font-bold mb-4">
+							{t("openSource.title")}
+						</h2>
+						<p className="text-lg text-gray-300 max-w-2xl mx-auto">
+							{t("openSource.subtitle")}
 						</p>
 					</div>
-					<div className="bg-white p-8 rounded-lg shadow-sm">
-						<h3 className="text-2xl font-semibold mb-4">
-							{t("features.peopleProfiles.title")}
-						</h3>
-						<p className="text-gray-600">
-							{t("features.peopleProfiles.description")}
-						</p>
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+						<div className="bg-gray-800 p-8 rounded-xl">
+							<div className="text-4xl mb-4" aria-hidden="true">
+								{"\uD83D\uDCBB"}
+							</div>
+							<h3 className="text-xl font-semibold mb-3">
+								{t("openSource.ossTitle")}
+							</h3>
+							<p className="text-gray-400">{t("openSource.ossDescription")}</p>
+						</div>
+						<div className="bg-gray-800 p-8 rounded-xl">
+							<div className="text-4xl mb-4" aria-hidden="true">
+								{"\uD83D\uDD12"}
+							</div>
+							<h3 className="text-xl font-semibold mb-3">
+								{t("openSource.privacyTitle")}
+							</h3>
+							<p className="text-gray-400">
+								{t("openSource.privacyDescription")}
+							</p>
+						</div>
+						<div className="bg-gray-800 p-8 rounded-xl">
+							<div className="text-4xl mb-4" aria-hidden="true">
+								{"\uD83C\uDFE0"}
+							</div>
+							<h3 className="text-xl font-semibold mb-3">
+								{t("openSource.selfHostTitle")}
+							</h3>
+							<p className="text-gray-400">
+								{t("openSource.selfHostDescription")}
+							</p>
+						</div>
 					</div>
-					<div className="bg-white p-8 rounded-lg shadow-sm">
-						<h3 className="text-2xl font-semibold mb-4">
-							{t("features.locationHistory.title")}
-						</h3>
-						<p className="text-gray-600">
-							{t("features.locationHistory.description")}
-						</p>
+					<div className="text-center">
+						<a
+							href="https://github.com/garyforsterio/life-tracker"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="inline-flex items-center gap-2 bg-white text-gray-900 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+						>
+							<Image
+								src={GithubIcon}
+								alt=""
+								className="h-5 w-5 invert"
+								aria-hidden="true"
+							/>
+							{t("openSource.viewSource")}
+						</a>
 					</div>
 				</div>
 			</div>

@@ -193,27 +193,70 @@
 	"home": {
 		"hero": {
 			"title": "Note Neko",
-			"subtitle": "Simple note taking app to empower you.",
-			"cta": "Start Taking Notes",
+			"subtitle": "Journal daily. Let AI remember the people and places that matter.",
+			"cta": "Start Journaling Free",
+			"githubCta": "View on GitHub",
 			"heroImageAlt": "Note Neko Hero"
 		},
+		"demo": {
+			"title": "See How It Works",
+			"subtitle": "Write about your day. AI identifies the people and places you mention and builds rich profiles automatically.",
+			"diaryTitle": "Diary Entry",
+			"line1": "Had coffee with Sarah today at Blue Bottle.",
+			"line2": "She mentioned she's training for a marathon.",
+			"line3": "We talked about her new job at the design studio.",
+			"aiExtracted": "AI Extracted",
+			"profileInitial": "S",
+			"profileName": "Sarah",
+			"profileRelation": "Friend · 12 mentions",
+			"profileDetail1": "Training for a marathon",
+			"profileDetail2": "Works at a design studio",
+			"profileDetail3": "Likes coffee at Blue Bottle",
+			"arrowAlt": "AI extracts profile from diary"
+		},
+		"walkthrough": {
+			"title": "The App in Action",
+			"subtitle": "Follow the journey from writing a diary entry to building rich relationship profiles.",
+			"diaryStep": "Step 1",
+			"diaryAlt": "Diary page with map and creating a new entry",
+			"diaryPlaceholder": "diary walkthrough GIF",
+			"diaryCaption": "Browse & Write",
+			"diaryDescription": "See your diary entries on a map with every location you've visited. Click to create a new entry and write about your day.",
+			"extractionStep": "Step 2",
+			"extractionAlt": "AI extracting people and locations from diary text",
+			"extractionPlaceholder": "AI extraction walkthrough GIF",
+			"extractionCaption": "AI Does the Work",
+			"extractionDescription": "As you type, AI identifies the people and places you mention — matching them to existing profiles or creating new ones.",
+			"profileStep": "Step 3",
+			"profileAlt": "Person profile page with AI suggestions",
+			"profilePlaceholder": "profile walkthrough GIF",
+			"profileCaption": "Relationship Insights",
+			"profileDescription": "Click any person to see their full profile — interests, conversation topics, and AI-powered suggestions for deepening the relationship."
+		},
 		"features": {
-			"dailyDiary": {
-				"title": "Daily Diary",
-				"description": "Capture your thoughts, feelings, and the moments that matter."
-			},
-			"peopleProfiles": {
-				"title": "People Profiles",
-				"description": "Automatically generate detailed personas from your interactions. Build comprehensive profiles that serve as valuable references for future encounters and relationship building."
+			"diary": {
+				"title": "Therapeutic Journaling",
+				"description": "Write freely about your day. Journaling reduces stress, boosts emotional clarity, and helps you process your experiences."
 			},
 			"people": {
-				"title": "People",
-				"description": "Manage your relationships and memories."
+				"title": "Relationship Memory",
+				"description": "AI extracts people from your entries and builds detailed profiles — interests, life events, conversation topics — so you never forget what matters."
 			},
-			"locationHistory": {
-				"title": "Location History",
-				"description": "Document and organize your visits to different places. Keep track of venues, activities, and experiences for future reference."
+			"places": {
+				"title": "Places & Moments",
+				"description": "Every location you mention is tracked and linked. Revisit the cafes, parks, and cities that shaped your memories."
 			}
+		},
+		"openSource": {
+			"title": "Open Source & Privacy First",
+			"subtitle": "Your journal is deeply personal. Note Neko is built to respect that.",
+			"ossTitle": "Fully Open Source",
+			"ossDescription": "Licensed under AGPL-3.0. Inspect every line of code, contribute, or self-host on your own server.",
+			"privacyTitle": "Your Data Stays Yours",
+			"privacyDescription": "No ads, no tracking, no selling your data. Your entries are never used to train AI models.",
+			"selfHostTitle": "Self-Hostable",
+			"selfHostDescription": "Run Note Neko on your own infrastructure for complete control over your data.",
+			"viewSource": "View Source on GitHub"
 		},
 		"testimonials": {
 			"title": "What Our Users Say",

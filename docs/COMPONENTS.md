@@ -319,3 +319,16 @@ Client component (`src/app/[locale]/(with-sidebar)/settings/data/components/Bulk
 - "Process All" button processes entries sequentially
 - Progress bar with "Processing X of Y..." indicator
 - Completion message when all entries are processed
+
+### Landing Page (`src/app/[locale]/(home)/`)
+
+The landing page (`page.tsx`) is a server component with the following sections:
+
+1. **Hero** — Emotional tagline, primary CTA (signup), secondary CTA (GitHub)
+2. **Animated Demo** — Uses `DemoAnimation.tsx` (client component) with CSS-only typewriter animation showing the core loop: diary entry → AI-extracted person profile. Respects `prefers-reduced-motion`.
+3. **Features** — Three cards: Therapeutic Journaling, Relationship Memory, Places & Moments
+4. **Open Source & Privacy** — Three cards highlighting AGPL-3.0 license, data privacy, and self-hosting
+5. **Testimonials** — Humorous user quotes with avatar images
+6. **Footer** — Author credit
+
+Translation keys are under the `home` namespace in `messages/en.json` and `messages/ja.json`.
