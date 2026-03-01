@@ -11,39 +11,56 @@ jobs:
     name: E2E Tests (Playwright)
     runs-on: ubuntu-latest
     steps:
-      - name: Check deployment status
-        if: >-
-          github.event.deployment_status.state != 'success' ||
-          (github.event.deployment_status.environment != 'Preview' &&
-           github.event.deployment_status.environment != 'Production')
+      - name: Gate deployment
+        id: gate
         run: |
-          echo "Skipping: deployment status is '${{ github.event.deployment_status.state }}' for environment '${{ github.event.deployment_status.environment }}'"
-          exit 1
+          ENV="${{ github.event.deployment_status.environment }}"
+          STATE="${{ github.event.deployment_status.state }}"
+
+          if [ "$ENV" = "Production" ]; then
+            echo "Skipping E2E tests for Production deployment"
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ "$STATE" != "success" ] || [ "$ENV" != "Preview" ]; then
+            echo "Failing: deployment status is '$STATE' for environment '$ENV'"
+            exit 1
+          fi
+
+          echo "should_run=true" >> "$GITHUB_OUTPUT"
 
       - name: Checkout code
+        if: steps.gate.outputs.should_run == 'true'
         uses: actions/checkout@v6
 
       - name: Install pnpm
+        if: steps.gate.outputs.should_run == 'true'
         uses: pnpm/action-setup@v4
         with:
           version: 10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017
 
       - name: Use Node.js 24
+        if: steps.gate.outputs.should_run == 'true'
         uses: actions/setup-node@v6
         with:
           node-version: 24.14.0
           cache: 'pnpm'
 
       - name: Install dependencies
+        if: steps.gate.outputs.should_run == 'true'
         run: pnpm install
 
       - name: Generate Prisma client
+        if: steps.gate.outputs.should_run == 'true'
         run: pnpm prisma:generate
 
       - name: Install Playwright browsers
+        if: steps.gate.outputs.should_run == 'true'
         run: pnpm exec playwright install chromium --with-deps
 
       - name: Run E2E tests
+        if: steps.gate.outputs.should_run == 'true'
         run: pnpm test:e2e
         env:
           BASE_URL: ${{ github.event.deployment_status.target_url }}
@@ -52,7 +69,7 @@ jobs:
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && steps.gate.outputs.should_run == 'true' }}
         with:
           name: playwright-report
           path: playwright-report/
