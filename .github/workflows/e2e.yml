@@ -14,7 +14,8 @@ jobs:
       - name: Check deployment status
         if: >-
           github.event.deployment_status.state != 'success' ||
-          github.event.deployment_status.environment != 'Preview'
+          (github.event.deployment_status.environment != 'Preview' &&
+           github.event.deployment_status.environment != 'Production')
         run: |
           echo "Skipping: deployment status is '${{ github.event.deployment_status.state }}' for environment '${{ github.event.deployment_status.environment }}'"
           exit 1
