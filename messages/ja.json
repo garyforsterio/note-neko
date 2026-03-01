@@ -215,6 +215,25 @@
 			"profileDetail3": "ブルーボトルのコーヒーが好き",
 			"arrowAlt": "AIが日記からプロフィールを抽出"
 		},
+		"walkthrough": {
+			"title": "アプリの実際の様子",
+			"subtitle": "日記を書いてから人間関係プロフィールが構築されるまでの流れをご覧ください。",
+			"diaryStep": "ステップ 1",
+			"diaryAlt": "日記ページの地図表示と新規エントリー作成",
+			"diaryPlaceholder": "日記ウォークスルーGIF",
+			"diaryCaption": "閲覧＆記録",
+			"diaryDescription": "訪れたすべての場所を地図上で確認。クリックして新しいエントリーを作成し、一日の出来事を書きましょう。",
+			"extractionStep": "ステップ 2",
+			"extractionAlt": "AIが日記テキストから人物と場所を抽出",
+			"extractionPlaceholder": "AI抽出ウォークスルーGIF",
+			"extractionCaption": "AIにおまかせ",
+			"extractionDescription": "テキストを入力すると、AIが言及された人物や場所を特定し、既存のプロフィールと照合するか新規作成します。",
+			"profileStep": "ステップ 3",
+			"profileAlt": "AI提案付きの人物プロフィールページ",
+			"profilePlaceholder": "プロフィールウォークスルーGIF",
+			"profileCaption": "関係性インサイト",
+			"profileDescription": "人物をクリックすると、興味・会話のトピック・関係を深めるためのAI提案など、詳細なプロフィールが表示されます。"
+		},
 		"features": {
 			"diary": {
 				"title": "セラピューティック・ジャーナリング",

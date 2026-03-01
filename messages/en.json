@@ -212,6 +212,25 @@
 			"profileDetail3": "Likes coffee at Blue Bottle",
 			"arrowAlt": "AI extracts profile from diary"
 		},
+		"walkthrough": {
+			"title": "The App in Action",
+			"subtitle": "Follow the journey from writing a diary entry to building rich relationship profiles.",
+			"diaryStep": "Step 1",
+			"diaryAlt": "Diary page with map and creating a new entry",
+			"diaryPlaceholder": "diary walkthrough GIF",
+			"diaryCaption": "Browse & Write",
+			"diaryDescription": "See your diary entries on a map with every location you've visited. Click to create a new entry and write about your day.",
+			"extractionStep": "Step 2",
+			"extractionAlt": "AI extracting people and locations from diary text",
+			"extractionPlaceholder": "AI extraction walkthrough GIF",
+			"extractionCaption": "AI Does the Work",
+			"extractionDescription": "As you type, AI identifies the people and places you mention — matching them to existing profiles or creating new ones.",
+			"profileStep": "Step 3",
+			"profileAlt": "Person profile page with AI suggestions",
+			"profilePlaceholder": "profile walkthrough GIF",
+			"profileCaption": "Relationship Insights",
+			"profileDescription": "Click any person to see their full profile — interests, conversation topics, and AI-powered suggestions for deepening the relationship."
+		},
 		"features": {
 			"diary": {
 				"title": "Therapeutic Journaling",

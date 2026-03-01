@@ -91,6 +91,90 @@ export default async function Home() {
 				</div>
 			</div>
 
+			{/* App Walkthrough GIFs Section */}
+			<div className="bg-white py-16 md:py-24 border-b border-gray-100">
+				<div className="max-w-5xl mx-auto px-4">
+					<div className="text-center mb-16">
+						<h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+							{t("walkthrough.title")}
+						</h2>
+						<p className="text-lg text-gray-600 max-w-2xl mx-auto">
+							{t("walkthrough.subtitle")}
+						</p>
+					</div>
+					<div className="space-y-20">
+						{/* GIF 1: Diary overview + writing an entry */}
+						<div className="md:flex md:items-center md:gap-12">
+							<div className="md:w-3/5 mb-6 md:mb-0">
+								<div className="rounded-xl overflow-hidden shadow-lg border border-gray-200 aspect-video bg-gray-100 flex items-center justify-center">
+									{/* Replace with: <img src="/walkthrough-diary.gif" alt={t("walkthrough.diaryAlt")} className="w-full h-full object-cover" /> */}
+									<span className="text-gray-400 text-sm">
+										{t("walkthrough.diaryPlaceholder")}
+									</span>
+								</div>
+							</div>
+							<div className="md:w-2/5">
+								<div className="text-sm font-semibold text-indigo-600 uppercase tracking-wide mb-2">
+									{t("walkthrough.diaryStep")}
+								</div>
+								<h3 className="text-2xl font-bold text-gray-900 mb-3">
+									{t("walkthrough.diaryCaption")}
+								</h3>
+								<p className="text-gray-600">
+									{t("walkthrough.diaryDescription")}
+								</p>
+							</div>
+						</div>
+
+						{/* GIF 2: AI extraction + matched people/locations */}
+						<div className="md:flex md:flex-row-reverse md:items-center md:gap-12">
+							<div className="md:w-3/5 mb-6 md:mb-0">
+								<div className="rounded-xl overflow-hidden shadow-lg border border-gray-200 aspect-video bg-gray-100 flex items-center justify-center">
+									{/* Replace with: <img src="/walkthrough-extraction.gif" alt={t("walkthrough.extractionAlt")} className="w-full h-full object-cover" /> */}
+									<span className="text-gray-400 text-sm">
+										{t("walkthrough.extractionPlaceholder")}
+									</span>
+								</div>
+							</div>
+							<div className="md:w-2/5">
+								<div className="text-sm font-semibold text-indigo-600 uppercase tracking-wide mb-2">
+									{t("walkthrough.extractionStep")}
+								</div>
+								<h3 className="text-2xl font-bold text-gray-900 mb-3">
+									{t("walkthrough.extractionCaption")}
+								</h3>
+								<p className="text-gray-600">
+									{t("walkthrough.extractionDescription")}
+								</p>
+							</div>
+						</div>
+
+						{/* GIF 3: Person profile + suggestions */}
+						<div className="md:flex md:items-center md:gap-12">
+							<div className="md:w-3/5 mb-6 md:mb-0">
+								<div className="rounded-xl overflow-hidden shadow-lg border border-gray-200 aspect-video bg-gray-100 flex items-center justify-center">
+									{/* Replace with: <img src="/walkthrough-profile.gif" alt={t("walkthrough.profileAlt")} className="w-full h-full object-cover" /> */}
+									<span className="text-gray-400 text-sm">
+										{t("walkthrough.profilePlaceholder")}
+									</span>
+								</div>
+							</div>
+							<div className="md:w-2/5">
+								<div className="text-sm font-semibold text-indigo-600 uppercase tracking-wide mb-2">
+									{t("walkthrough.profileStep")}
+								</div>
+								<h3 className="text-2xl font-bold text-gray-900 mb-3">
+									{t("walkthrough.profileCaption")}
+								</h3>
+								<p className="text-gray-600">
+									{t("walkthrough.profileDescription")}
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
 			{/* Features Section */}
 			<div className="bg-white py-16 md:py-24">
 				<div className="max-w-7xl mx-auto px-4">
