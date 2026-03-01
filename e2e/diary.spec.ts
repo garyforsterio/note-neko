@@ -51,14 +51,16 @@ test.describe("Diary", () => {
 		// 3. Navigate to notifications
 		await page.goto("/en/notifications");
 
-		// 4. Assert notification card is visible (shows "Review Needed" header and content preview)
+		// 4. Assert notification card is visible (shows "Review Needed" header and entry date)
 		await expect(page.getByText("Review Needed")).toBeVisible();
-		// Content preview may have entity references stripped (AI replaces names with [person:id])
-		// so match on text that won't be replaced by AI processing
-		await expect(page.getByText(/at the park/)).toBeVisible();
+		// Notification shows entry date only (content preview was removed)
+		const notificationLink = page.locator(
+			'a[href*="/diary/"][href*="mode=edit"]',
+		);
+		await expect(notificationLink).toBeVisible();
 
 		// 5. Click notification to navigate to edit page
-		await page.getByText(/at the park/).click();
+		await notificationLink.click();
 		await expect(page).toHaveURL(/.*\/diary\/[a-zA-Z0-9]+\?mode=edit/);
 
 		// 6. Click "Mark as Reviewed"
