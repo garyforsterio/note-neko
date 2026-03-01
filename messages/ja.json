@@ -165,7 +165,10 @@
 			"title": "AI処理完了",
 			"description": "抽出された人物と場所を確認し、「確認済みにする」をクリックして確定してください。"
 		},
-		"markAsReviewed": "確認済みにする"
+		"markAsReviewed": "確認済みにする",
+		"processWithAI": "AIで処理",
+		"reprocess": "再処理",
+		"processSuccess": "エントリーが正常に処理されました"
 	},
 	"notifications": {
 		"title": "通知",
@@ -336,7 +339,8 @@
 			"profileParenthesized": "（プロフィール）",
 			"social": "ソーシャルアカウント",
 			"privacy": "プライバシー",
-			"account": "アカウント"
+			"account": "アカウント",
+			"data": "データ"
 		},
 		"sections": {
 			"profile": {
@@ -354,7 +358,22 @@
 			"account": {
 				"title": "アカウント管理",
 				"description": "アカウント設定とサブスクリプションを管理します。"
+			},
+			"data": {
+				"title": "データ管理",
+				"description": "AIで日記エントリーを処理し、データを管理します。"
 			}
+		},
+		"data": {
+			"title": "データ管理",
+			"description": "日記データの処理と管理を行います。",
+			"bulkProcess": "一括処理",
+			"bulkProcessDescription": "未処理の日記エントリーに対してAIエンティティ抽出を実行します。",
+			"unprocessedCount": "未処理のエントリーが{count}件あります",
+			"processingProgress": "{total}件中{current}件を処理中...",
+			"processingComplete": "すべてのエントリーが処理されました！",
+			"noUnprocessed": "すべてのエントリーは処理済みです。",
+			"processAll": "すべて処理"
 		},
 		"comingSoon": "近日公開...",
 		"logout": {

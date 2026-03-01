@@ -20,31 +20,20 @@ export default async function NotificationList({
 			</h2>
 			<p className="text-sm text-gray-400 mb-4">{t("reviewDescription")}</p>
 			<div className="space-y-3">
-				{entries.map((entry) => {
-					const preview = entry.content
-						.replace(/\[(person|location):[^\]]+\]/g, "")
-						.slice(0, 120);
-
-					return (
-						<Link
-							key={entry.id}
-							href={`/diary/${entry.id}?mode=edit`}
-							className="block bg-white rounded-2xl shadow-sm border border-gray-100 p-4 hover:shadow-md hover:border-purple-100 transition-all duration-200"
-						>
-							<div className="flex items-center gap-3">
-								<Sparkles className="w-4 h-4 text-purple-500 flex-shrink-0" />
-								<span className="text-sm font-medium text-gray-900">
-									{format(new Date(entry.date), "MMMM d, yyyy")}
-								</span>
-							</div>
-							{preview && (
-								<p className="text-sm text-gray-400 mt-1.5 truncate ml-7">
-									{preview}
-								</p>
-							)}
-						</Link>
-					);
-				})}
+				{entries.map((entry) => (
+					<Link
+						key={entry.id}
+						href={`/diary/${entry.id}?mode=edit`}
+						className="block bg-white rounded-2xl shadow-sm border border-gray-100 p-4 hover:shadow-md hover:border-purple-100 transition-all duration-200"
+					>
+						<div className="flex items-center gap-3">
+							<Sparkles className="w-4 h-4 text-purple-500 flex-shrink-0" />
+							<span className="text-sm font-medium text-gray-900">
+								{format(new Date(entry.date), "MMMM d, yyyy")}
+							</span>
+						</div>
+					</Link>
+				))}
 			</div>
 		</div>
 	);

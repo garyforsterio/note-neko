@@ -106,7 +106,13 @@ export async function extractEntitiesFromText(
      - **PREFER** the person who explicitly has that **nickname** listed in the database, as this implies a closer relationship.
      - Example: If DB has "James Smith (nickname: James)" and "James Doe", and text says "James", map to "James Smith".
 
-4. **SPECIFICITY & FORMATTING**:
+4. **PRE-TAGGED ENTITIES**:
+   - The text may contain pre-tagged entity references in the format \`[person:id]\` or \`[location:placeId]\`.
+   - These are entities from prior processing — **IGNORE them completely**.
+   - Do NOT re-extract, modify, or include them in your output.
+   - Only extract *new*, untagged mentions of people and locations.
+
+5. **SPECIFICITY & FORMATTING**:
    - **EXCLUDE** broad regions ("Japan", "Europe") and generic places ("home", "work", "gym", "restaurant").
    - **EXTRACT** specific venues ("Starbucks Shibuya", "Joe's Gym").
    - Keep compound names together ("Disney Land Tokyo" -> One location).

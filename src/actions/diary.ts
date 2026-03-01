@@ -2,6 +2,7 @@
 
 import { parseWithZod } from "@conform-to/zod";
 import * as Sentry from "@sentry/nextjs";
+import { revalidatePath } from "next/cache";
 import { getLocale } from "next-intl/server";
 import { z } from "zod";
 import { extractEntitiesFromText } from "#actions/extractEntities";
@@ -13,6 +14,7 @@ import {
 	createDiaryEntry,
 	createPerson,
 	deleteDiaryEntry,
+	getDiaryEntry,
 	updateDiaryEntry,
 } from "#lib/dal";
 import { getTranslations } from "#lib/i18n/server";
@@ -25,6 +27,143 @@ import { deleteDiaryEntrySchema, diaryEntrySchema } from "#schema/diary";
  */
 function escapeRegex(string: string): string {
 	return string.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&");
+}
+
+/**
+ * Process a diary entry with AI to extract entities (people, locations)
+ * and replace text with reference syntax.
+ */
+async function processEntryWithAI(
+	entryId: string,
+	content: string,
+	date: Date,
+	userLat?: number,
+	userLng?: number,
+	existingLocations?: Prisma.DiaryLocationCreateWithoutDiaryEntryInput[],
+): Promise<void> {
+	// Collect pre-existing references from content before AI processing
+	const existingPersonIds = [...content.matchAll(/\[person:([^\]]+)\]/g)].map(
+		(m) => m[1] as string,
+	);
+	const existingLocationPlaceIds = [
+		...content.matchAll(/\[location:([^\]]+)\]/g),
+	].map((m) => m[1] as string);
+
+	// Extract entities using AI
+	const extractedEntities = await extractEntitiesFromText(
+		content,
+		userLat,
+		userLng,
+	);
+
+	// Start with pre-existing person mentions so they survive reprocessing
+	const mentions: string[] = [...existingPersonIds];
+	const newlyCreatedPeople: Array<{ name: string; id: string }> = [];
+
+	for (const person of extractedEntities.people) {
+		if (person.existingPerson) {
+			if (!mentions.includes(person.existingPerson.id)) {
+				mentions.push(person.existingPerson.id);
+			}
+		} else if (person.confidence > 0.7) {
+			// Create new person if confidence is high
+			const newPerson = await createPerson({ name: person.name });
+			mentions.push(newPerson.id);
+			// Track newly created people for linking
+			newlyCreatedPeople.push({ name: person.name, id: newPerson.id });
+		}
+		// Skip people with low confidence for now
+	}
+
+	// Start with pre-existing locations so they survive reprocessing
+	const locations: Prisma.DiaryLocationCreateWithoutDiaryEntryInput[] = (
+		existingLocations ?? []
+	).filter((loc) => existingLocationPlaceIds.includes(loc.placeId));
+
+	// Add new locations from AI
+	const newLocations = extractedEntities.locations
+		.filter(
+			(location) => location.googlePlaceResult && location.confidence > 0.6,
+		)
+		.map((location) => location.googlePlaceResult)
+		.filter((place): place is NonNullable<typeof place> => place !== undefined)
+		.map((place) => ({
+			name: place.name,
+			placeId: place.placeId,
+			lat: place.lat,
+			lng: place.lng,
+		}));
+
+	for (const loc of newLocations) {
+		if (!locations.some((existing) => existing.placeId === loc.placeId)) {
+			locations.push(loc);
+		}
+	}
+
+	// Process content to insert ID references for matched entities
+	let processedContent = content;
+
+	// Collect all entities to process, sorted by length (longest first to avoid nested replacements)
+	const entitiesToReplace: Array<{
+		searchText: string;
+		replacement: string;
+		type: "person" | "location";
+	}> = [];
+
+	// Add person references for matched people
+	for (const person of extractedEntities.people) {
+		if (person.existingPerson) {
+			entitiesToReplace.push({
+				searchText: person.name,
+				replacement: `[person:${person.existingPerson.id}]`,
+				type: "person",
+			});
+		}
+	}
+
+	// Add person references for newly created people
+	for (const newPerson of newlyCreatedPeople) {
+		entitiesToReplace.push({
+			searchText: newPerson.name,
+			replacement: `[person:${newPerson.id}]`,
+			type: "person",
+		});
+	}
+
+	// Add location references for locations with Google Places data
+	for (const location of extractedEntities.locations) {
+		if (location.googlePlaceResult) {
+			entitiesToReplace.push({
+				searchText: location.name,
+				replacement: `[location:${location.googlePlaceResult.placeId}]`,
+				type: "location",
+			});
+		}
+	}
+
+	// Sort by length (longest first) to prevent nested replacements
+	entitiesToReplace.sort((a, b) => b.searchText.length - a.searchText.length);
+
+	// Replace each entity, ensuring we don't replace inside existing references
+	for (const entity of entitiesToReplace) {
+		// Create a regex that matches the text only if it's not already in a reference
+		// Negative lookbehind for [ and negative lookahead for :
+		const regex = new RegExp(
+			`(?<!\\[)\\b${escapeRegex(entity.searchText)}\\b(?!:)`,
+			"gi",
+		);
+		processedContent = processedContent.replace(regex, entity.replacement);
+	}
+
+	// Update the diary entry with processed content and entities
+	await updateDiaryEntry(entryId, {
+		content: processedContent,
+		mentions,
+		locations,
+		date,
+		processed: true,
+		reviewed: false,
+	});
 }
 
 const LocationDataSchema = z
@@ -93,111 +232,14 @@ export async function createDiaryEntryAction(
 			userLngForBias = locationData.longitude;
 		}
 
-		// Extract entities using AI
-		const extractedEntities = await extractEntitiesFromText(
+		// Process entry with AI to extract entities and replace text with references
+		await processEntryWithAI(
+			entryId,
 			submission.value.content,
+			submission.value.date,
 			userLatForBias,
 			userLngForBias,
 		);
-
-		// Process people - create new ones if they don't exist and confidence is high
-		const mentions: string[] = [];
-		const newlyCreatedPeople: Array<{ name: string; id: string }> = [];
-
-		for (const person of extractedEntities.people) {
-			if (person.existingPerson) {
-				// Use existing person
-				mentions.push(person.existingPerson.id);
-			} else if (person.confidence > 0.7) {
-				// Create new person if confidence is high
-				const newPerson = await createPerson({ name: person.name });
-				mentions.push(newPerson.id);
-				// Track newly created people for linking
-				newlyCreatedPeople.push({ name: person.name, id: newPerson.id });
-			}
-			// Skip people with low confidence for now
-		}
-
-		// Process locations from AI
-		const locations: Prisma.DiaryLocationCreateWithoutDiaryEntryInput[] =
-			extractedEntities.locations
-				.filter(
-					(location) => location.googlePlaceResult && location.confidence > 0.6,
-				)
-				.map((location) => location.googlePlaceResult)
-				.filter(
-					(place): place is NonNullable<typeof place> => place !== undefined,
-				)
-				.map((place) => ({
-					name: place.name,
-					placeId: place.placeId,
-					lat: place.lat,
-					lng: place.lng,
-				}));
-
-		// Process content to insert ID references for matched entities
-		let processedContent = submission.value.content;
-
-		// Collect all entities to process, sorted by length (longest first to avoid nested replacements)
-		const entitiesToReplace: Array<{
-			searchText: string;
-			replacement: string;
-			type: "person" | "location";
-		}> = [];
-
-		// Add person references for matched people
-		for (const person of extractedEntities.people) {
-			if (person.existingPerson) {
-				entitiesToReplace.push({
-					searchText: person.name,
-					replacement: `[person:${person.existingPerson.id}]`,
-					type: "person",
-				});
-			}
-		}
-
-		// Add person references for newly created people
-		for (const newPerson of newlyCreatedPeople) {
-			entitiesToReplace.push({
-				searchText: newPerson.name,
-				replacement: `[person:${newPerson.id}]`,
-				type: "person",
-			});
-		}
-
-		// Add location references for locations with Google Places data
-		for (const location of extractedEntities.locations) {
-			if (location.googlePlaceResult) {
-				entitiesToReplace.push({
-					searchText: location.name,
-					replacement: `[location:${location.googlePlaceResult.placeId}]`,
-					type: "location",
-				});
-			}
-		}
-
-		// Sort by length (longest first) to prevent nested replacements
-		entitiesToReplace.sort((a, b) => b.searchText.length - a.searchText.length);
-
-		// Replace each entity, ensuring we don't replace inside existing references
-		for (const entity of entitiesToReplace) {
-			// Create a regex that matches the text only if it's not already in a reference
-			// Negative lookbehind for [ and negative lookahead for :
-			const regex = new RegExp(
-				`(?<!\\[)\\b${escapeRegex(entity.searchText)}\\b(?!:)`,
-				"gi",
-			);
-			processedContent = processedContent.replace(regex, entity.replacement);
-		}
-
-		// Update the diary entry with processed content and entities
-		await updateDiaryEntry(entryId, {
-			content: processedContent,
-			mentions,
-			locations,
-			date: submission.value.date, // Preserve the original date
-			processed: true,
-		});
 	} catch (error) {
 		Sentry.captureException(error);
 		return submission.reply({
@@ -346,6 +388,63 @@ export async function deleteDiaryEntryAction(
 
 	const locale = await getLocale();
 	redirect({ href: "/diary", locale });
+}
+
+/**
+ * Process (or reprocess) a single diary entry with AI entity extraction.
+ */
+export async function processDiaryEntryAction(
+	entryId: string,
+	{ redirectToEdit = true }: { redirectToEdit?: boolean } = {},
+): Promise<{ success: boolean; error?: string }> {
+	await requireAuth();
+
+	try {
+		const entry = await getDiaryEntry(entryId);
+		if (!entry) {
+			return { success: false, error: "Entry not found" };
+		}
+
+		await processEntryWithAI(
+			entryId,
+			entry.content,
+			new Date(entry.date),
+			undefined,
+			undefined,
+			entry.locations.map((loc) => ({
+				name: loc.name,
+				placeId: loc.placeId,
+				lat: loc.lat,
+				lng: loc.lng,
+			})),
+		);
+
+		revalidatePath(`/diary/${entryId}`);
+	} catch (error) {
+		Sentry.captureException(error);
+		return {
+			success: false,
+			error: error instanceof Error ? error.message : "Processing failed",
+		};
+	}
+
+	if (redirectToEdit) {
+		const locale = await getLocale();
+		redirect({ href: `/diary/${entryId}?mode=edit`, locale });
+	}
+
+	return { success: true };
+}
+
+/**
+ * Get IDs of all unprocessed diary entries for the current user.
+ */
+export async function getUnprocessedDiaryIdsAction(): Promise<
+	{ id: string }[]
+> {
+	await requireAuth();
+	const { getUnprocessedDiaryIds } = await import("#lib/dal");
+	return getUnprocessedDiaryIds();
 }
 
 /**
