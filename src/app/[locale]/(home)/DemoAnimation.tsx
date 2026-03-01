@@ -87,23 +87,22 @@ export default function DemoAnimation() {
 						white-space: nowrap;
 						border-right: 2px solid transparent;
 						width: 0;
-						animation: demo-type 1.5s steps(40, end) forwards;
 					}
 
 					.demo-line-1 {
-						animation-delay: 0.5s;
+						animation:
+							demo-type 1.5s steps(40, end) 0.5s forwards,
+							demo-cursor 0.6s step-end 0.5s 3;
 					}
 					.demo-line-2 {
-						animation-delay: 2.5s;
+						animation:
+							demo-type 1.5s steps(40, end) 2.5s forwards,
+							demo-cursor 0.6s step-end 2.5s 3;
 					}
 					.demo-line-3 {
-						animation-delay: 4.5s;
-					}
-
-					.demo-typewriter {
 						animation:
-							demo-type 1.5s steps(40, end) forwards,
-							demo-cursor 0.6s step-end 3;
+							demo-type 1.5s steps(40, end) 4.5s forwards,
+							demo-cursor 0.6s step-end 4.5s 3;
 					}
 
 					@keyframes demo-type {
