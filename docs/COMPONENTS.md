@@ -240,6 +240,29 @@ const expensiveValue = useMemo(() => computeExpensive(data), [data]);
 const handleClick = useCallback(() => doSomething(id), [id]);
 ```
 
+## Form Autosave
+
+### `useAutosave<T>(key, data, options?)`
+
+**File:** `src/hooks/useAutosave.ts`
+
+Debounced localStorage persistence for form drafts:
+
+```typescript
+const { restoredDraft, lastSaved, clearDraft } = useAutosave(
+  "diary-draft-new",
+  { content, date },
+  { debounceMs: 1000 }
+);
+```
+
+- Saves `{ data, savedAt }` to localStorage with configurable debounce
+- Returns `restoredDraft` once on mount for restoration
+- `clearDraft()` removes the stored draft (call on successful submit)
+- Handles SSR and quota errors gracefully
+
+Used in `DiaryForm` (create, key: `diary-draft-new`) and `DiaryEditForm` (edit, key: `diary-draft-{id}`). Drafts are restored on mount with a toast notification and cleared on successful submission.
+
 ## Feature Components
 
 ### NotificationList

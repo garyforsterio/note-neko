@@ -180,7 +180,9 @@
 		"markAsReviewed": "Mark as Reviewed",
 		"processWithAI": "Process with AI",
 		"reprocess": "Reprocess",
-		"processSuccess": "Entry processed successfully"
+		"processSuccess": "Entry processed successfully",
+		"draftRestored": "Draft restored",
+		"draftRestoredDescription": "Your previous draft has been restored."
 	},
 	"notifications": {
 		"title": "Notifications",
