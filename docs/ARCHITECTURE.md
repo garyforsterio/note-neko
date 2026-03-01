@@ -77,7 +77,7 @@ src/
 │
 ├── app/                  # Next.js App Router
 │   └── [locale]/        # Internationalized routes
-│       ├── (home)/      # Public home page
+│       ├── (home)/      # Public pages (home, privacy, terms)
 │       ├── (with-sidebar)/ # Authenticated app layout
 │       │   ├── diary/   # Diary entries pages
 │       │   ├── people/  # People management pages

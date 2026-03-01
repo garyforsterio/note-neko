@@ -31,7 +31,7 @@ This document outlines the prioritized tasks for launching Note Neko, focusing o
 - **Launch Blocker:** Yes
 - **Priority:** High
 
-### Task 1.4: Privacy Policy & Terms of Service (Security/Legal)
+### ✅ Task 1.4: Privacy Policy & Terms of Service (Security/Legal)
 - **Description:** Create comprehensive legal pages explaining exactly how data is used, stored, and sent to third-party APIs (OpenRouter/Google Maps). Explicitly state that data is not used for training.
 - **Agent Instructions:** Create `src/app/[locale]/(home)/privacy/page.tsx` and `src/app/[locale]/(home)/terms/page.tsx`. Write standard SaaS privacy/terms copy with specific clauses for AI API usage and user data ownership. Ensure translations in `messages/en.json` and `messages/ja.json`.
 - **Launch Blocker:** Yes
