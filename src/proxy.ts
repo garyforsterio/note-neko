@@ -12,7 +12,7 @@ const AUTH_PATHS = [
 	"/auth/reset-password",
 ];
 
-const PUBLIC_PATHS = ["", "/", ...AUTH_PATHS];
+const PUBLIC_PATHS = ["", "/", "/privacy", "/terms", ...AUTH_PATHS];
 
 export async function proxy(request: NextRequest) {
 	const { pathname } = request.nextUrl;
