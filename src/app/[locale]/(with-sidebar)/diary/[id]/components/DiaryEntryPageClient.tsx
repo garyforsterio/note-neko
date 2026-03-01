@@ -1,12 +1,7 @@
 "use client";
 
 import { format } from "date-fns";
-import {
-	ArrowRight,
-	Calendar as CalendarIcon,
-	MapPin,
-	Pencil,
-} from "lucide-react";
+import { ArrowRight, Calendar as CalendarIcon, MapPin } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { DiaryContent } from "#components/DiaryContent";
@@ -14,11 +9,10 @@ import type { Person } from "#generated/prisma";
 import { Link, useRouter } from "#i18n/navigation";
 import type { DiaryEntryWithRelations } from "#lib/dal";
 import type { WeatherInfo } from "#lib/utils/weather";
-import DeleteButton from "../../components/DeleteButton";
+import { DiaryActions } from "../../components/DiaryActions";
 import DiaryEditForm from "../../components/DiaryEditForm";
 import DiaryMap from "../../components/DiaryMap";
 import { DiaryMentions } from "../../components/DiaryMentions";
-import ShareButton from "../../components/ShareButton";
 import { WeatherWidget } from "../../components/WeatherWidget";
 
 interface DiaryEntryPageClientProps {
@@ -168,18 +162,11 @@ export default function DiaryEntryPageClient({
 							/>
 						</div>
 
-						<div className="flex items-center gap-1 shrink-0">
-							<button
-								type="button"
-								onClick={() => setIsEditing(true)}
-								className="p-2 text-gray-500 hover:text-blue-600 transition-colors cursor-pointer"
-								title={t("common.edit")}
-							>
-								<Pencil className="h-4 w-4" />
-							</button>
-							<ShareButton entry={entry} locale={locale} />
-							<DeleteButton id={entry.id} />
-						</div>
+						<DiaryActions
+							entry={entry}
+							locale={locale}
+							onEdit={() => setIsEditing(true)}
+						/>
 					</div>
 				</div>
 			</div>
