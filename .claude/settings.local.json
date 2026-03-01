@@ -18,7 +18,9 @@
 			"Bash(ls:*)",
 			"WebSearch",
 			"Bash(gh pr:*)",
-			"Bash(git checkout:*)"
+			"Bash(git checkout:*)",
+			"Bash(gh run:*)",
+			"Bash(cat:*)"
 		],
 		"deny": []
 	},

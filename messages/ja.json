@@ -194,27 +194,51 @@
 	"home": {
 		"hero": {
 			"title": "Note Neko",
-			"subtitle": "シンプルなメモアプリで、あなたの力を引き出します。",
-			"cta": "メモを始める",
+			"subtitle": "毎日の日記から、AIが大切な人や場所を記憶します。",
+			"cta": "無料で日記を始める",
+			"githubCta": "GitHubで見る",
 			"heroImageAlt": "Note Neko ヒーロー画像"
 		},
+		"demo": {
+			"title": "使い方を見る",
+			"subtitle": "日々の出来事を書くだけ。AIが言及された人物や場所を特定し、プロフィールを自動で作成します。",
+			"diaryTitle": "日記エントリー",
+			"line1": "今日はサラとブルーボトルでコーヒーを飲んだ。",
+			"line2": "マラソンのトレーニングをしているって話してた。",
+			"line3": "デザインスタジオでの新しい仕事の話もした。",
+			"aiExtracted": "AI抽出",
+			"profileInitial": "サ",
+			"profileName": "サラ",
+			"profileRelation": "友人 · 12回言及",
+			"profileDetail1": "マラソンのトレーニング中",
+			"profileDetail2": "デザインスタジオで働いている",
+			"profileDetail3": "ブルーボトルのコーヒーが好き",
+			"arrowAlt": "AIが日記からプロフィールを抽出"
+		},
 		"features": {
-			"dailyDiary": {
-				"title": "日記機能",
-				"description": "クリーンで直感的なインターフェースで、日々の活動や交流を記録。進捗を追跡し、経験の包括的な記録を維持します。"
-			},
-			"peopleProfiles": {
-				"title": "人物プロフィール",
-				"description": "交流から詳細な人物像を自動生成。将来の出会いや関係構築のための貴重な参照となる包括的なプロフィールを構築します。"
+			"diary": {
+				"title": "セラピューティック・ジャーナリング",
+				"description": "自由に一日を書き留めましょう。日記はストレスを軽減し、感情の整理を助け、経験を振り返る力を与えてくれます。"
 			},
 			"people": {
-				"title": "人物",
-				"description": "人間関係や思い出を管理します。"
+				"title": "人間関係の記憶",
+				"description": "AIが日記から人物を抽出し、興味・出来事・会話のトピックなど詳細なプロフィールを構築。大切なことを忘れません。"
 			},
-			"locationHistory": {
-				"title": "場所の履歴",
-				"description": "様々な場所への訪問を記録・整理。将来の参照のために、会場、活動、経験を追跡します。"
+			"places": {
+				"title": "場所と思い出",
+				"description": "言及したすべての場所が記録・リンクされます。思い出を形作ったカフェ、公園、街を振り返りましょう。"
 			}
+		},
+		"openSource": {
+			"title": "オープンソース＆プライバシー優先",
+			"subtitle": "日記は極めて個人的なもの。Note Nekoはそれを尊重するために作られました。",
+			"ossTitle": "完全オープンソース",
+			"ossDescription": "AGPL-3.0ライセンス。すべてのコードを確認し、貢献したり、自分のサーバーでセルフホストできます。",
+			"privacyTitle": "あなたのデータはあなたのもの",
+			"privacyDescription": "広告なし、トラッキングなし、データ販売なし。あなたの日記はAIの学習に使用されません。",
+			"selfHostTitle": "セルフホスト可能",
+			"selfHostDescription": "自分のインフラでNote Nekoを実行し、データを完全にコントロールできます。",
+			"viewSource": "GitHubでソースを見る"
 		},
 		"testimonials": {
 			"title": "ユーザーの声",
