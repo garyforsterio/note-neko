@@ -196,6 +196,7 @@ export async function createDiaryEntryAction(
 			mentions,
 			locations,
 			date: submission.value.date, // Preserve the original date
+			processed: true,
 		});
 	} catch (error) {
 		Sentry.captureException(error);

@@ -81,9 +81,10 @@ Stores user's diary entries with support for rich content.
 | id | String | PK, CUID | Unique entry identifier |
 | content | String | Required | Diary entry content with tags |
 | date | DateTime | Default: now() | Entry date (user-editable) |
+| processed | Boolean | Default: false | Whether AI entity extraction has run |
+| reviewed | Boolean | Default: false | Whether user has reviewed AI extractions |
 | userId | String | FK, Required | Author user ID |
 | createdAt | DateTime | Default: now() | Record creation timestamp |
-| reviewed | Boolean | Default: false | Whether entry has been reviewed by user |
 | updatedAt | DateTime | Auto-update | Last modification timestamp |
 
 **Indexes:**
