@@ -156,7 +156,13 @@ export default function DiaryForm({
 		}
 	};
 
+	const skipCreditCheckRef = useRef(false);
+
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		if (skipCreditCheckRef.current) {
+			skipCreditCheckRef.current = false;
+			return;
+		}
 		if (creditsRemaining <= 0) {
 			e.preventDefault();
 			setShowUpgradeDialog(true);
@@ -164,7 +170,7 @@ export default function DiaryForm({
 	};
 
 	const handleSaveWithoutAi = () => {
-		// Submit the form normally - server action will skip AI processing when credits are 0
+		skipCreditCheckRef.current = true;
 		formRef.current?.requestSubmit();
 	};
 

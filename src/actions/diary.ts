@@ -191,24 +191,23 @@ export async function createDiaryEntryAction(
 		return submission.reply();
 	}
 
+	// Check AI credits before proceeding
+	const creditResult = await checkAndUseAiCredit();
+
+	if (!creditResult.success) {
+		// Create entry without AI processing - still usable, just no entity extraction
+		const newEntry = await createDiaryEntry({
+			content: submission.value.content,
+			date: submission.value.date,
+			mentions: [],
+			locations: [],
+		});
+		redirect({ href: `/diary/${newEntry.id}`, locale });
+	}
+
 	let entryId: string;
 
 	try {
-		// Check AI credits before proceeding
-		const creditResult = await checkAndUseAiCredit();
-
-		if (!creditResult.success) {
-			// Create entry without AI processing - still usable, just no entity extraction
-			const newEntry = await createDiaryEntry({
-				content: submission.value.content,
-				date: submission.value.date,
-				mentions: [],
-				locations: [],
-			});
-			redirect({ href: `/diary/${newEntry.id}`, locale });
-			return;
-		}
-
 		// Create diary entry with original content (no AI processing yet)
 		const newEntry = await createDiaryEntry({
 			content: submission.value.content,

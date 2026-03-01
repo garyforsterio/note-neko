@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { requireAuth } from "#lib/auth";
-import { getUnprocessedDiaryCount } from "#lib/dal";
+import { getCreditsRemaining } from "#lib/credits";
+import { getUnprocessedDiaryCount, getUserBillingInfo } from "#lib/dal";
 import BulkProcessForm from "./components/BulkProcessForm";
 
 export async function generateMetadata() {
@@ -14,7 +15,13 @@ export async function generateMetadata() {
 export default async function DataSettingsPage() {
 	await requireAuth();
 	const t = await getTranslations("settings");
-	const unprocessedCount = await getUnprocessedDiaryCount();
+	const [unprocessedCount, billing] = await Promise.all([
+		getUnprocessedDiaryCount(),
+		getUserBillingInfo(),
+	]);
+	const creditsRemaining = billing
+		? getCreditsRemaining(billing.subscriptionStatus, billing.aiCreditsUsed)
+		: 0;
 
 	return (
 		<div className="container mx-auto px-4 py-8">
@@ -29,7 +36,10 @@ export default async function DataSettingsPage() {
 						{t("data.bulkProcessDescription")}
 					</p>
 
-					<BulkProcessForm initialCount={unprocessedCount} />
+					<BulkProcessForm
+						initialCount={unprocessedCount}
+						creditsRemaining={creditsRemaining}
+					/>
 				</div>
 			</div>
 		</div>

@@ -22,6 +22,7 @@ interface DiaryEntryPageClientProps {
 	nextDay?: string;
 	weather?: WeatherInfo | null;
 	mode?: "edit";
+	creditsRemaining?: number;
 }
 
 export default function DiaryEntryPageClient({
@@ -31,6 +32,7 @@ export default function DiaryEntryPageClient({
 	nextDay,
 	weather,
 	mode,
+	creditsRemaining,
 }: DiaryEntryPageClientProps) {
 	const t = useTranslations();
 	const locale = useLocale();
@@ -165,6 +167,7 @@ export default function DiaryEntryPageClient({
 						<DiaryActions
 							entry={entry}
 							locale={locale}
+							creditsRemaining={creditsRemaining}
 							onEdit={() => setIsEditing(true)}
 						/>
 					</div>

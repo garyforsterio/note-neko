@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
-import { getDiaryEntry, getPeople } from "#lib/dal";
+import { getCreditsRemaining } from "#lib/credits";
+import { getDiaryEntry, getPeople, getUserBillingInfo } from "#lib/dal";
 import { getHistoricWeather } from "#lib/utils/weather";
 import DiaryEntryPageClient from "./components/DiaryEntryPageClient";
 
@@ -32,11 +33,15 @@ export default async function DiaryEntryPage({
 	params,
 	searchParams,
 }: DiaryEntryPageProps) {
-	const [entry, allPeople, { nextDay, mode }] = await Promise.all([
+	const [entry, allPeople, billing, { nextDay, mode }] = await Promise.all([
 		getDiaryEntry((await params).id),
 		getPeople(),
+		getUserBillingInfo(),
 		searchParams,
 	]);
+	const creditsRemaining = billing
+		? getCreditsRemaining(billing.subscriptionStatus, billing.aiCreditsUsed)
+		: 0;
 
 	if (!entry) {
 		notFound();
@@ -58,6 +63,7 @@ export default async function DiaryEntryPage({
 				nextDay={nextDay}
 				weather={weather}
 				mode={mode}
+				creditsRemaining={creditsRemaining}
 			/>
 		</div>
 	);

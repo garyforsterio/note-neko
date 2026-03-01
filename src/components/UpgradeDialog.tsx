@@ -9,7 +9,7 @@ import { createCheckoutSessionAction } from "#actions/billing";
 interface UpgradeDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	onSaveWithoutAi: () => void;
+	onSaveWithoutAi?: () => void;
 }
 
 export default function UpgradeDialog({
@@ -61,16 +61,18 @@ export default function UpgradeDialog({
 							{t("credits.upgradeButton")}
 						</button>
 
-						<button
-							type="button"
-							onClick={() => {
-								onOpenChange(false);
-								onSaveWithoutAi();
-							}}
-							className="w-full px-4 py-2.5 text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors font-medium cursor-pointer"
-						>
-							{t("credits.saveWithoutAi")}
-						</button>
+						{onSaveWithoutAi && (
+							<button
+								type="button"
+								onClick={() => {
+									onOpenChange(false);
+									onSaveWithoutAi();
+								}}
+								className="w-full px-4 py-2.5 text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors font-medium cursor-pointer"
+							>
+								{t("credits.saveWithoutAi")}
+							</button>
+						)}
 
 						<Dialog.Close asChild>
 							<button
