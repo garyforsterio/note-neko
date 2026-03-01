@@ -70,6 +70,16 @@ export default async function SettingsPage() {
 								{t("sections.account.description")}
 							</p>
 						</Link>
+
+						<Link
+							href="/settings/data"
+							className="p-4 border rounded-lg hover:bg-gray-50 transition-colors block"
+						>
+							<h3 className="font-medium mb-2">{t("sections.data.title")}</h3>
+							<p className="text-sm text-gray-600">
+								{t("sections.data.description")}
+							</p>
+						</Link>
 					</div>
 
 					<div className="mt-6 pt-6 border-t border-gray-200">

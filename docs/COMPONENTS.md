@@ -261,3 +261,21 @@ When editing an unreviewed entry (`entry.reviewed === false`):
 ### Navigation Notification Badge
 
 A bell icon is added to the main navigation bar displaying the count of unreviewed diary entries. The count is fetched via `getUnreviewedDiaryCount()` DAL function.
+
+### ProcessButton
+
+Client component (`src/app/[locale]/(with-sidebar)/diary/[id]/components/ProcessButton.tsx`) that triggers AI entity extraction on a diary entry. Displayed in the diary entry view footer alongside Edit/Share/Delete buttons.
+
+- Shows "Process with AI" when `processed=false`, "Reprocess" when `processed=true`
+- Uses `useTransition` for pending state with animated sparkle icon
+- On success, redirects to edit mode (`?mode=edit`) so the user can review extractions
+- Reprocessing resets `reviewed=false` to require re-review
+
+### BulkProcessForm
+
+Client component (`src/app/[locale]/(with-sidebar)/settings/data/components/BulkProcessForm.tsx`) for processing all unprocessed diary entries in bulk from the settings data page.
+
+- Shows count of unprocessed entries
+- "Process All" button processes entries sequentially
+- Progress bar with "Processing X of Y..." indicator
+- Completion message when all entries are processed

@@ -177,7 +177,10 @@
 			"title": "AI Processing Complete",
 			"description": "Review the extracted people and places below, then click Mark as Reviewed to confirm."
 		},
-		"markAsReviewed": "Mark as Reviewed"
+		"markAsReviewed": "Mark as Reviewed",
+		"processWithAI": "Process with AI",
+		"reprocess": "Reprocess",
+		"processSuccess": "Entry processed successfully"
 	},
 	"notifications": {
 		"title": "Notifications",
@@ -478,7 +481,8 @@
 			"profileParenthesized": "(Profile)",
 			"social": "Social Accounts",
 			"privacy": "Privacy",
-			"account": "Account"
+			"account": "Account",
+			"data": "Data"
 		},
 		"sections": {
 			"profile": {
@@ -496,7 +500,22 @@
 			"account": {
 				"title": "Account Management",
 				"description": "Manage your account settings and subscription."
+			},
+			"data": {
+				"title": "Data Management",
+				"description": "Process diary entries with AI and manage your data."
 			}
+		},
+		"data": {
+			"title": "Data Management",
+			"description": "Process and manage your diary data.",
+			"bulkProcess": "Bulk Process Entries",
+			"bulkProcessDescription": "Run AI entity extraction on all unprocessed diary entries.",
+			"unprocessedCount": "{count} unprocessed {count, plural, one {entry} other {entries}}",
+			"processingProgress": "Processing {current} of {total}...",
+			"processingComplete": "All entries have been processed!",
+			"noUnprocessed": "All entries are already processed.",
+			"processAll": "Process All"
 		},
 		"comingSoon": "Coming soon...",
 		"logout": {

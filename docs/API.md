@@ -47,6 +47,14 @@ Email sending failures are caught and logged — the action still returns succes
 - **Templates**: `src/lib/email-templates/` — inline-styled HTML with plain text fallback
 - **i18n**: Templates include built-in translations (en, ja) selected by locale
 
+### processDiaryEntryAction
+
+Processes (or reprocesses) a single diary entry with AI entity extraction. Calls the shared `processEntryWithAI()` function to extract people and locations, then sets `processed: true` and `reviewed: false`. Returns `{ success: boolean; error?: string }`.
+
+### getUnprocessedDiaryIdsAction
+
+Returns an array of `{ id: string }` for all unprocessed diary entries belonging to the authenticated user. Used by the bulk processing UI on the settings data page.
+
 ## Data Access Layer (DAL)
 
 Cached data access functions in `src/lib/dal.ts`.
@@ -56,6 +64,11 @@ Cached data access functions in `src/lib/dal.ts`.
 - **`getUnreviewedDiaryCount()`** - Returns the count of diary entries where `reviewed === false` for the authenticated user. Used by the navigation badge.
 - **`getUnreviewedDiaryEntries()`** - Returns all unreviewed diary entries for the authenticated user. Used by the `/notifications` page.
 - **`updateDiaryEntry()`** - Accepts an optional `reviewed` boolean parameter to mark entries as reviewed.
+
+### Processing-Related Functions
+
+- **`getUnprocessedDiaryCount()`** - Returns the count of diary entries where `processed === false`. Used by the settings data page.
+- **`getUnprocessedDiaryIds()`** - Returns IDs of all unprocessed diary entries, ordered by date ascending. Used by bulk processing.
 
 ## Rate Limiting
 

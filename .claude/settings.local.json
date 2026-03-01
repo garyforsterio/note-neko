@@ -16,7 +16,9 @@
 			"Bash(pnpm lint:*)",
 			"Bash(pnpm format:*)",
 			"Bash(ls:*)",
-			"WebSearch"
+			"WebSearch",
+			"Bash(gh pr:*)",
+			"Bash(git checkout:*)"
 		],
 		"deny": []
 	},

@@ -263,6 +263,24 @@ export const getUnreviewedDiaryEntries = cache(async () => {
 	});
 });
 
+export const getUnprocessedDiaryCount = cache(async (): Promise<number> => {
+	const { userId } = await requireAuth();
+	return db.diaryEntry.count({
+		where: { userId, processed: false },
+	});
+});
+
+export const getUnprocessedDiaryIds = cache(
+	async (): Promise<{ id: string }[]> => {
+		const { userId } = await requireAuth();
+		return db.diaryEntry.findMany({
+			where: { userId, processed: false },
+			select: { id: true },
+			orderBy: { date: "asc" },
+		});
+	},
+);
+
 export async function createDiaryEntry({
 	content,
 	date,
